@@ -8,7 +8,7 @@ import classes from '../../data/teacherClassViewData.js';
 //          UNAUTH_USER,
 //          PROTECTED_TEST } from './types';
 
-const loginUrl = 'http://localhost:3000/login';
+const loginUrl = 'http://localhost:3000';
 
 export function errorHandler(dispatch, error, type) {  
 let errorMessage = '';
@@ -35,9 +35,9 @@ let errorMessage = '';
     }
 }
 
-export function loginUser({ userName, password }) {  
+export function loginUser({ email, password }) {  
     return function(dispatch) {
-      axios.post(`${API_URL}`, { userName, password })
+      axios.post(`${API_URL}/auth/login`, { email, password })
       .then(response => {
         cookie.save('token', response.data.token, { path: '/' });
         dispatch({ type: AUTH_USER });
