@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path')
 const bodyParser = require('body-parser')
-const { db } = require('../db/mainDb.js')
-const { fb } = require('../db/liveClassroom.js')
+const main = require('../db/mainDb.js')
+// const { fb } = require('../db/liveClassroom.js')
 
 const app = express()
 
@@ -11,6 +11,19 @@ app.use(bodyParser.json())
 
 // Sign up
   // Specifiy user class in params
+  app.post('/newAccount', (req, res)=> {
+    const {firstName, lastName, email, password, userClass} = req.body.newAccount
+
+    main.addUser(firstName, lastName, email, password, userClass)
+    .then((data)=> {
+      if (data === 'User already exists')
+      console.log('user already exits')
+      res.sendStatus(403)
+    })
+    .catch(err => {
+      res.sendStatus(500)
+    })
+  })
 
 // Login
   // Specifiy user class in params
