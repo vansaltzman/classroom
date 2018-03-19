@@ -1,5 +1,9 @@
 const { Pool } = require('pg')
 const schema = require('./classroom.js')
+<<<<<<< HEAD
+=======
+const bcrypt = require('bcrypt')
+>>>>>>> teacherSignup
 
 const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
 
@@ -26,10 +30,56 @@ db.connect().then((client)=> {
     console.log(err.stack)
   })
 })
+<<<<<<< HEAD
+=======
 
+// Database helpers
+>>>>>>> teacherSignup
 
+const addUser = function(firstName, lastName, email, password, userClass) {
+  let userTable = userClass === 'teacher' ? 'teachers' : 'students'
+
+  const salt = 10;
+  return bcrypt.hash(password, salt)
+    .then((hash)=> {
+
+      var client
+      
+      return db.connect().then(newClient => {
+        client = newClient
+
+        return client.query(`SELECT * FROM ${userTable} WHERE email=$1`, [email])
+        .then(res => {
+          if (res.rowCount) {
+            return 'User already exists'
+          } else {
+            return client.query(
+              `INSERT INTO ${userTable} (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)`, 
+              [firstName, lastName, email, hash]
+            )
+          }
+        })
+      })
+      .then(output => {
+        client.release()
+        return output
+      })
+    })
+    .catch((err) => {
+      console.log('Issue with password hashing', err)
+    })
+}
+
+const verifyUser = function(email, password) {
+  
+}
 
 module.exports = {
+<<<<<<< HEAD
+=======
+  addUser,
+  verifyUser,
+>>>>>>> teacherSignup
   db
 }
 
