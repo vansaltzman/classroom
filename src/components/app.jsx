@@ -52,6 +52,7 @@ class App extends React.Component {
 				This is just a place holder for now.
 				{/* <SignUp/> */}
 				<StudentViewQuiz/>
+				<SignUp/>
 			</div>
 		)
 	}
