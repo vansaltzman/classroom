@@ -8,24 +8,17 @@ module.exports = {
     filename: 'bundle.js',
     path: DIST_DIR
   },
-  resolve: {
-    extensions: ['', '.js', '.jsx']
-  },
-  module: {
-    loaders: [
+  module : {
+    loaders : [
       {
-        test: /\.js?$/,
-        exclude: /node_modules/,
-        loaders: ['babel'],
-        include: path.join(__dirname, 'app'),
+        test : /\.jsx?/,
+        include : SRC_DIR,
+        loader : 'babel-loader',      
         query: {
-            presets: ['es2015', 'react', 'stage-2']
-        }
+          presets: ['react', 'es2015']
+       }
       },
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader'
-      }
+      { test: /\.css$/, loader: "style-loader!css-loader" },
     ]
-  }
+  },
 };
