@@ -11,13 +11,13 @@ const loginUrl = 'http://localhost:3000/login';
 export function errorHandler(dispatch, error, type) {  
 let errorMessage = '';
 
-if(error.data.error) {
-    errorMessage = error.data.error;
-} else if(error.data){
-    errorMessage = error.data;
-} else {
-    errorMessage = error;
-}
+    if(error.data.error) {
+        errorMessage = error.data.error;
+    } else if(error.data){
+        errorMessage = error.data;
+    } else {
+        errorMessage = error;
+    }
 
     if(error.status === 401) {
         dispatch({
@@ -32,3 +32,34 @@ if(error.data.error) {
         });
     }
 }
+
+export function loginUser({ userName, password }) {  
+    return function(dispatch) {
+      axios.post(`${API_URL}`, { userName, password })
+      .then(response => {
+        cookie.save('token', response.data.token, { path: '/' });
+        dispatch({ type: AUTH_USER });
+        window.location.href = CLIENT_ROOT_URL + '/dashboard';
+      })
+      .catch((error) => {
+        errorHandler(dispatch, error.response, AUTH_ERROR)
+      });
+      }
+    }
+
+export function protectedTest() {  
+    return function(dispatch) {
+        axios.get(`${API_URL}/protected`, {
+        headers: { 'Authorization': cookie.load('token') }
+        })
+        .then(response => {
+        dispatch({
+            type: PROTECTED_TEST,
+            payload: response.data.content
+        });
+        })
+        .catch((error) => {
+        errorHandler(dispatch, error.response, AUTH_ERROR)
+        });
+    }
+    }
