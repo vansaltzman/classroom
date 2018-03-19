@@ -1,10 +1,11 @@
 import axios from 'axios';  
 import { browserHistory } from 'react-router';  
 import cookie from 'react-cookie';  
-import { AUTH_USER,  
-         AUTH_ERROR,
-         UNAUTH_USER,
-         PROTECTED_TEST } from './types';
+import actionTypes from './types';
+// import { AUTH_USER,  
+//          AUTH_ERROR,
+//          UNAUTH_USER,
+//          PROTECTED_TEST } from './types';
 
 const loginUrl = 'http://localhost:3000/login';
 
@@ -54,7 +55,7 @@ export function protectedTest() {
         })
         .then(response => {
         dispatch({
-            type: PROTECTED_TEST,
+            type: actionTypes.PROTECTED_TEST,
             payload: response.data.content
         });
         })
@@ -62,4 +63,4 @@ export function protectedTest() {
         errorHandler(dispatch, error.response, AUTH_ERROR)
         });
     }
-    }
+}
