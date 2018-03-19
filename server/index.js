@@ -28,7 +28,7 @@ app.use(bodyParser.json())
     .catch(err => {
       res.sendStatus(500)
     })
-  })
+})
 
 // Login
   app.post(`/auth/login`, (req, res)=> {
@@ -53,7 +53,7 @@ app.use(bodyParser.json())
   })
 
 
-// Teacher
+  // Teacher
 
   // Start class
   app.post('/startClass', (erq, res) => {
@@ -76,10 +76,10 @@ app.use(bodyParser.json())
 
   // End Class
 
-// Student
+  // Student
 
   // Join Class in session
-  
+
   // Answer Quiz Question
   app.post('/updateLiveQuizAnswers', (req, res)=> {
     var studentId = 37;
@@ -158,6 +158,6 @@ app.post('/getStudentsClasses', (req, res) => {
 
 const port = 3000
 app.listen(port, function() {
-  console.log('Listening on ' + port)
+console.log('Listening on ' + port)
 })
 
