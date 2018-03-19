@@ -1,4 +1,4 @@
-var classes = [
+const classes = [
  {
 	 className: "JavaScript",
 	 totalStudents: 23,
@@ -14,8 +14,7 @@ var classes = [
 	 totalStudents: 50,
 	 year: 2018
  }
-]
+];
 
-module.exports = classes;
-
+export default classes
 // will be different depending on what we get back from postgres
