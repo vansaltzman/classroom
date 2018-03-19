@@ -1,9 +1,6 @@
 const { Pool } = require('pg')
 const schema = require('./classroom.js')
-<<<<<<< HEAD
-=======
 const bcrypt = require('bcrypt')
->>>>>>> teacherSignup
 
 const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
 
@@ -30,11 +27,8 @@ db.connect().then((client)=> {
     console.log(err.stack)
   })
 })
-<<<<<<< HEAD
-=======
 
 // Database helpers
->>>>>>> teacherSignup
 
 const addUser = function(firstName, lastName, email, password, userClass) {
   let userTable = userClass === 'teacher' ? 'teachers' : 'students'
@@ -75,11 +69,8 @@ const verifyUser = function(email, password) {
 }
 
 module.exports = {
-<<<<<<< HEAD
-=======
   addUser,
   verifyUser,
->>>>>>> teacherSignup
   db
 }
 
