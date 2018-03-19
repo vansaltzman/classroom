@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path')
 const bodyParser = require('body-parser')
 const { db } = require('../db/mainDb.js')
-const { fb } = require('../db/liveClassroom.js')
+// const { fb } = require('../db/liveClassroom.js')
 
 const app = express()
 
