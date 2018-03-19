@@ -19,6 +19,7 @@ import NavigationBar from './components/NavigationBar.jsx';
 //import ClassView from './components/classView.jsx';
 // import { Router, Route, browserHistory } from 'react-router'
 // import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import SignUp from './SignUp.jsx'
 
 //const logger = createLogger();
 
@@ -36,6 +37,12 @@ if (localStorage.jwtToken) {
 ReactDOM.render(
 	<Provider store={store}>
 		<NavigationBar history={history} />
+		<AppContainer />
+        <SignUp />
 	</Provider>,
 	document.getElementById('app')
 )
+
+
+
+
