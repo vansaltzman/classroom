@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import { teachersClassView } from './teacherClassViewReducer';
 import {reducer as formReducer} from 'redux-form';
 import authReducer from './auth_reducers';
+import { teacherClassViewReducer } from './teacherClassViewReducer.js';
 
 const RootReducer = combineReducers({
-	teachersClassView: teachersClassView,
+	teacherClassView: teacherClassViewReducer,
 	auth: authReducer,
 	form: formReducer
 })
