@@ -40,7 +40,8 @@ export function loginUser({ email, password }) {
       axios.post(`${API_URL}/auth/login`, { email, password })
       .then(response => {
         cookie.save('token', response.data.token, { path: '/' });
-        dispatch({ type: AUTH_USER });
+        dispatch({ type: actionTypes.AUTH_USER });
+        // to reconfigure how to redirect user
         window.location.href = CLIENT_ROOT_URL + '/dashboard';
       })
       .catch((error) => {
