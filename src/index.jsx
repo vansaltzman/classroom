@@ -9,10 +9,10 @@ import rootReducer from './reducers/rootReducer';
 import AppContainer from './containers/app.js';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-const logger = createLogger();
+//const logger = createLogger();
 
 const store = createStore(rootReducer, composeWithDevTools(
-  applyMiddleware(thunk, logger)
+  applyMiddleware(thunk)
 ))
 
 ReactDOM.render(

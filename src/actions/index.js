@@ -2,6 +2,7 @@ import axios from 'axios';
 import { browserHistory } from 'react-router';  
 import cookie from 'react-cookie';  
 import actionTypes from './types';
+import classes from '../../data/teacherClassViewData.js';
 // import { AUTH_USER,  
 //          AUTH_ERROR,
 //          UNAUTH_USER,
@@ -63,4 +64,23 @@ export function protectedTest() {
         errorHandler(dispatch, error.response, AUTH_ERROR)
         });
     }
+}
+
+
+/********************************** GET CLASSES TO DISPLAY ON TEACHERS MAIN VIEW ***********************************/
+//RIGHT NOW JUST USING DUMMY DATA, BUT LATER WILL INVOLVE FETCHING DATA FROM POSTGRESQL
+export function getClasses() {
+	return function(dispatch) {
+		dispatch(getClassesAction()); 
+	}
+}
+
+function getClassesAction() {
+	//console.log(classes);
+  return {
+		type: actionTypes.GET_TEACHERS_CLASSES,
+		//later the pay load shoud be the credentials of the teacher
+		//right now the payload would be just the dummy data
+		classes
+	}
 }

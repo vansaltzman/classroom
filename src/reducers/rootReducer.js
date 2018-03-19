@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import { teachersClassView } from './teacherClassViewReducer';
+import { teacherClassViewReducer } from './teacherClassViewReducer.js';
 
 const RootReducer = combineReducers({
-	teachersClassView: teachersClassView
+	teachersClassView: teacherClassViewReducer
 })
 
 export default RootReducer;

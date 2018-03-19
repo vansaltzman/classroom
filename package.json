@@ -28,6 +28,8 @@
     "webpack": "^2.2.1"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.0",
     "firebase": "^4.11.0",
