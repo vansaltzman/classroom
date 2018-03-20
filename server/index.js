@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path')
 const bodyParser = require('body-parser')
 const main = require('../db/mainDb.js')
-// const { fb } = require('../db/liveClassroom.js')
+const migration = require('./migrationWorker.js')
+const { fb } = require('../db/liveClassroom.js')
 
 const app = express()
 
@@ -32,7 +33,22 @@ app.use(bodyParser.json())
 // Teacher
 
   // Start class
+  app.post('/startClass', (erq, res) => {
+    const { classId } = req.body
 
+    migration.migrateClassToFB(classId)
+    .then(()=> {
+
+      // update redux state?
+
+      res.sendStatus(200)
+      return
+    })
+    .catch(() => {
+      console.log('Issue starting live class')
+      res.sendStatus(500)
+    })
+  })
   // Start Quiz
 
   // End Class

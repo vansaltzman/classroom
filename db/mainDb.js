@@ -103,7 +103,9 @@ const verifyUser = function(email, password) {
 }
 
 const fetchClass = function(classId) {
-  return db.query(`SELECT * FROM classes WHERE id=$1`, [classId])
+  return db.query(`
+  SELECT classes.id, classes.name, teachers.first_name, teachers.last_name, teachers.email, teachers.id as teacher_id, subjects.name as subject 
+  FROM classes, teachers, subjects WHERE classes.id=$1;`, [classId])
   .then(res => {
     return res.rows
   })
