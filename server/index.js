@@ -4,10 +4,19 @@ const bodyParser = require('body-parser')
 const main = require('../db/mainDb.js');
 const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
+<<<<<<< HEAD
 const config = require('./config.js');
 const migration = require('./migrationWorker.js')
+<<<<<<< HEAD
 const { fb, updateQuizResponses } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
+=======
+const { fb } = require('../db/liveClassroom.js')
+=======
+// const config = require('./config.js');
+// const { fb } = require('../db/liveClassroom.js')
+>>>>>>> rebased to grommet ui
+>>>>>>> rebased to grommet ui
 
 const app = express()
 
@@ -16,7 +25,10 @@ app.use(bodyParser.json())
 
 
 // Sign up
+<<<<<<< HEAD
 
+=======
+>>>>>>> rebased to grommet ui
   app.post('/newAccount', (req, res)=> {
     const {firstName, lastName, email, password, userClass} = req.body.newAccount
 
