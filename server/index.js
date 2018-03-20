@@ -13,7 +13,6 @@ app.use(express.static(__dirname + '/../dist'))
 app.use(bodyParser.json())
 
 // Sign up
-  // Specifiy user class in params
   app.post('/newAccount', (req, res)=> {
     const {firstName, lastName, email, password, userClass} = req.body.newAccount
 
@@ -29,19 +28,16 @@ app.use(bodyParser.json())
   })
 
 // Login
-  // Specifiy user class in params
   app.post(`/auth/login`, (req, res)=> {
-    // console.log('test req ', req.body)
     var email = req.body.email;
     var password = req.body.password;
-    // var credentials = req.body;
     dbMethods.verifyUser(email, password)
     .then( (check)=> {
+      check.email = email;
       const newToken = jwt.sign(check, config.jwtSecret);
       if (check) {
         check.token = newToken;
       }
-      console.log('check in server ', check);
       res.send(check)
     })
   
