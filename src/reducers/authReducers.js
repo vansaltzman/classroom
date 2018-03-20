@@ -1,5 +1,5 @@
 import actionTypes from '../actions/types';
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from 'lodash.isempty';
 
 const initialState = { authenticated: false, user: {} }
 // note: reducers should be pure!

@@ -5,7 +5,7 @@ import authReducer from './authReducers';
 // note: reducers should be pure!
 // no side effects
 const RootReducer = combineReducers({
-	teacherClassView: teacherClassViewReducer,
+	teachersClassView: teacherClassViewReducer,
 	auth: authReducer,
 	form: formReducer
 })

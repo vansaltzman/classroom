@@ -39,7 +39,7 @@ build/Release
 server/config.js
 
 # Dependency directories
-node_modules
+node_modules/
 jspm_packages/
 dist/bundle.js
 package-lock.json
