@@ -20,7 +20,6 @@ app.use(bodyParser.json())
 
 
 // Sign up
-
   app.post('/newAccount', (req, res)=> {
     const {firstName, lastName, email, password, userClass} = req.body.newAccount
 
