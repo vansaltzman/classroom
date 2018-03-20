@@ -18,10 +18,11 @@ const store = createStore(rootReducer, composeWithDevTools(
   applyMiddleware(thunk)
 ))
 
-const token = cookie.load('token');
-if(token) {
-	store.dispatch({type: actionTypes.AUTH_USER});
-}
+//wut do we do with this
+// const token = cookie.load('token');
+// if(token) {
+// 	store.dispatch({type: actionTypes.AUTH_USER});
+// }
 
 ReactDOM.render(
 	<Provider store={store}>

@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path')
 const bodyParser = require('body-parser')
-const main = require('../db/mainDb.js')
+const main = require('../db/mainDb.js');
+const dbMethods = require('../db/mainDb.js');
 // const { fb } = require('../db/liveClassroom.js')
 
 const app = express()
@@ -27,6 +28,24 @@ app.use(bodyParser.json())
 
 // Login
   // Specifiy user class in params
+  app.post(`/auth/login`, (req, res)=> {
+    // console.log('test req ', req.body)
+    var email = req.body.email;
+    var password = req.body.password;
+    // var credentials = req.body;
+    dbMethods.verifyUser(email, password, function(data) {
+      res.send(false);
+    })
+    // .then( (check)=> {
+    //   res.send(false)
+    // })
+  
+    .catch((err)=> {
+      if(err) {
+        console.log('err in accessing db when logging in ', err);
+      }
+    })
+  })
 
 
 // Teacher
