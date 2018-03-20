@@ -36,7 +36,7 @@ const addUser = function(firstName, lastName, email, password, userClass) {
   const salt = 10;
   return bcrypt.hash(password, salt)
     .then((hash)=> {
-
+      
       var client
       
       return db.connect().then(newClient => {
@@ -65,7 +65,37 @@ const addUser = function(firstName, lastName, email, password, userClass) {
 }
 
 const verifyUser = function(email, password) {
-  
+
+  // Check if user is a teacher
+  return db.query(`SELECT * FROM teachers WHERE email=$1`, [email])
+  .then((teacherSearch) => {
+    if (teacherSearch.rowCount > 0) {
+      return {table: 'teachers', user: teacherSearch}
+    } else {
+
+  // Check if user is a student
+     return db.query(`SELECT * FROM students WHERE email=$1`, [email])
+      .then((studentSearch) => {
+        if (studentSearch.rowCount > 0) {
+          return {table: 'students', user: studentSearch}
+        } else {
+          return null
+        }
+      })
+    }
+  })
+  .then((res)=> {
+    if (res) {
+      let user = res.user.rows[0]
+      
+    return bcrypt.compare(password, user.password)
+      .then(auth => {
+        return auth
+      })
+    } else {
+      return false
+    }
+  })
 }
 
 module.exports = {
