@@ -90,10 +90,10 @@ const verifyUser = function(email, password) {
       
     return bcrypt.compare(password, user.password)
       .then(auth => {
-        if(auth) {
+        if (auth) {
           return {class: res.class}
         } else {
-          return false;
+          return false
         }
       })
     } else {
@@ -102,9 +102,22 @@ const verifyUser = function(email, password) {
   })
 }
 
+const fetchClass = function(classId) {
+  return db.query(`
+  SELECT classes.id, classes.name, teachers.first_name, teachers.last_name, teachers.email, teachers.id as teacher_id, subjects.name as subject 
+  FROM classes, teachers, subjects WHERE classes.id=$1;`, [classId])
+  .then(res => {
+    return res.rows
+  })
+  .catch(err => {
+    console.log('Issue fetching class from MainDb', err)
+  })
+}
+
 module.exports = {
   addUser,
   verifyUser,
+  fetchClass,
   db
 }
 

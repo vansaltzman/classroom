@@ -18,24 +18,21 @@ db: {
     1: {
       id: 1
       name: English 101
-      teacher: Joe
+      teacher: {id: , email: , name: }
       subject: English
       students: {
-        Ara: {}
+        id: { 
+          name: 'Carlos Ramon',
+          isInClassroom: false,
+          activeView: 'lobby',
+          email: 'cramo@magic.bus',
+          quizzes: {} 
+        },
       }
     }
   }
 }
 */
-
-const startClass = function(classObj) {
-  const classId = classObj.id
-  const classList = fb.ref('/classes/' + classId) 
-
-  return classList.push(classObj)
-  .then(()=> console.log('Launched claass ' + classObj.name))
-  .catch((err)=> console.log('Issue starting class' + err))
-}
 
 const endClass = function(classId) {
  
