@@ -11,6 +11,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import setAuthorizationToken from './utils/setAuthorizationToken';
 import jwt from 'jsonwebtoken';
 import { setCurrentUser } from './actions/index';
+
 import { Router } from 'react-router-dom';
 import { browserHistory } from 'react-router';
 import {syncHistoryWithStore } from 'react-router-redux';
@@ -19,6 +20,7 @@ import NavigationBar from './components/NavigationBar.jsx';
 //import ClassView from './components/classView.jsx';
 // import { Router, Route, browserHistory } from 'react-router'
 // import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+
 
 //const logger = createLogger();
 
