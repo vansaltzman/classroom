@@ -38,10 +38,12 @@ const serverURL = 'http://localhost:3000';
 export function loginUser({ email, password }) {  
     return function(dispatch) {
       axios.post(`${serverURL}/auth/login`, { email, password })
-      .then((response) => {
-        console.log('saving cookie ', response)
+      .then((res) => {
+        console.log('saving cookie ', res)
         
-        cookie.save('token', response.data, { path: '/' });
+        cookie.save('token', res.data, { path: '/' });
+        const token = res.data.token;
+        localStorage.setItem('jwtToken ', token);
         
         dispatch({ type: actionTypes.AUTH_USER });
         // to reconfigure how to redirect user
@@ -49,7 +51,7 @@ export function loginUser({ email, password }) {
       })
       .catch((error) => {
           console.log('error in console logging ', error)
-        errorHandler(dispatch, error.response, actionTypes.AUTH_ERROR)
+        errorHandler(dispatch, error.res, actionTypes.AUTH_ERROR)
       });
       }
     }
@@ -61,14 +63,14 @@ export function protectedTest() {
         headers: { 'Authorization': cookie.load('token') }
         })
         
-        .then(response => {
+        .then(res => {
         dispatch({
             type: actionTypes.PROTECTED_TEST,
-            payload: response.data.content
+            payload: res.data.content
         });
         })
         .catch((error) => {
-        errorHandler(dispatch, error.response, AUTH_ERROR)
+        errorHandler(dispatch, error.res, AUTH_ERROR)
         });
     }
 }

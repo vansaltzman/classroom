@@ -5,7 +5,8 @@
 import actionTypes from '../actions/types';
 
 const initialState = { error: '', message: '', content: '', authenticated: false}
-
+// note: reducers should be pure!
+// no side effects
 export default function(state=initialState, action) {
     switch(action.type) {
         case actionTypes.AUTH_USER:
