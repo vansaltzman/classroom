@@ -31,7 +31,7 @@ db.connect().then((client)=> {
 // Database helpers
 
 const addUser = function(firstName, lastName, email, password, userClass) {
-  let userTable = userClass === 'teacher' ? 'teachers' : 'students'
+  let userclass = userClass === 'teacher' ? 'teachers' : 'students'
 
   const salt = 10;
   return bcrypt.hash(password, salt)
@@ -42,13 +42,13 @@ const addUser = function(firstName, lastName, email, password, userClass) {
       return db.connect().then(newClient => {
         client = newClient
 
-        return client.query(`SELECT * FROM ${userTable} WHERE email=$1`, [email])
+        return client.query(`SELECT * FROM ${userclass} WHERE email=$1`, [email])
         .then(res => {
           if (res.rowCount) {
             return 'User already exists'
           } else {
             return client.query(
-              `INSERT INTO ${userTable} (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)`, 
+              `INSERT INTO ${userclass} (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)`, 
               [firstName, lastName, email, hash]
             )
           }
@@ -70,14 +70,14 @@ const verifyUser = function(email, password) {
   return db.query(`SELECT * FROM teachers WHERE email=$1`, [email])
   .then((teacherSearch) => {
     if (teacherSearch.rowCount > 0) {
-      return {table: 'teachers', user: teacherSearch}
+      return {class: 'teacher', user: teacherSearch}
     } else {
 
   // Check if user is a student
      return db.query(`SELECT * FROM students WHERE email=$1`, [email])
       .then((studentSearch) => {
         if (studentSearch.rowCount > 0) {
-          return {table: 'students', user: studentSearch}
+          return {class: 'student', user: studentSearch}
         } else {
           return null
         }
@@ -90,7 +90,11 @@ const verifyUser = function(email, password) {
       
     return bcrypt.compare(password, user.password)
       .then(auth => {
-        return auth
+        if(auth) {
+          return {class: res.class}
+        } else {
+          return false;
+        }
       })
     } else {
       return false

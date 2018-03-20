@@ -33,12 +33,11 @@ app.use(bodyParser.json())
     var email = req.body.email;
     var password = req.body.password;
     // var credentials = req.body;
-    dbMethods.verifyUser(email, password, function(data) {
-      res.send(false);
+    dbMethods.verifyUser(email, password)
+    .then( (check)=> {
+      console.log('check ', check)
+      res.send(check)
     })
-    // .then( (check)=> {
-    //   res.send(false)
-    // })
   
     .catch((err)=> {
       if(err) {

@@ -17,7 +17,7 @@ const addFrizzle = function(){
     })
     .catch(err => console.log('issue with add Frizzle', err))
 }
-
+addFrizzle();
 
 const removeFrizzle = function(){
   return db.query('DELETE FROM teachers WHERE email=$1', [testTeacher[2]])
@@ -85,7 +85,7 @@ exports.verifyUser = function() {
           return verifyUser(testTeacher[2], testTeacher[3])
         })
         .then((res)=> {
-          if (res === true) {
+          if (!!res === true) {
             done()
           } else {
             done('Failed to match credentials, did not return true')

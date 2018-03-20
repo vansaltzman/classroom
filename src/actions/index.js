@@ -10,52 +10,57 @@ import classes from '../../data/teacherClassViewData.js';
 
 const serverURL = 'http://localhost:3000';
 
-export function errorHandler(dispatch, error, type) {  
-let errorMessage = '';
+// export function errorHandler(dispatch, error, type) {  
+// let errorMessage = '';
 
-    if(error.data.error) {
-        errorMessage = error.data.error;
-    } else if(error.data){
-        errorMessage = error.data;
-    } else {
-        errorMessage = error;
-    }
+//     if(error.data.error) {
+//         errorMessage = error.data.error;
+//     } else if(error.data){
+//         errorMessage = error.data;
+//     } else {
+//         errorMessage = error;
+//     }
 
-    if(error.status === 401) {
-        dispatch({
-        type: type,
-        payload: 'You are not authorized to do this. Please login and try again.'
-        });
-        logoutUser();
-    } else {
-        dispatch({
-        type: type,
-        payload: errorMessage
-        });
-    }
-}
+//     if(error.status === 401) {
+//         dispatch({
+//         type: type,
+//         payload: 'You are not authorized to do this. Please login and try again.'
+//         });
+//         logoutUser();
+//     } else {
+//         dispatch({
+//         type: type,
+//         payload: errorMessage
+//         });
+//     }
+// }
 
 export function loginUser({ email, password }) {  
     return function(dispatch) {
       axios.post(`${serverURL}/auth/login`, { email, password })
-      .then(response => {
-        cookie.save('token', response.data.token, { path: '/' });
-        console.log('saving cookie ', response.data.token)
+      .then((response) => {
+        console.log('saving cookie ', response)
+        
+        cookie.save('token', response.data, { path: '/' });
+        
         dispatch({ type: actionTypes.AUTH_USER });
         // to reconfigure how to redirect user
         window.location.href = CLIENT_ROOT_URL + '/dashboard';
       })
       .catch((error) => {
-        errorHandler(dispatch, error.response, AUTH_ERROR)
+          console.log('error in console logging ', error)
+        errorHandler(dispatch, error.response, actionTypes.AUTH_ERROR)
       });
       }
     }
 
 export function protectedTest() {  
+    console.log('are we running protected test')
     return function(dispatch) {
         axios.get(`${serverURL}/protected`, {
         headers: { 'Authorization': cookie.load('token') }
         })
+        
         .then(response => {
         dispatch({
             type: actionTypes.PROTECTED_TEST,
