@@ -2,7 +2,9 @@ const express = require('express');
 const path = require('path')
 const bodyParser = require('body-parser')
 const main = require('../db/mainDb.js');
+const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
+const config = require('./config.js');
 // const { fb } = require('../db/liveClassroom.js')
 
 const app = express()
@@ -35,7 +37,11 @@ app.use(bodyParser.json())
     // var credentials = req.body;
     dbMethods.verifyUser(email, password)
     .then( (check)=> {
-      console.log('check ', check)
+      const newToken = jwt.sign(check, config.jwtSecret);
+      if (check) {
+        check.token = newToken;
+      }
+      console.log('check in server ', check);
       res.send(check)
     })
   

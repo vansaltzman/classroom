@@ -3,6 +3,8 @@ import { browserHistory } from 'react-router';
 import cookie from 'react-cookie';  
 import actionTypes from './types';
 import classes from '../../data/teacherClassViewData.js';
+import setAuthorizationToken from '../utils/setAuthorizationToken';
+import jwt from 'jsonwebtoken';
 // import { AUTH_USER,  
 //          AUTH_ERROR,
 //          UNAUTH_USER,
@@ -10,44 +12,29 @@ import classes from '../../data/teacherClassViewData.js';
 
 const serverURL = 'http://localhost:3000';
 
-// export function errorHandler(dispatch, error, type) {  
-// let errorMessage = '';
-
-//     if(error.data.error) {
-//         errorMessage = error.data.error;
-//     } else if(error.data){
-//         errorMessage = error.data;
-//     } else {
-//         errorMessage = error;
-//     }
-
-//     if(error.status === 401) {
-//         dispatch({
-//         type: type,
-//         payload: 'You are not authorized to do this. Please login and try again.'
-//         });
-//         logoutUser();
-//     } else {
-//         dispatch({
-//         type: type,
-//         payload: errorMessage
-//         });
-//     }
-// }
+export function setCurrentUser (user) {
+    return {
+        type: actionTypes.SET_CURRENT_USER,
+        user: user
+    }
+}
 
 export function loginUser({ email, password }) {  
     return function(dispatch) {
       axios.post(`${serverURL}/auth/login`, { email, password })
       .then((res) => {
-        console.log('saving cookie ', res)
+        console.log('response in actions ', res)
         
-        cookie.save('token', res.data, { path: '/' });
+        // cookie.save('token', res.data, { path: '/' });
         const token = res.data.token;
+        // console.log('token ', token)
         localStorage.setItem('jwtToken ', token);
-        
-        dispatch({ type: actionTypes.AUTH_USER });
+        setAuthorizationToken(token);
+        dispatch(setCurrentUser(jwt.decode(token)))
+        // console.log('decode ', jwt.decode(token));
+        // dispatch({ type: actionTypes.AUTH_USER });
         // to reconfigure how to redirect user
-        window.location.href = CLIENT_ROOT_URL + '/dashboard';
+        // window.location.href = CLIENT_ROOT_URL + '/dashboard';
       })
       .catch((error) => {
           console.log('error in console logging ', error)
@@ -70,7 +57,8 @@ export function protectedTest() {
         });
         })
         .catch((error) => {
-        errorHandler(dispatch, error.res, AUTH_ERROR)
+                console.log('err in protected test ', error)
+        // errorHandler(dispatch, error.res, AUTH_ERROR)
         });
     }
 }

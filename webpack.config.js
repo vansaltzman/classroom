@@ -35,5 +35,8 @@ module.exports = {
         ]
       }
     ]
-  },
+  }, node: {
+    net: 'empty',
+    dns: 'emtpy'
+  }
 };

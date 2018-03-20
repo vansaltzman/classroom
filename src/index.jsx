@@ -10,6 +10,9 @@ import rootReducer from './reducers/rootReducer';
 import App from './components/app.jsx';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import actionTypes from './actions/types';
+import setAuthorizationToken from './utils/setAuthorizationToken';
+import jwt from 'jsonwebtoken';
+import { setCurrentUser } from './actions/index';
 
 
 
@@ -18,6 +21,11 @@ import actionTypes from './actions/types';
 const store = createStore(rootReducer, composeWithDevTools(
   applyMiddleware(thunk)
 ))
+if (localStorage.jwtToken) {
+	console.log('decoded ', jwt.decode(localStorage.jwtToken))
+	setAuthorizationToken(localStorage.jwtToken);
+	store.dispatch(setCurrentUser( jwt.decode(localStorage.jwtToken)));
+}
 
 //wut do we do with this
 // const token = cookie.load('token');
