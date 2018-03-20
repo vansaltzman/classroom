@@ -70,14 +70,14 @@ const verifyUser = function(email, password) {
   return db.query(`SELECT * FROM teachers WHERE email=$1`, [email])
   .then((teacherSearch) => {
     if (teacherSearch.rowCount > 0) {
-      return {table: 'teachers', user: teacherSearch}
+      return {class: 'teacher', user: teacherSearch}
     } else {
 
   // Check if user is a student
      return db.query(`SELECT * FROM students WHERE email=$1`, [email])
       .then((studentSearch) => {
         if (studentSearch.rowCount > 0) {
-          return {table: 'students', user: studentSearch}
+          return {class: 'student', user: studentSearch}
         } else {
           return null
         }
@@ -90,7 +90,11 @@ const verifyUser = function(email, password) {
       
     return bcrypt.compare(password, user.password)
       .then(auth => {
-        return auth
+        if (auth) {
+          return {class: res.class}
+        } else {
+          return false
+        }
       })
     } else {
       return false
@@ -98,9 +102,20 @@ const verifyUser = function(email, password) {
   })
 }
 
+const fetchClass = function(classId) {
+  return db.query(`SELECT * FROM classes WHERE id=$1`, [classId])
+  .then(res => {
+    return res.rows
+  })
+  .catch(err => {
+    console.log('Issue fetching class from MainDb', err)
+  })
+}
+
 module.exports = {
   addUser,
   verifyUser,
+  fetchClass,
   db
 }
 
