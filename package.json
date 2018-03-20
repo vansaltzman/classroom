@@ -34,8 +34,11 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.17.2",
+    "css-loader": "^0.28.11",
     "express": "^4.15.0",
     "firebase": "^4.11.0",
+    "grommet": "^1.10.1",
+    "node-sass": "^4.7.2",
     "nodemon": "^1.17.2",
     "pg": "^7.4.1",
     "react": "^15.4.2",
@@ -43,11 +46,14 @@
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.3.0",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "sass-loader": "^6.0.7",
+    "style-loader": "^0.20.3"
   },
   "bugs": {
     "url": "https://github.com/The-North/classroom/issues"

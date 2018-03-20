@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import cookie from 'react-cookie';
 import rootReducer from './reducers/rootReducer';
-import AppContainer from './containers/app.js';
+import App from './components/app.jsx';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import actionTypes from './actions/types';
 
@@ -27,7 +27,7 @@ const store = createStore(rootReducer, composeWithDevTools(
 
 ReactDOM.render(
 	<Provider store={store}>
-		<AppContainer />
+		<App />
 	</Provider>,
 	document.getElementById('app')
 )

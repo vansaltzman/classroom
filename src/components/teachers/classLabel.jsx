@@ -1,11 +1,17 @@
 import React from 'react';
+import Card from 'grommet/components/Card';
+import Tile from 'grommet/components/Tile';
 
-const ClassLabel = () => {
+const ClassLabel = (props) => {
   return (
-		<div>
-			class label
-		</div>
+		<Tile>
+			<Card thumbnail={props.item.thumbnail}
+				label={props.item.year}
+				heading={props.item.className}
+				description='Sample description providing more details.' />
+		</Tile>
 	)
 }
 
 export default ClassLabel
+

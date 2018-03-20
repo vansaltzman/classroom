@@ -1,12 +1,76 @@
-import React from 'react';
-import ClassLabel from './classLabel.jsx';
+import React from "react";
+import ClassLabel from "./classLabel.jsx";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+//import ClassLabel from './classLabel.jsx';
+
+/****** Grommet Stuff ******/
+import "grommet/scss/hpinc/index.scss";
+import GrommetApp from "grommet/components/App";
+import Header from "grommet/components/Header";
+import Title from "grommet/components/Title";
+import Box from "grommet/components/Box";
+import Search from "grommet/components/Search";
+import Menu from "grommet/components/Menu";
+import MenuIcon from "grommet/components/icons/base/Menu";
+import Anchor from "grommet/components/Anchor";
+import Hero from "grommet/components/Hero";
+import Heading from "grommet/components/Heading";
+import Image from "grommet/components/Image";
+import Button from "grommet/components/Button";
+import Tiles from "grommet/components/Tiles";
+import Tile from "grommet/components/Tile";
+import Section from "grommet/components/Section";
+import AddCircleIcon from "grommet/components/icons/base/AddCircle";
+
+/****** Grommet Stuff ******/
 
 class TeacherMainView extends React.Component {
+  constructor() {
+    super();
+  }
+
+  componentDidMount() {
+    //this.props.getClassesAction()
+  }
+
   render() {
-		<div>
-			TeacherMainView
-		</div>
-	}
+    return (
+      <div>
+        {/* <Section> */}
+          <Menu
+            responsive={true}
+            icon={<MenuIcon />}
+            label="Menu"
+            inline={false}
+            primary={false}
+          >
+            <Anchor href="#" className="active">
+              Classes
+            </Anchor>
+            <Anchor href="#">Students</Anchor>
+            <Anchor href="#">Quizzes</Anchor>
+          </Menu>
+        {/* </Section> */}
+        <Tiles flush={false} selectable={true}>
+          {/* onSelect some function */}
+          {this.props.classes.map((item, index) => {
+            return <ClassLabel item={item} key={index} />;
+          })}
+          <Tile label="Label" href="#">
+            <Button icon={<AddCircleIcon size="huge" />} />
+            {/* onClick={...} */}
+          </Tile>
+        </Tiles>
+      </div>
+    );
+  }
 }
 
-export default TeacherMainView
+function mapStateToProps(state) {
+  return {
+    classes: state.teachersClassView.classes
+  };
+}
+
+export default connect(mapStateToProps)(TeacherMainView);

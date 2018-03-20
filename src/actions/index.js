@@ -76,13 +76,13 @@ export function protectedTest() {
 
 /********************************** GET CLASSES TO DISPLAY ON TEACHERS MAIN VIEW ***********************************/
 //RIGHT NOW JUST USING DUMMY DATA, BUT LATER WILL INVOLVE FETCHING DATA FROM POSTGRESQL
-export function getClasses() {
-	return function(dispatch) {
-		dispatch(getClassesAction()); 
-	}
-}
+// export function getClasses() {
+// 	return (dispatch) => {
+// 		dispatch(getClassesAction());
+// 	}
+// }
 
-function getClassesAction() {
+export function getClassesAction() {
 	//console.log(classes);
   return {
 		type: actionTypes.GET_TEACHERS_CLASSES,
