@@ -2,8 +2,12 @@ const firebase = require('firebase');
 const config = require('../server/config.js');
 const dummyStudentData=require('../db/dummyStudentsData');
 // Add config
+<<<<<<< HEAD
 
 
+=======
+const config = require('../server/config.js')
+>>>>>>> Rebase commit
 
 firebase.initializeApp(config);
 const fb = firebase.database();
@@ -38,6 +42,11 @@ const endClass = function(classId) {
 
 // Database helpers
 
+<<<<<<< HEAD
 module.exports = {  
   fb
+=======
+module.exports = {
+  fb,
+>>>>>>> Rebase commit
 }

@@ -16,6 +16,11 @@ import { browserHistory } from 'react-router';
 import {syncHistoryWithStore } from 'react-router-redux';
 import { createBrowserHistory } from 'history';
 import NavigationBar from './components/NavigationBar.jsx';
+//import ClassView from './components/classView.jsx';
+// import { Router, Route, browserHistory } from 'react-router'
+// import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+
+//const logger = createLogger();
 
 const store = createStore(rootReducer, composeWithDevTools(
   applyMiddleware(thunk)
