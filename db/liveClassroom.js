@@ -1,11 +1,6 @@
 const firebase = require('firebase')
 // Add config
-
-const config = {
-	apiKey: '',
-	authDomain: '',
-	databaseURL: ''
-}
+const config = require('../server/config.js')
 
 firebase.initializeApp(config);
 const fb = firebase.database();
@@ -42,5 +37,4 @@ const endClass = function(classId) {
 
 module.exports = {
   fb,
-  startClass,
 }

@@ -35,12 +35,8 @@ module.exports = {
         ]
       }
     ]
-<<<<<<< HEAD
   }, node: {
     net: "empty",
     dns: "empty"
   }
-=======
-  },
->>>>>>> MainView
 };
