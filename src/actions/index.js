@@ -84,3 +84,80 @@ export function getClassesAction() {
 		classes
 	}
 }
+
+//show class builder modal
+export function toggleModalAction() {
+	return {
+		type: actionTypes.TOGGLE_CLASS_BUILDER_MODAL
+	}
+}
+
+
+/************************** CLASS BUILDER MODAL *************************/
+export function updateNewClassName(event) {
+	return (dispatch) => {
+		dispatch(updateNewClassNameAction(event))
+	}
+}
+function updateNewClassNameAction(event) {
+	return {
+		type: actionTypes.UPDATE_NEW_CLASS_NAME_ACTION,
+		event
+	}
+}
+
+export function updateNewClassSubject(event) {
+	return (dispatch) => {
+		dispatch(updateNewClassSubjectAction(event))
+	}
+}
+function updateNewClassSubjectAction(event) {
+	return {
+		type: actionTypes.UPDATE_NEW_CLASS_SUBJECT_ACTION,
+		event
+	}
+}
+
+export function updateNewClassQuarter(quarter) {
+	return (dispatch) => {
+		dispatch(updateNewClassQuarterAction(quarter))
+	}
+}
+function updateNewClassQuarterAction(quarter) {
+	return {
+		type: actionTypes.UPDATE_NEW_CLASS_QUARTER_ACTION,
+		quarter
+	}
+}
+
+export function updateNewClassYear(year) {
+	return (dispatch) => {
+		dispatch(updateNewClassYearAction(year));
+	}
+}
+function updateNewClassYearAction(year) {
+	return {
+		type: actionTypes.UPDATE_NEW_CLASS_YEAR_ACTION,
+		year
+	}
+}
+
+
+
+//Adding basic info of a new class into postgress db
+// export function addClass() {
+
+// }
+export function addClassAction() {
+	return {
+		type: actionTypes.ADD_NEW_CLASS_ACTION
+	}
+}
+
+//making request to postgres
+function getUpdatedClassList() {
+	return {
+		type: actionTypes.GET_UPDATED_CLASS_LIST
+	}
+}
+

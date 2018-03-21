@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as Actions from '../actions/index';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import ClassView from './teachers/classView.jsx';
 
 /****** Grommet Stuff ******/
 import 'grommet/scss/hpinc/index.scss';
@@ -31,6 +32,8 @@ class App extends React.Component {
 			<div>
 				{/* Will need to put a conditional statement here for different class of user
 				in case of conditional rendering or use router */}
+				{/* <ClassView /> */}
+				{/* Comment the TeacherMainView out for now...will need to use router later */}
 				<TeacherMainView />
 			</div>
 		)
