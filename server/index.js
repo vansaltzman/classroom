@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
 const config = require('./config.js');
 const migration = require('./migrationWorker.js')
-const { fb } = require('../db/liveClassroom.js')
+// const { fb } = require('../db/liveClassroom.js')
 
 const app = express()
 
@@ -34,11 +34,13 @@ app.use(bodyParser.json())
     var password = req.body.password;
     dbMethods.verifyUser(email, password)
     .then( (check)=> {
+      // this adds the email to our object that we will then add to our store with user info
       check.email = email;
       const newToken = jwt.sign(check, config.jwtSecret);
       if (check) {
         check.token = newToken;
       }
+      console.log('check before sending back to server ', check)
       res.send(check)
     })
   

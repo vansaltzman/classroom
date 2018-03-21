@@ -1,6 +1,5 @@
 import axios from 'axios';  
 import { browserHistory } from 'react-router';  
-import cookie from 'react-cookie';  
 import actionTypes from './types';
 import classes from '../../data/teacherClassViewData.js';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
@@ -20,8 +19,10 @@ export function loginUser({ email, password }) {
     return function(dispatch) {
       axios.post(`${serverURL}/auth/login`, { email, password })
       .then((res) => {
+        console.log('res from server upon login ', res )
         const token = res.data.token;
         localStorage.setItem('jwtToken ', token);
+        // to check: are we storing the token correctly in local storage?
         setAuthorizationToken(token);
         var decoded = jwt.decode(token)
         dispatch(setCurrentUser(jwt.decode(token)))
