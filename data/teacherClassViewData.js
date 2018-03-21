@@ -21,3 +21,17 @@ const classes = [
 
 export default classes
 // will be different depending on what we get back from postgres
+
+// db: {
+//     classes: {
+//       1: {
+//         id: 1
+//         name: English 101
+//         teacher: Joe
+//         subject: English
+//         students: {
+//           Ara: {}
+//         }
+//       }
+//     }
+//   }
