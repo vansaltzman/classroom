@@ -27,9 +27,15 @@ import Button from 'grommet/components/Button';
 class App extends React.Component {
   render() {
 		return(
+			// <Router>
+			// 	<Route path="/" component={TeacherMainView} />
+			// 	<Route path='/class' component={ClassView} />
+			// </Router>
 			<div>
 				{/* Will need to put a conditional statement here for different class of user
 				in case of conditional rendering or use router */}
+				{/* <ClassView /> */}
+				{/* Comment the TeacherMainView out for now...will need to use router later */}
 				<TeacherMainView />
 			</div>
 		)
