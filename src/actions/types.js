@@ -3,8 +3,6 @@ const actionTypes = {
 	UNAUTH_USER:'unauth_user',
 	AUTH_ERROR:'auth_error',
 	SET_CURRENT_USER: 'SET_CURRENT_USER',
-	// FORGOT_PASSWORD_REQUEST = 'forgot_password_request',
-	// RESET_PASSWORD_REQUEST = 'reset_password_request',
 	PROTECTED_TEST: 'protected_test',
 	GET_TEACHERS_CLASSES: 'get_teachers_classes'
 }

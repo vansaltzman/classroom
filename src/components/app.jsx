@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as Actions from '../actions/index';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import NavigationBar from './NavigationBar.jsx';
+import { Link, withRouter } from 'react-router';  
 
 /****** Grommet Stuff ******/
 import 'grommet/scss/hpinc/index.scss';
@@ -34,7 +36,6 @@ class App extends React.Component {
 	}
 }
 
-
 function mapStateToProps(state) {
   return {
 		// subject to change
@@ -46,6 +47,6 @@ function matchDispatchToProps(dispatch) {
 	return bindActionCreators(Actions, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(App)
+export default withRouter(connect(mapStateToProps, matchDispatchToProps)(App));
 //export default App;
 

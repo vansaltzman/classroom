@@ -33,26 +33,6 @@ export function loginUser({ email, password }) {
       }
     }
 
-export function protectedTest() {  
-    console.log('are we running protected test')
-    return function(dispatch) {
-        axios.get(`${serverURL}/protected`, {
-        headers: { 'Authorization': cookie.load('token') }
-        })
-        
-        .then(res => {
-        dispatch({
-            type: actionTypes.PROTECTED_TEST,
-            payload: res.data.content
-        });
-        })
-        .catch((error) => {
-                console.log('err in protected test ', error)
-        // errorHandler(dispatch, error.res, AUTH_ERROR)
-        });
-    }
-}
-
 
 /********************************** GET CLASSES TO DISPLAY ON TEACHERS MAIN VIEW ***********************************/
 //RIGHT NOW JUST USING DUMMY DATA, BUT LATER WILL INVOLVE FETCHING DATA FROM POSTGRESQL

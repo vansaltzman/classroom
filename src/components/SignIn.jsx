@@ -1,7 +1,7 @@
 import React, { Component } from 'react';  
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';  
-import { Link } from 'react-router';  
+import { Link, withRouter } from 'react-router';  
 import { loginUser } from '../actions';
 
 const form = reduxForm({
@@ -21,7 +21,6 @@ class SignIn extends Component {
     }
     render() {
         const {handleSubmit} = this.props;
-
         return (
             <div>
               <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} >  
@@ -48,4 +47,4 @@ function mapStateToProps(state) {
     };
   }
   
-export default connect(mapStateToProps, { loginUser })(form(SignIn));
+export default withRouter(connect(mapStateToProps, { loginUser })(form(SignIn)));
