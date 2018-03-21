@@ -5,14 +5,12 @@ const main = require('../db/mainDb.js');
 const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
 // const config = require('./config.js');
+const config = require('./config.js');
 const migration = require('./migrationWorker.js')
 const { fb, updateQuizResponses } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
-
 // const config = require('./config.js');
 // const { fb } = require('../db/liveClassroom.js')
-
-
 const app = express()
 
 app.use(express.static(__dirname + '/../dist'))
