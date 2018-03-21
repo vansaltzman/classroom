@@ -5,6 +5,9 @@ import actionTypes from './types';
 import classes from '../../data/teacherClassViewData.js';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import jwt from 'jsonwebtoken';
+const { fb } = require('../../db/liveClassroom.js')
+
+// import { fbConfig } from '../../server/config.js'
 
 const serverURL = 'http://localhost:3000';
 
@@ -128,9 +131,32 @@ function getUpdatedClassList() {
 	}
 }
 
+export function goLive(classObj) {
+	fb.ref('classes').push(classObj) // Should this be going through server?
+	.then(() => {
+		
+		dispatch(goLiveAction(classObj))
+		
+		fb.ref('classes/' + classObj.id + '/students').on('value', (snap)=> {
+			return (dispatch => {
+				dispatch(updateStudents(snap.val()))
+			})
+		})
+	})
+}
+function goLiveAction(classObj) {
+	return {
+		type: actionTypes.GO_LIVE,
+		classObj
+	}
+}
+
+
 /************************** TEACHER QUIZ VIEW *************************/
 
-export function getQuiz(quizObj) {
+export function getStudentValues(quizObj) {
+	// for each student's responsense create a value ref that dispatches the get student answer action
+
 	return (dispatch) => {
 		dispatch(getQuizAction(object))
 	}
@@ -145,11 +171,6 @@ function getQuizAction({ students, quizName, timeRemaining, questions }) {
 	}
 }
 
-export function getStudentAnswer() {
-	return (dispatch) => {
-		dispatch(getStudentAnswerAction(answerObj))
-	}
-}
 function getStudentAnswerAction({ studentId, question, answer }) {
 	return {
 		type: actionTypes.GET_STUDENT_ANSWER,

@@ -12,12 +12,20 @@ class ClassView extends React.Component {
 		super();
 	}
 
+	handleGoLive() {
+		axios.get('/class', {
+			params:{classId: this.props.classId}
+		}).then((classObj)=> {
+			this.props.goLive(classObj.data)
+		})
+	}
+
   render() {
 		return(
 			<Section>
 				<Button icon={<DeployIcon />}
   							label='Go Live'
-  							// onClick={...}
+  								onClick={()=> this.handleGoLive()}
   							primary={false}
   							secondary={false}
   							accent={true}
@@ -45,4 +53,17 @@ class ClassView extends React.Component {
 	}
 }
 
-export default ClassView
+function mapStateToProps(state) {
+  return {
+		students: state.teacherClassView.students,
+		quizzes: state.teacherClassview.quizzes,
+		classId: state.teacherClassview.classId
+  };
+}
+
+function matchDispatchToProps(dispatch) {
+	return bindActionCreators(Actions, dispatch);
+}
+
+
+export default connect(mapStateToProps, matchDispatchToProps)(ClassView);

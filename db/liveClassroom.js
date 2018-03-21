@@ -2,7 +2,7 @@ const firebase = require('firebase')
 // Add config
 const config = require('../server/config.js')
 
-firebase.initializeApp(config);
+firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
 
 /*

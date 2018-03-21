@@ -14,6 +14,7 @@ const actionTypes = {
 	UPDATE_NEW_CLASS_YEAR_ACTION: 'update_new_class_year_action',
 	GET_QUIZ: 'GET_QUIZ',
 	GET_STUDENT_ANSWER: 'GET_STUDENT_ANSWER',
+	GO_LIVE: 'GO_LIVE',
 }
 
 export default actionTypes

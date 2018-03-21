@@ -8,7 +8,7 @@ import { routerReducer } from 'react-router-redux';
 // no side effects
 const RootReducer = combineReducers({
 	teachersClassView: teacherClassViewReducer,
-	teachersQuizView: teacherQuizViewReducer,
+	// teachersQuizView: teacherQuizViewReducer,
 	auth: authReducer,
 	form: formReducer,
 	routing: routerReducer
