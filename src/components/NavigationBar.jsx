@@ -10,6 +10,8 @@ import TeacherMainView from './teachers/mainView.jsx';
 import TeacherQuizView from './teachers/quizView.jsx';
 import QuizView from './teachers/quizView.jsx'
 import ClassView from './teachers/classView.jsx'
+import SignUp from './Signup.jsx';
+import StudentViewQuiz from './students/StudentViewQuiz.jsx'
 
 
 import "grommet/scss/hpinc/index.scss";
@@ -81,6 +83,11 @@ class NavigationBar extends React.Component {
                     </Menu>
                 </Box>
             </Header>
+                            <li> < Link to="/signup"> Signup </Link> </li>
+                            <li> < Link to="/login"> Login </Link> </li>
+                            <li> < Link to="/quiz"> Quiz </Link> </li>
+                            
+
 
         
                         <Switch>
@@ -91,8 +98,10 @@ class NavigationBar extends React.Component {
                             } />  
                             <Route path="/login" component={SignIn}  />
                             <Route path="/teacherQuiz" component={ClassView}  />
-                            <Route path="/quiz" component={QuizView}  />
+                        
                             
+                            <Route path="/signUp" component={SignUp}/>
+                            <Route path="/quiz" component={StudentViewQuiz}/>
                         </Switch>
                 </nav>
                 </Router>
