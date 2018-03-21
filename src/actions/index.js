@@ -128,3 +128,32 @@ function getUpdatedClassList() {
 	}
 }
 
+/************************** TEACHER QUIZ VIEW *************************/
+
+export function getQuiz(quizObj) {
+	return (dispatch) => {
+		dispatch(getQuizAction(object))
+	}
+}
+function getQuizAction({ students, quizName, timeRemaining, questions }) {
+	return {
+		type: actionTypes.GET_QUIZ,
+		students,
+		quizName,
+		timeRemaining,
+		questions
+	}
+}
+
+export function getStudentAnswer() {
+	return (dispatch) => {
+		dispatch(getStudentAnswerAction(answerObj))
+	}
+}
+function getStudentAnswerAction({ studentId, question, answer }) {
+	return {
+		type: actionTypes.GET_STUDENT_ANSWER,
+		question,
+		answer
+	}
+}

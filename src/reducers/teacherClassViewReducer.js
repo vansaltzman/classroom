@@ -8,13 +8,6 @@ export function teacherClassViewReducer(state={
 	newClassSubject: '',
 	newClassQuarter: '',
 	newClassYear: ''
-	// newClass: {
-	// 	className: '',
-	// 	thumbnail: "https://regmedia.co.uk/2016/10/17/javascript_photo_via_shutterstock.jpg?x=442&y=293&crop=1",
-	// 	subject: '',
-	// 	quarter: '',
-	// 	year: ''
-	// }
 }, action) {
   switch(action.type) {
 		case actionTypes.GET_TEACHERS_CLASSES:

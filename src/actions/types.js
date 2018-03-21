@@ -12,6 +12,8 @@ const actionTypes = {
 	UPDATE_NEW_CLASS_SUBJECT_ACTION: 'update_new_class_subject_action',
 	UPDATE_NEW_CLASS_QUARTER_ACTION: 'update_new_class_quarter_action',
 	UPDATE_NEW_CLASS_YEAR_ACTION: 'update_new_class_year_action',
+	GET_QUIZ: 'GET_QUIZ',
+	GET_STUDENT_ANSWER: 'GET_STUDENT_ANSWER',
 }
 
 export default actionTypes
