@@ -112,6 +112,11 @@ class NavigationBar extends React.Component {
                     </Menu>
                 </Box>
             </Header>
+                            <li> < Link to="/signup"> Signup </Link> </li>
+                            <li> < Link to="/login"> Login </Link> </li>
+                            <li> < Link to="/quiz"> Quiz </Link> </li>
+                            
+
 
         
                         <Switch>
@@ -124,8 +129,10 @@ class NavigationBar extends React.Component {
                             <Route path="/studentmainview" component={StudentMainView} />
                             <Route path="/login" component={SignIn}  />
                             <Route path="/teacherQuiz" component={ClassView}  />
-                            <Route path="/quiz" component={QuizView}  />
+                        
                             
+                            <Route path="/signUp" component={SignUp}/>
+                            <Route path="/quiz" component={StudentViewQuiz}/>
                         </Switch>
                 </nav>
                 </Router>

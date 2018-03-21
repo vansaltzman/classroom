@@ -51,8 +51,8 @@ class App extends React.Component {
 				<TeacherMainView />
 				This is just a place holder for now.
 				{/* <SignUp/> */}
-				<StudentViewQuiz/>
-				<SignUp/>
+				{/* <StudentViewQuiz/>
+				<SignUp/> */}
 			</div>
 		)
 	}
