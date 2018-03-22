@@ -7,6 +7,9 @@ import Section from 'grommet/components/Section';
 import DeployIcon from 'grommet/components/icons/base/Deploy';
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
+import TableHeader from 'grommet/components/TableHeader';
+import Sort from 'grommet-addons/components/Sort'
+
 import moment from 'moment'
 
 
@@ -20,7 +23,6 @@ import moment from 'moment'
 const students = {
 		'37': 
 		 { name: 'Carlos Ramon',
-			 isInClassroom: true,
 			 isHere: true,
 			 email: 'cramo@magic.bus',
 			 quizzes: {
@@ -54,7 +56,6 @@ const students = {
 		},
 		'38': 
 		 { name: 'Keesha Franklin',
-			 isInClassroom: false,
 			 isHere: true,
 			 email: 'kfrank@magic.bus',
 			 quizzes: {
@@ -88,8 +89,7 @@ const students = {
 		},
 		'39': 
 		 { name: 'Dorothy Rourke',
-			 isInClassroom: false,
-			 isHere: false,
+			 isHere: true,
 			 email: 'drour@magic.bus',
 			 quizzes: {
 				12 : {
@@ -122,7 +122,6 @@ const students = {
 		},
 		'40': 
 		 { name: 'Arnold Perlstein',
-			 isInClassroom: false,
 			 isHere: false,
 			 email: 'aperl@magic.bus',
 			 quizzes: {
@@ -187,26 +186,28 @@ const students = {
 
 const QuizView = ({}) => {
 	return (
+		<div>
+			{/* <Sort 
+				options={['Name', 'Current Question', 'Time', 'Score']}
+				value='Name'
+				direction='asc'
+				// onChange={...}
+			/> */}
 			<Table>
-			<thead>
-				<tr>
-					<th>
-						Name
-					</th>
-					<th>
-						Current Question
-					</th>
-					<th>
-						Time on Question
-					</th>
-					<th>
-						Score
-					</th>
-				</tr>
-			</thead>
+			<TableHeader labels={['Name', 'Current Question', 'Time on Question', 'Score']}
+				sortIndex={false}
+				sortAscending={true}
+			/>
 			<tbody>
 			{Object.keys(students).map(studentId => {
-				return <TableRow style={{background: students[studentId].quizzes[quiz.id].isFinished ? 'green' : students[studentId].isHere ? 'white' : 'lightgrey'}}>
+
+					// !-- Need to add more human readable variables for long object paths
+
+				return <TableRow 
+					style={{
+						background: students[studentId].quizzes[quiz.id].isFinished ? 'lightgreen' : students[studentId].isHere ? 'white' : 'lightgrey',
+						height: '100px'
+					}}>
 					<td>
 						{students[studentId].name}
 					</td>
@@ -225,7 +226,6 @@ const QuizView = ({}) => {
 
 								let isCorrect = 
 								Object.keys(students[studentId].quizzes[quiz.id].responses[questionKey].answers).reduce((acc, answerKey)=> {
-									debugger
 									if (quiz.questions[questionKey].answers[answerKey].isCorrect !== students[studentId].quizzes[quiz.id].responses[questionKey].answers[answerKey]) {
 										return false
 									} else {
@@ -247,6 +247,7 @@ const QuizView = ({}) => {
 			}
 			</tbody>
 			</Table>
+		</div>
 	)
 }
 
