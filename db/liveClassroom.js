@@ -1,5 +1,6 @@
 const firebase = require('firebase');
 const config = require('../server/config.js');
+const dummyStudentData=require('../db/dummyStudentsData');
 // Add config
 
 
@@ -36,12 +37,7 @@ const endClass = function(classId) {
 }
 
 // Database helpers
-const updateQuizResponses = function (responseObj, studentId, quizId, classId) {
-  
-}
 
-
-module.exports = {
-  updateQuizResponses,
+module.exports = {  
   fb
 }

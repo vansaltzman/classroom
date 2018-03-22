@@ -82,16 +82,16 @@ app.use(bodyParser.json())
   
   // Answer Quiz Question
   app.post('/updateLiveQuizAnswers', (req, res)=> {
-    var studentId = 1;
-    var quizId = 2;
+    var studentId = 37;
+    var quizId = 12;
     var classId = 3;
     updateQuizResponses(dummyAnswerData, studentId, quizId, classId)
-    .then(()=> {
-      res.sendStatus(200)
-    })
-    .catch((err)=> {
-      console.log('err in updating quiz response ', err)
-    })
+    // .then(()=> {
+    //   res.sendStatus(200)
+    // })
+    // .catch((err)=> {
+    //   console.log('err in updating quiz response ', err)
+    // })
     console.log('dummy data ', dummyAnswerData)
   })
 
