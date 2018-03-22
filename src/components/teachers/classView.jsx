@@ -24,6 +24,7 @@ class ClassView extends React.Component {
 	}
 
   render() {
+
 		return(
 			<Section>
 				<Button icon={<DeployIcon />}
