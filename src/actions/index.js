@@ -12,7 +12,7 @@ const serverURL = 'http://localhost:3000';
 export function setCurrentUser (user) {
     return {
         type: actionTypes.SET_CURRENT_USER,
-        user: user
+		user: user
     }
 }
 
@@ -22,10 +22,9 @@ export function loginUser({ email, password }) {
       .then((res) => {
         const token = res.data.token;
         localStorage.setItem('jwtToken ', token);
-        // to check: are we storing the token correctly in local storage?
         setAuthorizationToken(token);
-        const decoded = jwt.decode(token)
-        dispatch(setCurrentUser(jwt.decode(token)))
+		const decoded = jwt.decode(token)
+        dispatch(setCurrentUser(decoded))
       })
       .catch((error) => {
           console.log('error in console logging ', error)

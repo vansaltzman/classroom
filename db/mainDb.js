@@ -91,7 +91,7 @@ const verifyUser = function(email, password) {
     return bcrypt.compare(password, user.password)
       .then(auth => {
         if (auth) {
-          return {class: res.class}
+          return {class: res.class, id: user.id}
         } else {
           return false
         }
