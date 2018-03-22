@@ -9,6 +9,7 @@ import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
 import TableHeader from 'grommet/components/TableHeader';
 import Sort from 'grommet-addons/components/Sort'
+import Animate from './animate.jsx'
 
 import moment from 'moment'
 
@@ -18,7 +19,6 @@ import moment from 'moment'
 	// Object.keys(quiz.questions).filter(question => question.position === 1)
 
 	// This should be set in firebase when teacher releases quiz to class
-
 
 const students = {
 		'37': 
@@ -184,7 +184,11 @@ const students = {
 		}
 	}
 
-const QuizView = ({}) => {
+const QuizView = ({ currentClass }) => {
+
+	const students = currentClass.students
+	const quiz = currentClass.quizzes[currentClass.activeView]
+
 	return (
 		<div>
 			{/* <Sort 
@@ -212,10 +216,11 @@ const QuizView = ({}) => {
 						{students[studentId].name}
 					</td>
 					<td className='secondary'>
+						<Animate text=
 						{
 							quiz.questions[students[studentId].quizzes[quiz.id].currentQuestion].position + ': ' +
 							quiz.questions[students[studentId].quizzes[quiz.id].currentQuestion].text
-						}
+						}/>
 					</td>
 					<td className='secondary'>
 						{moment.duration(students[studentId].quizzes[quiz.id].responses[students[studentId].quizzes[quiz.id].currentQuestion].time).humanize()}

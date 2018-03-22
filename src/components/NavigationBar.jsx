@@ -11,6 +11,7 @@ import TeacherQuizView from './teachers/quizView.jsx';
 import QuizView from './teachers/quizView.jsx'
 import ClassView from './teachers/classView.jsx'
 import StudentClass from './students/classViewDefault.jsx'
+import TeacherQuizContainer from './teachers/quizViewContainer.jsx'
 
 
 import "grommet/scss/hpinc/index.scss";
@@ -77,7 +78,7 @@ class NavigationBar extends React.Component {
                             < Link to="/quiz"> Quiz </Link>
                         </Anchor>
                         <Anchor href='#'>
-                            < Link to="/studentClass"> Student Quiz </Link>
+                            < Link to="/studentClass"> Student Class </Link>
                         </Anchor>
                         <Anchor href='#'>
                             Logout
@@ -95,7 +96,7 @@ class NavigationBar extends React.Component {
                             } />  
                             <Route path="/login" component={SignIn}  />
                             <Route path="/teacherQuiz" component={ClassView}  />
-                            <Route path="/quiz" component={QuizView}  />
+                            <Route path="/quiz" component={TeacherQuizContainer}  />
                             <Route path="/studentClass" component={StudentClass}  />
                             
                         </Switch>
