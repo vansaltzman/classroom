@@ -82,8 +82,64 @@ app.use(bodyParser.json())
   // Answer Quiz Question
 
   // Complete Quiz
+  
+app.post('/addClass', (req, res) => {
+  console.log('server side data for add class',  req.body);
+  main.addNewClass(req.body)
+  .then(() => {
+    console.log('Class is added')
+  })
+  .catch((err) => {
+    if (err) throw err;
+  })
+})
 
+app.post('/allClasses', (req, res) => {
+  //console.log('serverside /allClasses', req.body);
+  main.getClassesForTeacherMainView(req.body.email)
+  .then((data) => {
+    res.send(data.rows);
+    //console.log('server side classes', data.rows)
+  })
+  .catch((err) => {
+    if (err) throw err;
+  })
+})
 
+app.get('/getAllStudents', (req, res) => {
+  main.getAllStudents()
+  .then((data) => {
+    //console.log('serverside', data.rows);
+    res.send(data.rows);
+  })
+  .catch((err) => {
+    if (err) throw err
+  })
+})
+
+app.post('/getAllStudentsInAClass', (req, res) => {
+  //console.log('class id server side', req.body);
+  main.getAllStudentsBelongToAClass(req.body.id)
+  .then((data) => {
+    res.send(data.rows);
+    //console.log('server side data', data.rows);
+  })
+  .catch((err) => {
+    if (err) throw err
+  })
+  
+})
+
+app.post('/getStudentsClasses', (req, res) => {
+  main.getClassesBelongToAStudent(req.body.email)
+  .then((data) => {
+    res.send(data.rows);
+    console.log('server side data', data.rows);
+  })
+  .catch((err) => {
+    if (err) throw err
+  })
+})
 
 const port = 3000
 app.listen(port, function() {

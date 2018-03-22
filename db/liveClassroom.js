@@ -7,6 +7,7 @@ const config = require('../server/config.js');
 firebase.initializeApp(config);
 const fb = firebase.database();
 
+
 /*
 
 JSON Tree
@@ -32,7 +33,7 @@ db: {
 */
 
 const endClass = function(classId) {
- 
+  
 }
 
 // Database helpers

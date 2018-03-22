@@ -109,6 +109,8 @@ const removeStudentsAndClass = function() {
   })
 }
 
+//exports.removeData = removeStudentsAndClass;
+
 
 exports.classMigration = function() {
   addStudentsAndClass().then(()=> {

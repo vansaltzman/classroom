@@ -3,7 +3,7 @@ module.exports =
 	"id" serial NOT NULL,
 	"first_name" varchar(50),
 	"last_name" varchar(50),
-	"email" varchar(100),
+	"email" varchar(100) UNIQUE,
 	"password" varchar(100),
 	CONSTRAINT teachers_pk PRIMARY KEY ("id")
 ) WITH (
@@ -14,9 +14,12 @@ module.exports =
 
 CREATE TABLE IF NOT EXISTS  "classes" (
 	"id" serial NOT NULL,
-	"name" varchar(50) NOT NULL,
+	"name" varchar(50) NOT NULL UNIQUE,
 	"teacher_id" integer NOT NULL,
 	"subject_id" integer NOT NULL,
+	"year" varchar(5),
+	"quarter" varchar(10),
+	"thunmbnail" varchar(1000),
 	CONSTRAINT classes_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -38,7 +41,7 @@ CREATE TABLE IF NOT EXISTS  "students" (
 	"id" serial NOT NULL,
 	"first_name" varchar(50) NOT NULL,
 	"last_name" varchar(50) NOT NULL,
-	"email" varchar(100) NOT NULL,
+	"email" varchar(100) NOT NULL UNIQUE,
 	"password" varchar(100),
 	CONSTRAINT students_pk PRIMARY KEY ("id")
 ) WITH (

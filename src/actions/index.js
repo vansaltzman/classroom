@@ -4,11 +4,12 @@ import actionTypes from './types';
 import classes from '../../data/teacherClassViewData.js';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import jwt from 'jsonwebtoken';
+import fb from '../../db/liveClassroom.js'
 
 const serverURL = 'http://localhost:3000';
 
 export function setCurrentUser (user) {
-    console.log('user in set user ', user);
+    //console.log('user in set user ', user);
     return {
         type: actionTypes.SET_CURRENT_USER,
         user: user
@@ -29,26 +30,34 @@ export function loginUser({ email, password }) {
       })
       .catch((error) => {
           console.log('error in console logging ', error)
-        errorHandler(dispatch, error.res, actionTypes.AUTH_ERROR)
+        //errorHandler(dispatch, error.res, actionTypes.AUTH_ERROR)
       });
       }
     }
 
 
 /********************************** GET CLASSES TO DISPLAY ON TEACHERS MAIN VIEW ***********************************/
-//RIGHT NOW JUST USING DUMMY DATA, BUT LATER WILL INVOLVE FETCHING DATA FROM POSTGRESQL
-// export function getClasses() {
-// 	return (dispatch) => {
-// 		dispatch(getClassesAction());
-// 	}
-// }
+function getTeacherEmail(state) {
+	return {
+		email: state().auth.user.email
+	}
+}
 
-export function getClassesAction() {
-	//console.log(classes);
+export function getClasses(emailObj) {
+	//console.log('emailobj', emailObj)
+	return (dispatch) => {
+		axios.post('/allClasses', emailObj)
+		.then((res) => {
+			//console.log('got here');
+			dispatch(getClassesAction(res.data))
+			//console.log('Data received by client', res.data);
+		})
+	}
+}
+
+function getClassesAction(classes) {
   return {
 		type: actionTypes.GET_TEACHERS_CLASSES,
-		//later the pay load shoud be the credentials of the teacher
-		//right now the payload would be just the dummy data
 		classes
 	}
 }
@@ -110,22 +119,112 @@ function updateNewClassYearAction(year) {
 	}
 }
 
-
-
-//Adding basic info of a new class into postgress db
-// export function addClass() {
-
+// function addNewClassAction() {
+// 	return {
+// 		type: actionTypes.ADD_NEW_CLASS_ACTION
+// 	}
 // }
-export function addClassAction() {
-	return {
-		type: actionTypes.ADD_NEW_CLASS_ACTION
+
+/******************** LIVE CLASS VIEW ********************/
+//this should make a call to db to get the target information including 
+//students belongs to that class & quizzes that belong to the teacher (quizzes later)
+export function teacherEnterClass() {
+	return (dispatch) => {
+		axios.get('/getTargetClass')
+		.then((res) => {
+			dispatch(teacherEnterClassAction(res.data))
+		})	
 	}
 }
 
-//making request to postgres
-function getUpdatedClassList() {
-	return {
-		type: actionTypes.GET_UPDATED_CLASS_LIST
+//when a teacher enter a class, add to the store a target class obj
+export function updateTargetClass(targetClass) {
+	return (dispatch) => {
+		dispatch(updateTargetClassAction(targetClass))
 	}
 }
+function updateTargetClassAction(targetClass) {
+	return {
+		type: actionTypes.UPDATE_TARGET_CLASS_ACTION,
+		targetClass
+	}
+}
+
+export function getAllStudents() {
+	return (dispatch) => {
+		axios.get('/getAllStudents')
+		.then((res) => {
+			//console.log('all students', res.data);
+			dispatch(getAllStudentsAction(res.data));
+		})
+	}
+}
+function getAllStudentsAction(students) {
+	return {
+		type: actionTypes.GET_ALL_STUDENTS_ACTION,
+		students
+	}
+}
+
+export function getStudentsBelongToAClass(idObj) {
+	return (dispatch) => {
+		axios.post('/getAllStudentsInAClass', idObj)
+		.then((res) => {
+			dispatch(getStudentsBelongToAClassAction(res.data))
+		})
+	}
+}
+function getStudentsBelongToAClassAction(students) {
+	return {
+		type: actionTypes.GET_STUDENTS_BELONGS_TO_A_CLASS_ACTION,
+		students
+	}
+}
+
+
+
+export function classGoLive(classId, classObj) {
+	return (dispatch) => {
+		const classes = fb.fb.ref('/');
+		classes.push(classObj)
+		.then(() => {
+			dispatch(classGoLiveAction());
+		})
+	}
+}
+function classGoLiveAction() {
+	return {
+		type: actionTypes.CLASS_GO_LIVE_ACTION
+	}
+}
+
+/******************************* GET ALL CLASSES THAT BELONGS TO A STUDENT **********************************/
+
+export function getClassesBelongToAStudent(studentIdObj) {
+	return (dispatch) => {
+		axios.post('/getStudentsClasses', studentIdObj)
+		.then((res) => {
+			console.log('students classes', res.data)
+			dispatch(getClassesBelongToAStudentAction(res.data))
+		})
+	}
+}
+function getClassesBelongToAStudentAction(classes) {
+	return {
+		type: actionTypes.GET_CLASSES_BELONG_TO_A_STUDENT_ACTION,
+		classes
+	}
+}
+// export function teacherAddStudentsToClass(studentId) {
+// 	return (dispatch) => {
+// 		axios.post('/addStudentToClass', {id: studentId})
+// 	}
+// }
+
+// function teacherAddStudentsToClassAction(studentId) {
+// 	return {
+// 		type: actionTypes.TEACHER_ADD_STUDENT_TO_CLASS_ACTION,
+// 		studentId
+// 	}
+// }
 

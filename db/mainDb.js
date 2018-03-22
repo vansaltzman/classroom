@@ -114,11 +114,86 @@ const fetchClass = function(classId) {
   })
 }
 
+/**************** INSERTING CLASS INTO POSTGRESQL ****************/
+const addNewClass = function(classObj) {
+  console.log('database side', classObj)
+  //const params = []
+  const checkSubjectQuery = `SELECT * FROM subjects WHERE name='${classObj.subject}';`
+  console.log(checkSubjectQuery);
+  return db.query(checkSubjectQuery)
+  .then((count) => {
+    console.log('count', count);
+    if (count.rowCount === 0) {
+      return db.query(`INSERT INTO subjects (name) VALUES ('${classObj.subject}')`)
+    }
+  })
+  .then(() => {
+    console.log('got there', classObj.classname)
+    const queryString = `INSERT INTO classes (name, teacher_id, subject_id, year, quarter, thunmbnail)
+                       VALUES ('${classObj.classname}', (SELECT id FROM teachers WHERE email='${classObj.email}'),
+                       (SELECT id FROM subjects WHERE name='${classObj.subject}'), '${classObj.year}', '${classObj.quarter}', '${classObj.thumbnail}')`
+    //console.log(queryString);
+    return db.query(queryString)
+  })
+  .catch((err)=> console.log(err))
+  
+}
+
+const getClassesForTeacherMainView = function(email) {
+  const teacherIdqueryString = `SELECT id FROM teachers WHERE email='${email}'`;
+  return db.query(teacherIdqueryString)
+  .then((data) => {
+    const teacherId = data.rows[0].id;
+    const queryStringForClasses = `SELECT * FROM classes WHERE teacher_id='${teacherId}';`
+    return db.query(queryStringForClasses)
+    console.log('teacher id data', data.rows[0].id);
+  })
+}
+
+const getAllStudents = function() {
+  const queryString= `SELECT * FROM students`;
+  return db.query(queryString)
+}
+
+const getAllStudentsBelongToAClass = function(classId) {
+  const queryString = `SELECT students.id, students.first_name, students.last_name, students.email
+                       FROM students INNER JOIN classes_students ON students.id = classes_students.student_id
+                       WHERE classes_students.class_id='${classId}'`
+  return db.query(queryString);
+}
+
+const addStudentToAClass= function(classId, studentId) {
+  const queryString = `INSERT INTO classes_students (class_id, student_id) VALUES ('${classId}', '${student_id}');`
+  return db.query(queryString);
+}
+
+const getClassesBelongToAStudent = function(studentEmail) {
+  const studentIdQueryString = `SELECT id FROM students WHERE email='${studentEmail}';`
+  return db.query(studentIdQueryString)
+  .then((data) => {
+    const studentId = data.rows[0].id;
+    const queryStringForClasses = `SELECT * FROM classes INNER JOIN classes_students 
+                                   ON classes.id = classes_students.class_id 
+                                   WHERE classes_students.student_id='${studentId}';`
+    return db.query(queryStringForClasses);
+  })
+}
+
 module.exports = {
   addUser,
   verifyUser,
   fetchClass,
-  db
+  db,
+  addNewClass,
+  getClassesForTeacherMainView,
+  getAllStudents,
+  getAllStudentsBelongToAClass,
+  addStudentToAClass,
+  getClassesBelongToAStudent
 }
 
-
+// to get all students belong to a class
+// select * 
+// from student s
+// join student_classes sc on s.student_id = sc.student_id
+// join classes c on c.class_id = sc.class_id
