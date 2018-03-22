@@ -6,7 +6,8 @@ const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
 const config = require('./config.js');
 const migration = require('./migrationWorker.js')
-// const { fb } = require('../db/liveClassroom.js')
+const { fb, updateQuizResponses } = require('../db/liveClassroom.js');
+const dummyAnswerData = require('../db/dummyAnswerData');
 
 const app = express()
 
@@ -80,6 +81,19 @@ app.use(bodyParser.json())
   // Join Class in session
   
   // Answer Quiz Question
+  app.post('/updateLiveQuizAnswers', (req, res)=> {
+    var studentId = 1;
+    var quizId = 2;
+    var classId = 3;
+    updateQuizResponses(dummyAnswerData, studentId, quizId, classId)
+    .then(()=> {
+      res.sendStatus(200)
+    })
+    .catch((err)=> {
+      console.log('err in updating quiz response ', err)
+    })
+    console.log('dummy data ', dummyAnswerData)
+  })
 
   // Complete Quiz
 

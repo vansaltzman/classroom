@@ -36,7 +36,12 @@ const endClass = function(classId) {
 }
 
 // Database helpers
+const updateQuizResponses = function (responseObj, studentId, quizId, classId) {
+  
+}
+
 
 module.exports = {
+  updateQuizResponses,
   fb
 }

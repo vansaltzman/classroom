@@ -129,3 +129,7 @@ function getUpdatedClassList() {
 	}
 }
 
+// updating response data for a particular student
+export function updateStudentQuizAnswers (responsesObj, studentId, quizId, classId) {
+	
+}

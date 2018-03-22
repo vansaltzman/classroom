@@ -2,6 +2,7 @@ import actionTypes from '../actions/types';
 import isEmpty from 'lodash.isempty';
 
 const initialState = { authenticated: false, user: {} }
+// const initialState = {}
 
 export default ( state = initialState, action = {} ) => {
     switch(action.type) {
