@@ -7,6 +7,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions/index';
 import TeacherMainView from './teachers/mainView.jsx';
+import TeacherQuizView from './teachers/quizView.jsx';
+
 
 import "grommet/scss/hpinc/index.scss";
 import Header from 'grommet/components/Header';
@@ -69,6 +71,9 @@ class NavigationBar extends React.Component {
                             < Link to="/signup"> Signup </Link>
                         </Anchor>
                         <Anchor href='#'>
+                            < Link to="/signup"> Signup </Link>
+                        </Anchor>
+                        <Anchor href='#'>
                             Logout
                         </Anchor>
                     </Menu>
@@ -83,6 +88,7 @@ class NavigationBar extends React.Component {
                                     this.checkAuth
                             } />  
                             <Route path="/login" component={SignIn}  />
+                            <Route path="/teacherQuiz" component={ClassView}  />
                         </Switch>
                 </nav>
                 </Router>
