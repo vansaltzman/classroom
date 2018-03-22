@@ -3,18 +3,12 @@ import classes from '../../data/teacherClassViewData';
 
 export function teacherClassViewReducer(state={
 	classes: classes,
+	activeView: false,
 	showClassBuilderModal: false,
 	newClassName: '',
 	newClassSubject: '',
 	newClassQuarter: '',
 	newClassYear: ''
-	// newClass: {
-	// 	className: '',
-	// 	thumbnail: "https://regmedia.co.uk/2016/10/17/javascript_photo_via_shutterstock.jpg?x=442&y=293&crop=1",
-	// 	subject: '',
-	// 	quarter: '',
-	// 	year: ''
-	// }
 }, action) {
   switch(action.type) {
 		case actionTypes.GET_TEACHERS_CLASSES:
@@ -40,6 +34,8 @@ export function teacherClassViewReducer(state={
 			}
 			console.log('new Class', newClass);
 			return {...state, newClass: newClass}
+		case actionTypes.GO_LIVE:
+			return {...state, activeView: action.classObj}
 		default: return state
 	}
 }

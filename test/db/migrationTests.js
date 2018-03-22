@@ -91,7 +91,6 @@ const addStudentsAndClass = function() {
   })
 }
 
-addStudentsAndClass()
 
 const removeStudentsAndClass = function() {
 
@@ -108,9 +107,6 @@ const removeStudentsAndClass = function() {
     return db.query(`DELETE FROM students WHERE email LIKE '%magic.bus';`)
   })
 }
-
-exports.addDummyData = addStudentsAndClass;
-exports.removeDummyData = removeStudentsAndClass;
 
 
 exports.classMigration = function() {
@@ -132,3 +128,6 @@ exports.classMigration = function() {
     })
   })
 }
+
+exports.addDummyData = addStudentsAndClass;
+exports.removeDummyData = removeStudentsAndClass;
