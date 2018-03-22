@@ -41,7 +41,6 @@ app.use(bodyParser.json())
       if (check) {
         check.token = newToken;
       }
-      console.log('check before sending back to server ', check)
       res.send(check)
     })
   
