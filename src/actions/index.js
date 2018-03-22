@@ -5,6 +5,7 @@ import classes from '../../data/teacherClassViewData.js';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import jwt from 'jsonwebtoken';
 import { fb } from '../../db/liveClassroom.js';
+import studentQuizObjConverter from '../utils/studentQuizObjConverter.js';
 
 const serverURL = 'http://localhost:3000';
 
