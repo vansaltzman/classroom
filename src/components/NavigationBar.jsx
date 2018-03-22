@@ -9,6 +9,7 @@ import * as actions from '../actions/index';
 import TeacherMainView from './teachers/mainView.jsx';
 import TeacherQuizView from './teachers/quizView.jsx';
 import QuizView from './teachers/quizView.jsx'
+import ClassView from './teachers/classView.jsx'
 
 
 import "grommet/scss/hpinc/index.scss";
@@ -25,10 +26,10 @@ class NavigationBar extends React.Component {
         super(props);
         this.checkAuth = this.checkAuth.bind(this);
     }
-    checkAuth () {
+    checkAuth (destination) {
         if (this.props.auth.authenticated === true) {
             if (this.props.auth.user.class === 'teacher') {
-                return < Redirect to="/teachermainview"  /> 
+                return < Redirect to= "/teachermainview"  /> 
             }
             else {
                 if (this.props.auth.user.class === 'student') {
@@ -67,9 +68,6 @@ class NavigationBar extends React.Component {
                         icon={<Actions/>}>
                         <Anchor href='#'>
                             < Link to="/login"> Login </Link>
-                        </Anchor>
-                        <Anchor href='#'>
-                            < Link to="/signup"> Signup </Link>
                         </Anchor>
                         <Anchor href='#'>
                             < Link to="/signup"> Signup </Link>

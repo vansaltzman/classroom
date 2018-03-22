@@ -108,9 +108,6 @@ const removeStudentsAndClass = function() {
   })
 }
 
-exports.addDummyData = addStudentsAndClass;
-exports.removeDummyData = removeStudentsAndClass;
-
 
 exports.classMigration = function() {
   addStudentsAndClass().then(()=> {
@@ -131,3 +128,6 @@ exports.classMigration = function() {
     })
   })
 }
+
+exports.addDummyData = addStudentsAndClass;
+exports.removeDummyData = removeStudentsAndClass;

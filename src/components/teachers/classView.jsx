@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
+import * as actions from '../../actions/index.js';
 
 import "grommet/scss/hpinc/index.scss";
 import Columns from 'grommet/components/Columns';
