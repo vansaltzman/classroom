@@ -21,11 +21,11 @@ export function loginUser({ email, password }) {
     return function(dispatch) {
       axios.post(`${serverURL}/auth/login`, { email, password })
       .then((res) => {
-        const token = res.data.token;
-        localStorage.setItem('jwtToken ', token);
+		const token = res.data.token
+		localStorage.setItem('jwtToken ', token);
         setAuthorizationToken(token);
-		const decoded = jwt.decode(token)
-        dispatch(setCurrentUser(decoded))
+        const decoded = jwt.decode(token)
+        dispatch(setCurrentUser(jwt.decode(token)))
       })
       .catch((error) => {
           console.log('error in console logging ', error)

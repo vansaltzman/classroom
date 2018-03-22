@@ -98,7 +98,7 @@ class NavigationBar extends React.Component {
             <Header
                 style={{background: navBarBackground}}
                 size='medium'>
-                <Headline margin='large' style={titleStyle} primary={true} >
+                <Headline margin='large' style={titleStyle} >
                     Jaqen
                 </Headline>
                 <Box flex={true}
