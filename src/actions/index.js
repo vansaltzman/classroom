@@ -10,7 +10,6 @@ import studentQuizObjConverter from '../utils/studentQuizObjConverter.js';
 const serverURL = 'http://localhost:3000';
 
 export function setCurrentUser (user) {
-    console.log('user in set user ', user);
     return {
         type: actionTypes.SET_CURRENT_USER,
         user: user
@@ -21,7 +20,6 @@ export function loginUser({ email, password }) {
     return function(dispatch) {
       axios.post(`${serverURL}/auth/login`, { email, password })
       .then((res) => {
-        console.log('res from server upon login ', res )
         const token = res.data.token;
         localStorage.setItem('jwtToken ', token);
         // to check: are we storing the token correctly in local storage?
@@ -34,8 +32,22 @@ export function loginUser({ email, password }) {
         errorHandler(dispatch, error.res, actionTypes.AUTH_ERROR)
       });
       }
-    }
+	}
 
+export function logoutUser () {
+	return (dispatch) => {
+		// localStorage.removeItem('jwtToken');
+		localStorage.clear();
+		setAuthorizationToken(false);
+		dispatch(setCurrentUser({}));
+	}
+}
+// function updateLogout () {
+// 	return {
+// 		type: actionTypes.LOGOUT_USER
+// 	}
+// }
+ 
 
 /********************************** GET CLASSES TO DISPLAY ON TEACHERS MAIN VIEW ***********************************/
 //RIGHT NOW JUST USING DUMMY DATA, BUT LATER WILL INVOLVE FETCHING DATA FROM POSTGRESQL

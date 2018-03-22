@@ -20,11 +20,13 @@ import Anchor from 'grommet/components/Anchor';
 import Menu from 'grommet/components/Menu';
 import Box from 'grommet/components/Box';
 import Actions from 'grommet/components/icons/base/Action.js';
+import {logoutUser} from '../actions/index.js';
  
 class NavigationBar extends React.Component {
     constructor(props) {
         super(props);
         this.checkAuth = this.checkAuth.bind(this);
+        this.logout = this.logout.bind(this);
     }
     checkAuth (destination) {
         if (this.props.auth.authenticated === true) {
@@ -41,10 +43,54 @@ class NavigationBar extends React.Component {
             return < SignIn /> 
         }
     }
+    logout (e) {
+        e.preventDefault();
+        this.props.logoutUser();
+    }
     
     render() {
         const titleStyle = {
             marginLeft: '50px'
+        }
+        if (!this.props.auth.authenticated) {
+            var menuLabel = 'Start';
+            var navBarBackground = 'lightGreen'
+            var dropAnchors = 
+                <div>
+                    <Anchor path="/login">
+                        Login 
+                    </Anchor>
+                    <Anchor path="/signup">
+                        Signup 
+                    </Anchor>
+                </div>
+        } else {
+            if (this.props.auth.user.class === 'teacher') {
+                var menuLabel = this.props.auth.user.email;
+                var navBarBackground = 'lightCoral'
+                var dropAnchors = 
+                <div>
+                    <Anchor path="/quiz">
+                        Quiz 
+                    </Anchor>
+                    <Anchor path='/login' onClick={this.logout}>
+                        Logout
+                    </Anchor>
+                </div>
+            }
+            if (this.props.auth.user.class === 'student') {
+                var menuLabel = this.props.auth.user.email;
+                var navBarBackground = 'lightBlue'
+                var dropAnchors = 
+                <div>
+                    <Anchor path="/quiz">
+                        Quiz 
+                    </Anchor>
+                    <Anchor path='/login' onClick={this.logout}>
+                        Logout
+                    </Anchor>
+                </div>
+            }
         }
         return (
         <div>
@@ -52,8 +98,9 @@ class NavigationBar extends React.Component {
                 <nav className="navbar navbar-default"> 
 
             <Header
+                style={{background: navBarBackground}}
                 size='medium'>
-                <Headline margin='large' style={titleStyle} >
+                <Headline margin='large' style={titleStyle} primary={true} >
                     Jaqen
                 </Headline>
                 <Box flex={true}
@@ -64,20 +111,9 @@ class NavigationBar extends React.Component {
                     <Menu 
                         primary={false}
                         direction='row'
-                        label='Menu'
+                        label={menuLabel}
                         icon={<Actions/>}>
-                        <Anchor href='#'>
-                            < Link to="/login"> Login </Link>
-                        </Anchor>
-                        <Anchor href='#'>
-                            < Link to="/signup"> Signup </Link>
-                        </Anchor>
-                        <Anchor href='#'>
-                            < Link to="/quiz"> Quiz </Link>
-                        </Anchor>
-                        <Anchor href='#'>
-                            Logout
-                        </Anchor>
+                        {dropAnchors}
                     </Menu>
                 </Box>
             </Header>

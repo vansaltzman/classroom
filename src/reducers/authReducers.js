@@ -11,6 +11,9 @@ export default ( state = initialState, action = {} ) => {
             authenticated: !isEmpty(action.user),
             user: action.user
         }
+        case actionTypes.LOGOUT_USER:
+            return initialState;
+
         default: return state;
     }
 }
