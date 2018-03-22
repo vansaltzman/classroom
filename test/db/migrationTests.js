@@ -91,7 +91,6 @@ const addStudentsAndClass = function() {
   })
 }
 
-addStudentsAndClass()
 
 const removeStudentsAndClass = function() {
 
