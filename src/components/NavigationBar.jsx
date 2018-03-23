@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { HashRouter as Router, Route, Link, Switch } from 'react-router-dom';
 import {withRouter, Redirect} from 'react-router';
 import App from './app.jsx';
 import SignIn from './SignIn.jsx';
@@ -12,6 +12,7 @@ import QuizView from './teachers/quizView.jsx'
 import ClassView from './teachers/classView.jsx'
 import SignUp from './Signup.jsx';
 import StudentViewQuiz from './students/StudentViewQuiz.jsx'
+import quizContainer from './students/quizContainer.jsx'
 
 
 import "grommet/scss/hpinc/index.scss";
@@ -78,16 +79,14 @@ class NavigationBar extends React.Component {
                             < Link to="/quiz"> Quiz </Link>
                         </Anchor>
                         <Anchor href='#'>
+                            < Link to="/studentQuiz"> Student Quiz </Link>
+                        </Anchor>
+                        <Anchor href='#'>
                             Logout
                         </Anchor>
                     </Menu>
                 </Box>
             </Header>
-                            <li> < Link to="/signup"> Signup </Link> </li>
-                            <li> < Link to="/login"> Login </Link> </li>
-                            <li> < Link to="/quiz"> Quiz </Link> </li>
-                            
-
 
         
                         <Switch>
@@ -98,14 +97,13 @@ class NavigationBar extends React.Component {
                             } />  
                             <Route path="/login" component={SignIn}  />
                             <Route path="/teacherQuiz" component={ClassView}  />
-                        
+                            <Route path="/quiz" component={QuizView}  />
+                            <Route path="/studentQuiz" component={quizContainer}/>
+                            {/* <Route path="/studentClass" component={StudentClass}  /> */}
                             
-                            <Route path="/signUp" component={SignUp}/>
-                            <Route path="/quiz" component={StudentViewQuiz}/>
                         </Switch>
                 </nav>
                 </Router>
-
             </div>
         )
     }

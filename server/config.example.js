@@ -1,9 +1,9 @@
 export default {
-    jwtSecret: '',
+    jwtSecret: 'callipygian',
     fbConfig: {
-      apiKey: '',
-      authDomain: '',
-      databaseURL: ''
+      apiKey: "AIzaSyCNOO34AZkHCvUnp3uNLYec1EsFTooWaBU",
+      authDomain: "test-1-84a61.firebaseapp.com",
+      databaseURL: "https://test-1-84a61.firebaseio.com"
     }
   }
   // put correct key in the jwtsecret key of this module. 

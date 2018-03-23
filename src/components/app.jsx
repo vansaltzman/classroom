@@ -49,16 +49,17 @@ class App extends React.Component {
 )
 				{/* <ClassView /> */}
 				{/* Comment the TeacherMainView out for now...will need to use router later */}
-				<TeacherMainView />
+				{/* <TeacherMainView />
 				This is just a place holder for now.
-				<SignUp/>
+				
 				<StudentViewQuiz/>
-				<SignUp/>
+				<SignUp/> */}
 
 			</div>
 		)
 	}
 }
+
 
 function mapStateToProps(state) {
   return {
