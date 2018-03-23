@@ -23,7 +23,7 @@ class StudentLiveClassView extends React.Component {
 
 function mapStateToProps(state) {
 	return {
-		targetClass: state.studentClassView.targetClass
+		targetClass: state.teachersClassView.activeView
 	}
 }
 
