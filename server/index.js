@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const main = require('../db/mainDb.js');
 const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
+// const config = require('./config.js');
 const config = require('./config.js');
 const migration = require('./migrationWorker.js')
 const { fb, startClass } = require('../db/liveClassroom.js');
@@ -11,10 +12,12 @@ const dummyAnswerData = require('../db/dummyAnswerData');
 const dummyStudentsData = require('../db/dummyStudentsData')
   
 
+
 const app = express()
 
 app.use(express.static(__dirname + '/../dist'))
 app.use(bodyParser.json())
+
 
 // Sign up
   app.post('/newAccount', (req, res)=> {
@@ -29,7 +32,7 @@ app.use(bodyParser.json())
     .catch(err => {
       res.sendStatus(500)
     })
-  })
+})
 
 // Login
   app.post(`/auth/login`, (req, res)=> {
@@ -54,7 +57,7 @@ app.use(bodyParser.json())
   })
 
 
-// Teacher
+  // Teacher
 
   // Start class
   app.post('/startClass', (erq, res) => {
@@ -77,10 +80,10 @@ app.use(bodyParser.json())
 
   // End Class
 
-// Student
+  // Student
 
   // Join Class in session
-  
+
   // Answer Quiz Question
   app.post('/updateLiveQuizAnswers', (req, res)=> {
     var studentId = 37;
@@ -96,13 +99,79 @@ app.use(bodyParser.json())
     console.log('dummy data ', dummyAnswerData)
   })
 
+  // app.post('/answer', (req, res) => {
+  //   let answer = req.body.answer
+  //   console.log('answer submitted', answer)
+  // })
+
+  app.post('/answer', (req, res) => {
+    let answer = req.body.answer
+    console.log('answer submitted', answer)
+  })
 
   // Complete Quiz
+  
+app.post('/addClass', (req, res) => {
+  console.log('server side data for add class',  req.body);
+  main.addNewClass(req.body)
+  .then(() => {
+    console.log('Class is added')
+  })
+  .catch((err) => {
+    if (err) throw err;
+  })
+})
 
+app.post('/allClasses', (req, res) => {
+  //console.log('serverside /allClasses', req.body);
+  main.getClassesForTeacherMainView(req.body.email)
+  .then((data) => {
+    res.send(data.rows);
+    //console.log('server side classes', data.rows)
+  })
+  .catch((err) => {
+    if (err) throw err;
+  })
+})
 
+app.get('/getAllStudents', (req, res) => {
+  main.getAllStudents()
+  .then((data) => {
+    //console.log('serverside', data.rows);
+    res.send(data.rows);
+  })
+  .catch((err) => {
+    if (err) throw err
+  })
+})
+
+app.post('/getAllStudentsInAClass', (req, res) => {
+  console.log('class id server side', req.body);
+  main.getAllStudentsBelongToAClass(req.body.id)
+  .then((data) => {
+    console.log('server side data', data.rows);
+    res.send(data.rows);
+    
+  })
+  .catch((err) => {
+    if (err) throw err
+  })
+  
+})
+
+app.post('/getStudentsClasses', (req, res) => {
+  main.getClassesBelongToAStudent(req.body.email)
+  .then((data) => {
+    res.send(data.rows);
+    console.log('server side data', data.rows);
+  })
+  .catch((err) => {
+    if (err) throw err
+  })
+})
 
 const port = 3000
 app.listen(port, function() {
-  console.log('Listening on ' + port)
+console.log('Listening on ' + port)
 })
 

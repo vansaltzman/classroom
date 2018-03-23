@@ -17,7 +17,7 @@ const addFrizzle = function(){
     })
     .catch(err => console.log('issue with add Frizzle', err))
 }
-addFrizzle();
+//addFrizzle();
 
 const removeFrizzle = function(){
   return db.query('DELETE FROM teachers WHERE email=$1', [testTeacher[2]])
@@ -129,3 +129,30 @@ exports.verifyUser = function() {
     });
   })
 }
+
+
+/******** Students *******/
+let Ara = ['Ara', 'Nguyen', 'pnn2104@columbia.edu', '123456'];
+let Jae = ['Jae', 'Jang', 'jj2837@columbia.edu', '123456'];
+let Adam = ['Adam', 'Mateo', 'adam@mateo.edu', '123456'];
+let Jerry = ['Jerry', 'Chen', 'jerry@chen.edu', '123456'];
+let Artem = ['Artem', 'Ipatev', 'artem@ipatev.edu', '123456'];
+
+const addStudents = function(student) {
+  hashStudent = student.slice();
+  let salt = 10;
+  return bcrypt.hash(student[3], salt)
+  .then((hashedPassword) => {
+    //console.log(hashedPassword);
+    hashStudent[3] = hashedPassword;
+    db.query('INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)', hashStudent);
+  })
+  .catch((err) => {
+    if (err) {
+      console.log('can not add student');
+    }
+  })
+}
+
+addStudents(Jae);
+
