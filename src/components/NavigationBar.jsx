@@ -23,6 +23,9 @@ import quizContainer from './students/quizContainer.jsx'
 
 import { readdir } from "fs";
 
+import "grommet/scss/hpinc/index.scss";
+import {logoutUser} from '../actions/index.js';
+ 
 class NavigationBar extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +44,10 @@ class NavigationBar extends React.Component {
       return <SignIn />;
     }
 }
+    logout (e) {
+        e.preventDefault();
+        this.props.logoutUser();
+    }
     logout (e) {
         e.preventDefault();
         this.props.logoutUser();
