@@ -20,6 +20,7 @@ import QuizView from "./teachers/quizView.jsx";
 import SignUp from './Signup.jsx';
 import StudentViewQuiz from './students/StudentViewQuiz.jsx'
 import quizContainer from './students/quizContainer.jsx'
+import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 
 import { readdir } from "fs";
 
@@ -141,6 +142,7 @@ class NavigationBar extends React.Component {
                             <Route path="/quiz" component={QuizView}  />
                             <Route path="/studentQuiz" component={quizContainer}/>
                             {/* <Route path="/studentClass" component={StudentClass}  /> */}
+                            <Route path="/studentliveclass" component={StudentLiveClassView}/>
                             
                             <Route path="/signUp" component={SignUp}/>
                             <Route path="/quiz" component={StudentViewQuiz}/>

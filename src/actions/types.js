@@ -12,7 +12,6 @@ const actionTypes = {
 	UPDATE_NEW_CLASS_NAME_ACTION: 'update_new_class_name_action',
 	UPDATE_NEW_CLASS_SUBJECT_ACTION: 'update_new_class_subject_action',
 	UPDATE_NEW_CLASS_QUARTER_ACTION: 'update_new_class_quarter_action',
-	UPDATE_CLASS_DATA: 'update_class_data',
 	GET_ALL_STUDENTS_ACTION: 'get_all_students_action',
 	TEACHER_ENTER_CLASS_ACTION: 'enter_class_action',
 	TEACHER_ADD_STUDENT_TO_CLASS_ACTION: 'teacher_add_student_to_class_action',
@@ -25,8 +24,12 @@ const actionTypes = {
 	////// StudentViewQuiz //////
 	GET_QUIZ: 'get_quiz',
 	NEXT_QUESTION: 'next_question',
-	PREVIOUS_QUESTION: 'previous_question'
-
+	PREVIOUS_QUESTION: 'previous_question',
+	UPDATE_STUDENT_TARGET_CLASS_ACTION: 'get_student_target_class_action',
+	LISTENING_FOR_LIVE_CLASSES: 'listening_for_live_classes',
+	WATCH_CLASS_GO_LIVE_ACTION: 'watch_class_go_live_action',
+	TOGGLE_STUDENT_LIVE_STATUS: 'toggle_student_live_status',
+	CHANGE_CLASS_LABEL_WHEN_LIVE: 'change_class_label_when_live'
 }
 
 export default actionTypes
