@@ -98,10 +98,6 @@ class TeacherMainView extends React.Component {
 		})
 	}
 
-  componentDidMount() {
-    //this.props.getClassesAction()
-  }
-
   render() {
 		//const {email} = this.props.auth.user.email;
 		console.log('email', this.props.auth.user.email);
@@ -202,6 +198,7 @@ function mapStateToProps(state) {
 }
 
 function matchDispatchToProps(dispatch) {
+	Actions.watchClassGoLive(dispatch);
 	return bindActionCreators(Actions, dispatch);
 }
 

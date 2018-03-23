@@ -19,7 +19,7 @@ const StudentClassLabel = (props) => {
       <Button
         label="Enter Class"
         type="button"
-        // path="/liveclass"
+        path="/studentliveclass"
         primary={true}
         onClick={() => props.clickHandler(props.item)}
       />

@@ -20,6 +20,10 @@ const actionTypes = {
 	GET_STUDENTS_BELONGS_TO_A_CLASS_ACTION: 'get_students_belong_to_a_class_action',
 	CLASS_GO_LIVE_ACTION: 'class_go_live_action',
 	GET_CLASSES_BELONG_TO_A_STUDENT_ACTION: 'get_classes_belong_to_a_student_action',
+	UPDATE_STUDENT_TARGET_CLASS_ACTION: 'get_student_target_class_action',
+	LISTENING_FOR_LIVE_CLASSES: 'listening_for_live_classes',
+	WATCH_CLASS_GO_LIVE_ACTION: 'watch_class_go_live_action',
+	TOGGLE_STUDENT_LIVE_STATUS: 'toggle_student_live_status'
 }
 
 export default actionTypes

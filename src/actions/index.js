@@ -197,13 +197,14 @@ export function classGoLive(classId, classObj) {
 		const classes = fb.ref('/');
 		classes.child(classId).set(classObj)
 		.then(() => {
-			dispatch(classGoLiveAction());
+			dispatch(classGoLiveAction(classId));
 		})
 	}
 }
-function classGoLiveAction() {
+function classGoLiveAction(classId) {
 	return {
-		type: actionTypes.CLASS_GO_LIVE_ACTION
+		type: actionTypes.CLASS_GO_LIVE_ACTION,
+		classId
 	}
 }
 
@@ -224,6 +225,63 @@ function getClassesBelongToAStudentAction(classes) {
 		classes
 	}
 }
+
+export function updateStudentTargetClass(targetClass) {
+	return (dispatch) => {
+		return dispatch(updateStudentTargetClassAction(targetClass))
+	}
+}
+function updateStudentTargetClassAction(targetClass) {
+	return {
+		type: actionTypes.UPDATE_STUDENT_TARGET_CLASS_ACTION,
+		targetClass
+	}
+}
+
+//student's main view to see which class is currently live
+export function watchClassGoLive(dispatch) {
+	fb.ref('/').once('child_added', (snap) => {
+		console.log('snap.val()', snap.val())
+		dispatch(watchClassGoLiveAction(snap.val()));
+	})
+}
+function watchClassGoLiveAction(classId) {
+	return {
+		type: actionTypes.WATCH_CLASS_GO_LIVE_ACTION,
+		classId
+	}
+}
+
+// join/exit live class from student pov
+export function toggleStudentLiveClassStatus (classId, studentId) {
+	const currentStudentStatus = fb.ref('/' + classId + '/students' + studentId + '/isHere')
+	return (dispatch) => {
+		currentStudentStatus.set(!currentStudentStatus)
+		.then(() => {
+			dispatch(toggleStudentLiveClassStatusAction())
+		})
+	}
+	// return (dispatch) => {
+	// 	currentStudentStatus.set(!currentStudentStatus)
+	// 	.then(()=> {
+	// 		return currentStudentStatus.once('value')
+	// 	})
+	// 	.then((snap) => {
+	// 		const status = snap.val();
+	// 		if (status) {
+	// 			dispatch(fetchClassData(classId))
+	// 		} else {
+	// 			dispatch(stopFetchingClassData(classId))
+	// 		}
+	// 	})
+	// }
+}
+function toggleStudentLiveClassStatusAction () {
+	return {
+		type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
+	}
+}
+
 // make class live - > from teacher pov
 export function launchLiveClass(classObj) {
 	const classes = fb.ref('/classes');
@@ -259,24 +317,24 @@ export function launchQuiz (classId, quizObj) {
 	}
 }
 
-// join/exit live class from student pov
-export function toggleStudentLiveClassStatus (classId, studentId) {
-	const currentStudentStatus = fb.ref('/classes' + classId + '/students' + studentId + '/isHere')
-	return (dispatch) => {
-		currentStudentStatus.set(!currentStudentStatus)
-		.then(()=> {
-			return currentStudentStatus.once('value')
-		})
-		.then((snap) => {
-			const status = snap.val();
-			if (status) {
-				dispatch(fetchClassData(classId))
-			} else {
-				dispatch(stopFetchingClassData(classId))
-			}
-		})
-	}
-}
+// // join/exit live class from student pov
+// export function toggleStudentLiveClassStatus (classId, studentId) {
+// 	const currentStudentStatus = fb.ref('/' + classId + '/students' + studentId + '/isHere')
+// 	return (dispatch) => {
+// 		currentStudentStatus.set(!currentStudentStatus)
+// 		.then(()=> {
+// 			return currentStudentStatus.once('value')
+// 		})
+// 		.then((snap) => {
+// 			const status = snap.val();
+// 			if (status) {
+// 				dispatch(fetchClassData(classId))
+// 			} else {
+// 				dispatch(stopFetchingClassData(classId))
+// 			}
+// 		})
+// 	}
+// }
 
 // change newView to be quiz id or false
 export function updateActiveView (newView, classId) {

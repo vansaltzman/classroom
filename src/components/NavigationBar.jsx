@@ -123,6 +123,7 @@ class NavigationBar extends React.Component {
                             <Route path="/liveclass" component={ClassView}/>
                             <Route path="/studentmainview" component={StudentMainView} />
                             <Route path="/login" component={SignIn}  />
+                            <Route path="/studentliveclass" component={StudentMainView}/>
                             <Route path="/teacherQuiz" component={ClassView}  />
                             <Route path="/quiz" component={QuizView}  />
                             

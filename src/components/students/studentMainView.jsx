@@ -41,14 +41,20 @@ class StudentMainView extends React.Component {
   componentWillMount() {
     //consol
     this.props.getClassesBelongToAStudent({email: this.props.auth.user.email})
+    //this.props.watchClassGoLive()
   }
+
+  // updateTargetClassAndStudentStatus() {
+  //   this.props.updateStudentTargetClass()
+    
+  // }
   render() {
     return (
       <div>
         <Tiles flush={false} selectable={true}>
           {/* onSelect some function */}
           {this.props.classes.map((item, index) => {
-            return <StudentClassLabel item={item} key={index}/>;
+            return <StudentClassLabel item={item} key={index} clickHandler={this.props.updateStudentTargetClass}/>;
           })}
         </Tiles>
       </div>
@@ -64,6 +70,7 @@ function mapStateToProps(state) {
 }
 
 function matchDispatchToProps(dispatch) {
+  Actions.watchClassGoLive(dispatch);
   return bindActionCreators(Actions, dispatch);
 }
 
