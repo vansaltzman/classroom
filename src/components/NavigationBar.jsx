@@ -23,6 +23,9 @@ import quizContainer from './students/quizContainer.jsx'
 import StudentLiveClassView from './students/studentLiveClassView.jsx'
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 
+import quizView from './teachers/quizView.jsx';
+
+
 import { readdir } from "fs";
 
 import "grommet/scss/hpinc/index.scss";
@@ -80,6 +83,13 @@ class NavigationBar extends React.Component {
                     <Anchor path="/quiz">
                         Quiz 
                     </Anchor>
+
+                     <Anchor path='/quizView'>
+                        Quiz View
+                    </Anchor>
+
+
+
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
                     </Anchor>
@@ -153,6 +163,8 @@ class NavigationBar extends React.Component {
                             <Route path="/quiz" component={StudentViewQuiz}/>
                             <Route path="/studentLiveClass" component={StudentLiveClassView}/>
                             <Route path="/studentQuiz" component={quizContainer}/>
+                            <Route path="/quizView" component={quizView}/>
+
                         </Switch>
                 </nav>
                 </Router>

@@ -26,24 +26,46 @@ const studentJoins = function(studentId, classId) { // Conncect this to actions.
 }
 
 const launchQuiz = function (classId, quizObj) {
+	console.log('LAUNCH QUIZ')
+	console.log('classId----', classId)
+	console.log('quizObj----', quizObj)
 	// store postgres quiz id to active view property in the
 	const currentClass = fb.ref('/classes/ ' + classId )
 		updateActiveView(quizObj.id, classId)
 		.then(()=> {
-			currentClass.ref('/quizzes').child(quizObj.id).set(quizObj)
+			fb.ref('classes/'+ classId +'/quizzes').child(quizObj.id).set(quizObj)
 		})
 		.then(() => {
 			// create a copy of quiz object for each student in that class (with answers defaulted to false)
 			const studentQuizObj = studentQuizObjConverter(quizObj);
+			console.log('student anwers obj ', studentQuizObj);
 			// get all student Ids from current class in fb
-			const studentIdsArray = Object.keys(fb.ref('/classes/' + classId + '/students').val());
-			studentIdsArray.forEach( studentId => {
-				// iterate through all student ID array
-				// create ref to that students quizzes
-				let studentRef = fb.ref('/classes/' + classId + '/students' + studentId);
-				// push studentQuizObj to each of those 
-				studentRef.child(quizObj.id).set(studentQuizObj)
+			// const studentIdsArray = Object.keys(fb.ref('/classes/' + classId + '/students').val());
+			fb.ref('/classes/' + classId + '/students').once('value', (snap)=>{
+				var students = snap.val()
+				students.forEach( student => {
+					console.log('student ', student);
+					console.log('classId ', classId )
+					console.log('student id ', student.id);
+					console.log('______________________')
+					let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id);
+					studentRef.child(quizObj.id).set(studentQuizObj)
+				})
+				// snap.forEach((student) => {
+				// 	console.log('student',student.val())
+				
+				// 	// student.child(quizObj.id).val().set(studentQuizObj)
+				// })
 			})
+			
+			// console.log('studen ids array ', fb.ref('/classes/' + classId + '/students'))
+			// studentIdsArray.forEach( studentId => {
+			// 	// iterate through all student ID array
+			// 	// create ref to that students quizzes
+			// 	let studentRef = fb.ref('/classes/' + classId + '/students' + studentId);
+			// 	// push studentQuizObj to each of those 
+			// 	studentRef.child(quizObj.id).set(studentQuizObj)
+			// })
 		})
   }
 

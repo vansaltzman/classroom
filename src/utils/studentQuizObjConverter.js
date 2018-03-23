@@ -2,11 +2,11 @@
 
 const studentQuizObjectConverter = function (quizObject) {
     var studentResponseObj = {};
-    studentResponseObj[quizObject.id] = {};
-    studentResponseObj[quizObject.id].id = quizObject.id;
-    studentResponseObj[quizObject.id].isFinished = false;
-    studentResponseObj[quizObject.id].currentQuestion = null
-    studentResponseObj[quizObject.id].responses = {};
+    // studentResponseObj[quizObject.id] = {};
+    studentResponseObj.id = quizObject.id;
+    studentResponseObj.isFinished = false;
+    studentResponseObj.currentQuestion = null
+    studentResponseObj.responses = {};
     for (var question in quizObject.questions) {
         let questionResponses = {};
         questionResponses.id = question;
@@ -15,7 +15,7 @@ const studentQuizObjectConverter = function (quizObject) {
         for (var answer in quizObject.questions[question].answers) {
             questionResponses.answers[answer] = false
         }
-        studentResponseObj[quizObject.id].responses[question] = questionResponses
+        studentResponseObj.responses[question] = questionResponses
     }
     return studentResponseObj;
 }
