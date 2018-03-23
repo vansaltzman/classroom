@@ -7,8 +7,10 @@ const dbMethods = require('../db/mainDb.js');
 // const config = require('./config.js');
 const config = require('./config.js');
 const migration = require('./migrationWorker.js')
-const { fb, updateQuizResponses } = require('../db/liveClassroom.js');
+const { fb, startClass } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
+const dummyStudentsData = require('../db/dummyStudentsData')
+  
 
 
 const app = express()
@@ -97,6 +99,7 @@ app.use(bodyParser.json())
     console.log('dummy data ', dummyAnswerData)
   })
 
+<<<<<<< HEAD
   // app.post('/answer', (req, res) => {
   //   let answer = req.body.answer
   //   console.log('answer submitted', answer)
@@ -106,6 +109,8 @@ app.use(bodyParser.json())
     let answer = req.body.answer
     console.log('answer submitted', answer)
   })
+=======
+>>>>>>> save progress on log in view
 
   // Complete Quiz
   

@@ -26,16 +26,12 @@ class ClassView extends React.Component {
 	}
 
   render() {
-<<<<<<< HEAD
 		const { studentsInClass } = this.props;
 		//console.log('heyyy', studentsInClass)
 		const studentsArray = [];
 		for (var key in studentsInClass) {
 			studentsArray.push(studentsInClass[key]);
 		}
-=======
-
->>>>>>> fix login bug, still need to store localstorage token and keep session
 		return(
 			<Section>
 				<Button icon={<DeployIcon />}

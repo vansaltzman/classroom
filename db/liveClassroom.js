@@ -26,5 +26,6 @@ firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
 
 module.exports = {  
-  fb
+  fb,
+  startClass
 }
