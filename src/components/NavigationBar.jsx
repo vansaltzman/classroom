@@ -48,6 +48,10 @@ class NavigationBar extends React.Component {
         e.preventDefault();
         this.props.logoutUser();
     }
+    logout (e) {
+        e.preventDefault();
+        this.props.logoutUser();
+    }
     
     render() {
         const titleStyle = {
@@ -101,7 +105,7 @@ class NavigationBar extends React.Component {
             <Header
                 style={{background: navBarBackground}}
                 size='medium'>
-                <Headline margin='large' style={titleStyle} >
+                <Headline margin='large' style={titleStyle} primary={true} >
                     Jaqen
                 </Headline>
                 <Box flex={true}
