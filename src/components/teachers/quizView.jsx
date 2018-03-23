@@ -184,10 +184,10 @@ const students = {
 		}
 	}
 
-const QuizView = ({ currentClass }) => {
+const QuizView = ({ currentQuiz }) => {
 
-	const students = currentClass.students
-	const quiz = currentClass.quizzes[currentClass.activeView]
+	// const students = currentClass.students
+	// const quiz = currentClass.quizzes[currentClass.activeView]
 
 	return (
 		<div>
@@ -197,6 +197,12 @@ const QuizView = ({ currentClass }) => {
 				direction='asc'
 				// onChange={...}
 			/> */}
+
+			<Button
+				label='End Quiz'
+				onClick={()=> props.updateActiveView(false, currenClass.id)} 
+			/>
+
 			<Table>
 			<TableHeader labels={['Name', 'Current Question', 'Time on Question', 'Score']}
 				sortIndex={false}
@@ -207,9 +213,12 @@ const QuizView = ({ currentClass }) => {
 
 					// !-- Need to add more human readable variables for long object paths
 
-				return <TableRow 
+					let studentQuiz = students[studentId].quizzes[quiz.id]
+
+				return <TableRow
+					key={studentId}
 					style={{
-						background: students[studentId].quizzes[quiz.id].isFinished ? 'lightgreen' : students[studentId].isHere ? 'white' : 'lightgrey',
+						background: studentQuiz.isFinished ? 'lightgreen' : students[studentId].isHere ? 'white' : 'lightgrey',
 						height: '100px'
 					}}>
 					<td>
@@ -218,20 +227,20 @@ const QuizView = ({ currentClass }) => {
 					<td className='secondary'>
 						<Animate text=
 						{
-							quiz.questions[students[studentId].quizzes[quiz.id].currentQuestion].position + ': ' +
-							quiz.questions[students[studentId].quizzes[quiz.id].currentQuestion].text
+							quiz.questions[studentQuiz.currentQuestion].position + ': ' +
+							quiz.questions[studentQuiz.currentQuestion].text
 						}/>
 					</td>
 					<td className='secondary'>
-						{moment.duration(students[studentId].quizzes[quiz.id].responses[students[studentId].quizzes[quiz.id].currentQuestion].time).humanize()}
+						{moment.duration(studentQuiz.responses[studentQuiz.currentQuestion].time).humanize()}
 					</td>
 					<td className='secondary'>
 						{
-							Object.keys(students[studentId].quizzes[quiz.id].responses).reduce((score, questionKey)=> {
+							Object.keys(studentQuiz.responses).reduce((score, questionKey)=> {
 
 								let isCorrect = 
-								Object.keys(students[studentId].quizzes[quiz.id].responses[questionKey].answers).reduce((acc, answerKey)=> {
-									if (quiz.questions[questionKey].answers[answerKey].isCorrect !== students[studentId].quizzes[quiz.id].responses[questionKey].answers[answerKey]) {
+								Object.keys(studentQuiz.responses[questionKey].answers).reduce((acc, answerKey)=> {
+									if (quiz.questions[questionKey].answers[answerKey].isCorrect !== studentQuiz.responses[questionKey].answers[answerKey]) {
 										return false
 									} else {
 										return acc

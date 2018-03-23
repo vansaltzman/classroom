@@ -4,7 +4,6 @@ const dummyStudentData=require('../db/dummyStudentsData');
 
 firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
-
 /*
 
 JSON Tree

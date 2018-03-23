@@ -187,7 +187,7 @@ export function toggleStudentLiveClassStatus (classId, studentId) {
 // change newView to be quiz id or false
 export function updateActiveView (newView, classId) {
 	const currentClassActiveView = fb.ref('/classes/' + classId + '/activeView')
-	return (dispatch )=> {
+	return (dispatch)=> {
 		return currentClassActiveView.set(newView)
 	}
 }
