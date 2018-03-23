@@ -4,7 +4,7 @@ import actionTypes from './types';
 import classes from '../../data/teacherClassViewData.js';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import jwt from 'jsonwebtoken';
-import { fb,  } from '../../db/liveClassroom.js';
+import { fb, updateActiveView, stopFetchingClassData  } from '../../db/liveClassroom.js';
 import studentQuizObjConverter from '../utils/studentQuizObjConverter.js';
 import dummyStudentsData from '../../db/dummyStudentsData';
 
@@ -24,8 +24,8 @@ export function loginUser({ email, password }) {
       .then((res) => {
 		const token = res.data.token
 		localStorage.setItem('jwtToken ', token);
-        setAuthorizationToken(token);
-        const decoded = jwt.decode(token)
+		setAuthorizationToken(token);
+		const decoded = jwt.decode(token)
         dispatch(setCurrentUser(jwt.decode(token)))
       })
       .catch((error) => {
@@ -145,37 +145,12 @@ function getUpdatedClassList() {
 }
 
 // make class live - > from teacher pov
-export function launchLiveClass(dummyStudentsData) {
+export function launchLiveClass(classObj) {
 	const classes = fb.ref('/classes');
 	return (dispatch) => {
-		classes.push(classObj)
-		.then( () => {
-			dispatch(fetchClassData(classObj.id));
-		})
-	}
-}
-
-
-export function launchQuiz (classId, quizObj) {
-	// store postgres quiz id to active view property in the
-	const currentClass = fb.ref('/classes/ ' + classId )
-	return (dispatch) => {
-		updateActiveView(quizObj.quizId, classId)
-		.then(()=> {
-			currentClass.ref('/quizzes').push(quizObj)
-		})
+		classes.child(classObj.id).set(classObj)
 		.then(() => {
-			// create a copy of quiz object for each student in that class (with answers defaulted to false)
-			const studentQuizObj = studentQuizObjConverter(quizObj);
-			// get all student Ids from current class in fb
-			const studentIdsArray = Object.keys(fb.ref('/classes/' + classId + '/students').val());
-			studentIdsArray.forEach( studentId => {
-				// iterate through all student ID array
-				// create ref to that students quizzes
-				let studentRef = fb.ref('/classes/' + classId + '/students' + studentId);
-				// push studentQuizObj to each of those 
-				studentRef.push(studentQuizObj)
-			})
+			dispatch(fetchClassData(classObj.id));
 		})
 	}
 }
@@ -199,22 +174,6 @@ export function toggleStudentLiveClassStatus (classId, studentId) {
 	}
 }
 
-// change newView to be quiz id or false
-export function updateActiveView (newView, classId) {
-	const currentClassActiveView = fb.ref('/classes/' + classId + '/activeView')
-	return (dispatch )=> {
-		return currentClassActiveView.set(newView)
-	}
-}
-
-// submit a student's responses to a quiz every time they check an answer
-export function insertStudentAnswers(quizObj, studentId, quizId, classId) {
-	const currentStudent = fb.ref('classes/' + classId + '/students/' + studentId + '/quizzes/' + quizId );
-	return (dispatch) => {
-		currentStudent.set(quizObj);
-	}
-}
- 
 // get all class data for a live class
 export function fetchClassData (classId) {
 	const currentClass = fb.ref('/classes/' + classId )
@@ -222,18 +181,11 @@ export function fetchClassData (classId) {
 		currentClass.on('value', function(snap) {
 			dispatch(updateClassData(snap.val()))
 		})
+	}
+}
 
-	}
-}
-// turns off a student/teacher's listener for a live class 
-export function stopFetchingClassData (classId) {
-	const currentClass = fb.ref('/classes/' + classId )
-	return (dispatch) => {
-		currentClass.off('value')
-	}
-}
 // update global state with updated live class data
-function updateClassData(classData) {
+export function updateClassData(classData) {
 	return {
 		type: actionTypes.UPDATE_CLASS_DATA,
 		classData

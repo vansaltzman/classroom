@@ -73,6 +73,7 @@ class TeacherMainView extends React.Component {
   }
 
   render() {
+
     return (
       <div>
         {/* <Section> */}
@@ -163,7 +164,8 @@ function mapStateToProps(state) {
 		newClassName: state.teachersClassView.newClassName,
 		newClassSubject: state.teachersClassView.newClassSubject,
 		newClassQuarter: state.teachersClassView.newClassQuarter,
-		newClassYear: state.teachersClassView.newClassYear
+		newClassYear: state.teachersClassView.newClassYear,
+		auth: state.auth
   };
 }
 

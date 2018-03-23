@@ -1,33 +1,10 @@
 const firebase = require('firebase');
 const config = require('../server/config.js');
 const dummyStudentData=require('../db/dummyStudentsData');
+const studentQuizObjConverter = require('../src/utils/studentQuizObjConverter.js');
 
 firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
-
-/*
-
-JSON Tree
-db: {
-  classes: {
-    1: {
-      id: 1
-      name: English 101
-      teacher: {id: , email: , name: }
-      subject: English
-      students: {
-        id: { 
-          name: 'Carlos Ramon',
-          isInClassroom: false,
-          activeView: 'lobby',
-          email: 'cramo@magic.bus',
-          quizzes: {} 
-        },
-      }
-    }
-  }
-}
-*/
 
 const selectClass = function(classId) {
   return migrate.migrateClassToFB(classId)
@@ -36,7 +13,7 @@ const selectClass = function(classId) {
 
 const startClass = function(classObj) {
   const classList = fb.ref('/classes/' + classObj.id) 
-  return classList.push(classObj)
+  return classList.child(classObj.id).set(classObj)
   .then(()=> console.log('Launched claass ' + classObj.name))
   .catch((err)=> console.log('Issue starting class' + err))
 }
@@ -48,35 +25,53 @@ const studentJoins = function(studentId, classId) { // Conncect this to actions.
   })
 }
 
-const startQuiz = function(classId, quizId) {
+const launchQuiz = function (classId, quizObj) {
+	// store postgres quiz id to active view property in the
+	const currentClass = fb.ref('/classes/ ' + classId )
+		updateActiveView(quizObj.id, classId)
+		.then(()=> {
+			currentClass.ref('/quizzes').child(quizObj.id).set(quizObj)
+		})
+		.then(() => {
+			// create a copy of quiz object for each student in that class (with answers defaulted to false)
+			const studentQuizObj = studentQuizObjConverter(quizObj);
+			// get all student Ids from current class in fb
+			const studentIdsArray = Object.keys(fb.ref('/classes/' + classId + '/students').val());
+			studentIdsArray.forEach( studentId => {
+				// iterate through all student ID array
+				// create ref to that students quizzes
+				let studentRef = fb.ref('/classes/' + classId + '/students' + studentId);
+				// push studentQuizObj to each of those 
+				studentRef.child(quizObj.id).set(studentQuizObj)
+			})
+		})
+  }
+
+// change newView to be quiz id or false
+const updateActiveView = function (newView, classId) {
+  const currentClassActiveView = fb.ref('/classes/' + classId + '/activeView')
+      return currentClassActiveView.set(newView)
 
 }
 
-const answerQuestion = function(studentId, classId, quizId, questionId, responseValue) {
-
+// submit a student's responses to a quiz every time they check an answer
+const insertStudentAnswers = function (quizObj, studentId, quizId, classId) {
+	const currentStudent = fb.ref('classes/' + classId + '/students/' + studentId + '/quizzes/' + quizId );
+		return currentStudent.set(quizObj);
 }
 
-const changeQuestion = function(studentId, classId, quizId, prevQuestionId, newQuestionId) {
-
+// turns off a student/teacher's listener for a live class 
+const stopFetchingClassData = function (classId) {
+	const currentClass = fb.ref('/classes/' + classId )
+		return currentClass.off('value')
 }
 
-// const studentFinishedQuiz = function(studentId, classId, quizId) {
-
-// }
-
-const endQuiz = function(classId, quizId) {
-
-}
-
-const endClass = function(classId) {
-  // get snapshot
-  // remove class from fb
-  // run migration worker on snapshot 
-}
-
-// Database helpers
 
 module.exports = {  
   fb,
-  startClass
+  startClass,
+  launchQuiz,
+  updateActiveView,
+  insertStudentAnswers,
+  stopFetchingClassData
 }
