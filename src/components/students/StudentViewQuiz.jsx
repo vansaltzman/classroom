@@ -10,71 +10,81 @@ import Button from 'grommet/components/Button';
 import Section from 'grommet/components/Section';
 import Label from 'grommet/components/Label';
 import Title from 'grommet/components/Title';
+import * as Actions from '../../actions/index.js';
 
-//this.props.class 
-// let classRoom = data.classRoom['25']
-// let students = classRoom.students
-// let currentQuestion = students['38'].quizzes['12'].currentQuestion
-// let { students } = data.classRoom['25'].students
-// let { currentQuestion } = students['38'].quizzes['12'].currentQuestion
-// let quiz = data.quiz
+
+
 
 class StudentViewQuiz extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   studentID: '38',
-    //   currentQuestion: 2,
-    //   quizzes: quiz, 
-    //   quizId: 12,
-    //   index: 0,
-    //   totalQuestions: 3,
-       
-    // }
+    this.state = {
+      count: [1]
+    }
     this.forwardClick = this.forwardClick.bind(this)
-    this.backwardClick = this.backwardClick.bind(this)
-    // console.log('this.props in student view quiz',this.props)
+    this.backwardClick = this.backwardClick.bind(this) 
+    
   }
 
 componentDidMount() {
-  // this.setState({
-  //   totalQuestions: Object.keys(quiz.questions).length
-  //})
 
 }
 
 forwardClick(e) {
   e.preventDefault()
-  //run some action that updates the current question ++
-    //conditional to the question
-    // send dummyResponse.['38'].quizzes['12'].currentQuestion++
-// currentQuestion++
-  if(this.state.index < this.state.totalQuestions ){
-    currentQuestion++
-  this.setState({index: this.state.index + 1})
-  }
+  console.log('-------',this.props)
+let copy = Object.assign({}, this.props.quizResponseObj)
+      copy.currentQuestion++
+      //**Need the studentId and classID 
+      // this.props.insertStudentAnswers(quizObj, studentId, quizId, classId)
+        // this.props.insertStudentAnswers(copy, studentId, quizId, classId)
+        
+        this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
+
+        if(!this.state.count.includes(currentQuestion)) {
+          this.state.count.push(currentQuestion)
+        }
 }
 
 backwardClick(e) {
 
 
-  e.preventDefault()
-  if (currentQuestion !== 1) {
-    currentQuestion--
-  this.setState({index: this.state.index - 1})
-  }
+  // e.preventDefault()
+  
+  let copy = Object.assign({}, this.props.quizResponseObj)
+  copy.currentQuestion--
+  //**Need the studentId and classID 
+  // this.props.insertStudentAnswers(quizObj, studentId, quizId, classId)
+    //this.props.insertStudentAnswers(copy, studentId, quizId, classId)
+
+    this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
 }
 
 render() {
-  
-  //let studentId = this.props.auth.user.userId
-  let studentId = '37'
-  let classId ='25'
 
+  //let classId = this.props.class[this.props.class.id]
+  let classId ='25'
+  //let quizId = this.props.class[classId].activeView
+  let quizId = '12'
+  //let studentId = this.props.auth.user.userId
+  let studentId = '37' 
+
+//The question NUMBER this student is on //from student portion
   let currentQuestion = this.props.class[classId].students[studentId].quizzes[this.props.class[classId].activeView].currentQuestion
-  // console.log('currentQuestion',currentQuestion) 
+
+//Student's responseObj at current question
+  let quizResponseObj = this.props.class[classId].students[studentId].quizzes[this.props.class[classId].activeView]//.responses[currentQuestion]
+
+//The ACTUAL QUESTION this student is on // from the teachers quiz at key of students current question// to display question text
   let question = this.props.class[classId].quizzes[this.props.class[classId].activeView].questions[currentQuestion]
+  
+//The Quiz
+  let quiz = this.props.class[classId].quizzes[this.props.class[classId].activeView].questions
+
+//The students ANSWERS Obj of Booleans //from student portion
   let currentQuestionsAnswers = this.props.class[classId].students[studentId].quizzes[this.props.class[classId].activeView].responses[currentQuestion].answers
+  
+
   // console.log('question',question)
      console.log('currentQuestion in student View Quiz',currentQuestion)
      console.log('answers', currentQuestionsAnswers)
@@ -87,46 +97,51 @@ render() {
       </Header>
     
         <Title>Question {currentQuestion} </Title>
-        {/* // quiz.questions[students[this.props.userId].quizzes[quiz.id].currentQuestion] */}
-
         {/* Current Question from quiz object at key of [this student's quizID currect question   */}   
           <Question 
-  
-                    passedProps={this.props}
-                    question={question}
-                    currentQuestionsAnswers={currentQuestionsAnswers}
+            passedProps={this.props}
+            question={question}
+            currentQuestionsAnswers={currentQuestionsAnswers}
+            quizResponseObj={quizResponseObj}
+            currentQuestion={currentQuestion}
+            studentId={studentId}
+            classId={classId}                  
           />
 
-        
-      <span>
-        <Button 
-          label='Previous Question'
-          href='#'
-          primary={true}
-          secondary={false}
-          accent={false}
-          critical={false}
-          plain={false}
-          onClick={(e)=> this.backwardClick(e)} />
-
+          {currentQuestion > 1 ? <span>
           <Button 
-          label='Next Question'
-          href='#'
-          primary={true}
-          secondary={false}
-          accent={false}
-          critical={false}
-          plain={false}
-          onClick={(e)=> this.forwardClick(e)}
-           />
-      </span>
-          {/* <button onClick={this.backwardClick}>Previous Question</button> */}
-          
-          {/* <button onClick={this.forwardClick}>Next Question</button> */}
+            label='Previous Question'
+            href='#'
+            primary={true}
+            secondary={false}
+            accent={false}
+            critical={false}
+            plain={false}
+            onClick={(e)=> this.backwardClick(e)} 
+            />
+            </span>  : <span></span>}
+            
+            {currentQuestion < Object.keys(quiz).length ? <span>
+            <Button 
+            label='Next Question'
+            href='#'
+            primary={true}
+            secondary={false}
+            accent={false}
+            critical={false}
+            plain={false}
+            onClick={(e)=> this.forwardClick(e)}
+            />
+            </span> : <span></span>}
+            
+            {this.state.count.length === quiz.length ? 
+            <div>
+              <button>Submit Quiz</button>
+            </div>
+            : <span></span>}
+
     </Section>
     )
- 
-
   }
 }
 

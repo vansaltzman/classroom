@@ -68,7 +68,7 @@ let  classRoom= { '25':
               }
              }
            },
-           currentQuestion: 2,
+           currentQuestion: 1,
          } 
        }
      },

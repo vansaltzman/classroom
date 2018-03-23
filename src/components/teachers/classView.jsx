@@ -13,9 +13,23 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from '../../actions/index.js';
 
+import classRoom from '../../../data/quizDummyData.js';
+import launchQuiz from '../../../db/liveClassroom.js';
+
 class ClassView extends React.Component {
 	constructor() {
 		super();
+
+		this.launchNewQuiz = this.launchNewQuiz.bind(this)
+	}
+
+	launchNewQuiz(){
+		console.log('CLICK HEARD')
+		console.log('CLASSROOM',classRoom)
+		console.log('LAUNCH QUIZ',launchQuiz)
+		launchQuiz.launchQuiz('1', classRoom.classRoom['25'].quizzes['12'])
+		// launchQuiz('2', 'test')
+		
 	}
 
 	componentWillMount() {
@@ -34,6 +48,7 @@ class ClassView extends React.Component {
 		}
 		return(
 			<Section>
+				
 				<Button icon={<DeployIcon />}
   							label='Go Live'
   							primary={false}
@@ -42,6 +57,18 @@ class ClassView extends React.Component {
   							critical={false}
   							plain={false} 
 								onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass)}/>
+
+	<Button icon={<DeployIcon />}
+  							label='Launch Quiz'
+  							primary={false}
+  							secondary={false}
+  							accent={true}
+  							critical={false}
+  							plain={false} 
+								onClick={() => this.launchNewQuiz()}/>
+
+
+
 				<Columns masonry={false}
 								maxCount={2}
 								size='large'

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { withRouter, Redirect } from "react-router";
 import App from "./app.jsx";
 import SignIn from "./SignIn.jsx";
@@ -22,6 +22,9 @@ import StudentViewQuiz from './students/StudentViewQuiz.jsx'
 import quizContainer from './students/quizContainer.jsx'
 import StudentLiveClassView from './students/studentLiveClassView.jsx'
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
+
+import quizView from './teachers/quizView.jsx';
+
 
 import { readdir } from "fs";
 
@@ -80,6 +83,13 @@ class NavigationBar extends React.Component {
                     <Anchor path="/quiz">
                         Quiz 
                     </Anchor>
+
+                     <Anchor path='/quizView'>
+                        Quiz View
+                    </Anchor>
+
+
+
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
                     </Anchor>
@@ -95,6 +105,10 @@ class NavigationBar extends React.Component {
                     </Anchor>
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
+                    </Anchor>
+
+                    <Anchor path='/studentQuiz'>
+                        studentQuiz
                     </Anchor>
                 </div>
             }
@@ -148,6 +162,9 @@ class NavigationBar extends React.Component {
                             <Route path="/signUp" component={SignUp}/>
                             <Route path="/quiz" component={StudentViewQuiz}/>
                             <Route path="/studentLiveClass" component={StudentLiveClassView}/>
+                            <Route path="/studentQuiz" component={quizContainer}/>
+                            <Route path="/quizView" component={quizView}/>
+
                         </Switch>
                 </nav>
                 </Router>

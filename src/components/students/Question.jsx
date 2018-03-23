@@ -18,8 +18,8 @@ class Question extends React.Component {
   
 render() {
   // let studentId = this.props.auth.userId
-   let studentId = '37'
-   let classId = '25'
+  //  let studentId = '37'
+  //  let classId = '25'
    //let currentQuestion = this.props.passedProps.class[classId].students[studentId].currentQuestion
    console.log('this.props.passedProps', this.props.question)
    let answerArray = Object.keys(this.props.currentQuestionsAnswers)
@@ -41,13 +41,18 @@ render() {
                 <Answers key={i} 
                   answersText={this.props.question.answers}
                   answerNum={answerNum} 
+                  currentQuestionsAnswers={this.props.currentQuestionsAnswers}
+                  quizResponseObj={this.props.quizResponseObj}
+                  currentQuestion={this.props.currentQuestion}
+                  studentId={this.props.studentId}
+                  classId={this.props.classId}
           
                 />
                 ))}
               </ol>
         </List>
       </Animate>
-        {/* <button>Submit Answer</button> */}
+       
      </Section>
   )
 }
