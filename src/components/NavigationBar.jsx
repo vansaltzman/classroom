@@ -1,48 +1,43 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
-import {withRouter, Redirect} from 'react-router';
-import App from './app.jsx';
-import SignIn from './SignIn.jsx';
+import React from "react";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { withRouter, Redirect } from "react-router";
+import App from "./app.jsx";
+import SignIn from "./SignIn.jsx";
 import { connect } from "react-redux";
-import { bindActionCreators } from 'redux';
-import * as actions from '../actions/index';
-import TeacherMainView from './teachers/mainView.jsx';
-import TeacherQuizView from './teachers/quizView.jsx';
-import QuizView from './teachers/quizView.jsx'
-import ClassView from './teachers/classView.jsx'
+import { bindActionCreators } from "redux";
+import * as actions from "../actions/index";
+import TeacherMainView from "./teachers/mainView.jsx";
+import StudentMainView from "./students/studentMainView.jsx";
+import ClassView from "./teachers/classView.jsx";
+import Headline from "grommet/components/Headline"
+import Header from "grommet/components/Header";
+import Title from "grommet/components/Title";
+import Anchor from "grommet/components/Anchor";
+import Menu from "grommet/components/Menu";
+import Box from "grommet/components/Box";
+import Actions from "grommet/components/icons/base/Action.js";
+import QuizView from "./teachers/quizView.jsx";
 
+import { readdir } from "fs";
 
-import "grommet/scss/hpinc/index.scss";
-import Header from 'grommet/components/Header';
-import Title from 'grommet/components/Title';
-import Headline from 'grommet/components/Headline';
-import Anchor from 'grommet/components/Anchor';
-import Menu from 'grommet/components/Menu';
-import Box from 'grommet/components/Box';
-import Actions from 'grommet/components/icons/base/Action.js';
-import {logoutUser} from '../actions/index.js';
- 
 class NavigationBar extends React.Component {
-    constructor(props) {
-        super(props);
-        this.checkAuth = this.checkAuth.bind(this);
-        this.logout = this.logout.bind(this);
-    }
-    checkAuth (destination) {
-        if (this.props.auth.authenticated === true) {
-            if (this.props.auth.user.class === 'teacher') {
-                return < Redirect to= "/teachermainview"  /> 
-            }
-            else {
-                if (this.props.auth.user.class === 'student') {
-                    return < Redirect to="/login"  /> 
-                }
-            }
+  constructor(props) {
+    super(props);
+    this.checkAuth = this.checkAuth.bind(this);
+  }
+  checkAuth() {
+    if (this.props.auth.authenticated === true) {
+      if (this.props.auth.user.class === "teacher") {
+        return <Redirect to="/teachermainview" />;
+      } else {
+        if (this.props.auth.user.class === "student") {
+          return <Redirect to="/studentmainview" />;
         }
-        else {
-            return < SignIn /> 
-        }
+      }
+    } else {
+      return <SignIn />;
     }
+}
     logout (e) {
         e.preventDefault();
         this.props.logoutUser();
@@ -125,6 +120,8 @@ class NavigationBar extends React.Component {
                             <Route exact path="/login"  render={
                                     this.checkAuth
                             } />  
+                            <Route path="/liveclass" component={ClassView}/>
+                            <Route path="/studentmainview" component={StudentMainView} />
                             <Route path="/login" component={SignIn}  />
                             <Route path="/teacherQuiz" component={ClassView}  />
                             <Route path="/quiz" component={QuizView}  />
@@ -137,18 +134,18 @@ class NavigationBar extends React.Component {
         )
     }
 }
-function mapStateToProps(state) {
-    return {
-          // subject to change
-          auth: state.auth
-      }
-  }
-  
-  function matchDispatchToProps(dispatch) {
-      return bindActionCreators(actions, dispatch);
-  }
-  
-  export default connect(mapStateToProps, matchDispatchToProps)(NavigationBar)
 
+function mapStateToProps(state) {
+  return {
+    // subject to change
+    auth: state.auth
+  };
+}
+
+function matchDispatchToProps(dispatch) {
+  return bindActionCreators(actions, dispatch);
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(NavigationBar);
 
 // export default NavigationBar;

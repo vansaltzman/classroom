@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import {reducer as formReducer} from 'redux-form';
 import { teacherClassViewReducer } from './teacherClassViewReducer';
 import { teacherQuizViewReducer } from './teacherQuizViewReducer';
+import { studentClassViewReducer } from './studentClassViewReducer';
 import authReducer from './authReducers';
 import { routerReducer } from 'react-router-redux';
 import {liveClassReducer} from './liveClassReducers'
@@ -13,7 +14,7 @@ const RootReducer = combineReducers({
 	auth: authReducer,
 	form: formReducer,
 	routing: routerReducer,
-	liveClass: liveClassReducer
+	studentClassView: studentClassViewReducer
 })
 
 export default RootReducer;
