@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 //import ClassLabel from './classLabel.jsx';
 import * as Actions from '../../actions/index.js';
 //import ClassBuilderModal from './classBuilderModal';
-
+import axios from 'axios';
 /****** Grommet Stuff ******/
 import "grommet/scss/hpinc/index.scss";
 import GrommetApp from "grommet/components/App";
@@ -30,6 +30,7 @@ import Footer from 'grommet/components/Footer';
 import FormFields from 'grommet/components/FormFields';
 import TextInput from 'grommet/components/TextInput';
 import Select from 'grommet/components/Select';
+import Header from 'grommet/components/Header'
 
 
 /****** Grommet Stuff ******/
@@ -42,7 +43,18 @@ class TeacherMainView extends React.Component {
 		this.newClassSubjectChangeHandler = this.newClassSubjectChangeHandler.bind(this);
 		this.newClassQuarterChangeHandler = this.newClassQuarterChangeHandler.bind(this);
 		this.newClassYearChangeHandler = this.newClassYearChangeHandler.bind(this);
+		this.getClassesfromDb = this.getClassesfromDb.bind(this);
+		this.updateTargetClass = this.updateTargetClass.bind(this);
   }
+
+	componentWillMount() {
+		//console.log(this.props.auth.user.email)
+		this.getClassesfromDb()
+	}
+
+	getClassesfromDb() {
+		this.props.getClasses({email: this.props.auth.user.email})
+	}
 
 	toggleModalHandler() {
 		this.props.toggleModalAction()
@@ -64,8 +76,26 @@ class TeacherMainView extends React.Component {
 		this.props.updateNewClassYear(value)
 	}
 
+	updateTargetClass(target) {
+		this.props.updateTargetClass(target)
+	}
+
 	addClassHandler() {
-		this.props.addClassAction()
+		console.log('email', this.props.auth.user.email);
+		axios.post('/addClass', {
+			email: this.props.auth.user.email,
+			classname: this.props.newClassName,
+			subject: this.props.newClassSubject,
+			year: this.props.newClassYear,
+			quarter: this.props.newClassQuarter,
+			thumbnail: "https://regmedia.co.uk/2016/10/17/javascript_photo_via_shutterstock.jpg?x=442&y=293&crop=1"
+		})
+		.then(() => {
+			console.log('class added');
+		})
+		.catch((err) => {
+			if (err) throw err
+		})
 	}
 
   componentDidMount() {
@@ -73,6 +103,8 @@ class TeacherMainView extends React.Component {
   }
 
   render() {
+		//const {email} = this.props.auth.user.email;
+		console.log('email', this.props.auth.user.email);
     return (
       <div>
         {/* <Section> */}
@@ -93,7 +125,7 @@ class TeacherMainView extends React.Component {
         <Tiles flush={false} selectable={true}>
           {/* onSelect some function */}
           {this.props.classes.map((item, index) => {
-            return <ClassLabel item={item} key={index} />;
+            return <ClassLabel item={item} key={index} clickHandler={this.updateTargetClass}/>;
           })}
           <Tile label="Label" href="#">
             <Button icon={<AddCircleIcon size="huge" onClick={() => this.toggleModalHandler()}/>} />
@@ -163,7 +195,9 @@ function mapStateToProps(state) {
 		newClassName: state.teachersClassView.newClassName,
 		newClassSubject: state.teachersClassView.newClassSubject,
 		newClassQuarter: state.teachersClassView.newClassQuarter,
-		newClassYear: state.teachersClassView.newClassYear
+		newClassYear: state.teachersClassView.newClassYear,
+		newClass: state.teachersClassView.newClass,
+		auth: state.auth
   };
 }
 
