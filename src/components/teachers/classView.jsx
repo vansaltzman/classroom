@@ -53,7 +53,7 @@ class ClassView extends React.Component {
 						Side bar for students list
 						{studentsArray.map((each) => {
 							return (
-								<Box>
+								<Box style={{color: each.isHere ? 'black' : 'lightgrey'}}>
 									{each.name}
 								</Box>
 							)

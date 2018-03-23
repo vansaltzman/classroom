@@ -200,7 +200,7 @@ export function classGoLive(classId, classObj) {
 		classes.child(classId).set(classObj)
 		.then(() => {
 			dispatch(changeClassLabelColorWhenLive());
-			
+			dispatch(fetchClassData(classId))
 		})
 		.then(() => {
 			dispatch(classGoLiveAction(classId));
