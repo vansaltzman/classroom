@@ -27,7 +27,7 @@ export function teacherClassViewReducer(state={
 		case actionTypes.UPDATE_NEW_CLASS_QUARTER_ACTION:
 			return {...state, newClassQuarter: action.quarter.option}
 		case actionTypes.UPDATE_NEW_CLASS_YEAR_ACTION:
-			console.log('reducer action.year', action.year.option)
+			//console.log('reducer action.year', action.year.option)
 			return {...state, newClassYear: action.year.option}
 		case actionTypes.GET_ALL_STUDENTS_ACTION:
 			const studentNames = action.students.map((each) => {
@@ -35,13 +35,13 @@ export function teacherClassViewReducer(state={
 			}) 
 			return {...state, students: action.students, studentNames: studentNames}
 		case actionTypes.UPDATE_TARGET_CLASS_ACTION:
-			console.log('reducer', action.targetClass)
+			//console.log('reducer', action.targetClass)
 			const targetClass = action.targetClass;
 			targetClass.quizzes = {};
 			targetClass.isLive = false;
 			return {...state, targetClass: targetClass}
 		case actionTypes.GET_STUDENTS_BELONGS_TO_A_CLASS_ACTION:
-			console.log('action.students in a class at reducers', action.students)
+			//console.log('action.students in a class at reducers', action.students)
 			const studentsObj = {};
 			for (var i = 0; i < action.students.length; i++) {
 				let student_id = action.students[i].id;
@@ -53,10 +53,10 @@ export function teacherClassViewReducer(state={
 					quizzes: {}
 				}
 			}
-			console.log('formatted students obj', studentsObj)
+			//console.log('formatted students obj', studentsObj)
 			const targetClassWithStudents = state.targetClass;
 			targetClassWithStudents.students = studentsObj;
-			console.log('class with students', targetClassWithStudents)
+			//console.log('class with students', targetClassWithStudents)
 			return {...state, targetClass: targetClassWithStudents}
 		case actionTypes.CLASS_GO_LIVE_ACTION:
 			const goLiveClass = state.targetClass;
