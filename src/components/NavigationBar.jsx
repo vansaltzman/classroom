@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { withRouter, Redirect } from "react-router";
 import App from "./app.jsx";
 import SignIn from "./SignIn.jsx";
@@ -96,6 +96,10 @@ class NavigationBar extends React.Component {
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
                     </Anchor>
+
+                    <Anchor path='/studentQuiz'>
+                        studentQuiz
+                    </Anchor>
                 </div>
             }
         }
@@ -148,6 +152,7 @@ class NavigationBar extends React.Component {
                             <Route path="/signUp" component={SignUp}/>
                             <Route path="/quiz" component={StudentViewQuiz}/>
                             <Route path="/studentLiveClass" component={StudentLiveClassView}/>
+                            <Route path="/studentQuiz" component={quizContainer}/>
                         </Switch>
                 </nav>
                 </Router>
