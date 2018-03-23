@@ -11,19 +11,20 @@ class StudentLiveClassView extends React.Component {
   constructor() {
 		super();
 	}
-  render(props) {
-
-		if (this.props.targetClass.activeView) {
-			return <Quiz />
-		} else {
+  render() {
+	console.log(this.props)
+		if (!this.props.activeView.activeView) {
 			return <Default />
+		} else {
+			return <Quiz />
 		}
   }
 }
 
 function mapStateToProps(state) {
 	return {
-		targetClass: state.teachersClassView.activeView
+		activeView: state.studentClassView.targetClass
+		// targetClass: state.studen
 	}
 }
 

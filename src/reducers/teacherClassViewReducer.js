@@ -3,7 +3,6 @@ import classes from '../../data/teacherClassViewData';
 import axios from 'axios';
 
 export function teacherClassViewReducer(state={
-	activeView: false,
 	classes: [],
 	showClassBuilderModal: false,
 	newClassName: '',
@@ -39,6 +38,7 @@ export function teacherClassViewReducer(state={
 			const targetClass = action.targetClass;
 			targetClass.quizzes = {};
 			targetClass.isLive = false;
+			targetClass.activeView = false;
 			return {...state, targetClass: targetClass}
 		case actionTypes.GET_STUDENTS_BELONGS_TO_A_CLASS_ACTION:
 			//console.log('action.students in a class at reducers', action.students)
