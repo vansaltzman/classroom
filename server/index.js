@@ -97,10 +97,10 @@ app.use(bodyParser.json())
     console.log('dummy data ', dummyAnswerData)
   })
 
-  app.post('/answer', (req, res) => {
-    let answer = req.body.answer
-    console.log('answer submitted', answer)
-  })
+  // app.post('/answer', (req, res) => {
+  //   let answer = req.body.answer
+  //   console.log('answer submitted', answer)
+  // })
 
   app.post('/answer', (req, res) => {
     let answer = req.body.answer
