@@ -65,6 +65,7 @@ export function teacherClassViewReducer(state={
 		case actionTypes.FETCH_CLASS_DATA:
 			return {...state}
 		case actionTypes.UPDATE_CLASS_DATA:
+		console.log(action.classData)
 			return {...state, targetClass: action.classData}
 		default: return state
 	}

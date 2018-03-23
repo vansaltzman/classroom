@@ -3,41 +3,32 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 //import ClassLabel from './classLabel.jsx';
 import * as Actions from "../../actions/index.js";
+import Default from './classViewDefault.jsx'
+import Quiz from './StudentViewQuiz.jsx'
 
-// class StudentLiveClassView extends React.Component {
-//   constructor() {
-// 		super();
-// 		this.studentGoOnline = this.studentGoOnline.bind(this)
-// 	}
-	
-// 	studentGoOnline() {
-// 		this.props.updateStudentTargetClass(this.props.targetClassId, this.props.studentId)
-// 	}
-//   componentWillReceiveProps() {
-// 		console.log(this.props.targetClassId, this.props.studentId)
-// 		this.props.updateStudentTargetClass(this.props.targetClassId, this.props.studentId)
-// 		//this.studentGoOnline()
-// 	}
-//   render() {
-//     return (
-//       <div>
-//         Hellloo
-//       </div>
-//     )
-//   }
-// }
 
-// function mapStateToProps(state) {
-// 	return {
-// 		// targetClassId: state.studentClassView.targetClass.id,
-// 		studentId: state.studentClassView.targetClass.student_id,
-// 		targetClass: state.studentClassView.targetClass
-// 	}
-// }
+class StudentLiveClassView extends React.Component {
+  constructor() {
+		super();
+	}
+  render(props) {
 
-// function matchDispatchToProps(dispatch) {
-// 	return bindActionCreators(Actions, dispatch);
-// }
+		if (this.props.targetClass.activeView) {
+			return <Quiz />
+		} else {
+			return <Default />
+		}
+  }
+}
 
-// export default connect(mapStateToProps, matchDispatchToProps)(StudentLiveClassView)
-//export default StudentLiveClassView
+function mapStateToProps(state) {
+	return {
+		targetClass: state.teachersClassView.activeView
+	}
+}
+
+function matchDispatchToProps(dispatch) {
+	return bindActionCreators(Actions, dispatch);
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(StudentLiveClassView)
