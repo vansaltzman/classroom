@@ -26,6 +26,7 @@ import NavigationBar from './components/NavigationBar.jsx';
 //const logger = createLogger();
 
 
+
 //const logger = createLogger();
 
 
@@ -51,7 +52,6 @@ ReactDOM.render(
 	</Provider>,
 	document.getElementById('app')
 )
-
 
 
 
