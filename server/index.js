@@ -99,7 +99,6 @@ app.use(bodyParser.json())
     console.log('dummy data ', dummyAnswerData)
   })
 
-<<<<<<< HEAD
   // app.post('/answer', (req, res) => {
   //   let answer = req.body.answer
   //   console.log('answer submitted', answer)
@@ -109,8 +108,6 @@ app.use(bodyParser.json())
     let answer = req.body.answer
     console.log('answer submitted', answer)
   })
-=======
->>>>>>> save progress on log in view
 
   // Complete Quiz
   

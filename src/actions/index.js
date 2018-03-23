@@ -196,7 +196,7 @@ function getStudentsBelongToAClassAction(students) {
 
 export function classGoLive(classId, classObj) {
 	return (dispatch) => {
-		const classes = fb.ref('/');
+		const classes = fb.ref('/classes');
 		classes.child(classId).set(classObj)
 		.then(() => {
 			dispatch(classGoLiveAction());

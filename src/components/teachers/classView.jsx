@@ -36,7 +36,6 @@ class ClassView extends React.Component {
 			<Section>
 				<Button icon={<DeployIcon />}
   							label='Go Live'
-  								onClick={()=> this.handleGoLive()}
   							primary={false}
   							secondary={false}
   							accent={true}
