@@ -62,6 +62,10 @@ export function teacherClassViewReducer(state={
 			const goLiveClass = state.targetClass;
 			goLiveClass.isLive = !state.targetClass.isLive;
 			return {...state, targetClass: goLiveClass}
+		case actionTypes.FETCH_CLASS_DATA:
+			return {...state}
+		case actionTypes.UPDATE_CLASS_DATA:
+			return {...state, targetClass: action.classData}
 		default: return state
 	}
 }

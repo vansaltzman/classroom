@@ -71,7 +71,7 @@ class StudentMainView extends React.Component {
                   type="button"
                   path="/studentliveclass"
                   primary={true}
-                  onClick={() => this.props.updatedStudentTargetClass(item)}
+                  onClick={() => this.props.toggleStudentLiveClassStatus(item.class_id, item.student_id)}
                 />
               </Tile>
             );

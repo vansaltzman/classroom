@@ -200,7 +200,7 @@ export function classGoLive(classId, classObj) {
 		classes.child(classId).set(classObj)
 		.then(() => {
 			dispatch(changeClassLabelColorWhenLive());
-			
+			dispatch(fetchClassData(classId))
 		})
 		.then(() => {
 			dispatch(classGoLiveAction(classId));
@@ -299,23 +299,29 @@ export function launchLiveClass(classObj) {
 
 // join/exit live class from student pov
 export function toggleStudentLiveClassStatus (classId, studentId) {
-	const currentStudentStatus = fb.ref('/' + classId + '/students' + studentId + '/isHere')
+	console.log('Toggle Student Class Status' , classId, studentId)
+	const currentStudentStatus = fb.ref('/classes/' + classId + '/students/' + studentId + '/isHere')
 	return (dispatch) => {
-		currentStudentStatus.set(!currentStudentStatus)
+		currentStudentStatus.set(true)
 		.then(()=> {
+			dispatch(toggleStudentLiveClassStatusAction())
 			return currentStudentStatus.once('value')
 		})
 		.then((snap) => {
 			const status = snap.val();
-			if (status) {
+			// if (status) {
 				dispatch(fetchClassData(classId))
-			} else {
-				dispatch(stopFetchingClassData(classId))
-			}
+			// } else {
+			// 	dispatch(stopFetchingClassData(classId))
+			// }
 		})
 	}
 }
-
+function toggleStudentLiveClassStatusAction () {
+		return {
+			type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
+		}
+	}
 //change newView to be quiz id or false
 // export function updateActiveView (newView, classId) {
 // 	const currentClassActiveView = fb.ref('/classes/' + classId + '/activeView')
@@ -337,8 +343,14 @@ export function fetchClassData (classId) {
 	const currentClass = fb.ref('/classes/' + classId )
 	return (dispatch) => {
 		currentClass.on('value', function(snap) {
+			console.log(snap.val())
 			dispatch(updateClassData(snap.val()))
 		})
+	}
+}
+function fetchClassDataAction () {
+	return {
+		type: actionTypes.FETCH_CLASS_DATA,
 	}
 }
 
