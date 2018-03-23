@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const main = require('../db/mainDb.js');
 const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
+// const config = require('./config.js');
 const config = require('./config.js');
 const migration = require('./migrationWorker.js')
 const { fb, updateQuizResponses } = require('../db/liveClassroom.js');

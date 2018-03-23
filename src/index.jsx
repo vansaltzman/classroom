@@ -19,8 +19,15 @@ import NavigationBar from './components/NavigationBar.jsx';
 //import ClassView from './components/classView.jsx';
 // import { Router, Route, browserHistory } from 'react-router'
 // import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+// import SignUp from './SignUp.jsx'
 
 //const logger = createLogger();
+
+//const logger = createLogger();
+
+
+//const logger = createLogger();
+
 
 const store = createStore(rootReducer, composeWithDevTools(
   applyMiddleware(thunk)
@@ -36,6 +43,15 @@ if (localStorage.jwtToken) {
 ReactDOM.render(
 	<Provider store={store}>
 		<NavigationBar history={history} />
+
+		{/* <AppContainer /> */}
+        
+		{/* <App /> */}
+      
 	</Provider>,
 	document.getElementById('app')
 )
+
+
+
+
