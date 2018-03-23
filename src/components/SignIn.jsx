@@ -7,9 +7,12 @@ import LoginForm from 'grommet/components/LoginForm';
 
 import Article from 'grommet/components/Article';
 import Section from 'grommet/components/Section';
-import Headline from 'grommet/components/HeadLine';
+import Headline from 'grommet/components/Headline';
 import Button from 'grommet/components/Button';
 import PasswordInput from 'grommet/components/PasswordInput';
+import Form from 'grommet/components/Form';
+import FormField from 'grommet/components/FormField';
+import TextInput from 'grommet/components/TextInput';
 
 const form = reduxForm({
     form: 'login'
@@ -18,7 +21,7 @@ const form = reduxForm({
 class SignIn extends Component {
     handleFormSubmit(formProps) {
         console.log('is this running ', formProps)
-        // this.props.loginUser(formProps)
+        this.props.loginUser(formProps)
     }
     renderAlert() {
         if(this.props.errorMessage) {
@@ -38,6 +41,15 @@ class SignIn extends Component {
                         <Headline margin='medium'>
                         Login
                         </Headline>
+                        {/* <Form onSubmit={this.handleFormSubmit.bind(this)}  >
+                            <FormField label='Sample label'>
+                                <TextInput />
+                            </FormField>
+                            <FormField label='Sample label'>
+                                <PasswordInput />
+                            </FormField>
+                            <Button type="submit" label='Submit' />
+                        </Form> */}
                         <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} >  
                             {this.renderAlert()}
                             <div>
@@ -47,22 +59,14 @@ class SignIn extends Component {
                             <div>
                                 <label>Password</label>
                                 <Field name="password" className="form-control" component="input" type="password" />
-                                {/* <PasswordInput />  */}
                             </div>
-                            <Button label='Submit'
-                                primary={false}
-                                secondary={false}
-                                accent={true}
-                                critical={false}
-                                plain={true}
-                                type='reset' />
-                            {/* <button type="submit" className="btn btn-primary">Login</button> */}
+                            
+                            <button type="submit" className="btn btn-primary">Login</button>
                         </form>
                     </Section>
                     
                 </Article>
-               
-            
+          
             </div>
         )
     }
@@ -76,3 +80,11 @@ function mapStateToProps(state) {
   }
   
 export default withRouter(connect(mapStateToProps, { loginUser })(form(SignIn)));
+
+{/* <Button label='Submit'
+                                primary={false}
+                                secondary={false}
+                                accent={true}
+                                critical={false}
+                                plain={true}
+                                type='reset' /> */}

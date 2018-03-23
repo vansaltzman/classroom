@@ -105,6 +105,7 @@ class TeacherMainView extends React.Component {
   render() {
 		//const {email} = this.props.auth.user.email;
 		console.log('email', this.props.auth.user.email);
+
     return (
       <div>
         {/* <Section> */}
