@@ -19,7 +19,7 @@ import Headline from 'grommet/components/Headline';
 import Anchor from 'grommet/components/Anchor';
 import Menu from 'grommet/components/Menu';
 import Box from 'grommet/components/Box';
-import Actions from 'grommet/components/icons/base/Action.js';
+import Actions from 'grommet/components/icons/base/Actions.js';
 import {logoutUser} from '../actions/index.js';
  
 class NavigationBar extends React.Component {

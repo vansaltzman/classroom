@@ -4,8 +4,10 @@ import actionTypes from './types';
 import classes from '../../data/teacherClassViewData.js';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import jwt from 'jsonwebtoken';
-import { fb } from '../../db/liveClassroom.js';
+import { fb,  } from '../../db/liveClassroom.js';
 import studentQuizObjConverter from '../utils/studentQuizObjConverter.js';
+import dummyStudentsData from '../../db/dummyStudentsData';
+
 
 const serverURL = 'http://localhost:3000';
 
@@ -143,7 +145,7 @@ function getUpdatedClassList() {
 }
 
 // make class live - > from teacher pov
-export function launchLiveClass(classObj) {
+export function launchLiveClass(dummyStudentsData) {
 	const classes = fb.ref('/classes');
 	return (dispatch) => {
 		classes.push(classObj)
@@ -152,6 +154,7 @@ export function launchLiveClass(classObj) {
 		})
 	}
 }
+
 
 export function launchQuiz (classId, quizObj) {
 	// store postgres quiz id to active view property in the

@@ -77,5 +77,6 @@ const endClass = function(classId) {
 // Database helpers
 
 module.exports = {  
-  fb
+  fb,
+  startClass
 }
