@@ -9,7 +9,7 @@ import axios from 'axios';
 /****** Grommet Stuff ******/
 import "grommet/scss/hpinc/index.scss";
 import GrommetApp from "grommet/components/App";
-// import Header from "grommet/components/Header";
+import Header from "grommet/components/Header";
 import Title from "grommet/components/Title";
 import Box from "grommet/components/Box";
 import Search from "grommet/components/Search";
@@ -30,7 +30,7 @@ import Footer from 'grommet/components/Footer';
 import FormFields from 'grommet/components/FormFields';
 import TextInput from 'grommet/components/TextInput';
 import Select from 'grommet/components/Select';
-import Header from 'grommet/components/Header'
+// import Header from 'grommet/components/Header'
 
 
 /****** Grommet Stuff ******/

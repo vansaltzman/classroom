@@ -20,6 +20,13 @@ const actionTypes = {
 	GET_STUDENTS_BELONGS_TO_A_CLASS_ACTION: 'get_students_belong_to_a_class_action',
 	CLASS_GO_LIVE_ACTION: 'class_go_live_action',
 	GET_CLASSES_BELONG_TO_A_STUDENT_ACTION: 'get_classes_belong_to_a_student_action',
+	UPDATE_NEW_CLASS_YEAR_ACTION: 'update_new_class_year_action',
+	UPDATE_CLASS_DATA: 'update_class_data',
+	////// StudentViewQuiz //////
+	GET_QUIZ: 'get_quiz',
+	NEXT_QUESTION: 'next_question',
+	PREVIOUS_QUESTION: 'previous_question'
+
 }
 
 export default actionTypes

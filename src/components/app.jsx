@@ -22,6 +22,8 @@ import Heading from 'grommet/components/Heading';
 import Image from 'grommet/components/Image';
 import Button from 'grommet/components/Button';
 /****** Grommet Stuff ******/
+import SignUp from './SignUp.jsx'
+import StudentViewQuiz from './students/StudentViewQuiz.jsx';
 
 class App extends React.Component {
   render() {
@@ -42,12 +44,22 @@ class App extends React.Component {
 			<div>
 				{/* Will need to put a conditional statement here for different class of user
 				in case of conditional rendering or use router */}
+
 				{/* <TeacherMainView /> */}
 )
+				{/* <ClassView /> */}
+				{/* Comment the TeacherMainView out for now...will need to use router later */}
+				{/* <TeacherMainView />
+				This is just a place holder for now.
+				
+				<StudentViewQuiz/>
+				<SignUp/> */}
+
 			</div>
 		)
 	}
 }
+
 
 function mapStateToProps(state) {
   return {

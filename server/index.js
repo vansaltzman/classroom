@@ -4,15 +4,18 @@ const bodyParser = require('body-parser')
 const main = require('../db/mainDb.js');
 const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
+// const config = require('./config.js');
 const config = require('./config.js');
 const migration = require('./migrationWorker.js')
 const { fb, updateQuizResponses } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
 
+
 const app = express()
 
 app.use(express.static(__dirname + '/../dist'))
 app.use(bodyParser.json())
+
 
 // Sign up
   app.post('/newAccount', (req, res)=> {
@@ -27,7 +30,7 @@ app.use(bodyParser.json())
     .catch(err => {
       res.sendStatus(500)
     })
-  })
+})
 
 // Login
   app.post(`/auth/login`, (req, res)=> {
@@ -52,7 +55,7 @@ app.use(bodyParser.json())
   })
 
 
-// Teacher
+  // Teacher
 
   // Start class
   app.post('/startClass', (erq, res) => {
@@ -75,10 +78,10 @@ app.use(bodyParser.json())
 
   // End Class
 
-// Student
+  // Student
 
   // Join Class in session
-  
+
   // Answer Quiz Question
   app.post('/updateLiveQuizAnswers', (req, res)=> {
     var studentId = 37;
@@ -92,6 +95,16 @@ app.use(bodyParser.json())
     //   console.log('err in updating quiz response ', err)
     // })
     console.log('dummy data ', dummyAnswerData)
+  })
+
+  // app.post('/answer', (req, res) => {
+  //   let answer = req.body.answer
+  //   console.log('answer submitted', answer)
+  // })
+
+  app.post('/answer', (req, res) => {
+    let answer = req.body.answer
+    console.log('answer submitted', answer)
   })
 
   // Complete Quiz
@@ -157,6 +170,6 @@ app.post('/getStudentsClasses', (req, res) => {
 
 const port = 3000
 app.listen(port, function() {
-  console.log('Listening on ' + port)
+console.log('Listening on ' + port)
 })
 

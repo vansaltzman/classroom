@@ -8,7 +8,7 @@ import DeployIcon from 'grommet/components/icons/base/Deploy';
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
 import TableHeader from 'grommet/components/TableHeader';
-import Sort from 'grommet-addons/components/Sort'
+// import Sort from 'grommet-addons/components/Sort'
 
 import moment from 'moment'
 

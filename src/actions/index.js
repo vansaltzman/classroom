@@ -318,3 +318,22 @@ function updateClassData(classData) {
 		classData
 	}
 }
+//**************** STUDENT VIEW QUIZ *******************
+
+export function getQuiz() {
+	return {
+		type: actionTypes.GET_QUIZ
+	}
+}
+
+export function nextQuestion() {
+	return {
+		type: actionTypes.NEXT_QUESTION
+	}
+}
+
+export function previousQuestion() {
+	return {
+		type: actionTypes.PREVIOUS_QUESTION
+	}
+}

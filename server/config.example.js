@@ -1,9 +1,9 @@
-module.exports = {
+export default {
     jwtSecret: '',
     fbConfig: {
-      apiKey: '',
-      authDomain: '',
-      databaseURL: ''
+      apiKey: "",
+      authDomain: "",
+      databaseURL: ""
     }
   }
   // put correct key in the jwtsecret key of this module. 

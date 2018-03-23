@@ -17,6 +17,9 @@ import Menu from "grommet/components/Menu";
 import Box from "grommet/components/Box";
 import Actions from "grommet/components/icons/base/Action.js";
 import QuizView from "./teachers/quizView.jsx";
+import SignUp from './Signup.jsx';
+import StudentViewQuiz from './students/StudentViewQuiz.jsx'
+import quizContainer from './students/quizContainer.jsx'
 
 import { readdir } from "fs";
 
@@ -112,6 +115,9 @@ class NavigationBar extends React.Component {
                     </Menu>
                 </Box>
             </Header>
+                           
+                            
+
 
         
                         <Switch>
@@ -124,12 +130,16 @@ class NavigationBar extends React.Component {
                             <Route path="/studentmainview" component={StudentMainView} />
                             <Route path="/login" component={SignIn}  />
                             <Route path="/teacherQuiz" component={ClassView}  />
+                        
                             <Route path="/quiz" component={QuizView}  />
+                            <Route path="/studentQuiz" component={quizContainer}/>
+                            {/* <Route path="/studentClass" component={StudentClass}  /> */}
                             
+                            <Route path="/signUp" component={SignUp}/>
+                            <Route path="/quiz" component={StudentViewQuiz}/>
                         </Switch>
                 </nav>
                 </Router>
-
             </div>
         )
     }
