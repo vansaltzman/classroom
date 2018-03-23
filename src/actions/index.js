@@ -256,6 +256,22 @@ export function toggleStudentLiveClassStatus (classId, studentId) {
 	}
 }
 
+// change newView to be quiz id or false
+// export function updateActiveView (newView, classId) {
+// 	const currentClassActiveView = fb.ref('/classes/' + classId + '/activeView')
+// 	return (dispatch)=> {
+// 		return currentClassActiveView.set(newView)
+// 	}
+// }
+
+// // submit a student's responses to a quiz every time they check an answer
+// export function insertStudentAnswers(quizObj, studentId, quizId, classId) {
+// 	const currentStudent = fb.ref('classes/' + classId + '/students/' + studentId + '/quizzes/' + quizId );
+// 	return (dispatch) => {
+// 		currentStudent.set(quizObj);
+// 	}
+// }
+ 
 // get all class data for a live class
 export function fetchClassData (classId) {
 	const currentClass = fb.ref('/classes/' + classId )
