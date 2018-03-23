@@ -34,6 +34,8 @@ export function studentClassViewReducer(
 			return {...state, classes: updatedClasses}
 		case actionTypes.TOGGLE_STUDENT_LIVE_STATUS:
 			return {...state}
+		case actionTypes.FETCH_CLASS_DATA:
+			return {...state}
 			
     default:
       return state;

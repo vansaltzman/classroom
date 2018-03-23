@@ -56,9 +56,9 @@ const addStudentsAndClass = function() {
     // create class
    console.log('create class')
    return db.query(
-      `INSERT INTO classes (name, teacher_id, subject_id) 
+      `INSERT INTO classes (name, teacher_id, subject_id, year, quarter, thunmbnail) 
       VALUES ('Magic Class', (SELECT id FROM teachers WHERE email='mfrizz@magic.bus'), 
-      (SELECT id FROM subjects WHERE name='Magic'));`
+      (SELECT id FROM subjects WHERE name='Magic'), '2018', 'Second', 'https://twitter.com/magicschoolbus');`
     )
   })
   .then(()=> {
