@@ -37,6 +37,7 @@ export function studentClassViewReducer(
 		case actionTypes.FETCH_CLASS_DATA:
 			return {...state}
 		case actionTypes.UPDATE_CLASS_DATA:
+			console.log('action.classData', action.classData)
 			return {...state, targetClass: action.classData}
 		
     default:

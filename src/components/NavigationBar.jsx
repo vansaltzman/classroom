@@ -21,6 +21,7 @@ import SignUp from './Signup.jsx';
 import StudentViewQuiz from './students/StudentViewQuiz.jsx'
 import quizContainer from './students/quizContainer.jsx'
 import StudentLiveClassView from './students/studentLiveClassView.jsx'
+import ClassViewDefault from './students/classViewDefault.jsx';
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 
 import quizView from './teachers/quizView.jsx';
@@ -35,7 +36,15 @@ class NavigationBar extends React.Component {
   constructor(props) {
     super(props);
     this.checkAuth = this.checkAuth.bind(this);
+    this.checkView = this.checkView.bind(this);
   }
+  checkView() {
+    return <Redirect to="/default"/>
+    // setTimeout(function() {
+    //     return <Redirect to="/studentLiveClass2"/>
+    // }, 3000) 
+  }
+
   checkAuth() {
     if (this.props.auth.authenticated === true) {
       if (this.props.auth.user.class === "teacher") {
@@ -161,10 +170,10 @@ class NavigationBar extends React.Component {
                             
                             <Route path="/signUp" component={SignUp}/>
                             <Route path="/quiz" component={StudentViewQuiz}/>
-                            <Route path="/studentLiveClass" component={StudentLiveClassView}/>
-                            <Route path="/studentQuiz" component={quizContainer}/>
-                            <Route path="/quizView" component={quizView}/>
-
+                            {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
+                            <Route path="/default" component={ClassViewDefault}/>
+                            <Route path="/studentLiveClass2" component={StudentLiveClassView}/>
+                            
                         </Switch>
                 </nav>
                 </Router>
@@ -176,7 +185,8 @@ class NavigationBar extends React.Component {
 function mapStateToProps(state) {
   return {
     // subject to change
-    auth: state.auth
+    auth: state.auth,
+    activeView: state.teachersClassView.targetClass.activeView
   };
 }
 
