@@ -6,14 +6,19 @@ import * as Actions from "../../actions/index.js";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-const StudentClassLabel = (props) => {
-  return (
-    //   <div>students</div>
-    <Tile>
+class StudentClassLabel extends React.Component {
+  constructor() {
+    super()
+  }
+  render() {
+    console.log(this.props.item.isLive);
+    return (
+      <Tile>
       <Card
-        thumbnail={props.item.thunmbnail}
-        label={props.item.year}
-        heading={props.item.name}
+        style={{background: this.props.item.color}}
+        thumbnail={this.props.item.thunmbnail}
+        label={this.props.item.year}
+        heading={this.props.item.name}
         description="Sample description providing more details."
       />
       <Button
@@ -21,10 +26,12 @@ const StudentClassLabel = (props) => {
         type="button"
         path="/studentliveclass"
         primary={true}
-        onClick={() => props.clickHandler(props.item)}
+        onClick={() => this.props.clickHandler(this.props.item)}
       />
-    </Tile>
-  );
-};
+      </Tile>
+    )
+  }
+}
+
 
 export default StudentClassLabel;

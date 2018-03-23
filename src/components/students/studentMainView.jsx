@@ -6,7 +6,7 @@ import { bindActionCreators } from "redux";
 import * as Actions from "../../actions/index.js";
 //import ClassBuilderModal from './classBuilderModal';
 import axios from "axios";
-import StudentClassLabel from './studentClassLabel.jsx';
+import StudentClassLabel from "./studentClassLabel.jsx";
 /****** Grommet Stuff ******/
 import "grommet/scss/hpinc/index.scss";
 import GrommetApp from "grommet/components/App";
@@ -32,7 +32,7 @@ import FormFields from "grommet/components/FormFields";
 import TextInput from "grommet/components/TextInput";
 import Select from "grommet/components/Select";
 import Header from "grommet/components/Header";
-
+import Card from "grommet/components/Card";
 
 class StudentMainView extends React.Component {
   constructor() {
@@ -40,25 +40,46 @@ class StudentMainView extends React.Component {
   }
   componentWillMount() {
     //consol
-    this.props.getClassesBelongToAStudent({email: this.props.auth.user.email})
+    this.props.getClassesBelongToAStudent({
+      email: this.props.auth.user.email
+    });
     //this.props.watchClassGoLive()
   }
 
   // updateTargetClassAndStudentStatus() {
-  //   this.props.updateStudentTargetClass()
-    
+  //   this.props.updateStudentTargetClass(this.props.targetClassId, this.props.studentId)
+
   // }
   render() {
+    console.log('classes', this.props.classes, this.props.classes.color);
     return (
       <div>
         <Tiles flush={false} selectable={true}>
           {/* onSelect some function */}
           {this.props.classes.map((item, index) => {
-            return <StudentClassLabel item={item} key={index} clickHandler={this.props.updateStudentTargetClass}/>;
+            return (
+              <Tile>
+                <Card
+                  style={{ background: item.isLive ? 'lightGreen' : 'white'}}
+                  thumbnail={item.thunmbnail}
+                  label={item.year}
+                  heading={item.name}
+                  description="Sample description providing more details."
+                />
+                <Button
+                  label="Enter Class"
+                  type="button"
+                  path="/studentliveclass"
+                  primary={true}
+                  onClick={() => this.props.updatedStudentTargetClass(item)}
+                />
+              </Tile>
+            );
+            // return <StudentClassLabel item={item} key={index} clickHandler={this.props.updateStudentTargetClass}/>;
           })}
         </Tiles>
       </div>
-    )
+    );
   }
 }
 

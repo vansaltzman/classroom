@@ -23,7 +23,8 @@ const actionTypes = {
 	UPDATE_STUDENT_TARGET_CLASS_ACTION: 'get_student_target_class_action',
 	LISTENING_FOR_LIVE_CLASSES: 'listening_for_live_classes',
 	WATCH_CLASS_GO_LIVE_ACTION: 'watch_class_go_live_action',
-	TOGGLE_STUDENT_LIVE_STATUS: 'toggle_student_live_status'
+	TOGGLE_STUDENT_LIVE_STATUS: 'toggle_student_live_status',
+	CHANGE_CLASS_LABEL_WHEN_LIVE: 'change_class_label_when_live'
 }
 
 export default actionTypes
