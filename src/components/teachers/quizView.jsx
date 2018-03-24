@@ -184,10 +184,12 @@ const students = {
 		}
 	}
 
-const QuizView = ({ currentQuiz }) => {
-
-	// const students = currentClass.students
-	// const quiz = currentClass.quizzes[currentClass.activeView]
+const QuizView = (props) => {
+	console.log('props ', props.props)
+	const targetClass = props.props.currentClass;
+	const students = targetClass.students;
+	const quiz = targetClass.quizzes[targetClass.activeView];
+	const quizIds = Object.keys(quiz.questions);
 
 	return (
 		<div>
@@ -198,10 +200,10 @@ const QuizView = ({ currentQuiz }) => {
 				// onChange={...}
 			/> */}
 
-			<Button
+			{/* <Button
 				label='End Quiz'
-				onClick={()=> props.updateActiveView(false, currenClass.id)} 
-			/>
+				onClick={()=> updateActiveView(false, currentClass.id)} 
+			/> */}
 
 			<Table>
 			<TableHeader labels={['Name', 'Current Question', 'Time on Question', 'Score']}
@@ -227,12 +229,12 @@ const QuizView = ({ currentQuiz }) => {
 					<td className='secondary'>
 						<Animate text=
 						{
-							quiz.questions[studentQuiz.currentQuestion].position + ': ' +
-							quiz.questions[studentQuiz.currentQuestion].text
+							quiz.questions[quizIds[studentQuiz.currentQuestion]].position + ': ' +
+							quiz.questions[quizIds[studentQuiz.currentQuestion]].text
 						}/>
 					</td>
 					<td className='secondary'>
-						{moment.duration(studentQuiz.responses[studentQuiz.currentQuestion].time).humanize()}
+						{moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).humanize()}
 					</td>
 					<td className='secondary'>
 						{

@@ -26,9 +26,8 @@ const studentJoins = function(studentId, classId) { // Conncect this to actions.
 }
 
 const launchQuiz = function (classId, quizObj) {
-	console.log('LAUNCH QUIZ')
-	console.log('classId----', classId)
-	console.log('quizObj----', quizObj)
+	console.log('launquiz running in db file. classID:', classId)
+	console.log('launquiz running in db file. quizOBJ: ', classId)
 	// store postgres quiz id to active view property in the
 	const currentClass = fb.ref('/classes/ ' + classId )
 		updateActiveView(quizObj.id, classId)
@@ -44,10 +43,6 @@ const launchQuiz = function (classId, quizObj) {
 			fb.ref('/classes/' + classId + '/students').once('value', (snap)=>{
 				var students = snap.val()
 				students.forEach( student => {
-					console.log('student ', student);
-					console.log('classId ', classId )
-					console.log('student id ', student.id);
-					console.log('______________________')
 					let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id +'/quizzes');
 					studentRef.child(quizObj.id).set(studentQuizObj)
 				})
