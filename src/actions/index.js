@@ -172,7 +172,6 @@ function getAllStudentsAction(students) {
 }
 
 export function getStudentsBelongToAClass(idObj) {
-	console.log('console.log', idObj)
 	return (dispatch) => {
 		axios.post('/getAllStudentsInAClass', idObj)
 		.then((res) => {
@@ -196,7 +195,7 @@ export function classGoLive(classId, classObj) {
 		classes.child(classId).set(classObj)
 		.then(() => {
 			dispatch(changeClassLabelColorWhenLive());
-			dispatch(fetchClassData(classId))
+			dispatch(fetchClassData(classId, 'teacher'))
 		})
 		.then(() => {
 			dispatch(classGoLiveAction(classId));
@@ -306,7 +305,7 @@ export function toggleStudentLiveClassStatus (classId, studentId) {
 		.then((snap) => {
 			const status = snap.val();
 			// if (status) {
-				dispatch(fetchClassData(classId))
+				dispatch(fetchClassData(classId, 'student'))
 			// } else {
 			// 	dispatch(stopFetchingClassData(classId))
 			// }
@@ -335,25 +334,37 @@ function toggleStudentLiveClassStatusAction () {
 // }
  
 // get all class data for a live class
-export function fetchClassData (classId) {
+export function fetchClassData (classId, type) {
 	const currentClass = fb.ref('/classes/' + classId )
 	return (dispatch) => {
 		currentClass.on('value', function(snap) {
 			console.log(snap.val())
-			dispatch(updateClassData(snap.val()))
+			if(type === 'teacher') {
+				dispatch(updateClassDataTeacher(snap.val()))
+			} 
+			if (type === 'student') {
+				dispatch(updateClassDataStudent(snap.val()))
+			}
 		})
 	}
 }
-function fetchClassDataAction () {
+// function fetchClassDataAction () {
+// 	return {
+// 		type: actionTypes.FETCH_CLASS_DATA,
+// 	}
+// }
+
+// update global state with updated live class data
+export function updateClassDataStudent(classData) {
 	return {
-		type: actionTypes.FETCH_CLASS_DATA,
+		type: actionTypes.UPDATE_CLASS_DATA_STUDENT,
+		classData
 	}
 }
 
-// update global state with updated live class data
-export function updateClassData(classData) {
+export function updateClassDataTeacher(classData) {
 	return {
-		type: actionTypes.UPDATE_CLASS_DATA,
+		type: actionTypes.UPDATE_CLASS_DATA_TEACHER,
 		classData
 	}
 }

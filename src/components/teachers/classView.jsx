@@ -14,7 +14,7 @@ import { bindActionCreators } from "redux";
 import * as Actions from '../../actions/index.js';
 
 import classRoom from '../../../data/quizDummyData.js';
-import launchQuiz from '../../../db/liveClassroom.js';
+import fb from '../../../db/liveClassroom.js';
 
 class ClassView extends React.Component {
 	constructor() {
@@ -24,12 +24,7 @@ class ClassView extends React.Component {
 	}
 
 	launchNewQuiz(){
-		console.log('CLICK HEARD')
-		console.log('CLASSROOM',classRoom)
-		console.log('LAUNCH QUIZ',launchQuiz)
-		launchQuiz.launchQuiz('1', classRoom.classRoom['25'].quizzes['12'])
-		// launchQuiz('2', 'test')
-		
+		fb.launchQuiz('1', classRoom.classRoom['25'].quizzes['12']) // takes classId and quiz Obj
 	}
 
 	componentWillMount() {
@@ -39,9 +34,6 @@ class ClassView extends React.Component {
 		this.props.getStudentsBelongToAClass({id: this.props.classId});
 	}
 
-	launchNewQuiz () {
-		launchQuiz('25', classRoom['25'].quizzes['12']);
-	}
   render() {
 		const { studentsInClass } = this.props;
 		//console.log('heyyy', studentsInClass)
@@ -68,7 +60,7 @@ class ClassView extends React.Component {
   							accent={true}
   							critical={false}
   							plain={false} 
-								onClick={() => this.launchNewQuiz}/>
+								onClick={() => this.launchNewQuiz()}/>
 				<Columns masonry={false}
 								maxCount={2}
 								size='large'

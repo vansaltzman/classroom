@@ -20,7 +20,8 @@ const actionTypes = {
 	CLASS_GO_LIVE_ACTION: 'class_go_live_action',
 	GET_CLASSES_BELONG_TO_A_STUDENT_ACTION: 'get_classes_belong_to_a_student_action',
 	UPDATE_NEW_CLASS_YEAR_ACTION: 'update_new_class_year_action',
-	UPDATE_CLASS_DATA: 'update_class_data',
+	UPDATE_CLASS_DATA_TEACHER: 'update_class_data_teacher',
+	UPDATE_CLASS_DATA_STUDENT: 'update_class_data_student',
 	////// StudentViewQuiz //////
 	GET_QUIZ: 'get_quiz',
 	NEXT_QUESTION: 'next_question',
