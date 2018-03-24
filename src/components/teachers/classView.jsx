@@ -34,6 +34,9 @@ class ClassView extends React.Component {
 		this.props.getStudentsBelongToAClass({id: this.props.classId});
 	}
 
+	launchNewQuiz () {
+		launchQuiz('25', classRoom['25'].quizzes['12']);
+	}
   render() {
 		const { studentsInClass } = this.props;
 		//console.log('heyyy', studentsInClass)
