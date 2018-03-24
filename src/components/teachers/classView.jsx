@@ -34,12 +34,8 @@ class ClassView extends React.Component {
 		this.props.getStudentsBelongToAClass({id: this.props.classId});
 	}
 
-	launchNewQuiz () {
-		launchQuiz('25', classRoom['25'].quizzes['12']);
-	}
   render() {
 		const { studentsInClass } = this.props;
-		//console.log('heyyy', studentsInClass)
 		const studentsArray = [];
 		for (var key in studentsInClass) {
 			studentsArray.push(studentsInClass[key]);
@@ -63,7 +59,7 @@ class ClassView extends React.Component {
   							accent={true}
   							critical={false}
   							plain={false} 
-								onClick={() => this.launchNewQuiz()}/>
+								onClick={this.launchNewQuiz()}/>
 				<Columns masonry={false}
 								maxCount={2}
 								size='large'
