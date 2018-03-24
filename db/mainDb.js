@@ -163,7 +163,7 @@ const getAllStudentsBelongToAClass = function(classId) {
 }
 
 const addStudentToAClass= function(classId, studentId) {
-  const queryString = `INSERT INTO classes_students (class_id, student_id) VALUES ('${classId}', '${student_id}');`
+  const queryString = `INSERT INTO classes_students (class_id, student_id) VALUES ('${classId}', '${studentId}');`
   return db.query(queryString);
 }
 

@@ -10,7 +10,8 @@ export function teacherClassViewReducer(state={
 	newClassQuarter: '',
 	newClassYear: '',
 	allStudents: [],
-	targetClass: {}
+	targetClass: {},
+	selectedStudent: {}
 }, action) {
   switch(action.type) {
 		case actionTypes.GET_TEACHERS_CLASSES:
@@ -30,7 +31,10 @@ export function teacherClassViewReducer(state={
 			return {...state, newClassYear: action.year.option}
 		case actionTypes.GET_ALL_STUDENTS_ACTION:
 			const studentNames = action.students.map((each) => {
-				return each.first_name
+				return {
+					"value": each.first_name + ' ' + each.last_name,
+					"sub": each
+				}
 			}) 
 			return {...state, students: action.students, studentNames: studentNames}
 		case actionTypes.UPDATE_TARGET_CLASS_ACTION:
@@ -65,8 +69,13 @@ export function teacherClassViewReducer(state={
 		case actionTypes.FETCH_CLASS_DATA:
 			return {...state}
 		case actionTypes.UPDATE_CLASS_DATA:
-		console.log(action.classData)
+		//console.log(action.classData)
 			return {...state, targetClass: action.classData}
+		case actionTypes.SELECT_EXISTING_STUDENT_TO_ADD:
+			console.log('selected student', action.student.suggestion)
+			return {...state, selectedStudent: action.student.suggestion}
+		case actionTypes.ADD_A_STUDENT_TO_CLASS_ACTION:
+			return {...state}
 		default: return state
 	}
 }

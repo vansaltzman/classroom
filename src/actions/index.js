@@ -225,6 +225,33 @@ function changeClassLabelColorWhenLiveAction() {
 	}
 }
 
+export function selectStudentToAdd(student) {
+	return (dispatch) => {
+		dispatch(selectStudentToAddAction(student))
+	}
+}
+
+function selectStudentToAddAction (student) {
+	return {
+		type: actionTypes.SELECT_EXISTING_STUDENT_TO_ADD,
+		student
+	}
+}
+
+export function addAStudentToClass(studentObj) {
+	return (dispatch) => {
+		axios.post('/addAStudentToClass', studentObj)
+		.then((dispatch) => {
+			dispatch(addAStudentToClassAction())
+		})
+	}
+}
+
+function addAStudentToClassAction () {
+	return {
+		type: ADD_A_STUDENT_TO_CLASS_ACTION,
+	}
+}
 /******************************* GET ALL CLASSES THAT BELONGS TO A STUDENT **********************************/
 
 export function getClassesBelongToAStudent(studentIdObj) {

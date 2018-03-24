@@ -170,6 +170,11 @@ app.post('/getStudentsClasses', (req, res) => {
   })
 })
 
+app.post('/addAStudentToClass', (req, res) => {
+  main.addStudentToAClass(req.body.classId, req.body.studentId)
+  console.log('server student to be added', req.body)
+})
+
 const port = 3000
 app.listen(port, function() {
 console.log('Listening on ' + port)

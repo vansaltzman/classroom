@@ -137,6 +137,10 @@ let Jae = ['Jae', 'Jang', 'jj2837@columbia.edu', '123456'];
 let Adam = ['Adam', 'Mateo', 'adam@mateo.edu', '123456'];
 let Jerry = ['Jerry', 'Chen', 'jerry@chen.edu', '123456'];
 let Artem = ['Artem', 'Ipatev', 'artem@ipatev.edu', '123456'];
+let Riley = ['Riley', 'Alsman', 'riley@alsman.edu', '123456'];
+let Juan = ['Juan', 'Galan', 'juan@galan.edu', '123456'];
+let AlexL = ['Alex', 'Levine', 'alex@levine.edu', '123456'];
+let AlexC = ['Alex', 'Chojnacki', 'alex@chojnacki.edu', '123456'];
 
 const addStudents = function(student) {
   hashStudent = student.slice();
@@ -154,5 +158,6 @@ const addStudents = function(student) {
   })
 }
 
-addStudents(Jae);
+addStudents(AlexC);
+
 

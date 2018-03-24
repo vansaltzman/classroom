@@ -21,6 +21,8 @@ const actionTypes = {
 	GET_CLASSES_BELONG_TO_A_STUDENT_ACTION: 'get_classes_belong_to_a_student_action',
 	UPDATE_NEW_CLASS_YEAR_ACTION: 'update_new_class_year_action',
 	UPDATE_CLASS_DATA: 'update_class_data',
+	SELECT_EXISTING_STUDENT_TO_ADD: 'select_existing_student_to_add',
+	ADD_A_STUDENT_TO_CLASS_ACTION: 'add_a_student_to_class_action',
 	////// StudentViewQuiz //////
 	GET_QUIZ: 'get_quiz',
 	NEXT_QUESTION: 'next_question',
@@ -31,6 +33,7 @@ const actionTypes = {
 	TOGGLE_STUDENT_LIVE_STATUS: 'toggle_student_live_status',
 	CHANGE_CLASS_LABEL_WHEN_LIVE: 'change_class_label_when_live',
 	FETCH_CLASS_DATA: 'FETCH_CLASS_DATA'
+	
 }
 
 export default actionTypes

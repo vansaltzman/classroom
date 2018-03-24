@@ -19,32 +19,32 @@ import launchQuiz from '../../../db/liveClassroom.js';
 class ClassView extends React.Component {
 	constructor() {
 		super();
-
 		this.launchNewQuiz = this.launchNewQuiz.bind(this)
 	}
-
 	launchNewQuiz(){
 		console.log('CLICK HEARD')
 		console.log('CLASSROOM',classRoom)
 		console.log('LAUNCH QUIZ',launchQuiz)
-		launchQuiz.launchQuiz('1', classRoom.classRoom['25'].quizzes['12'])
-		// launchQuiz('2', 'test')
-		
+		launchQuiz.launchQuiz('1', classRoom.classRoom['25'].quizzes['12'])	
 	}
-
 	componentWillMount() {
-		//console.log('this.props.classId', this.props.classId);
-		//getting all students for search input for teacher to add student to a new class
 		this.props.getAllStudents();
 		this.props.getStudentsBelongToAClass({id: this.props.classId});
+	}
+
+	componentWillUpdate() {
+		this.props.getStudentsBelongToAClass({id: this.props.classId});
+	}
+	changeHandler() {
+
 	}
 
   render() {
 		const { studentsInClass } = this.props;
 		//console.log('heyyy', studentsInClass)
 		const studentsArray = [];
-		for (var key in studentsInClass) {
-			studentsArray.push(studentsInClass[key]);
+		for (var key in this.props.teachersClassView.targetClass.students) {
+			studentsArray.push(this.props.teachersClassView.targetClass.students[key]);
 		}
 		return(
 			<Section>
@@ -78,16 +78,20 @@ class ClassView extends React.Component {
 							margin='small'
 							colorIndex='light-2'>
 						Side bar for students list
-						{studentsArray.map((each) => {
+						{studentsArray.map((each, index) => {
 							return (
-								<Box style={{color: each.isHere ? 'black' : 'lightgrey'}}>
+								<Box key={index} style={{color: each.isHere ? 'black' : 'lightgrey'}}>
 									{each.name}
 								</Box>
 							)
 						})}
 					</Box>
-					<SearchInput placeHolder='Search'
-  										 suggestions={this.props.studentNames} />
+					<SearchInput placeHolder='Search For A Student'
+											 suggestions={this.props.studentNames} 
+											//  onDOMChange={(target) => this.props.selectStudentToAdd(target)} />
+											 onSelect={(target) => this.props.selectStudentToAdd(target)}/> 
+					<Button label="Add Student"
+									onClick={() => {this.props.addAStudentToClass({classId: this.props.classId, studentId: this.props.teachersClassView.selectedStudent.sub.id})}}/>
 					<Box align='center'
 							pad='medium'
 							margin='small'
@@ -100,14 +104,15 @@ class ClassView extends React.Component {
 	}
 }
 
-
 function mapStateToProps(state) {
 	return {
 		targetClass: state.teachersClassView.targetClass,
 		studentsInClass: state.teachersClassView.targetClass.students,
 		students: state.teachersClassView.students,
 		studentNames: state.teachersClassView.studentNames,
-		classId: state.teachersClassView.targetClass.id
+		classId: state.teachersClassView.targetClass.id,
+		selectedStudent: state.teachersClassView.selectStudent,
+		teachersClassView: state.teachersClassView
 	}
 }
 
