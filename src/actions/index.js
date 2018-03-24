@@ -30,13 +30,14 @@ export function loginUser({ email, password }) {
         dispatch(setCurrentUser(jwt.decode(token)))
       })
       .catch((error) => {
-          console.log('error in console logging ', error)
+          console.log('error in loggin in ', error)
         //errorHandler(dispatch, error.res, actionTypes.AUTH_ERROR)
       });
       }
 	}
 
 export function logoutUser () {
+	console.log('are we running log out')
 	return (dispatch) => {
 		// localStorage.removeItem('jwtToken');
 		localStorage.clear();
@@ -44,11 +45,6 @@ export function logoutUser () {
 		dispatch(setCurrentUser({}));
 	}
 }
-// function updateLogout () {
-// 	return {
-// 		type: actionTypes.LOGOUT_USER
-// 	}
-// }
  
 
 /********************************** GET CLASSES TO DISPLAY ON TEACHERS MAIN VIEW ***********************************/
