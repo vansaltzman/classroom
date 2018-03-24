@@ -48,7 +48,7 @@ const launchQuiz = function (classId, quizObj) {
 					console.log('classId ', classId )
 					console.log('student id ', student.id);
 					console.log('______________________')
-					let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id);
+					let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id +'/quizzes');
 					studentRef.child(quizObj.id).set(studentQuizObj)
 				})
 				// snap.forEach((student) => {

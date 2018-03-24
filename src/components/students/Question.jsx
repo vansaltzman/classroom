@@ -42,10 +42,13 @@ render() {
                   answersText={this.props.question.answers}
                   answerNum={answerNum} 
                   currentQuestionsAnswers={this.props.currentQuestionsAnswers}
+                  questionId={this.props.questionId}
                   quizResponseObj={this.props.quizResponseObj}
                   currentQuestion={this.props.currentQuestion}
                   studentId={this.props.studentId}
                   classId={this.props.classId}
+                  insertStudentAnswers={this.props.insertStudentAnswers}
+                  quizId={this.props.quizId}            
           
                 />
                 ))}
