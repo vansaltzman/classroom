@@ -5,6 +5,7 @@ import axios from 'axios';
 export function teacherClassViewReducer(state={
 	classes: [],
 	showClassBuilderModal: false,
+	showQuizLauncherModal: false,
 	newClassName: '',
 	newClassSubject: '',
 	newClassQuarter: '',
@@ -18,6 +19,8 @@ export function teacherClassViewReducer(state={
 			return {...state, classes: action.classes}
 		case actionTypes.TOGGLE_CLASS_BUILDER_MODAL:
 			return {...state, showClassBuilderModal: !state.showClassBuilderModal}
+		case actionTypes.TOGGLE_QUIZ_LAUNCHER:
+			return {...state, showQuizLauncherModal: !state.showQuizLauncherModal}
 		case actionTypes.UPDATE_NEW_CLASS_NAME_ACTION:
 			//console.log('changeName action', action.event.target.value)
 			return {...state, newClassName: action.event.target.value}
@@ -59,7 +62,7 @@ export function teacherClassViewReducer(state={
 			//console.log('class with students', targetClassWithStudents)
 			return {...state, targetClass: targetClassWithStudents}
 		case actionTypes.CLASS_GO_LIVE_ACTION:
-			const goLiveClass = state.targetClass;
+			const goLiveClass = Object.assign({}, state.targetClass);
 			goLiveClass.isLive = !state.targetClass.isLive;
 			return {...state, targetClass: goLiveClass}
 		case actionTypes.FETCH_CLASS_DATA:

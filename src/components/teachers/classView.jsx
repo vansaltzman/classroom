@@ -8,6 +8,18 @@ import Button from 'grommet/components/Button';
 import Section from 'grommet/components/Section';
 import DeployIcon from 'grommet/components/icons/base/Deploy';
 import SearchInput from 'grommet/components/SearchInput';
+import Tiles from 'grommet/components/Tiles';
+import Tile from 'grommet/components/Tile';
+import Header from 'grommet/components/Header';
+import Heading from 'grommet/components/Heading';
+import Paragraph from 'grommet/components/Paragraph';
+import Split from 'grommet/components/Split';
+import Layer from 'grommet/components/Layer';
+import Form from 'grommet/components/Form';
+import Footer from 'grommet/components/Footer';
+import FormFields from 'grommet/components/FormFields';
+import TextInput from 'grommet/components/TextInput';
+import DateTime from 'grommet/components/DateTime';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -24,12 +36,7 @@ class ClassView extends React.Component {
 	}
 
 	launchNewQuiz(){
-		console.log('CLICK HEARD')
-		console.log('CLASSROOM',classRoom)
-		console.log('LAUNCH QUIZ',launchQuiz)
 		launchQuiz.launchQuiz('1', classRoom.classRoom['25'].quizzes['12'])
-		// launchQuiz('2', 'test')
-		
 	}
 
 	componentWillMount() {
@@ -37,6 +44,12 @@ class ClassView extends React.Component {
 		//getting all students for search input for teacher to add student to a new class
 		this.props.getAllStudents();
 		this.props.getStudentsBelongToAClass({id: this.props.classId});
+	}
+
+	componentWillUnmount() {
+		if (this.props.showQuizLauncherModal) {
+			this.props.toggleQuizLauncherModalAction()
+		}
 	}
 
   render() {
@@ -50,35 +63,36 @@ class ClassView extends React.Component {
 			<Section>
 				
 				<Button icon={<DeployIcon />}
-  							label='Go Live'
-  							primary={false}
-  							secondary={false}
-  							accent={true}
-  							critical={false}
-  							plain={false} 
-								onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass)}/>
+					label='Go Live'
+					primary={false}
+					secondary={false}
+					accent={true}
+					critical={false}
+					plain={false} 
+					onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass)}
+				/>
 
-	<Button icon={<DeployIcon />}
-  							label='Launch Quiz'
-  							primary={false}
-  							secondary={false}
-  							accent={true}
-  							critical={false}
-  							plain={false} 
-								onClick={() => this.launchNewQuiz()}/>
-
-
+				<Button icon={<DeployIcon />}
+					label='Launch Quiz'
+					primary={false}
+					secondary={false}
+					accent={true}
+					critical={false}
+					plain={false} 
+					onClick={() => this.launchNewQuiz()}
+				/>
 
 				<Columns masonry={false}
-								maxCount={2}
-								size='large'
-								align='center'>
-					<Box align='center'
-							pad='medium'
-							margin='small'
-							colorIndex='light-2'>
-						Side bar for students list
-						{studentsArray.map((each) => {
+					maxCount={2}
+					size='large'
+					align='center'>
+				<Box align='center'
+					pad='medium'
+					margin='small'
+					colorIndex='light-2'
+				>
+					Side bar for students list
+					{studentsArray.map((each) => {
 							return (
 								<Box style={{color: each.isHere ? 'black' : 'lightgrey'}}>
 									{each.name}
@@ -87,14 +101,76 @@ class ClassView extends React.Component {
 						})}
 					</Box>
 					<SearchInput placeHolder='Search'
-  										 suggestions={this.props.studentNames} />
+  					suggestions={this.props.studentNames} 
+					/>
 					<Box align='center'
-							pad='medium'
-							margin='small'
-							colorIndex='light-2'>
+						pad='small'
+						margin='small'
+						wrap="false"
+						colorIndex='light-2'
+					>
 						Quiz List
-					</Box>
+							<Tiles 
+								fill={true}
+							>
+								<Tile separator='top'
+									align='start'
+								>
+								<Header size='small'
+									pad={{"horizontal": "small"}}
+								>
+									<Heading tag='h4'
+										strong={true}
+										margin='none'>
+										Quiz 1
+									</Heading>
+								</Header>
+								<Box pad='small'>
+									<Paragraph margin='none'>
+										Estimated Time: 28min
+									</Paragraph>
+								</Box>
+								<Button
+									onClick={this.props.toggleQuizLauncherModalAction}
+								>
+									Select
+								</Button>
+								</Tile>
+							</Tiles>
+						</Box>
 				</Columns>
+
+			{this.props.showQuizLauncherModal ? 
+			<Layer
+				closer={true}
+				flush={true}
+				overlayClose={true}
+				onClose={this.props.toggleQuizLauncherModalAction}
+			>
+				<Form>
+					<Header pad={{ vertical: "medium", horizontal: "medium" }}>
+						Launch Quiz
+					</Header>
+					<FormFields pad={{ horizontal: "medium" }}>
+						<DateTime
+							name="quizLength"
+							placeHolder="Set Test time"
+							format='mm:ss'
+							// onChange={...}
+							value='15:00' 
+						/>
+					</FormFields>
+					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
+						<Button 
+							label="Launch Quiz" 
+							type="button"
+							primary={true} 
+							// onClick={() => this.addClassHandler()}
+						/>
+					</Footer>
+				</Form>
+			</Layer> :
+			<div></div>}
 			</Section>
 		)
 	}
@@ -105,6 +181,7 @@ function mapStateToProps(state) {
 	return {
 		targetClass: state.teachersClassView.targetClass,
 		studentsInClass: state.teachersClassView.targetClass.students,
+		showQuizLauncherModal: state.teachersClassView.showQuizLauncherModal,
 		students: state.teachersClassView.students,
 		studentNames: state.teachersClassView.studentNames,
 		classId: state.teachersClassView.targetClass.id

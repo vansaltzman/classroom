@@ -20,7 +20,6 @@ class Answers extends React.Component {
      console.log('this.props in answers', this.props)
   }
 
-
   handleChange(e) {    
     //the quiz object at key 12 
 

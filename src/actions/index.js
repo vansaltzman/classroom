@@ -84,6 +84,12 @@ export function toggleModalAction() {
 	}
 }
 
+export function toggleQuizLauncherModalAction() {
+	return {
+		type: actionTypes.TOGGLE_QUIZ_LAUNCHER
+	}
+}
+
 
 /************************** CLASS BUILDER MODAL *************************/
 export function updateNewClassName(event) {
@@ -200,14 +206,14 @@ export function classGoLive(classId, classObj) {
 		classes.child(classId).set(classObj)
 		.then(() => {
 			dispatch(changeClassLabelColorWhenLive());
-			dispatch(fetchClassData(classId))
+			dispatch(fetchClassData(classId, 'teacher'))
 		})
 		.then(() => {
 			dispatch(classGoLiveAction(classId));
 		})
 	}
 }
-function classGoLiveAction(classId) {
+function classGoLiveAction(classId) { // Not needed? - should update isLive when listner updates from fb
 	return {
 		type: actionTypes.CLASS_GO_LIVE_ACTION,
 		classId
