@@ -24,6 +24,7 @@ class ClassView extends React.Component {
 	}
 
 	launchNewQuiz(){
+		console.log('running launch new quiz')
 		fb.launchQuiz('1', classRoom.classRoom['25'].quizzes['12']) // takes classId and quiz Obj
 	}
 
@@ -50,16 +51,16 @@ class ClassView extends React.Component {
   							accent={true}
   							critical={false}
   							plain={false} 
-								onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass)}/>
+							onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass)}/>
 
-	<Button icon={<DeployIcon />}
+				<Button icon={<DeployIcon />}
   							label='Launch Quiz'
   							primary={false}
   							secondary={false}
   							accent={true}
   							critical={false}
   							plain={false} 
-								onClick={this.launchNewQuiz()}/>
+							onClick={this.launchNewQuiz}/>
 				<Columns masonry={false}
 								maxCount={2}
 								size='large'
