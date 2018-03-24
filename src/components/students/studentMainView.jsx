@@ -43,6 +43,7 @@ class StudentMainView extends React.Component {
     this.props.getClassesBelongToAStudent({
       email: this.props.auth.user.email
     });
+    
     //this.props.watchClassGoLive()
   }
 

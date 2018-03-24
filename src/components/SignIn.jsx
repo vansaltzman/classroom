@@ -20,7 +20,6 @@ const form = reduxForm({
 
 class SignIn extends Component {
     handleFormSubmit(formProps) {
-        console.log('is this running ', formProps)
         this.props.loginUser(formProps)
     }
     renderAlert() {

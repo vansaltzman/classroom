@@ -15,9 +15,9 @@ import Title from "grommet/components/Title";
 import Anchor from "grommet/components/Anchor";
 import Menu from "grommet/components/Menu";
 import Box from "grommet/components/Box";
-import Actions from "grommet/components/icons/base/Action.js";
+import Actions from "grommet/components/icons/base/Actions.js";
 import QuizView from "./teachers/quizView.jsx";
-import SignUp from './Signup.jsx';
+import SignUp from './SignUp.jsx';
 import StudentViewQuiz from './students/StudentViewQuiz.jsx'
 import quizContainer from './students/quizContainer.jsx'
 import StudentLiveClassView from './students/studentLiveClassView.jsx'
@@ -43,8 +43,10 @@ class NavigationBar extends React.Component {
     // setTimeout(function() {
     //     return <Redirect to="/studentLiveClass2"/>
     // }, 3000) 
-  }
 
+    this.logout = this.logout.bind(this);
+  }
+  
   checkAuth() {
     if (this.props.auth.authenticated === true) {
       if (this.props.auth.user.class === "teacher") {
@@ -58,10 +60,7 @@ class NavigationBar extends React.Component {
       return <SignIn />;
     }
 }
-    logout (e) {
-        e.preventDefault();
-        this.props.logoutUser();
-    }
+
     logout (e) {
         e.preventDefault();
         this.props.logoutUser();
