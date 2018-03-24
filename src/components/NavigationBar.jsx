@@ -16,7 +16,7 @@ import Anchor from "grommet/components/Anchor";
 import Menu from "grommet/components/Menu";
 import Box from "grommet/components/Box";
 import Actions from "grommet/components/icons/base/Actions.js";
-import QuizView from "./teachers/quizView.jsx";
+import quizViewContainer from "./teachers/quizViewContainer.jsx";
 import SignUp from './SignUp.jsx';
 import StudentViewQuiz from './students/StudentViewQuiz.jsx'
 import quizContainer from './students/quizContainer.jsx'
@@ -24,7 +24,7 @@ import StudentLiveClassView from './students/studentLiveClassView.jsx'
 import ClassViewDefault from './students/classViewDefault.jsx';
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 
-import quizView from './teachers/quizView.jsx';
+
 
 
 import { readdir } from "fs";
@@ -88,11 +88,8 @@ class NavigationBar extends React.Component {
                 var navBarBackground = 'lightCoral'
                 var dropAnchors = 
                 <div>
-                    <Anchor path="/quiz">
-                        Quiz 
-                    </Anchor>
 
-                     <Anchor path='/quizView'>
+                     <Anchor path='/quizViewContainer'>
                         Quiz View
                     </Anchor>
 
@@ -162,7 +159,7 @@ class NavigationBar extends React.Component {
                             <Route path="/login" component={SignIn}  />
                             <Route path="/teacherQuiz" component={ClassView}  />
                         
-                            <Route path="/quiz" component={QuizView}  />
+                            <Route path="/quizViewContainer" component={quizViewContainer}  />
                             <Route path="/studentQuiz" component={quizContainer}/>
                             {/* <Route path="/studentClass" component={StudentClass}  /> */}
                             {/* <Route path="/studentliveclass" component={StudentLiveClassView}/> */}

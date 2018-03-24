@@ -11,15 +11,10 @@ import fb from '../../../db/liveClassroom.js';
 
 class QuizContainer extends React.Component {
   render() {
-    console.log('user id', this.props.auth.user.id);
-    console.log('PROPS IN CONTAINER',this.props)
-    console.log('user  in container----', this.props.auth.user.id)
     
     let classId = this.props.class.id
-    console.log('classId', classId)
    
     let quizId = this.props.class.activeView
-    console.log('quizId', quizId)
 
     let quiz = this.props.class.quizzes[quizId].questions
     let keys = Object.keys(quiz)

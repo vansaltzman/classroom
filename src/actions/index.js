@@ -338,7 +338,7 @@ export function fetchClassData (classId, type) {
 	const currentClass = fb.ref('/classes/' + classId )
 	return (dispatch) => {
 		currentClass.on('value', function(snap) {
-			console.log(snap.val())
+			console.log('snap val on fetch class data', snap.val())
 			if(type === 'teacher') {
 				dispatch(updateClassDataTeacher(snap.val()))
 			} 

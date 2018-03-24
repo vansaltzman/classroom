@@ -12,9 +12,10 @@ class QuizViewContainer extends React.Component {
   }
 
   render() {
+    console.log('this props in teach quiz view conteinar ', this.props)
     return (
       <div>
-        <QuizView />
+        <QuizView props={this.props} />
       </div>
     );
   }
@@ -22,7 +23,7 @@ class QuizViewContainer extends React.Component {
 
 function mapStateToProps(state) {
   return {
-		currentClass: state.activeClass
+		currentClass: state.teachersClassView.targetClass
   };
 }
 
