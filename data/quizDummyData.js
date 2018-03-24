@@ -15,7 +15,7 @@ let  classRoom= { '25':
 		  name: 'This is the Quiz',
 		  endTime: 1521672378691,
 		  questions: {
-			1: {
+			40: {
 			  position: 1,
 			  text: 'This is a question',
 			  answers: {
@@ -25,7 +25,7 @@ let  classRoom= { '25':
 				4: {text: 'this is an answer', isCorrect: false}
 			  }
 			}, 
-			2: {
+			'pie': {
 			  position: 2,
 			  text: 'This is another question',
 			  answers: {
@@ -116,8 +116,8 @@ let  classRoom= { '25':
           id: 12,
           isFinished: false,
           responses: {
-            1: {
-              id: 1,
+            40: {
+              id: 40,
               time: 60000,
               answers: {
                1: false,
@@ -126,8 +126,8 @@ let  classRoom= { '25':
                4: false
               }
              },
-             2: {
-               id: 2,
+             'pie': {
+               id: 'pie',
                time: 60000,
                answers: {
                 1: false,

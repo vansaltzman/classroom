@@ -5,7 +5,7 @@ const studentQuizObjectConverter = function (quizObject) {
     // studentResponseObj[quizObject.id] = {};
     studentResponseObj.id = quizObject.id;
     studentResponseObj.isFinished = false;
-    studentResponseObj.currentQuestion = null
+    studentResponseObj.currentQuestion = 0;
     studentResponseObj.responses = {};
     for (var question in quizObject.questions) {
         let questionResponses = {};
