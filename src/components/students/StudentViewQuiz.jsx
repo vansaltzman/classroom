@@ -13,81 +13,53 @@ import Title from 'grommet/components/Title';
 import * as Actions from '../../actions/index.js';
 
 
-
-
 class StudentViewQuiz extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: [1]
+      count: [],
+      arrayOfQuestionIds: []
     }
     this.forwardClick = this.forwardClick.bind(this)
     this.backwardClick = this.backwardClick.bind(this) 
-    
+    console.log('PROPS IN StudentViwQuiz.jsx', this.props)
   }
 
 componentDidMount() {
+  // let quiz = this.props.class.quizzes[this.props.class.activeView].questions
+  // let keys = Object.keys(quiz)
+  this.setState({
+    arrayOfQuestionIds: this.props.keys
+  }, function() {
+    console.log('---array of question ids',this.state.arrayOfQuestionIds)
+
+  })
 
 }
 
 forwardClick(e) {
   e.preventDefault()
-  console.log('-------',this.props)
-let copy = Object.assign({}, this.props.quizResponseObj)
-      copy.currentQuestion++
-      //**Need the studentId and classID 
-      // this.props.insertStudentAnswers(quizObj, studentId, quizId, classId)
-        // this.props.insertStudentAnswers(copy, studentId, quizId, classId)
-        
-        this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
-
-        if(!this.state.count.includes(currentQuestion)) {
-          this.state.count.push(currentQuestion)
-        }
+  if(!this.state.count.includes(this.props.currentQuestion)) {
+    this.state.count.push(this.props.currentQuestion)
+  }
+  let quizResponseObj = this.props.quizResponseObj
+  let copy = Object.assign({}, quizResponseObj)
+    copy.currentQuestion++
+    console.log('COPY', copy)
+    console.log('QUIZ RESPONSE OBJ', quizResponseObj)
+    this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
 }
 
 backwardClick(e) {
-
-
-  // e.preventDefault()
-  
-  let copy = Object.assign({}, this.props.quizResponseObj)
-  copy.currentQuestion--
-  //**Need the studentId and classID 
-  // this.props.insertStudentAnswers(quizObj, studentId, quizId, classId)
-    //this.props.insertStudentAnswers(copy, studentId, quizId, classId)
-
+  e.preventDefault()
+  let quizResponseObj = this.props.quizResponseObj
+  let copy = Object.assign({}, quizResponseObj)
+    copy.currentQuestion--
     this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
 }
 
 render() {
-
-  //let classId = this.props.class[this.props.class.id]
-  let classId ='25'
-  //let quizId = this.props.class[classId].activeView
-  let quizId = '12'
-  //let studentId = this.props.auth.user.userId
-  let studentId = '37' 
-
-//The question NUMBER this student is on //from student portion
-  let currentQuestion = this.props.class[classId].students[studentId].quizzes[this.props.class[classId].activeView].currentQuestion
-
-//Student's responseObj at current question
-  let quizResponseObj = this.props.class[classId].students[studentId].quizzes[this.props.class[classId].activeView]//.responses[currentQuestion]
-
-//The ACTUAL QUESTION this student is on // from the teachers quiz at key of students current question// to display question text
-  let question = this.props.class[classId].quizzes[this.props.class[classId].activeView].questions[currentQuestion]
-  
-//The Quiz
-  let quiz = this.props.class[classId].quizzes[this.props.class[classId].activeView].questions
-
-//The students ANSWERS Obj of Booleans //from student portion
-  let currentQuestionsAnswers = this.props.class[classId].students[studentId].quizzes[this.props.class[classId].activeView].responses[currentQuestion].answers
-  
-
-  // console.log('question',question)
-     console.log('currentQuestion in student View Quiz',currentQuestion)
-     console.log('answers', currentQuestionsAnswers)
+    let currentQuestion = this.props.currentQuestion
   return (
     <Section pad='large'>    
       <Header>
@@ -96,19 +68,21 @@ render() {
         </Heading>
       </Header>
     
-        <Title>Question {currentQuestion} </Title>
-        {/* Current Question from quiz object at key of [this student's quizID currect question   */}   
+        <Title>Question {currentQuestion + 1} </Title>
           <Question 
-            passedProps={this.props}
-            question={question}
-            currentQuestionsAnswers={currentQuestionsAnswers}
-            quizResponseObj={quizResponseObj}
+            // passedProps={this.props}
+            question={this.props.question}
+            currentQuestionsAnswers={this.props.currentQuestionsAnswers}
+            quizResponseObj={this.props.quizResponseObj}
             currentQuestion={currentQuestion}
-            studentId={studentId}
-            classId={classId}                  
+            studentId={this.props.studentId}
+            classId={this.props.classId} 
+            questionId={this.props.questionId}   
+            insertStudentAnswers={this.props.insertStudentAnswers}  
+            quizId={this.props.quizId}            
           />
 
-          {currentQuestion > 1 ? <span>
+          {currentQuestion > 0 ? <span>
           <Button 
             label='Previous Question'
             href='#'
@@ -121,7 +95,7 @@ render() {
             />
             </span>  : <span></span>}
             
-            {currentQuestion < Object.keys(quiz).length ? <span>
+            {currentQuestion < this.props.keys.length - 1 ? <span>
             <Button 
             label='Next Question'
             href='#'
@@ -134,7 +108,7 @@ render() {
             />
             </span> : <span></span>}
             
-            {this.state.count.length === quiz.length ? 
+            {this.state.count.length === this.props.keys.length - 2 ? 
             <div>
               <button>Submit Quiz</button>
             </div>

@@ -65,8 +65,10 @@ export function teacherClassViewReducer(state={
 		case actionTypes.FETCH_CLASS_DATA:
 			return {...state}
 		case actionTypes.UPDATE_CLASS_DATA:
-		console.log(action.classData)
-			return {...state, targetClass: action.classData}
+		console.log('update__class_data', action.classData)
+			const targetClassWithQuiz = state.targetClass
+			targetClassWithQuiz.quizzes = action.classData.quizzes
+			return {...state, targetClass: targetClassWithQuiz}
 		default: return state
 	}
 }
