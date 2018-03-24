@@ -60,7 +60,7 @@ app.use(bodyParser.json())
   // Teacher
 
   // Start class
-  app.post('/startClass', (erq, res) => {
+  app.post('/startClass', (req, res) => {
     const { classId } = req.body
 
     migration.migrateClassToFB(classId)
@@ -76,13 +76,12 @@ app.use(bodyParser.json())
       res.sendStatus(500)
     })
   })
-  // Start Quiz
+ 
+  app.get('/quizzes', (req, res)=> {
+    const { userId } = req.query
 
-  // End Class
-
-  // Student
-
-  // Join Class in session
+    main
+  })
 
   // Answer Quiz Question
   app.post('/updateLiveQuizAnswers', (req, res)=> {

@@ -32,6 +32,7 @@ const actionTypes = {
 	CHANGE_CLASS_LABEL_WHEN_LIVE: 'change_class_label_when_live',
 	FETCH_CLASS_DATA: 'FETCH_CLASS_DATA',
 	TOGGLE_QUIZ_LAUNCHER: 'TOGGLE_QUIZ_LAUNCHER',
+	SET_QUIZ_TIME: 'SET_QUIZ_TIME',
 }
 
 export default actionTypes

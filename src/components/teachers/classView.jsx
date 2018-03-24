@@ -31,12 +31,15 @@ import launchQuiz from '../../../db/liveClassroom.js';
 class ClassView extends React.Component {
 	constructor() {
 		super();
+		state: {
+			selectedQuiz: null
+		}
 
 		this.launchNewQuiz = this.launchNewQuiz.bind(this)
 	}
 
 	launchNewQuiz(){
-		launchQuiz.launchQuiz('1', classRoom.classRoom['25'].quizzes['12'])
+		// fb stuff
 	}
 
 	componentWillMount() {
@@ -44,12 +47,20 @@ class ClassView extends React.Component {
 		//getting all students for search input for teacher to add student to a new class
 		this.props.getAllStudents();
 		this.props.getStudentsBelongToAClass({id: this.props.classId});
+		this.props.getQuizzes(this.props.userId)
 	}
 
 	componentWillUnmount() {
 		if (this.props.showQuizLauncherModal) {
 			this.props.toggleQuizLauncherModalAction()
 		}
+	}
+
+	selectQuiz(quizObj) {
+		this.setState({selectedQuiz: quizObj}, ()=> {
+			this.props.toggleQuizLauncherModalAction
+		})
+
 	}
 
   render() {
@@ -156,8 +167,8 @@ class ClassView extends React.Component {
 							name="quizLength"
 							placeHolder="Set Test time"
 							format='mm:ss'
-							// onChange={...}
-							value='15:00' 
+							onChange={(time)=> this.props.setQuizTime(time)}
+							value={this.props.quizTime} 
 						/>
 					</FormFields>
 					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
@@ -165,7 +176,7 @@ class ClassView extends React.Component {
 							label="Launch Quiz" 
 							type="button"
 							primary={true} 
-							// onClick={() => this.addClassHandler()}
+							onClick={() => this.launchNewQuiz()}
 						/>
 					</Footer>
 				</Form>
@@ -179,6 +190,9 @@ class ClassView extends React.Component {
 
 function mapStateToProps(state) {
 	return {
+		quizTemplates: state.teachersClassView.quizTemplates,
+		quizTime: state.teachersClassView.quizTime,
+		userId: state.auth.user.id,
 		targetClass: state.teachersClassView.targetClass,
 		studentsInClass: state.teachersClassView.targetClass.students,
 		showQuizLauncherModal: state.teachersClassView.showQuizLauncherModal,

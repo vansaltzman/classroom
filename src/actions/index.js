@@ -90,6 +90,31 @@ export function toggleQuizLauncherModalAction() {
 	}
 }
 
+export function setQuizTime(newTime) {
+	return {
+		type: actionTypes.SET_QUIZ_TIME,
+		newTime
+	}
+}
+
+
+export function getQuizzes(teacherId) {
+	return (dispatch) => {
+		axios.get('/quizzes', {params: {id: teacherId}})
+		.then((res) => {
+			dispatch(getQuizzesAction(res.data))
+		})
+	}
+}
+
+function getQuizzesAction(quizzes) {
+  return {
+		type: actionTypes.GET_QUIZZES,
+		quizzes
+	}
+}
+
+
 
 /************************** CLASS BUILDER MODAL *************************/
 export function updateNewClassName(event) {

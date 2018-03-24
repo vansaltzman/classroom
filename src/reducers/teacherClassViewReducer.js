@@ -6,6 +6,7 @@ export function teacherClassViewReducer(state={
 	classes: [],
 	showClassBuilderModal: false,
 	showQuizLauncherModal: false,
+	quizTime: 0,
 	newClassName: '',
 	newClassSubject: '',
 	newClassQuarter: '',
@@ -21,6 +22,8 @@ export function teacherClassViewReducer(state={
 			return {...state, showClassBuilderModal: !state.showClassBuilderModal}
 		case actionTypes.TOGGLE_QUIZ_LAUNCHER:
 			return {...state, showQuizLauncherModal: !state.showQuizLauncherModal}
+		case actionTypes.SET_QUIZ_TIME:
+			return {...state, quizTime: action.newTime}
 		case actionTypes.UPDATE_NEW_CLASS_NAME_ACTION:
 			//console.log('changeName action', action.event.target.value)
 			return {...state, newClassName: action.event.target.value}
