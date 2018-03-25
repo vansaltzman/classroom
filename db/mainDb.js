@@ -179,6 +179,11 @@ const getClassesBelongToAStudent = function(studentEmail) {
   })
 }
 
+const getAllExistingSubjects = function() {
+  const queryString = `SELECT * FROM subjects`;
+  return db.query(queryString);
+}
+
 module.exports = {
   addUser,
   verifyUser,
@@ -189,7 +194,8 @@ module.exports = {
   getAllStudents,
   getAllStudentsBelongToAClass,
   addStudentToAClass,
-  getClassesBelongToAStudent
+  getClassesBelongToAStudent,
+  getAllExistingSubjects
 }
 
 // to get all students belong to a class

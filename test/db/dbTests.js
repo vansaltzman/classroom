@@ -17,7 +17,7 @@ const addFrizzle = function(){
     })
     .catch(err => console.log('issue with add Frizzle', err))
 }
-//addFrizzle();
+addFrizzle();
 
 const removeFrizzle = function(){
   return db.query('DELETE FROM teachers WHERE email=$1', [testTeacher[2]])
@@ -157,7 +157,13 @@ const addStudents = function(student) {
     }
   })
 }
-
-addStudents(AlexC);
+addStudents(Jae);
+// addStudents(Adam);
+// addStudents(Jerry);
+// addStudents(Artem);
+// addStudents(Riley);
+// addStudents(Juan);
+// addStudents(AlexL);
+// addStudents(AlexC);
 
 

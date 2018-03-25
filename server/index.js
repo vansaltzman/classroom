@@ -175,6 +175,17 @@ app.post('/addAStudentToClass', (req, res) => {
   console.log('server student to be added', req.body)
 })
 
+app.get('/getAllSubjects', (req, res) => {
+  main.getAllExistingSubjects()
+  .then((data) => {
+    //console.log('server side all Subjects', data.rows)
+    res.send(data.rows)
+  })
+  .catch((err) => {
+    if (err) throw err;
+  })
+})
+
 const port = 3000
 app.listen(port, function() {
 console.log('Listening on ' + port)

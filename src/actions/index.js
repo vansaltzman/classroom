@@ -110,6 +110,19 @@ function updateNewClassSubjectAction(event) {
 	}
 }
 
+export function selectExistingSubjectToAdd(subject) {
+	return (dispatch) => {
+		dispatch(selectExistingSubjectToAddAction(subject))
+	}
+}
+
+function selectExistingSubjectToAddAction (subject) {
+	return {
+		type: actionTypes.SELECT_EXISTING_SUBJECT_ACTION,
+		subject
+	}
+}
+
 export function updateNewClassQuarter(quarter) {
 	return (dispatch) => {
 		dispatch(updateNewClassQuarterAction(quarter))
@@ -131,6 +144,22 @@ function updateNewClassYearAction(year) {
 	return {
 		type: actionTypes.UPDATE_NEW_CLASS_YEAR_ACTION,
 		year
+	}
+}
+
+export function getAllExistingSubjects() {
+	return (dispatch) => {
+		axios.get('/getAllSubjects')
+		.then((res) => {
+			console.log('at actions subjects', res.data)
+			dispatch(getAllExistingSubjectsAction(res.data))
+		})
+	}
+}
+function getAllExistingSubjectsAction(subjects) {
+	return {
+		type: actionTypes.GET_ALL_SUBJECTS,
+		subjects
 	}
 }
 
@@ -176,11 +205,11 @@ function getAllStudentsAction(students) {
 }
 
 export function getStudentsBelongToAClass(idObj) {
-	console.log('console.log', idObj)
+	//console.log('console.log', idObj)
 	return (dispatch) => {
 		axios.post('/getAllStudentsInAClass', idObj)
 		.then((res) => {
-			console.log('dataaaaaa', res.data);
+			//console.log('dataaaaaa', res.data);
 			dispatch(getStudentsBelongToAClassAction(res.data))
 		})
 	}
@@ -258,7 +287,7 @@ export function getClassesBelongToAStudent(studentIdObj) {
 	return (dispatch) => {
 		axios.post('/getStudentsClasses', studentIdObj)
 		.then((res) => {
-			console.log('students classes', res.data)
+			//console.log('students classes', res.data)
 			dispatch(getClassesBelongToAStudentAction(res.data))
 		})
 	}
@@ -285,7 +314,7 @@ function updateStudentTargetClassAction(targetClass) {
 //student's main view to see which class is currently live
 export function watchClassGoLive(dispatch) {
 	fb.ref('/classes').on('child_added', (snap) => {
-		console.log('snap.val()', snap.val())
+		//console.log('snap.val()', snap.val())
 		dispatch(watchClassGoLiveAction(snap.val()));
 	})
 }
@@ -348,7 +377,7 @@ function toggleStudentLiveClassStatusAction () {
 		return {
 			type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
 		}
-	}
+}
 //change newView to be quiz id or false
 // export function updateActiveView (newView, classId) {
 // 	const currentClassActiveView = fb.ref('/classes/' + classId + '/activeView')
@@ -370,7 +399,7 @@ export function fetchClassData (classId) {
 	const currentClass = fb.ref('/classes/' + classId )
 	return (dispatch) => {
 		currentClass.on('value', function(snap) {
-			console.log(snap.val())
+			//console.log(snap.val())
 			dispatch(updateClassData(snap.val()))
 		})
 	}
@@ -407,3 +436,17 @@ export function previousQuestion() {
 		type: actionTypes.PREVIOUS_QUESTION
 	}
 }
+
+
+/******************************************** QUIZ/QUESTION BUILDER ***************************************/
+export function showQuizModal() {
+	return (dispatch) => {
+		dispatch(showQuizModalAction())
+	}
+}
+function showQuizModalAction() {
+	return {
+		type: actionTypes.SHOW_QUIZ_MODAL_ACTION
+	}
+}
+

@@ -46,6 +46,9 @@ class StudentMainView extends React.Component {
     //this.props.watchClassGoLive()
   }
 
+  componentDidMount() {
+    console.log(this.props)
+  }
   // updateTargetClassAndStudentStatus() {
   //   this.props.updateStudentTargetClass(this.props.targetClassId, this.props.studentId)
 
@@ -69,7 +72,7 @@ class StudentMainView extends React.Component {
                 <Button
                   label="Enter Class"
                   type="button"
-                  path="/default"
+                  path="/studentLiveClassView"
                   primary={true}
                   onClick={() => this.props.toggleStudentLiveClassStatus(item.class_id, item.student_id)}
                 />
@@ -86,7 +89,8 @@ class StudentMainView extends React.Component {
 function mapStateToProps(state) {
   return {
     auth: state.auth,
-    classes: state.studentClassView.classes
+    classes: state.studentClassView.classes,
+    studentClassView: state.studentClassView
   };
 }
 

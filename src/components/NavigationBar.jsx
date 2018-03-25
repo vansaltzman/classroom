@@ -17,11 +17,13 @@ import Menu from "grommet/components/Menu";
 import Box from "grommet/components/Box";
 import Actions from "grommet/components/icons/base/Action.js";
 import QuizView from "./teachers/quizView.jsx";
-import SignUp from "./Signup.jsx";
+import SignUp from "./SignUp.jsx";
 import StudentViewQuiz from "./students/StudentViewQuiz.jsx";
 import quizContainer from "./students/quizContainer.jsx";
 import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 import ClassViewDefault from "./students/classViewDefault.jsx";
+import Default from './students/classViewDefault.jsx'
+import Quiz from './students/StudentViewQuiz.jsx'
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 
 import quizView from "./teachers/quizView.jsx";
@@ -38,10 +40,11 @@ class NavigationBar extends React.Component {
     this.checkView = this.checkView.bind(this);
   }
   checkView() {
-    return <Redirect to="/default" />;
-    // setTimeout(function() {
-    //     return <Redirect to="/studentLiveClass2"/>
-    // }, 3000)
+    // if (this.props.studentClassView.targetClass.activeView === true) {
+    //   return <Redirect to='/livequiz' />
+    // } else {
+    //   return <Redirect to='/default' />
+    // }
   }
 
   checkAuth() {
@@ -153,11 +156,9 @@ class NavigationBar extends React.Component {
               <Route path="/signUp" component={SignUp} />
               <Route path="/quiz" component={StudentViewQuiz} />
               {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
-              <Route path="/default" component={ClassViewDefault} />
-              <Route
-                path="/studentLiveClass2"
-                component={StudentLiveClassView}
-              />
+              <Route path="/studentLiveClassView" component={Default} />
+              <Route path="/livequiz" component={Quiz} />
+              <Route path="/default" component={Default}/>
             </Switch>
           </nav>
         </Router>
@@ -170,7 +171,8 @@ function mapStateToProps(state) {
   return {
     // subject to change
     auth: state.auth,
-    activeView: state.teachersClassView.targetClass.activeView
+    activeView: state.teachersClassView.targetClass.activeView,
+    studentClassView: state.studentClassView
   };
 }
 
