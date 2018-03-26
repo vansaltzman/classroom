@@ -193,9 +193,7 @@ export function classGoLive(classId, classObj) {
 		const classes = fb.ref('/classes');
 		classes.child(classId).set(classObj)
 		.then(() => {
-			dispatch(changeClassLabelColorWhenLive());
 			dispatch(fetchClassData(classId, 'teacher'))
-			dispatch(fetchClassData(classId, 'student'))
 		})
 		.then(() => {
 			dispatch(classGoLiveAction(classId));
@@ -206,17 +204,6 @@ function classGoLiveAction(classId) {
 	return {
 		type: actionTypes.CLASS_GO_LIVE_ACTION,
 		classId
-	}
-}
-
-export function changeClassLabelColorWhenLive () {
-	return (dispatch) => {
-		dispatch(changeClassLabelColorWhenLiveAction())
-	}
-}
-function changeClassLabelColorWhenLiveAction() {
-	return {
-		type: actionTypes.CHANGE_CLASS_LABEL_WHEN_LIVE,
 	}
 }
 
