@@ -96,9 +96,66 @@ export function teacherClassViewReducer(
       //console.log('selected student', action.student.suggestion)
       return { ...state, selectedStudent: action.student.suggestion };
     case actionTypes.ADD_A_STUDENT_TO_CLASS_ACTION:
-      return { ...state };
+			return { ...state };
+		/**************************** QUIZ **************************/
     case actionTypes.SHOW_QUIZ_MODAL_ACTION:
-      return { ...state, showQuizBuilderModal: !state.showClassBuilderModal };
+			return { ...state, showQuizBuilderModal: !state.showClassBuilderModal, newQuiz: {questions: []} };
+		case actionTypes.SET_NEW_QUIZ_NAME_ACTION:	
+			return {
+				...state,
+				newQuiz: {
+					...state.newQuiz,
+					name: action.event.target.value
+				}
+			}
+		case actionTypes.SET_NEW_QUIZ_SUBJECT_ACTION:
+			return {
+				...state,
+				newQuiz: {
+					...state.newQuiz,
+					subject: action.event.target.value
+				}
+			}
+		case actionTypes.SET_NEW_QUIZ_SUBJECT_BY_SELECTION_ACTION:
+			return {
+				...state,
+				newQuiz: {
+					...state.newQuiz,
+					subject: action.event.suggestion
+				}
+			}
+		case actionTypes.SET_QUESTION_NUMBER_ACTION:
+			const questions = state.newQuiz.questions.slice()
+			questions.push({question: "", answers: []})
+			return {
+				...state, 
+				newQuiz: {
+					...state.newQuiz,
+					questions: questions
+				}
+			}
+		case actionTypes.ADD_QUESTION_TEXT_ACTION:
+			console.log('question text', action.event.target.value, 'target', action.event.target)
+			return {
+				...state
+			}
+		case actionTypes.ADD_ANSWER_ACTION:
+			//console.log('target Question', action.targetQuestion)
+			const questionsAddAnswers = state.newQuiz.questions.slice();
+			for (var index = 0; index < questionsAddAnswers.length - 1; index++) {
+				if (questionsAddAnswers.indexOf(action.targetQuestion) === index) {
+					console.log('answerr arrray', questionsAddAnswers[index].answers)
+					questionsAddAnswers[index].answers.push({text: "", isCorrect: false})
+				}
+			}
+			//console.log('added answers', questionsAddAnswers)
+			return {
+				...state,
+				newQuiz: {
+					...state.newQuiz,
+					questions: questionsAddAnswers
+				}
+			}
     default:
       return state;
   }

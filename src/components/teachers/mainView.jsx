@@ -30,7 +30,7 @@ import Footer from "grommet/components/Footer";
 import FormFields from "grommet/components/FormFields";
 import TextInput from "grommet/components/TextInput";
 import Select from "grommet/components/Select";
-import SearchInput from "grommet/components/SearchInput"
+import SearchInput from "grommet/components/SearchInput";
 // import Header from 'grommet/components/Header'
 
 /****** Grommet Stuff ******/

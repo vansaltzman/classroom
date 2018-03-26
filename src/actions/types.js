@@ -37,7 +37,13 @@ const actionTypes = {
 	FETCH_CLASS_DATA: 'FETCH_CLASS_DATA',
 
 	/******************* Quiz/Question Builder*********************/
-	SHOW_QUIZ_MODAL_ACTION: 'show_quiz_modal_action'
+	SHOW_QUIZ_MODAL_ACTION: 'show_quiz_modal_action',
+	SET_NEW_QUIZ_NAME_ACTION: 'set_new_quiz_name_action',
+	SET_NEW_QUIZ_SUBJECT_ACTION: 'set_new_quiz_subject_action',
+	SET_NEW_QUIZ_SUBJECT_BY_SELECTION_ACTION: 'set_new_quiz_subject_by_selection_action',
+	SET_QUESTION_NUMBER_ACTION: 'set_question_number_action',
+	ADD_ANSWER_ACTION: 'add_answer_action',
+	ADD_QUESTION_TEXT_ACTION: 'add_question_text_action'
 }
 
 export default actionTypes

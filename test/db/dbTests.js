@@ -167,3 +167,12 @@ addStudents(Jae);
 // addStudents(AlexC);
 
 
+`INSERT INTO draft_quizzes (name, subject_id, teacher_id) VALUES ('Schrodinger Cat', '1', '1');`
+`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('Which physicist below devised the paradox of Schrodinger Cat?', '1', '1');`
+`INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) VALUES (1, 1, 1);`
+`INSERT INTO draft_answers (answer, question_id, correct) VALUES ('Erwin Schrödinger', '1', 'true')`
+
+
+// for getting all the quizzes belong to a teacher and the subject
+`SELECT * FROM draft_quizzes WHERE teacher_id='1' AND subject_id='1';`
+//get the quiz_id 

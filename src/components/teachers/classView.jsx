@@ -14,10 +14,12 @@ import Form from "grommet/components/Form";
 import Heading from "grommet/components/Heading";
 import Footer from "grommet/components/Footer";
 import FormFields from "grommet/components/FormFields";
-
+import TextInput from "grommet/components/TextInput";
+import AddCircleIcon from "grommet/components/icons/base/AddCircle";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../actions/index.js";
+import Label from "grommet/components/Label"
 
 import classRoom from "../../../data/quizDummyData.js";
 import launchQuiz from "../../../db/liveClassroom.js";
@@ -39,9 +41,8 @@ class ClassView extends React.Component {
   }
 
   componentWillUpdate() {
-    this.props.getStudentsBelongToAClass({ id: this.props.classId });
+    //this.props.getStudentsBelongToAClass({ id: this.props.classId });
   }
-  changeHandler() {}
 
   render() {
     const { studentsInClass } = this.props;
@@ -120,17 +121,44 @@ class ClassView extends React.Component {
 								 flush={true} 
 								 overlayClose={true}>
 						<Form>
-						<Header pad={{ vertical: "medium", horizontal: "medium" }}>
-							<Heading>
-								Create A New Quiz
-							</Heading>
-						</Header>
-							<FormFields>
-							
-							</FormFields>
-							<Footer pad={{"vertical": "medium"}}>
-								<Button label='Submit'/>
-							</Footer>
+              <Header pad={{ vertical: "medium", horizontal: "medium" }}>
+                <Heading>
+                  Create A New Quiz
+                </Heading>
+              </Header>
+                <Section pad={{ vertical: "medium", horizontal: "medium" }}>
+                  <FormFields>
+                    <TextInput 
+                      placeHolder="Please Name Your Quiz"
+                      onDOMChange={value => {
+                        this.props.setNewQuizName(value);
+                      }}/>
+                    <SearchInput 
+                      placeHolder="Quiz Subject"
+                      suggestions={this.props.subjects}
+                      // value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
+                      onDOMChange={(event) => this.props.setNewQuizSubject(event)}
+                      onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
+                      {this.props.teachersClassView.newQuiz.questions.map((each, index) => {
+                          return (
+                            <Section>
+                              <Label>{'Question' + ' ' + index+1}</Label>
+                              <TextInput placeHolder="Question..."
+                                         onDOMChange={(event) => {this.props.addQuestionText(event)}}/>
+                              <Button icon={<AddCircleIcon />} 
+                                      label="Add Answer"
+                                      onClick={() => {this.props.addAnswer(each)}}/>
+                            </Section>
+                          )
+                        }) }
+                      <Button icon={<AddCircleIcon />}
+                                      onClick={() => this.props.setQuestionNumber()}
+                                      label="Add Question"/>
+                  </FormFields>
+                </Section>
+              <Footer pad={{"vertical": "medium", horizontal: "medium"}}>
+                <Button label='Submit'/>
+              </Footer>
 						</Form>
 					</Layer>
 				: <div></div>}
@@ -147,6 +175,7 @@ function mapStateToProps(state) {
     studentNames: state.teachersClassView.studentNames,
     classId: state.teachersClassView.targetClass.id,
     selectedStudent: state.teachersClassView.selectStudent,
+    subjects: state.teachersClassView.subjects,
     teachersClassView: state.teachersClassView
   };
 }

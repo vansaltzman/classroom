@@ -281,6 +281,7 @@ function addAStudentToClassAction () {
 		type: ADD_A_STUDENT_TO_CLASS_ACTION,
 	}
 }
+
 /******************************* GET ALL CLASSES THAT BELONGS TO A STUDENT **********************************/
 
 export function getClassesBelongToAStudent(studentIdObj) {
@@ -449,4 +450,75 @@ function showQuizModalAction() {
 		type: actionTypes.SHOW_QUIZ_MODAL_ACTION
 	}
 }
+// SET_NEW_QUIZ_NAME_ACTION: 'set_new_quiz_name_action',
+// SET_NEW_QUIZ_SUBJECT_ACTIOn: 'set_new_quiz_subject_action'
+export function setNewQuizName(event) {
+	return (dispatch) => {
+		dispatch(setNewQuizNameAction(event))
+	}
+}
+function setNewQuizNameAction(event) {
+	return {
+		type: actionTypes.SET_NEW_QUIZ_NAME_ACTION,
+		event
+	}
+}
 
+export function setNewQuizSubject(event) {
+	return (dispatch) => {
+		dispatch(setNewQuizSubjectAction(event))
+	}
+}
+function setNewQuizSubjectAction(event) {
+	return {
+		type: actionTypes.SET_NEW_QUIZ_SUBJECT_ACTION,
+		event
+	}
+}
+
+export function setNewQuizSubjectBySelection(event) {
+	return (dispatch) => {
+		dispatch(setNewQuizSubjectBySelectionAction(event))
+	}
+}
+function setNewQuizSubjectBySelectionAction(event) {
+	return {
+		type: actionTypes.SET_NEW_QUIZ_SUBJECT_BY_SELECTION_ACTION,
+		event
+	}
+}
+
+export function setQuestionNumber() {
+	return (dispatch) => {
+		dispatch(setQuestionNumberAction())
+	}
+}
+function setQuestionNumberAction() {
+	return {
+		type: actionTypes.SET_QUESTION_NUMBER_ACTION
+	}
+}
+
+export function addQuestionText(event) {
+	return(dispatch) => {
+		dispatch(addQuestionTextAction(event))
+	}
+}
+function addQuestionTextAction(event) {
+	return {
+		type: actionTypes.ADD_QUESTION_TEXT_ACTION,
+		event
+	}
+}
+
+export function addAnswer(targetQuestion) {
+	return (dispatch) => {
+		dispatch(addAnswerAction(targetQuestion))
+	}
+}
+function addAnswerAction(targetQuestion) {
+	return {
+		type: actionTypes.ADD_ANSWER_ACTION,
+		targetQuestion
+	}
+}
