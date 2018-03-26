@@ -200,7 +200,7 @@ const QuizView = ({ currentQuiz }) => {
 
 			<Button
 				label='End Quiz'
-				onClick={()=> props.updateActiveView(false, currenClass.id)} 
+				onClick={()=> props.updateActiveView(false, currentClass.id)} 
 			/>
 
 			<Table>

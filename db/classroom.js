@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS  "students" (
 
 CREATE TABLE IF NOT EXISTS  "classes_students" (
 	"id" serial NOT NULL,
-	"student_id" serial NOT NULL,
-	"class_id" serial NOT NULL,
+	"student_id" integer NOT NULL,
+	"class_id" integer NOT NULL,
 	CONSTRAINT classes_students_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -64,7 +64,8 @@ CREATE TABLE IF NOT EXISTS  "draft_questions" (
   "id" serial NOT NULL,
   "question" varchar(2000),
   "teacher_id" integer,
-  "subject_id" integer,
+	"subject_id" integer,
+	"avg_time" integer,
   CONSTRAINT draft_questions_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -103,8 +104,8 @@ CREATE TABLE IF NOT EXISTS  "draft_quizzes" (
 
 CREATE TABLE IF NOT EXISTS  "draft_quizzes_draft_questions" (
   "id" serial NOT NULL,
-  "draft_quiz_id" serial NOT NULL,
-  "draft_question_id" serial NOT NULL,
+  "draft_quiz_id" integer NOT NULL,
+  "draft_question_id" integer NOT NULL,
   "position" integer NOT NULL,
   CONSTRAINT draft_quizzes_draft_questions_pk PRIMARY KEY ("id")
 ) WITH (
@@ -121,18 +122,6 @@ CREATE TABLE IF NOT EXISTS  "draft_quizzes" (
 ) WITH (
   OIDS=FALSE
 );
-
-
-CREATE TABLE IF NOT EXISTS  "draft_quizzes_draft_questions" (
-	"id" serial NOT NULL,
-	"draft_quiz_id" serial NOT NULL,
-	"draft_question_id" serial NOT NULL,
-	"position" integer NOT NULL,
-	CONSTRAINT draft_quizzes_draft_questions_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
 
 CREATE TABLE IF NOT EXISTS  "submitted_quizzes" (
 	"id" serial NOT NULL,
@@ -160,8 +149,8 @@ CREATE TABLE IF NOT EXISTS  "submitted_questions" (
 
 CREATE TABLE IF NOT EXISTS  "submitted_quizzes_submitted_questions" (
 	"id" serial NOT NULL,
-	"submitted_quiz_id" serial NOT NULL,
-	"submitted_question_id" serial NOT NULL,
+	"submitted_quiz_id" integer NOT NULL,
+	"submitted_question_id" integer NOT NULL,
 	CONSTRAINT submitted_quizzes_submitted_questions_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -171,9 +160,9 @@ CREATE TABLE IF NOT EXISTS  "submitted_quizzes_submitted_questions" (
 
 CREATE TABLE IF NOT EXISTS  "students_responses" (
 	"id" serial NOT NULL,
-	"student_id" serial NOT NULL,
-	"response_id" serial NOT NULL,
-	"response" varchar(2000) NOT NULL,
+	"student_id" integer NOT NULL,
+	"response_id" integer NOT NULL,
+	"question_id" integer NOT NULL,
 	"correct" BOOLEAN NOT NULL,
 	CONSTRAINT students_responses_pk PRIMARY KEY ("id")
 ) WITH (
@@ -209,7 +198,8 @@ ALTER TABLE "submitted_quizzes_submitted_questions" ADD CONSTRAINT "submitted_qu
 ALTER TABLE "submitted_quizzes_submitted_questions" ADD CONSTRAINT "submitted_quizzes_submitted_questions_fk1" FOREIGN KEY ("submitted_question_id") REFERENCES "submitted_questions"("id");
 
 ALTER TABLE "students_responses" ADD CONSTRAINT "students_responses_fk0" FOREIGN KEY ("student_id") REFERENCES "students"("id");
-ALTER TABLE "students_responses" ADD CONSTRAINT "students_responses_fk1" FOREIGN KEY ("response_id") REFERENCES "submitted_quizzes_submitted_questions"("id");
+ALTER TABLE "students_responses" ADD CONSTRAINT "students_responses_fk1" FOREIGN KEY ("question_id") REFERENCES "submitted_quizzes_submitted_questions"("id");
+ALTER TABLE "students_responses" ADD CONSTRAINT "students_responses_fk2" FOREIGN KEY ("response_id") REFERENCES "submitted_answers"("id");
 
 ALTER TABLE "draft_answers" ADD CONSTRAINT "draft_answers_fk0" FOREIGN KEY ("question_id") REFERENCES "draft_questions"("id");
 

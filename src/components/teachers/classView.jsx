@@ -1,5 +1,6 @@
 import React from 'react';
 import * as actions from '../../actions/index.js';
+import moment from 'moment';
 
 import "grommet/scss/hpinc/index.scss";
 import Columns from 'grommet/components/Columns';
@@ -20,6 +21,11 @@ import Footer from 'grommet/components/Footer';
 import FormFields from 'grommet/components/FormFields';
 import TextInput from 'grommet/components/TextInput';
 import DateTime from 'grommet/components/DateTime';
+import Accordion from 'grommet/components/Accordion';
+import AccordionPanel from 'grommet/components/AccordionPanel';
+import Notification from 'grommet/components/Notification';
+import Table from 'grommet/components/Table';
+import TableRow from 'grommet/components/TableRow';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -31,7 +37,7 @@ import launchQuiz from '../../../db/liveClassroom.js';
 class ClassView extends React.Component {
 	constructor() {
 		super();
-		state: {
+		this.state = {
 			selectedQuiz: null
 		}
 
@@ -57,13 +63,45 @@ class ClassView extends React.Component {
 	}
 
 	selectQuiz(quizObj) {
-		this.setState({selectedQuiz: quizObj}, ()=> {
-			this.props.toggleQuizLauncherModalAction
+		console.log(quizObj)
+		this.setState({selectedQuiz: quizObj || null}, ()=> {
+			// this.props.toggleQuizLauncherModalAction
 		})
 
 	}
 
   render() {
+
+		let quizzes = {
+			1: {
+				name: 'Recursion',
+				subject: 'JavaScript',
+				questions: {
+					1: {
+						id: 1, //question id
+						text: 'This is a question',
+						time: 70000,
+						answers: {
+						1: {text: 'this is an answer', isCorrect: true},
+						2: {text: 'this is an answer', isCorrect: false},
+						3: {text: 'this is an answer', isCorrect: false},
+						4: {text: 'this is an answer', isCorrect: false}
+						}
+					}, 
+					2: {
+						id: 1, //question id
+						text: 'This is another question',
+						time: 90000,
+						answers: {
+						1: {text: 'this is an answer', isCorrect: false},
+						2: {text: 'this is an answer', isCorrect: false},
+						3: {text: 'this is an answer', isCorrect: true}
+						}
+					}
+				}
+			}
+		}
+
 		const { studentsInClass } = this.props;
 		//console.log('heyyy', studentsInClass)
 		const studentsArray = [];
@@ -83,8 +121,9 @@ class ClassView extends React.Component {
 					onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass)}
 				/>
 
+				{ this.state.selectedQuiz !== null &&
 				<Button icon={<DeployIcon />}
-					label='Launch Quiz'
+					label={'Launch ' + this.state.selectedQuiz.name}
 					primary={false}
 					secondary={false}
 					accent={true}
@@ -92,6 +131,7 @@ class ClassView extends React.Component {
 					plain={false} 
 					onClick={() => this.launchNewQuiz()}
 				/>
+				}
 
 				<Columns masonry={false}
 					maxCount={2}
@@ -121,33 +161,29 @@ class ClassView extends React.Component {
 						colorIndex='light-2'
 					>
 						Quiz List
-							<Tiles 
-								fill={true}
-							>
-								<Tile separator='top'
-									align='start'
-								>
-								<Header size='small'
-									pad={{"horizontal": "small"}}
-								>
-									<Heading tag='h4'
-										strong={true}
-										margin='none'>
-										Quiz 1
-									</Heading>
-								</Header>
-								<Box pad='small'>
-									<Paragraph margin='none'>
-										Estimated Time: 28min
-									</Paragraph>
-								</Box>
-								<Button
-									onClick={this.props.toggleQuizLauncherModalAction}
-								>
-									Select
-								</Button>
-								</Tile>
-							</Tiles>
+						<Accordion
+							onActive={(index)=> this.selectQuiz(quizzes[Object.keys(quizzes)[index]])}
+						>
+							{Object.values(quizzes).map(quiz => {
+							return <AccordionPanel heading={
+								<div>
+									{quiz.name}
+								</div>}> 
+								{Object.values(quiz.questions).map(question => {
+									 return <Box>
+										{question.text  + ' ' + moment.duration(question.time).humanize()}
+										{Object.values(question.answers).map(answer=> {
+											return <Notification
+												message={answer.text}
+												size='medium'
+												status={answer.isCorrect ? 'ok' : 'critical'}
+											/>
+										})}
+									</Box>
+								})}
+							</AccordionPanel>
+							})}
+						</Accordion>
 						</Box>
 				</Columns>
 
