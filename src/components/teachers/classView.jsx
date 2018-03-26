@@ -19,7 +19,8 @@ import AddCircleIcon from "grommet/components/icons/base/AddCircle";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from "../../actions/index.js";
-import Label from "grommet/components/Label"
+import Label from "grommet/components/Label";
+import CheckBox from "grommet/components/CheckBox"
 
 import classRoom from "../../../data/quizDummyData.js";
 import launchQuiz from "../../../db/liveClassroom.js";
@@ -145,9 +146,20 @@ class ClassView extends React.Component {
                               <Label>{'Question' + ' ' + index+1}</Label>
                               <TextInput placeHolder="Question..."
                                          onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+                              {each.answers.map((eachAnswer, answerIndex) => {
+                                return (
+                                  <Section>
+                                    <TextInput placeHolder="Answer..."
+                                               onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
+                                    <CheckBox label='Correct'
+                                              toggle={false}
+                                              reverse={true} />
+                                  </Section>
+                                )
+                              })}
                               <Button icon={<AddCircleIcon />} 
                                       label="Add Answer"
-                                      onClick={() => {this.props.addAnswer(each)}}/>
+                                      onClick={() => {this.props.addAnswer(index)}}/>
                             </Section>
                           )
                         }) }

@@ -512,14 +512,28 @@ function addQuestionTextAction(event, index) {
 	}
 }
 
-export function addAnswer(targetQuestion) {
+export function addAnswer(index) {
 	return (dispatch) => {
-		dispatch(addAnswerAction(targetQuestion))
+		dispatch(addAnswerAction(index))
 	}
 }
-function addAnswerAction(targetQuestion) {
+function addAnswerAction(index) {
 	return {
 		type: actionTypes.ADD_ANSWER_ACTION,
-		targetQuestion
+		index
+	}
+}
+
+export function addAnswerText(event, questionIndex, answerIndex) {
+	return (dispatch) => {
+		dispatch(addAnswerTextAction(event, questionIndex, answerIndex))
+	}
+}
+function addAnswerTextAction(event, questionIndex, answerIndex) {
+	return {
+		type: actionTypes.ADD_ANSWER_TEXT_ACTION,
+		event,
+		questionIndex,
+		answerIndex
 	}
 }

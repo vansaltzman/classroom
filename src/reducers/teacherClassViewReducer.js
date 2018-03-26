@@ -150,15 +150,12 @@ export function teacherClassViewReducer(
 				}
 			}
 		case actionTypes.ADD_ANSWER_ACTION:
-			//console.log('target Question', action.targetQuestion)
 			const questionsAddAnswers = state.newQuiz.questions.slice();
-			for (var index = 0; index < questionsAddAnswers.length - 1; index++) {
-				if (questionsAddAnswers.indexOf(action.targetQuestion) === index) {
-					console.log('answerr arrray', questionsAddAnswers[index].answers)
-					questionsAddAnswers[index].answers.push({text: "", isCorrect: false})
+			for (var k = 0; k < questionsAddAnswers.length; k++) {
+				if (k === action.index) {
+					questionsAddAnswers[action.index].answers.push({text: "", isCorrect: false})
 				}
 			}
-			//console.log('added answers', questionsAddAnswers)
 			return {
 				...state,
 				newQuiz: {
@@ -166,6 +163,27 @@ export function teacherClassViewReducer(
 					questions: questionsAddAnswers
 				}
 			}
+
+			case actionTypes.ADD_ANSWER_TEXT_ACTION:
+				const questionsAddAnswerText = state.newQuiz.questions.slice();
+				for (var l = 0; l < questionsAddAnswerText.length; l++) {
+					if (l === action.questionIndex) {
+						const question_answers = questionsAddAnswerText[action.questionIndex].answers;
+						for (var m = 0; m < question_answers.length; m++) {
+							if (m === action.answerIndex) {
+								question_answers[action.answerIndex].text = action.event.target.value
+							}
+						}
+					}
+				}
+				return {
+					...state,
+					newQuiz: {
+						...state.newQuiz,
+						questions: questionsAddAnswerText
+					}
+				}
+			
     default:
       return state;
   }
