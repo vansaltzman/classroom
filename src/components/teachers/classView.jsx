@@ -44,6 +44,7 @@ class ClassView extends React.Component {
 		}
 
 		this.launchNewQuiz = this.launchNewQuiz.bind(this)
+		this.toggleClassEndConfirmation = this.toggleClassEndConfirmation.bind(this)
 	}
 
 	launchNewQuiz(){
@@ -61,6 +62,10 @@ class ClassView extends React.Component {
 		this.props.getQuizzes(this.props.userId)
 	}
 
+	componentDidMount() {
+		this.props.getClassStatus(this.props.classId)
+	}
+
 	componentWillUnmount() {
 		if (this.props.showQuizLauncherModal) {
 			this.props.toggleQuizLauncherModalAction()
@@ -72,7 +77,7 @@ class ClassView extends React.Component {
 	}
 
 	toggleClassEndConfirmation() {
-		this.setState({showGoLiveConfirm: !this.state.showGoLiveConfirm})
+		this.setState({showEndClassModal: !this.state.showEndClassModal})
 	}
 
   render() {
@@ -230,12 +235,12 @@ class ClassView extends React.Component {
 					</Footer>
 				</Form>
 			</Layer>}
-			{this.state.showGoLiveConfirm && 
+			{this.state.showEndClassModal && 
 			<Layer
 				closer={true}
 				flush={true}
 				overlayClose={true}
-				onClose={this.props.toggleClassEndConfirmation}
+				onClose={this.toggleClassEndConfirmation}
 			>
 					<Form>
 					<Header pad={{ vertical: "medium", horizontal: "medium" }}>
@@ -246,7 +251,10 @@ class ClassView extends React.Component {
 							label="Yes, I want to end the class" 
 							type="button"
 							primary={true} 
-							onClick={fb.endClass(this.props.classId)}
+							onClick={()=> {
+								fb.endClass(this.props.classId)
+								this.toggleClassEndConfirmation()
+							}}
 						/>
 					</Footer>
 				</Form>

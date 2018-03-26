@@ -227,16 +227,32 @@ export function classGoLive(classId, classObj) {
 			const liveClass = fb.ref('/classes/' + classId)
 			return liveClass.child('isLive').set(true)
 		})
-		.then(() => {
-			dispatch(classGoLiveAction(classId));
-		})
 	}
 }
-function classGoLiveAction(classId) { 
+function classGoLiveAction(classId) { // Not used
 	return {
 		type: actionTypes.CLASS_GO_LIVE_ACTION,
 		classId
 	}
+}
+
+export function getClassStatus(classId) {
+	return (dispacth) => {
+		return fb.ref('/classes/' + classId + '/isLive').once('value')
+			.then(snap => {
+				if (snap.val()) {
+					dispatch(fetchClassData(classId, 'teacher'))
+					return
+				} else {
+					dispatch(getClassStatusAction(snap.val()))
+					return
+				}
+			})
+	}
+} 
+function getClassStatusAction(classStatus) {
+	type: actionTypes.GET_CLASS_STATUS,
+	classStatus
 }
 
 /******************************* GET ALL CLASSES THAT BELONGS TO A STUDENT **********************************/
