@@ -60,7 +60,7 @@ class StudentMainView extends React.Component {
         <Tiles flush={false} selectable={true}>
           {this.props.classes.map((item, index) => {
             return (
-              <Tile>
+              <Tile key={index}>
                 <Card
                   style={{ background: item.isLive ? 'lightGreen' : 'white'}}
                   thumbnail={item.thunmbnail}
@@ -71,7 +71,8 @@ class StudentMainView extends React.Component {
                 <Button
                   label="Enter Class"
                   type="button"
-                  path="/default"
+                  path="/studentLiveClass"
+                  // path="default"
                   primary={true}
                   onClick={() => this.props.toggleStudentLiveClassStatus(item.class_id, item.student_id)}
                 />
