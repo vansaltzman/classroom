@@ -163,13 +163,12 @@ CREATE TABLE IF NOT EXISTS  "students_responses" (
 	"student_id" integer NOT NULL,
 	"response_id" integer NOT NULL,
 	"question_id" integer NOT NULL,
+	"time_spent" integer,
 	"correct" BOOLEAN NOT NULL,
 	CONSTRAINT students_responses_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 
 ALTER TABLE "classes" ADD CONSTRAINT "classes_fk0" FOREIGN KEY ("teacher_id") REFERENCES "teachers"("id");

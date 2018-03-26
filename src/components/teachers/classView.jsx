@@ -8,6 +8,8 @@ import Box from 'grommet/components/Box';
 import Button from 'grommet/components/Button';
 import Section from 'grommet/components/Section';
 import DeployIcon from 'grommet/components/icons/base/Deploy';
+import CloudUploadIcon from 'grommet/components/icons/base/CloudUpload';
+import ShareIcon from 'grommet/components/icons/base/Share';
 import SearchInput from 'grommet/components/SearchInput';
 import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
@@ -80,6 +82,10 @@ class ClassView extends React.Component {
 		this.setState({showEndClassModal: !this.state.showEndClassModal})
 	}
 
+	endClass() {
+
+	}
+
   render() {
 	
 		let quizzes = {
@@ -121,21 +127,28 @@ class ClassView extends React.Component {
 		return(
 			<Section>
 				
-				<Button icon={<DeployIcon />}
-					label= {this.props.targetClass.isLive ? 'End Class' : 'Go Live'}
+				{this.props.targetClass.isLive ?
+				<Button icon={<CloudUploadIcon />}
+					label= {'End Class'}
 					primary={false}
 					secondary={false}
-					accent={!this.props.targetClass.isLive}
+					accent={false}
 					critical={false}
 					plain={false} 
-					onClick={this.props.targetClass.isLive ? 
-						() =>  this.toggleClassEndConfirmation() :
-						() => this.props.classGoLive(this.props.classId, this.props.targetClass) 
-					}
-				/>
+					onClick={() =>  this.toggleClassEndConfirmation()}
+				/> :
+				<Button icon={<DeployIcon />}
+					label= {'Go Live'}
+					primary={false}
+					secondary={false}
+					accent={true}
+					critical={false}
+					plain={false} 
+					onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
+				/>}
 
 				{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
-				<Button icon={<DeployIcon />}
+				<Button icon={<ShareIcon />}
 					label={'Launch ' + this.state.selectedQuiz.name}
 					primary={false}
 					secondary={false}
