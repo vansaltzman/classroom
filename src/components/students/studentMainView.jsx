@@ -68,6 +68,7 @@ class StudentMainView extends React.Component {
                 <Button
                   label="Enter Class"
                   type="button"
+                  // path="/studentQuiz"
                   path="/studentLiveClass"
                   // path="default"
                   primary={true}

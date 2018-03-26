@@ -12,26 +12,21 @@ class StudentLiveClassView extends React.Component {
 		super();
 	}
   render() {
-	console.log('STUDENT LIVE CLASS VIEW PROPS.TARGETCLASS ', this.props.targetClass)
-		
-			if(this.props.targetClass.isLive){
+
+			if(this.props.studentState.targetClass && this.props.studentState.targetClass.activeView){
 				return <QuizContainer/>
-			} else {
+			} else if (this.props.studentState.targetClass && !this.props.studentState.targetClass.activeView) {
 				return <Default/>
+			} else {
+				return <div></div>
 			}
-	
-		// if (!this.props.studentClassView.targetClass.quizzes) {
-		// 	 return <ClassViewDefault />
-		// } else {
-		// 	 return <quizContainer/>
-		// }
   }
 }
 
 function mapStateToProps(state) {
 	return {
-		// targetClass: state.studentClassView.targetClass
-		targetClass: state.teachersClassView.targetClass
+		studentState: state.studentClassView
+		// targetClass: state.teachersClassView.targetClass
 	}
 }
 
