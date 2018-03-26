@@ -104,21 +104,7 @@ class TeacherMainView extends React.Component {
 
     return (
       <div>
-        {/* <Section> */}
-          <Menu
-            responsive={true}
-            icon={<MenuIcon />}
-            label="Menu"
-            inline={false}
-            primary={false}
-          >
-            <Anchor href="#" className="active">
-              Classes
-            </Anchor>
-            <Anchor href="#">Students</Anchor>
-            <Anchor href="#">Quizzes</Anchor>
-          </Menu>
-        {/* </Section> */}
+
         <Tiles flush={false} selectable={true}>
           {/* onSelect some function */}
           {this.props.classes.map((item, index) => {

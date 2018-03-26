@@ -24,13 +24,10 @@ class ClassView extends React.Component {
 	}
 
 	launchNewQuiz(){
-		console.log('running launch new quiz')
 		fb.launchQuiz('1', classRoom.classRoom['25'].quizzes['12']) // takes classId and quiz Obj
 	}
 
 	componentWillMount() {
-		//console.log('this.props.classId', this.props.classId);
-		//getting all students for search input for teacher to add student to a new class
 		this.props.getAllStudents();
 		this.props.getStudentsBelongToAClass({id: this.props.classId});
 	}

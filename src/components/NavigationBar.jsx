@@ -37,6 +37,7 @@ class NavigationBar extends React.Component {
     super(props);
     this.checkAuth = this.checkAuth.bind(this);
     this.checkView = this.checkView.bind(this);
+    this.logout = this.logout.bind(this);
   }
   checkView() {
     return <Redirect to="/default"/>
@@ -44,7 +45,6 @@ class NavigationBar extends React.Component {
     //     return <Redirect to="/studentLiveClass2"/>
     // }, 3000) 
 
-    this.logout = this.logout.bind(this);
   }
   
   checkAuth() {
