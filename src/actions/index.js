@@ -78,6 +78,37 @@ export function toggleModalAction() {
 	}
 }
 
+export function toggleQuizLauncherModalAction() {
+	return {
+		type: actionTypes.TOGGLE_QUIZ_LAUNCHER
+	}
+}
+
+export function setQuizTime(newTime) {
+	return {
+		type: actionTypes.SET_QUIZ_TIME,
+		newTime
+	}
+}
+
+
+export function getQuizzes(teacherId) {
+	return (dispatch) => {
+		axios.get('/quizzes', {params: {id: teacherId}})
+		.then((res) => {
+			dispatch(getQuizzesAction(res.data))
+		})
+	}
+}
+
+function getQuizzesAction(quizzes) {
+  return {
+		type: actionTypes.GET_QUIZZES,
+		quizzes
+	}
+}
+
+
 
 /************************** CLASS BUILDER MODAL *************************/
 export function updateNewClassName(event) {
@@ -185,22 +216,23 @@ function getStudentsBelongToAClassAction(students) {
 	}
 }
 
-
-
 export function classGoLive(classId, classObj) {
 	return (dispatch) => {
-		classObj.isLive = true;
 		const classes = fb.ref('/classes');
 		classes.child(classId).set(classObj)
 		.then(() => {
 			dispatch(fetchClassData(classId, 'teacher'))
+		})
+		.then(()=> {
+			const liveClass = fb.ref('/classes/' + classId)
+			return liveClass.child('isLive').set(true)
 		})
 		.then(() => {
 			dispatch(classGoLiveAction(classId));
 		})
 	}
 }
-function classGoLiveAction(classId) {
+function classGoLiveAction(classId) { 
 	return {
 		type: actionTypes.CLASS_GO_LIVE_ACTION,
 		classId
