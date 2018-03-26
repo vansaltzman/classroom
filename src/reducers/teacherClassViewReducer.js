@@ -135,9 +135,19 @@ export function teacherClassViewReducer(
 				}
 			}
 		case actionTypes.ADD_QUESTION_TEXT_ACTION:
-			console.log('question text', action.event.target.value, 'target', action.event.target)
+			const questionsWithText = state.newQuiz.questions.slice()
+			for (var j = 0; j < questionsWithText.length; j++) {
+				console.log('j === action.index', j === action.index)
+				if (j === action.index) {
+					questionsWithText[action.index].question = action.event.target.value
+				}
+			}
 			return {
-				...state
+				...state,
+				newQuiz: {
+					...state.newQuiz,
+					questions: questionsWithText
+				}
 			}
 		case actionTypes.ADD_ANSWER_ACTION:
 			//console.log('target Question', action.targetQuestion)

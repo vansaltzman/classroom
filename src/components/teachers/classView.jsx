@@ -144,7 +144,7 @@ class ClassView extends React.Component {
                             <Section>
                               <Label>{'Question' + ' ' + index+1}</Label>
                               <TextInput placeHolder="Question..."
-                                         onDOMChange={(event) => {this.props.addQuestionText(event)}}/>
+                                         onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
                               <Button icon={<AddCircleIcon />} 
                                       label="Add Answer"
                                       onClick={() => {this.props.addAnswer(each)}}/>

@@ -499,15 +499,16 @@ function setQuestionNumberAction() {
 	}
 }
 
-export function addQuestionText(event) {
+export function addQuestionText(event,index) {
 	return(dispatch) => {
-		dispatch(addQuestionTextAction(event))
+		dispatch(addQuestionTextAction(event,index))
 	}
 }
-function addQuestionTextAction(event) {
+function addQuestionTextAction(event, index) {
 	return {
 		type: actionTypes.ADD_QUESTION_TEXT_ACTION,
-		event
+		event,
+		index
 	}
 }
 
