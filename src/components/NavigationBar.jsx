@@ -105,16 +105,14 @@ class NavigationBar extends React.Component {
                 var navBarBackground = 'lightBlue'
                 var dropAnchors = 
                 <div>
-                    <Anchor path="/quiz">
-                        Quiz 
-                    </Anchor>
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
                     </Anchor>
 
-                    <Anchor path='/studentQuiz'>
+
+                    {/* <Anchor path='/studentQuiz'>
                         studentQuiz
-                    </Anchor>
+                    </Anchor> */}
                 </div>
             }
         }
@@ -168,10 +166,10 @@ class NavigationBar extends React.Component {
                             {/* <Route path="/studentliveclass" component={StudentLiveClassView}/> */}
                             
                             <Route path="/signUp" component={SignUp}/>
-                            <Route path="/quiz" component={StudentViewQuiz}/>
+                            {/* <Route path="/quiz" component={StudentViewQuiz}/> */}
                             {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
                             <Route path="/default" component={ClassViewDefault}/>
-                            <Route path="/studentLiveClass2" component={StudentLiveClassView}/>
+                            <Route path="/studentLiveClass" component={StudentLiveClassView}/>
                             
                         </Switch>
                 </nav>
