@@ -26,26 +26,33 @@ import AccordionPanel from 'grommet/components/AccordionPanel';
 import Notification from 'grommet/components/Notification';
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
+import Label from 'grommet/components/Label';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as Actions from '../../actions/index.js';
 
 import classRoom from '../../../data/quizDummyData.js';
-import launchQuiz from '../../../db/liveClassroom.js';
+import fb from '../../../db/liveClassroom.js'
 
 class ClassView extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			selectedQuiz: null
+			selectedQuiz: null,
+			showEndClassModal: false
 		}
 
 		this.launchNewQuiz = this.launchNewQuiz.bind(this)
 	}
 
 	launchNewQuiz(){
-		// fb stuff
+		fb.launchQuiz(this.props.classId, this.state.selectedQuiz, this.props.quizTime)
+			.then(()=> {
+				if (this.props.showQuizLauncherModal) {
+					this.props.toggleQuizLauncherModalAction()
+				}
+			})
 	}
 
 	componentWillMount() {
@@ -63,17 +70,18 @@ class ClassView extends React.Component {
 	}
 
 	selectQuiz(quizObj) {
-		console.log(quizObj)
-		this.setState({selectedQuiz: quizObj || null}, ()=> {
-			// this.props.toggleQuizLauncherModalAction
-		})
+		this.setState({selectedQuiz: quizObj || null})
+	}
 
+	toggleClassEndConfirmation() {
+		this.setState({showGoLiveConfirm: !this.state.showGoLiveConfirm})
 	}
 
   render() {
 
 		let quizzes = {
 			1: {
+				id: 1,
 				name: 'Recursion',
 				subject: 'JavaScript',
 				questions: {
@@ -103,7 +111,6 @@ class ClassView extends React.Component {
 		}
 
 		const { studentsInClass } = this.props;
-		//console.log('heyyy', studentsInClass)
 		const studentsArray = [];
 		for (var key in studentsInClass) {
 			studentsArray.push(studentsInClass[key]);
@@ -112,16 +119,19 @@ class ClassView extends React.Component {
 			<Section>
 				
 				<Button icon={<DeployIcon />}
-					label='Go Live'
+					label= {this.props.targetClass.isLive ? 'End Class' : 'Go Live'}
 					primary={false}
 					secondary={false}
-					accent={true}
+					accent={!this.props.targetClass.isLive}
 					critical={false}
 					plain={false} 
-					onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass)}
+					onClick={this.props.targetClass.isLive ? 
+						() =>  this.toggleClassEndConfirmation() :
+						() => this.props.classGoLive(this.props.classId, this.props.targetClass) 
+					}
 				/>
 
-				{ this.state.selectedQuiz !== null &&
+				{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
 				<Button icon={<DeployIcon />}
 					label={'Launch ' + this.state.selectedQuiz.name}
 					primary={false}
@@ -129,7 +139,7 @@ class ClassView extends React.Component {
 					accent={true}
 					critical={false}
 					plain={false} 
-					onClick={() => this.launchNewQuiz()}
+					onClick={this.props.toggleQuizLauncherModalAction}
 				/>
 				}
 
@@ -154,12 +164,12 @@ class ClassView extends React.Component {
 					<SearchInput placeHolder='Search'
   					suggestions={this.props.studentNames} 
 					/>
-					<Box align='center'
-						pad='small'
-						margin='small'
+					{/* <Box align='center'
+						pad='none'
+						margin="none"
 						wrap="false"
 						colorIndex='light-2'
-					>
+					> */}
 						Quiz List
 						<Accordion
 							onActive={(index)=> this.selectQuiz(quizzes[Object.keys(quizzes)[index]])}
@@ -171,11 +181,16 @@ class ClassView extends React.Component {
 								</div>}> 
 								{Object.values(quiz.questions).map(question => {
 									 return <Box>
-										{question.text  + ' ' + moment.duration(question.time).humanize()}
+										<Heading tag="h3">
+											{question.text}
+										</Heading>
+										<Label>
+											{moment.duration(question.time).humanize()}
+										</Label>
 										{Object.values(question.answers).map(answer=> {
 											return <Notification
 												message={answer.text}
-												size='medium'
+												size='small'
 												status={answer.isCorrect ? 'ok' : 'critical'}
 											/>
 										})}
@@ -184,10 +199,10 @@ class ClassView extends React.Component {
 							</AccordionPanel>
 							})}
 						</Accordion>
-						</Box>
+						{/* </Box> */}
 				</Columns>
 
-			{this.props.showQuizLauncherModal ? 
+			{this.props.showQuizLauncherModal &&
 			<Layer
 				closer={true}
 				flush={true}
@@ -216,8 +231,29 @@ class ClassView extends React.Component {
 						/>
 					</Footer>
 				</Form>
-			</Layer> :
-			<div></div>}
+			</Layer>}
+			{this.state.showGoLiveConfirm && 
+			<Layer
+				closer={true}
+				flush={true}
+				overlayClose={true}
+				onClose={this.props.toggleClassEndConfirmation}
+			>
+					<Form>
+					<Header pad={{ vertical: "medium", horizontal: "medium" }}>
+						Are you user you want to end the class?
+					</Header>
+					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
+						<Button 
+							label="Yes, I want to end the class" 
+							type="button"
+							primary={true} 
+							onClick={fb.endClass(this.props.classId)}
+						/>
+					</Footer>
+				</Form>
+			</Layer>
+			}
 			</Section>
 		)
 	}

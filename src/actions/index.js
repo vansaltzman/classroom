@@ -223,36 +223,26 @@ function getStudentsBelongToAClassAction(students) {
 	}
 }
 
-
-
 export function classGoLive(classId, classObj) {
 	return (dispatch) => {
 		const classes = fb.ref('/classes');
 		classes.child(classId).set(classObj)
 		.then(() => {
-			dispatch(changeClassLabelColorWhenLive());
 			dispatch(fetchClassData(classId, 'teacher'))
+		})
+		.then(()=> {
+			const liveClass = fb.ref('/classes/' + classId)
+			return liveClass.child('isLive').set(true)
 		})
 		.then(() => {
 			dispatch(classGoLiveAction(classId));
 		})
 	}
 }
-function classGoLiveAction(classId) { // Not needed? - should update isLive when listner updates from fb
+function classGoLiveAction(classId) { 
 	return {
 		type: actionTypes.CLASS_GO_LIVE_ACTION,
 		classId
-	}
-}
-
-export function changeClassLabelColorWhenLive () {
-	return (dispatch) => {
-		dispatch(changeClassLabelColorWhenLiveAction())
-	}
-}
-function changeClassLabelColorWhenLiveAction() {
-	return {
-		type: actionTypes.CHANGE_CLASS_LABEL_WHEN_LIVE,
 	}
 }
 
