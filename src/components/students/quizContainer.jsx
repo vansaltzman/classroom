@@ -34,7 +34,6 @@ class QuizContainer extends React.Component {
     return (
       
       <div>
-        -----TEST
         <StudentViewQuiz 
                         class={this.props.class}
                         studentId={studentId}
