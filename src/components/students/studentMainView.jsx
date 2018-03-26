@@ -52,11 +52,9 @@ class StudentMainView extends React.Component {
 
   // }
   render() {
-    console.log('classes', this.props.classes, this.props.classes.color);
     return (
       <div>
         <Tiles flush={false} selectable={true}>
-          {/* onSelect some function */}
           {this.props.classes.map((item, index) => {
             return (
               <Tile>
