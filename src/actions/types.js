@@ -31,7 +31,10 @@ const actionTypes = {
 	WATCH_CLASS_GO_LIVE_ACTION: 'watch_class_go_live_action',
 	TOGGLE_STUDENT_LIVE_STATUS: 'toggle_student_live_status',
 	CHANGE_CLASS_LABEL_WHEN_LIVE: 'change_class_label_when_live',
-	FETCH_CLASS_DATA: 'FETCH_CLASS_DATA'
+	FETCH_CLASS_DATA: 'FETCH_CLASS_DATA',
+	TOGGLE_QUIZ_LAUNCHER: 'TOGGLE_QUIZ_LAUNCHER',
+	SET_QUIZ_TIME: 'SET_QUIZ_TIME',
+	GET_CLASS_STATUS: 'GET_CLASS_STATUS',
 }
 
 export default actionTypes

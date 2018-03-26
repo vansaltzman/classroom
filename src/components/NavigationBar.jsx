@@ -149,6 +149,9 @@ class NavigationBar extends React.Component {
 
         
                         <Switch>
+                        <Route exact path="/"  render={
+                                    this.checkAuth
+                            } /> 
                             <Route path="/teachermainview" component={TeacherMainView} />
                             {/* <Route path="/studentmainview" component={TeacherMainView} /> */}
                             <Route exact path="/login"  render={

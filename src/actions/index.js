@@ -78,6 +78,37 @@ export function toggleModalAction() {
 	}
 }
 
+export function toggleQuizLauncherModalAction() {
+	return {
+		type: actionTypes.TOGGLE_QUIZ_LAUNCHER
+	}
+}
+
+export function setQuizTime(newTime) {
+	return {
+		type: actionTypes.SET_QUIZ_TIME,
+		newTime
+	}
+}
+
+
+export function getQuizzes(teacherId) {
+	return (dispatch) => {
+		axios.get('/quizzes', {params: {id: teacherId}})
+		.then((res) => {
+			dispatch(getQuizzesAction(res.data))
+		})
+	}
+}
+
+function getQuizzesAction(quizzes) {
+  return {
+		type: actionTypes.GET_QUIZZES,
+		quizzes
+	}
+}
+
+
 
 /************************** CLASS BUILDER MODAL *************************/
 export function updateNewClassName(event) {
@@ -185,39 +216,43 @@ function getStudentsBelongToAClassAction(students) {
 	}
 }
 
-
-
 export function classGoLive(classId, classObj) {
 	return (dispatch) => {
-		classObj.isLive = true;
 		const classes = fb.ref('/classes');
 		classes.child(classId).set(classObj)
 		.then(() => {
-			dispatch(changeClassLabelColorWhenLive());
 			dispatch(fetchClassData(classId, 'teacher'))
-			dispatch(fetchClassData(classId, 'student'))
 		})
-		.then(() => {
-			dispatch(classGoLiveAction(classId));
+		.then(()=> {
+			const liveClass = fb.ref('/classes/' + classId)
+			return liveClass.child('isLive').set(true)
 		})
 	}
 }
-function classGoLiveAction(classId) {
+function classGoLiveAction(classId) { // Not used
 	return {
 		type: actionTypes.CLASS_GO_LIVE_ACTION,
 		classId
 	}
 }
 
-export function changeClassLabelColorWhenLive () {
-	return (dispatch) => {
-		dispatch(changeClassLabelColorWhenLiveAction())
+export function getClassStatus(classId) {
+	return (dispacth) => {
+		return fb.ref('/classes/' + classId + '/isLive').once('value')
+			.then(snap => {
+				if (snap.val()) {
+					dispatch(fetchClassData(classId, 'teacher'))
+					return
+				} else {
+					dispatch(getClassStatusAction(snap.val()))
+					return
+				}
+			})
 	}
-}
-function changeClassLabelColorWhenLiveAction() {
-	return {
-		type: actionTypes.CHANGE_CLASS_LABEL_WHEN_LIVE,
-	}
+} 
+function getClassStatusAction(classStatus) {
+	type: actionTypes.GET_CLASS_STATUS,
+	classStatus
 }
 
 /******************************* GET ALL CLASSES THAT BELONGS TO A STUDENT **********************************/

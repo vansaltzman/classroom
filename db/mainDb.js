@@ -24,7 +24,7 @@ db.connect().then((client)=> {
   })
   .catch(err => {
     client.release()
-    console.log(err.stack)
+    console.log('oops!', err.stack)
   })
 })
 
@@ -111,6 +111,17 @@ const fetchClass = function(classId) {
   })
   .catch(err => {
     console.log('Issue fetching class from MainDb', err)
+  })
+}
+
+const fetchQuizTemplates = function(teacherId) {
+  return db.query(
+    `SELECT * FROM draft_quizzes WHERE teacher_id=$1`, [teacherId]
+  )
+  .then(quizzes => {
+    return Promise.all(quizzes.rows.map(quiz => {
+      db.query(`SELECT * FROM draft_quizzes_draft_questions INNER JOIN draft_questions .id ON draft_quizzes_draft_questions.draft_question_id WHERE draft_quizzes_draft_questions.draft_quiz_id=$1`, [quiz.id])
+    }))
   })
 }
 
