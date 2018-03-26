@@ -35,7 +35,7 @@ const studentJoins = function(studentId, classId) { // Conncect this to actions.
 
 const launchQuiz = function (classId, quizObj, quizTime) {
 	const timeValues = quizTime.split(':')
-	quizObj.time = moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('milliseconds')
+	quizObj.time = moment().unix() + moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('milliseconds')
 	console.log('classId, quizObj, quizTime ------> ' + classId, quizObj, quizTime + ' <------ ')
 
 	return fb.ref('classes/' + classId + '/quizzes').child(quizObj.id).set(quizObj)
