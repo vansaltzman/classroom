@@ -6,11 +6,27 @@ import setAuthorizationToken from '../utils/setAuthorizationToken';
 import jwt from 'jsonwebtoken';
 import { fb, updateActiveView, stopFetchingClassData  } from '../../db/liveClassroom.js';
 import studentQuizObjConverter from '../utils/studentQuizObjConverter.js';
-//import fb from '../../db/liveClassroom.js'
 import dummyStudentsData from '../../db/dummyStudentsData';
 
 
 const serverURL = 'http://localhost:3000';
+
+
+export function loginUser({ email, password }) {  
+    return function(dispatch) {
+      axios.post(`${serverURL}/auth/login`, { email, password })
+      .then((res) => {
+		const token = res.data.token
+		localStorage.setItem('jwtToken', token);
+		setAuthorizationToken(token);
+		const decoded = jwt.decode(token)
+        dispatch(setCurrentUser(jwt.decode(token)))
+      })
+      .catch((error) => {
+          console.log('error in loggin in ', error)
+      });
+      }
+	}
 
 export function setCurrentUser (user) {
     return {
@@ -18,23 +34,6 @@ export function setCurrentUser (user) {
 		user: user
     }
 }
-
-export function loginUser({ email, password }) {  
-    return function(dispatch) {
-      axios.post(`${serverURL}/auth/login`, { email, password })
-      .then((res) => {
-		const token = res.data.token
-		localStorage.setItem('jwtToken ', token);
-		setAuthorizationToken(token);
-		const decoded = jwt.decode(token)
-        dispatch(setCurrentUser(jwt.decode(token)))
-      })
-      .catch((error) => {
-          console.log('error in loggin in ', error)
-        //errorHandler(dispatch, error.res, actionTypes.AUTH_ERROR)
-      });
-      }
-	}
 
 export function logoutUser () {
 	console.log('are we running log out')
@@ -59,7 +58,6 @@ export function getClasses(emailObj) {
 	return (dispatch) => {
 		axios.post('/allClasses', emailObj)
 		.then((res) => {
-			//console.log('got here');
 			dispatch(getClassesAction(res.data))
 			//console.log('Data received by client', res.data);
 		})
@@ -191,11 +189,13 @@ function getStudentsBelongToAClassAction(students) {
 
 export function classGoLive(classId, classObj) {
 	return (dispatch) => {
+		classObj.isLive = true;
 		const classes = fb.ref('/classes');
 		classes.child(classId).set(classObj)
 		.then(() => {
 			dispatch(changeClassLabelColorWhenLive());
 			dispatch(fetchClassData(classId, 'teacher'))
+			dispatch(fetchClassData(classId, 'student'))
 		})
 		.then(() => {
 			dispatch(classGoLiveAction(classId));

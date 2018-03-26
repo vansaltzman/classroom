@@ -16,20 +16,6 @@ import { browserHistory } from 'react-router';
 import {syncHistoryWithStore } from 'react-router-redux';
 import { createBrowserHistory } from 'history';
 import NavigationBar from './components/NavigationBar.jsx';
-//import ClassView from './components/classView.jsx';
-// import { Router, Route, browserHistory } from 'react-router'
-// import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
-// import SignUp from './SignUp.jsx'
-
-//const logger = createLogger();
-
-
-//const logger = createLogger();
-
-
-
-
-//const logger = createLogger();
 
 
 const store = createStore(rootReducer, composeWithDevTools(
@@ -37,7 +23,6 @@ const store = createStore(rootReducer, composeWithDevTools(
 ))
 
 const history = syncHistoryWithStore(createBrowserHistory(), store);
-
 if (localStorage.jwtToken) {
 	setAuthorizationToken(localStorage.jwtToken);
 	store.dispatch(setCurrentUser( jwt.decode(localStorage.jwtToken)));
@@ -46,11 +31,6 @@ if (localStorage.jwtToken) {
 ReactDOM.render(
 	<Provider store={store}>
 		<NavigationBar history={history} />
-
-		{/* <AppContainer /> */}
-        
-		{/* <App /> */}
-      
 	</Provider>,
 	document.getElementById('app')
 )
