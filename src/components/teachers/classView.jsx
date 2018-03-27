@@ -51,7 +51,7 @@ class ClassView extends React.Component {
 	}
 
 	launchNewQuiz(){
-		fb.launchQuiz(this.props.classId, this.state.selectedQuiz, this.props.quizTime)
+		fb.launchQuiz(this.props.classId, this.state.selectedQuiz, this.props.quizTime, this.props.quizWeight)
 			.then(()=> {
 				if (this.props.showQuizLauncherModal) {
 					this.props.toggleQuizLauncherModalAction()
@@ -253,7 +253,7 @@ class ClassView extends React.Component {
 						onChange={(weight)=> this.props.updateQuizWeight(weight)} 
 						min={1}
 						max={100}
-						step={10}
+						step={1}
 					/>
 					</FormFields>
 					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
