@@ -39,6 +39,10 @@ class ClassView extends React.Component {
   componentWillMount() {
     this.props.getAllStudents();
     this.props.getStudentsBelongToAClass({ id: this.props.classId });
+    this.props.fetchQuizzes({
+      teacherId: this.props.teachersClassView.targetClass.teacher_id,
+      subjectId: this.props.teachersClassView.targetClass.subject_id
+    })
   }
 
   componentWillUpdate() {

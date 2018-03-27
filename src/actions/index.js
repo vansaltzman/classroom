@@ -566,3 +566,18 @@ function addNewQuizzesAction() {
 		type: actionTypes.ADD_NEW_QUIZZES,
 	}
 }
+
+export function fetchQuizzes(reqObj) {
+	return (dispatch) => {
+		axios.post('/getQuizzes', reqObj)
+		.then((res) => {
+			dispatch(fetchQuizzes(res.data))
+		})
+	}
+}
+function fetchQuizzesAction(quizzes) {
+	return {
+		type: actionTypes.FETCH_QUIZZES,
+		quizzes
+	}
+}

@@ -204,6 +204,10 @@ export function teacherClassViewReducer(
 						questions: questionsCheckCorrect
 					}
 				}
+		case actionTypes.FETCH_QUIZZES:
+			return {
+				...state
+			}
     default:
       return state;
   }
