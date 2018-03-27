@@ -64,7 +64,7 @@ render() {
     <Section pad='large'>    
       <Header>
         <Heading>
-           Quiz
+           Quiz {this.props.class.quizzes[this.props.quizId].name}
         </Heading>
       </Header>
     
