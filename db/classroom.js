@@ -119,6 +119,7 @@ CREATE TABLE IF NOT EXISTS  "submitted_quizzes" (
 	"subject_id" integer NOT NULL,
 	"class_id" integer NOT NULL,
 	"previous_id" integer NOT NULL,
+	"weight" integer NOT NULL,
 	CONSTRAINT submitted_quizzes_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
