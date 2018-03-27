@@ -8,6 +8,7 @@ import DeployIcon from 'grommet/components/icons/base/Deploy';
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
 import TableHeader from 'grommet/components/TableHeader';
+import Value from 'grommet/components/Value';
 import Sort from 'grommet-addons/components/Sort'
 import Animate from './animate.jsx';
 import fb from '../../../db/liveClassroom.js';
@@ -252,13 +253,21 @@ const QuizView = (props) => {
 					</td>
 					<td className='secondary' width="200px">
 						<Animate text=
-						{
-							quiz.questions[quizIds[studentQuiz.currentQuestion]].position + ': ' +
-							quiz.questions[quizIds[studentQuiz.currentQuestion]].text
-						}/>
+						{quiz.questions[quizIds[studentQuiz.currentQuestion]].text}
+					/>
 					</td>
 					<td className='secondary' width="100px">
-						{moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).humanize()}
+					<Value 
+						value={moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).minutes()}
+						responsive={false} />
+					<Value 
+						value={':'}
+						responsive={false} />
+					<Value 
+						value={moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds().toString().length < 2 ?
+									'0' + moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds() : 
+									moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds()}
+						responsive={false} />
 					</td>
 					<td className='secondary'>
 						<ScoreDistribution

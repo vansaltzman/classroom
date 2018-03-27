@@ -249,9 +249,10 @@ function watchClassGoLiveAction(classId) {
 }
 
 export function getClassStatus(classId) {
-	return (dispacth) => {
+	return (dispatch) => {
 		return fb.ref('/classes/' + classId + '/isLive').once('value')
 			.then(snap => {
+				console.log('Is class live?', snap.val())
 				if (snap.val()) {
 					dispatch(fetchClassData(classId, 'teacher'))
 					return
