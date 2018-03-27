@@ -268,6 +268,13 @@ function getClassStatusAction(classStatus) {
 	classStatus
 }
 
+
+export function updateQuizWeight(weight) {
+	return {
+		type: actionTypes.SET_QUIZ_WEIGHT,
+		newWeight
+	}
+}
 /******************************* GET ALL CLASSES THAT BELONGS TO A STUDENT **********************************/
 
 export function getClassesBelongToAStudent(studentIdObj) {

@@ -29,6 +29,7 @@ import Notification from 'grommet/components/Notification';
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
 import Label from 'grommet/components/Label';
+import NumberInput from 'grommet/components/NumberInput';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -247,6 +248,13 @@ class ClassView extends React.Component {
 							onChange={(time)=> this.props.setQuizTime(time)}
 							value={this.props.quizTime} 
 						/>
+					<NumberInput 
+						value={this.props.quizWeight}
+						onChange={(weight)=> this.props.updateQuizWeight(weight)} 
+						min={1}
+						max={100}
+						step={10}
+					/>
 					</FormFields>
 					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
 						<Button 
@@ -293,6 +301,7 @@ function mapStateToProps(state) {
 	return {
 		quizTemplates: state.teachersClassView.quizTemplates,
 		quizTime: state.teachersClassView.quizTime,
+		quizWeight: state.teachersClassView.quizWeight,
 		userId: state.auth.user.id,
 		targetClass: state.teachersClassView.targetClass,
 		studentsInClass: state.teachersClassView.targetClass.students,
