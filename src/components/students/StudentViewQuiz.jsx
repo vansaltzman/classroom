@@ -145,7 +145,7 @@ render() {
                         />
                         </span>  : <span></span>}
                         
-                        {currentQuestion < this.props.keys.length - 1 ? <span>
+                        {currentQuestion < this.props.keys.length -1 ? <span>
                         <Button 
                         label='Next Question'
                         href='#'
@@ -158,9 +158,18 @@ render() {
                         />
                         </span> : <span></span>}
                         
-                        {this.state.count.length === this.props.keys.length - 2 ? 
+                        {this.state.count.length === this.props.keys.length ? 
                         <div>
-                          <button>Submit Quiz</button>
+                            <Button 
+                              label='Submit Quiz'
+                              href='#'
+                              primary={true}
+                              secondary={false}
+                              accent={false}
+                              critical={false}
+                              plain={false}
+                              onClick={(e)=> this.forwardClick(e)}
+                          />
                         </div>
                         : <span></span>}
 
