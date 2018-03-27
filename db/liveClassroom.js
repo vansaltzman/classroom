@@ -3,6 +3,8 @@ const config = require('../server/config.js');
 const dummyStudentData=require('../db/dummyStudentsData');
 const studentQuizObjConverter = require('../src/utils/studentQuizObjConverter.js');
 const moment = require('moment')
+// const migrate = require('../server/migrationWorker.js')
+
 
 firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
@@ -74,6 +76,17 @@ const stopFetchingClassData = function (classId) {
 		return currentClass.off('value')
 }
 
+// const endClass = function(classId) {
+// 	// create variable of snapshot of the ending class object
+// 	return fb.ref('/classes/' + classId).once('value')
+// 		.then(snap => {
+// 			// migrate class to postgress
+// 			return migrate.classToPg(snap.val())
+// 		})	
+// 		// when migrated, set isLive to false
+// 			// then remove class from firebase
+// 	// if error, exit function
+// }
 
 module.exports = {  
   fb,

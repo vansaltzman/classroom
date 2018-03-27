@@ -106,7 +106,17 @@ class ClassView extends React.Component {
 						}
 					}, 
 					2: {
-						id: 1, //question id
+						id: 2, //question id
+						text: 'This is another question',
+						time: 90000,
+						answers: {
+						1: {text: 'this is an answer', isCorrect: false},
+						2: {text: 'this is an answer', isCorrect: false},
+						3: {text: 'this is an answer', isCorrect: true}
+						}
+					},
+					3: {
+						id: 3, //question id
 						text: 'This is another question',
 						time: 90000,
 						answers: {

@@ -18,6 +18,19 @@ const psqlClassToFbObj = function(sqlClass) {
     }
   }
 
+const fbClassToPgObj = function(classObj) {
+  const classId = classObj.id
+  const { name, quizzes, students, teacher_id, subject_id } = classObj
+
+  // save quizzes into submitted quizzes
+  
+    // for each quiz, associate student responses with questions and answers
+        // save questions into submitted questions
+            // save answers into submitted answers
+               // save responses into students_responses
+
+}
+
   // FIX: Consider doing this outise of this function
 
   // Gets student information for this class from db

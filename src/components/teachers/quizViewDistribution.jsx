@@ -1,19 +1,6 @@
 import React from 'react';
 import "grommet/scss/hpinc/index.scss";
-import Columns from 'grommet/components/Columns';
-import Box from 'grommet/components/Box';
-import Button from 'grommet/components/Button';
-import Section from 'grommet/components/Section';
-import DeployIcon from 'grommet/components/icons/base/Deploy';
-import Table from 'grommet/components/Table';
-import TableRow from 'grommet/components/TableRow';
-import TableHeader from 'grommet/components/TableHeader';
-import Sort from 'grommet-addons/components/Sort'
-import Animate from './animate.jsx';
-import fb from '../../../db/liveClassroom.js';
-import ScoreDistribution from './quizViewDistribution.jsx';
-
-import moment from 'moment'
+import Distribution from 'grommet/components/Distribution';
 
 
 // Current question initial state: 
@@ -195,83 +182,40 @@ const students = {
 		}
 	}
 
-const QuizView = (props) => {
-	const targetClass = props.props.currentClass;
-	const students = targetClass.students;
-	const quiz = targetClass.quizzes[targetClass.activeView];
-	const quizIds = Object.keys(quiz.questions);
+const QuizView = ({studentQuiz, quiz}) => {
 
-	const endQuiz = function() {
-		fb.updateActiveView(false, targetClass.id)
-	}
+		let correct = 0
+		let wrong = 0
+		let total = Object.keys(quiz.questions).length
+
+		Object.keys(studentQuiz.responses).forEach(questionKey=> {
+
+			let isCorrect = 
+			Object.keys(studentQuiz.responses[questionKey].answers).reduce((acc, answerKey)=> {
+				if (quiz.questions[questionKey].answers[answerKey].isCorrect !== studentQuiz.responses[questionKey].answers[answerKey]) {
+					return false
+				} else {
+					return acc
+				}
+			}, true)
+
+			if (isCorrect) {
+				++correct
+			} else if (studentQuiz.responses[questionKey].answers.includes(true)) {
+				++wrong
+			}	
+		})
+
+
+		console.log('c,w,t', correct, wrong, total)
+
 	return (
-		<div>
-			{/* <Sort 
-				options={['Name', 'Current Question', 'Time', 'Score']}
-				value='Name'
-				direction='asc'
-				// onChange={...}
-			/> */}
-
-			{/* <Button
-				label='End Quiz'
-				onClick={()=> updateActiveView(false, currentClass.id)} 
-			/> */}
-			
-
-			<Button icon={<DeployIcon />}
-							label='End Quiz'
-							primary={false}
-							secondary={false}
-							accent={true}
-							critical={false}
-							plain={false} 
-							path="/liveclass"
-							onClick={endQuiz.bind(this)}/>
-
-			<Table>
-			<TableHeader labels={['Name', 'Current Question', 'Time on Question', 'Score']}
-				sortIndex={false}
-				sortAscending={true}
-			/>
-			<tbody>
-			{Object.keys(students).map(studentId => {
-
-					// !-- Need to add more human readable variables for long object paths
-
-					let studentQuiz = students[studentId].quizzes[quiz.id]
-
-				return <TableRow
-					key={studentId}
-					style={{
-						background: studentQuiz.isFinished ? 'lightgreen' : students[studentId].isHere ? 'white' : 'lightgrey',
-						height: '100px'
-					}}>
-					<td width="50px">
-						{students[studentId].name}
-					</td>
-					<td className='secondary' width="200px">
-						<Animate text=
-						{
-							quiz.questions[quizIds[studentQuiz.currentQuestion]].position + ': ' +
-							quiz.questions[quizIds[studentQuiz.currentQuestion]].text
-						}/>
-					</td>
-					<td className='secondary' width="100px">
-						{moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).humanize()}
-					</td>
-					<td className='secondary'>
-						<ScoreDistribution
-							studentQuiz={studentQuiz}
-							quiz={quiz}
-						/>
-					</td>
-				</TableRow>
-			})
-			}
-			</tbody>
-			</Table>
-		</div>
+	<Distribution 
+		style={{height: '100px'}}
+		series={[{"label": "Correct", "value": correct, "colorIndex": "ok"}, {"label": "Wrong", "value": wrong, "colorIndex": "critical"}, {"label": "Remaining", "value": (total - (correct + wrong)), "colorIndex": "unknown"}]}
+		size='small'
+		full={false} 
+	/>
 	)
 }
 

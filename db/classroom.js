@@ -82,16 +82,6 @@ CREATE TABLE IF NOT EXISTS  "draft_answers" (
   OIDS=FALSE
 );
 
-CREATE TABLE IF NOT EXISTS  "submitted_answers" (
-  "id" serial NOT NULL,
-  "answer" varchar(2000),
-  "question_id" integer,
-  "correct" boolean NOT NULL DEFAULT FALSE,
-  CONSTRAINT submitted_answers_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
 CREATE TABLE IF NOT EXISTS  "draft_quizzes" (
   "id" serial NOT NULL,
   "name" varchar(200) NOT NULL,
@@ -145,6 +135,16 @@ CREATE TABLE IF NOT EXISTS  "submitted_questions" (
   OIDS=FALSE
 );
 
+
+CREATE TABLE IF NOT EXISTS  "submitted_answers" (
+  "id" serial NOT NULL,
+  "answer" varchar(2000),
+  "question_id" integer,
+  "correct" boolean NOT NULL DEFAULT FALSE,
+  CONSTRAINT submitted_answers_pk PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
 
 
 CREATE TABLE IF NOT EXISTS  "submitted_quizzes_submitted_questions" (
