@@ -3,6 +3,8 @@ const config = require('../server/config.js');
 const dummyStudentData=require('../db/dummyStudentsData');
 const studentQuizObjConverter = require('../src/utils/studentQuizObjConverter.js');
 const moment = require('moment')
+// const migrate = require('../server/migrationWorker.js')
+
 
 firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
@@ -36,16 +38,15 @@ const studentJoins = function(studentId, classId) { // Conncect this to actions.
 const launchQuiz = function (classId, quizObj, quizTime) {
 	const timeValues = quizTime.split(':')
 	quizObj.time = moment().unix() + moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('milliseconds')
-	console.log('classId, quizObj, quizTime ------> ' + classId, quizObj, quizTime + ' <------ ')
 
 	return fb.ref('classes/' + classId + '/quizzes').child(quizObj.id).set(quizObj)
 	.then(() => {
 		const studentQuizObj = studentQuizObjConverter(quizObj);
 		return fb.ref('/classes/' + classId + '/students').once('value', (snap)=> {
 			var students = snap.val()
-			console.log(students)
+			console.log('students ------> ' + students + ' <------ ')
 			Object.values(students).forEach( student => {
-				let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id);
+				let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id + '/quizzes');
 				studentRef.child(quizObj.id).set(studentQuizObj)
 			})
 		})
@@ -74,6 +75,17 @@ const stopFetchingClassData = function (classId) {
 		return currentClass.off('value')
 }
 
+// const endClass = function(classId) {
+// 	// create variable of snapshot of the ending class object
+// 	return fb.ref('/classes/' + classId).once('value')
+// 		.then(snap => {
+// 			// migrate class to postgress
+// 			return migrate.classToPg(snap.val())
+// 		})	
+// 		// when migrated, set isLive to false
+// 			// then remove class from firebase
+// 	// if error, exit function
+// }
 
 module.exports = {  
   fb,
