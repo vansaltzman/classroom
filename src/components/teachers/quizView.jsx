@@ -252,28 +252,33 @@ const QuizView = (props) => {
 						{students[studentId].name}
 					</td>
 					<td className='secondary' width="200px">
-						<Animate text=
-						{quiz.questions[quizIds[studentQuiz.currentQuestion]].text}
+						<Animate text={studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : null}
 					/>
 					</td>
 					<td className='secondary' width="100px">
-					<Value 
-						value={moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).minutes()}
-						responsive={false} />
-					<Value 
-						value={':'}
-						responsive={false} />
-					<Value 
-						value={moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds().toString().length < 2 ?
+					{studentQuiz.currentQuestion >= 0 &&
+					<div>
+						<Value 
+							value={studentQuiz.currentQuestion >= 0 ? moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).minutes() : null}
+							responsive={false} />
+						<Value 
+							value={':'}
+							responsive={false} />
+						<Value 
+							value={
+									moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds().toString().length < 2 ?
 									'0' + moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds() : 
 									moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds()}
-						responsive={false} />
+							responsive={false} />
+						</div>
+						}
 					</td>
 					<td className='secondary'>
+						{studentQuiz.currentQuestion >= 0 && 
 						<ScoreDistribution
 							studentQuiz={studentQuiz}
 							quiz={quiz}
-						/>
+						/>}
 					</td>
 				</TableRow>
 			})
