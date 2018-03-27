@@ -186,7 +186,6 @@ const students = {
 	}
 
 const QuizView = (props) => {
-	console.log('props in quizView ', props.props)
 	const targetClass = props.props.currentClass;
 	const students = targetClass.students;
 	const quiz = targetClass.quizzes[targetClass.activeView];

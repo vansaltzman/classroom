@@ -22,13 +22,17 @@ class QuizContainer extends React.Component {
 
     //The question NUMBER this student is on //from student portion
     let currentQuestion = this.props.class.students[studentId].quizzes[quizId].currentQuestion
+    console.log('current question ', currentQuestion); 
     //Student's responseObj at current question
     let quizResponseObj = this.props.class.students[studentId].quizzes[quizId]
     //The ACTUAL QUESTION this student is on // from the teachers quiz at key of students current question// to display question text
     let question = this.props.class.quizzes[quizId].questions[keys[currentQuestion]]    
     //The students ANSWERS Obj of Booleans //from student portion
-    let currentQuestionsAnswers = this.props.class.students[studentId].quizzes[quizId].responses[keys[currentQuestion]].answers
-    
+    if (currentQuestion >= 0 && currentQuestion < keys.length) {
+      var currentQuestionsAnswers = this.props.class.students[studentId].quizzes[quizId].responses[keys[currentQuestion]].answers
+    } else {
+      var currentQuestionsAnswers = {};
+    }
     let questionId = keys[currentQuestion]
   
     return (
