@@ -39,18 +39,21 @@ class StudentMainView extends React.Component {
     super();
   }
   componentWillMount() {
-    //consol
     this.props.getClassesBelongToAStudent({
       email: this.props.auth.user.email
     });
-    
-    //this.props.watchClassGoLive()
+    this.props.watchClassGoLive()
+  }
+
+  componentWillUnmount () {
+    // will need to create a function that is called here to stop the listener from update values based on 
+    // changes to the live status of their class
   }
 
   // updateTargetClassAndStudentStatus() {
   //   this.props.updateStudentTargetClass(this.props.targetClassId, this.props.studentId)
-
   // }
+  
   render() {
     return (
       <div>

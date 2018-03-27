@@ -17,21 +17,25 @@ export function studentClassViewReducer(
 			}
       return { ...state, classes: classes };
     case actionTypes.UPDATE_STUDENT_TARGET_CLASS_ACTION:
-      const targetClass = action.targetClass;
-			// targetClass.quizzes = {}; 
+			const targetClass = action.targetClass;
 			return { ...state, targetClass: action.targetClass };
 		case actionTypes.WATCH_CLASS_GO_LIVE_ACTION:
-			const liveClassId = action.classId.id;
+
+			const classesFromAction = action.classes;
 			const updatedClasses = state.classes.slice();
-			for (var i = 0; i < updatedClasses.length; i++) {
-				if (updatedClasses[i].class_id === liveClassId) {
-					updatedClasses[i].isLive = !updatedClasses[i].isLive
-					updatedClasses[i].color = "lightGreen"
+			if (Array.isArray(classesFromAction)) {
+				for (var i = 0; i < classesFromAction.length; i++) {
+					if ( classesFromAction[i] ) {
+						for (var j = 0; j < updatedClasses.length; j ++) {
+							if (updatedClasses[j].class_id === classesFromAction[i].id) {
+								updatedClasses[j].isLive = classesFromAction[i].isLive;
+							}
+						}
+					}
 				}
-			}
-			console.log('watch class go live', action.classId.id);
-			console.log('updatedClasses', updatedClasses)
-			return {...state, classes: updatedClasses}
+				return {...state, classes: updatedClasses}
+			} 
+
 		case actionTypes.TOGGLE_STUDENT_LIVE_STATUS:
 			return {...state}
 		case actionTypes.UPDATE_CLASS_DATA_STUDENT:
