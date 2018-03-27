@@ -211,7 +211,7 @@ const QuizView = ({studentQuiz, quiz}) => {
 
 	return (
 	<Distribution 
-		style={{height: '100px'}}
+		style={{height: '38px'}}
 		series={[{"label": "Correct", "value": correct, "colorIndex": "ok"}, {"label": "Wrong", "value": wrong, "colorIndex": "critical"}, {"label": "Remaining", "value": (total - (correct + wrong)), "colorIndex": "unknown"}]}
 		size='small'
 		full={false} 

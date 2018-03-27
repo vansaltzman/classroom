@@ -63,7 +63,7 @@ class ClassView extends React.Component {
 		this.props.getStudentsBelongToAClass({id: this.props.classId});
 		this.props.getQuizzes(this.props.userId)
 	}
-
+	
 	componentDidMount() {
 		this.props.getClassStatus(this.props.classId)
 	}
