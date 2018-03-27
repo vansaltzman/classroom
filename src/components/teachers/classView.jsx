@@ -170,7 +170,8 @@ class ClassView extends React.Component {
                   </FormFields>
                 </Section>
               <Footer pad={{"vertical": "medium", horizontal: "medium"}}>
-                <Button label='Submit'/>
+                <Button label='Add Quiz'
+                        onClick={() => this.props.addNewQuiz({authorId: this.props.auth.user.id, quiz: this.props.teachersClassView.newQuiz})}/>
               </Footer>
 						</Form>
 					</Layer>
@@ -189,7 +190,8 @@ function mapStateToProps(state) {
     classId: state.teachersClassView.targetClass.id,
     selectedStudent: state.teachersClassView.selectStudent,
     subjects: state.teachersClassView.subjects,
-    teachersClassView: state.teachersClassView
+    teachersClassView: state.teachersClassView,
+    auth: state.auth
   };
 }
 

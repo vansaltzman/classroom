@@ -550,3 +550,19 @@ function chooseCorrectAnswerAction(questionIndex, answerIndex) {
 		answerIndex
 	}
 }
+
+// ADD_NEW_QUIZZES: 'add_new_quizzes',
+// 	FETCH_QUIZZES: 'fetch_quizzes'
+export function addNewQuiz(teacherId, quizObj) {
+	return (dispatch) => {
+		axios.post('/addQuiz', teacherId, quizObj)
+		.then(() => {
+			dispatch(addNewQuizzesAction())
+		})
+	}
+}
+function addNewQuizzesAction() {
+	return {
+		type: actionTypes.ADD_NEW_QUIZZES,
+	}
+}
