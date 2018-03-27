@@ -35,10 +35,11 @@ const studentJoins = function(studentId, classId) { // Conncect this to actions.
   })
 }
 
-const launchQuiz = function (classId, quizObj, quizTime) {
+const launchQuiz = function (classId, quizObj, quizTime, quizWeight) {
 	const timeValues = quizTime.split(':')
 	quizObj.time = moment().unix() + moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('milliseconds')
-
+	quizObj.weight = quizWeight
+	
 	return fb.ref('classes/' + classId + '/quizzes').child(quizObj.id).set(quizObj)
 	.then(() => {
 		const studentQuizObj = studentQuizObjConverter(quizObj);
