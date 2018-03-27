@@ -205,6 +205,7 @@ export function teacherClassViewReducer(
 					}
 				}
 		case actionTypes.FETCH_QUIZZES:
+			console.log('reducer action.quizzes', action.quizzes)
 			return {
 				...state
 			}

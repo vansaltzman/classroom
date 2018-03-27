@@ -223,13 +223,27 @@ const addQuiz = function(quizObj) {
   })
 }
 
-
 const getQuizzes = function(teacherId, subjectId) {
-  //get all quizzes belongs to a teachers in a class with designated subject 
   return db.query(`SELECT * FROM draft_quizzes WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
   .then((data) => {
-    console.log('db data.rows', data.rows)
-    //probably needs to use data.rows here
+    return Promise.all(data.rows.map((eachQuiz, index) => {
+      return db.query(`SELECT * FROM draft_questions INNER JOIN draft_quizzes_draft_questions 
+                       ON draft_questions.id = draft_quizzes_draft_questions.draft_question_id 
+                       AND draft_quizzes_draft_questions.draft_quiz_id = '${eachQuiz.id}'`);
+      `SELECT (draft_quizzes.name, draft_)`
+    }))
+  })
+  .then((data) => {
+    console.log('DATAAAA', data);
+    const quizQuestions = data.map((each) => {
+     return each.rows
+    })
+    return Promise.all(quizQuestions.map((eachQuiz) => {
+      return Promise.all(eachQuiz.map((eachQuestion) => {
+        return db.query(`SELECT * FROM draft_answers WHERE question_id = '${eachQuestion.draft_question_id}'`)
+        //return example
+      }))
+    }))
   })
 }
 

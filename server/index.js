@@ -194,6 +194,9 @@ app.post('/addQuiz', (req, res) => {
 app.post('/getQuizzes', (req, res) => {
   console.log('serverside quizzes req obj', req.body)
   main.getQuizzes(req.body.teacherId, req.body.subjectId)
+  .then((data) => {
+    res.send(data)
+  })
 })
 
 const port = 3000
