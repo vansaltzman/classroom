@@ -226,11 +226,7 @@ export function classGoLive(classId, classObj) {
 		})
 	}
 }
-<<<<<<< HEAD
-function classGoLiveAction(classId) { // Not used
-=======
 function classGoLiveAction(classes) {
->>>>>>> end-quiz
 	return {
 		type: actionTypes.CLASS_GO_LIVE_ACTION,
 		classes
@@ -359,7 +355,6 @@ export function fetchClassData (classId, type) {
 	const currentClass = fb.ref('/classes/' + classId )
 	return (dispatch) => {
 		currentClass.on('value', function(snap) {
-			console.log('snap val on fetch class data', snap.val())
 			if(type === 'teacher') {
 				dispatch(updateClassDataTeacher(snap.val()))
 			} 
