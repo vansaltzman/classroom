@@ -183,7 +183,27 @@ export function teacherClassViewReducer(
 						questions: questionsAddAnswerText
 					}
 				}
-			
+			case actionTypes.CHOOSE_CORRECT_ANSWER_ACTION:
+				console.log(action.questionIndex, action.answerIndex)
+				const questionsCheckCorrect = state.newQuiz.questions.slice();
+				for (var n = 0; n < questionsCheckCorrect.length; n++) {
+					if (n === action.questionIndex) {
+						const question_answers = questionsCheckCorrect[action.questionIndex].answers;
+						for (var p = 0; p < question_answers.length; p++) {
+							if (p === action.answerIndex) {
+								console.log('isCorrect', state.newQuiz.questions[action.questionIndex].answers[action.answerIndex].isCorrect)
+								question_answers[action.answerIndex].isCorrect = !state.newQuiz.questions[action.questionIndex].answers[action.answerIndex].isCorrect
+							}
+						}
+					}
+				}
+				return {
+					...state,
+					newQuiz: {
+						...state.newQuiz,
+						questions: questionsCheckCorrect
+					}
+				}
     default:
       return state;
   }

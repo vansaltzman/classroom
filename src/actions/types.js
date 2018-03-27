@@ -44,7 +44,8 @@ const actionTypes = {
 	SET_QUESTION_NUMBER_ACTION: 'set_question_number_action',
 	ADD_ANSWER_ACTION: 'add_answer_action',
 	ADD_QUESTION_TEXT_ACTION: 'add_question_text_action',
-	ADD_ANSWER_TEXT_ACTION: 'add_answer_text_action'
+	ADD_ANSWER_TEXT_ACTION: 'add_answer_text_action',
+	CHOOSE_CORRECT_ANSWER_ACTION: 'choose_correct_answer_action'
 }
 
 export default actionTypes

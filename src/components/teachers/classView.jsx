@@ -153,7 +153,8 @@ class ClassView extends React.Component {
                                                onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
                                     <CheckBox label='Correct'
                                               toggle={false}
-                                              reverse={true} />
+                                              reverse={true} 
+                                              onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
                                   </Section>
                                 )
                               })}

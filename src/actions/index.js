@@ -537,3 +537,16 @@ function addAnswerTextAction(event, questionIndex, answerIndex) {
 		answerIndex
 	}
 }
+
+export function chooseCorrectAnswer(questionIndex, answerIndex) {
+	return (dispatch) => {
+		dispatch(chooseCorrectAnswerAction(questionIndex, answerIndex));
+	}
+}
+function chooseCorrectAnswerAction(questionIndex, answerIndex) {
+	return {
+		type: actionTypes.CHOOSE_CORRECT_ANSWER_ACTION,
+		questionIndex,
+		answerIndex
+	}
+}
