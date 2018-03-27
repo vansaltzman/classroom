@@ -30,6 +30,7 @@ import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
 import Label from 'grommet/components/Label';
 import NumberInput from 'grommet/components/NumberInput';
+import Animate from 'grommet/components/Animate';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -136,8 +137,30 @@ class ClassView extends React.Component {
 			studentsArray.push(studentsInClass[key]);
 		}
 		return(
-			<Section>
-				
+			<div>
+				{this.props.targetClass.isLive ?
+				<Animate 
+					enter={{"animation": "fade", "duration": 1000, "delay": 0}}
+					leave={{"animation": "fade", "duration": 1000, "delay": 0}}
+					keep={true}
+				>
+					<Notification
+						message={this.props.targetClass.name + ' is currently live'}
+						status={'ok'}
+					/>
+				</Animate> :
+				<Animate 
+				enter={{"animation": "fade", "duration": 1000, "delay": 0}}
+				leave={{"animation": "fade", "duration": 1000, "delay": 0}}
+				keep={true}
+			>
+				<Notification
+						message={this.props.targetClass.name + ' is currently offline'}
+						status={'warning'}
+				/> 
+			</Animate> 
+				}
+			<Section>				
 				{this.props.targetClass.isLive ?
 				<Button icon={<CloudUploadIcon />}
 					label= {'End Class'}
@@ -254,7 +277,7 @@ class ClassView extends React.Component {
 						min={1}
 						max={100}
 						step={1}
-					/>
+					/> 
 					</FormFields>
 					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
 						<Button 
@@ -292,6 +315,7 @@ class ClassView extends React.Component {
 			</Layer>
 			}
 			</Section>
+			</div>
 		)
 	}
 }
