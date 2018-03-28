@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS  "classes_students" (
 );
 
 CREATE TABLE IF NOT EXISTS  "draft_questions" (
-  "id" serial NOT NULL,
-  "question" varchar(2000),
+  "id" serial NOT NULL, 
+  "question" varchar(2000), 
   "teacher_id" integer,
   "subject_id" integer,
   CONSTRAINT draft_questions_pk PRIMARY KEY ("id")
@@ -61,29 +61,9 @@ CREATE TABLE IF NOT EXISTS  "draft_questions" (
   OIDS=FALSE
 );
 
-CREATE TABLE IF NOT EXISTS  "draft_answers" (
-  "id" serial NOT NULL,
-  "answer" varchar(2000),
-  "question_id" integer,
-  "correct" boolean NOT NULL DEFAULT FALSE,
-  CONSTRAINT draft_answers_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-CREATE TABLE IF NOT EXISTS  "submitted_answers" (
-  "id" serial NOT NULL,
-  "answer" varchar(2000),
-  "question_id" integer,
-  "correct" boolean NOT NULL DEFAULT FALSE,
-  CONSTRAINT submitted_answers_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
 CREATE TABLE IF NOT EXISTS  "draft_quizzes" (
-  "id" serial NOT NULL,
-  "name" varchar(200) NOT NULL,
+  "id" serial NOT NULL, 
+  "name" varchar(200) NOT NULL, 
   "subject_id" integer NOT NULL,
   "teacher_id" integer NOT NULL,
   CONSTRAINT draft_quizzes_pk PRIMARY KEY ("id")
@@ -100,6 +80,28 @@ CREATE TABLE IF NOT EXISTS  "draft_quizzes_draft_questions" (
 ) WITH (
   OIDS=FALSE
 );
+
+
+CREATE TABLE IF NOT EXISTS  "draft_answers" (
+  "id" serial NOT NULL,
+  "answer" varchar(2000), 
+  "question_id" integer,
+  "correct" boolean NOT NULL DEFAULT FALSE, 
+  CONSTRAINT draft_answers_pk PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE IF NOT EXISTS  "submitted_answers" (
+  "id" serial NOT NULL,
+  "answer" varchar(2000),
+  "question_id" integer,
+  "correct" boolean NOT NULL DEFAULT FALSE,
+  CONSTRAINT submitted_answers_pk PRIMARY KEY ("id")
+) WITH (
+  OIDS=FALSE
+);
+
 
 CREATE TABLE IF NOT EXISTS  "submitted_quizzes" (
 	"id" serial NOT NULL,
