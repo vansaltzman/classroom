@@ -371,6 +371,11 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
 //   }
 // }
 
+const addProfilePictureForStudent = function (studentId, url) {
+  const queryString = `UPDATE students SET thumbnail_url = '${url}' WHERE id=${studentId}`
+  return db.query(queryString)
+}
+
 module.exports = {
   addUser,
   verifyUser,
@@ -386,7 +391,9 @@ module.exports = {
   addQuiz,
   getQuizzes,
   getNewAddedClass,
-  GetAllQuestionsBelongToTeacher
+  GetAllQuestionsBelongToTeacher,
   // calculateAverageTimeForQuestions
+  addProfilePictureForStudent
+  
 }
 

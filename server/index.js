@@ -18,11 +18,64 @@ if (error) {
   console.log('error in dotenv ', error)
 }
 
+const multer = require('multer');
+const AWS = require('aws-sdk');
+var fs =  require('fs');
+const configAWS = require('./configAWS.js')
+
+  
 const app = express()
 
 app.use(express.static(__dirname + '/../dist'))
 app.use(bodyParser.json())
 
+
+// Amazon s3 config
+const s3 = new AWS.S3();
+AWS.config.update(  {
+  accessKeyId: configAWS.AWS_ACCESS_KEY_ID,
+  secretAccessKey: configAWS.AWS_SECRET_ACCESS_KEY,
+  subregion: configAWS.SUBREGION,
+});
+
+const upload = multer({dest: 'uploads/'});
+
+app.post('/imageUploader', upload.single('file'), (req, res) => {
+  var myBucket = 'jaqen-app';
+  var myKey = req.file.originalname;
+
+  fs.readFile(req.file.path, function (err, data) {
+    if (err) {
+      console.log(err)
+    } else {
+      s3.createBucket({ Bucket: myBucket}, function ()  {
+          const params = {
+            Bucket: myBucket,
+            Key: myKey,
+            Body: data,
+            ContentType: req.file.mimetype
+        };
+        s3.putObject(params, function (err, data) {
+          if (err) {
+            console.log(err)
+          } else {
+            const urlParams = {Bucket: myBucket, Key: myKey};
+            s3.getSignedUrl('getObject', urlParams, function(err, url){
+              const fileUrl = url.split('?')[0]
+              res.send(fileUrl)
+
+              fs.unlink(req.file.path, (err) => {
+                if (err) console.log(err);
+               
+              main.addProfilePictureForStudent(req.body.text, fileUrl) 
+              })
+            })
+          }
+        })
+      })
+    }
+  })
+})
 
 // Sign up
   app.post('/newAccount', (req, res)=> {
