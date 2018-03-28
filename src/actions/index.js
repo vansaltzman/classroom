@@ -251,6 +251,7 @@ export function classGoLive(classId, classObj) {
 			dispatch(fetchClassData(classId, 'teacher'))
 		})
 		.then(()=> {
+			console.log('It is here')
 			const liveClass = fb.ref('/classes/' + classId)
 			return liveClass.child('isLive').set(true)
 		})
@@ -320,17 +321,18 @@ function selectStudentToAddAction (student) {
 }
 
 export function addAStudentToClass(studentObj) {
+	console.log('selected student to be added')
 	return (dispatch) => {
 		axios.post('/addAStudentToClass', studentObj)
-		.then((dispatch) => {
+		.then(() => {
 			dispatch(addAStudentToClassAction())
 		})
 	}
 }
 
-function addAStudentToClassAction () {
+function addAStudentToClassAction (students) {
 	return {
-		type: ADD_A_STUDENT_TO_CLASS_ACTION,
+		type: ADD_A_STUDENT_TO_CLASS_ACTION
 	}
 }
 
@@ -364,25 +366,6 @@ function updateStudentTargetClassAction(targetClass) {
 	}
 }
 
-
-// join/exit live class from student pov
-// export function toggleStudentLiveClassStatus (classId, studentId) {
-// 	console.log('/' + classId + '/students/' + studentId);
-// 	return (dispatch) => {
-// 		const currentStudentStatus = fb.ref('/' + classId + '/students/' + studentId)
-// 		currentStudentStatus.set({isHere: true})
-// 		.then(() => {
-// 			dispatch(toggleStudentLiveClassStatusAction())
-// 		})
-// 	}
-// }
-// function toggleStudentLiveClassStatusAction () {
-// 	return {
-// 		type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
-// 	}
-// }
-
-
 // join/exit live class from student pov
 export function toggleStudentLiveClassStatus (classId, studentId) {
 	console.log('Toggle Student Class Status' , classId, studentId)
@@ -408,22 +391,7 @@ function toggleStudentLiveClassStatusAction () {
 			type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
 		}
 }
-//change newView to be quiz id or false
-// export function updateActiveView (newView, classId) {
-// 	const currentClassActiveView = fb.ref('/classes/' + classId + '/activeView')
-// 	return (dispatch )=> {
-// 		return currentClassActiveView.set(newView)
-// 	}
-// }
 
-// // submit a student's responses to a quiz every time they check an answer
-// export function insertStudentAnswers(quizObj, studentId, quizId, classId) {
-// 	const currentStudent = fb.ref('classes/' + classId + '/students/' + studentId + '/quizzes/' + quizId );
-// 	return (dispatch) => {
-// 		currentStudent.set(quizObj);
-// 	}
-// }
- 
 // get all class data for a live class
 export function fetchClassData (classId, type) {
 	const currentClass = fb.ref('/classes/' + classId )
@@ -438,11 +406,6 @@ export function fetchClassData (classId, type) {
 		})
 	}
 }
-// function fetchClassDataAction () {
-// 	return {
-// 		type: actionTypes.FETCH_CLASS_DATA,
-// 	}
-// }
 
 // update global state with updated live class data
 export function updateClassDataStudent(classData) {

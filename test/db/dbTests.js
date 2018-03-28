@@ -158,7 +158,7 @@ const addStudents = function(student) {
     }
   })
 }
-addStudents(Artem);
+addStudents(Jae);
 
 let JoeJoe = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
 // const addTeachers = function(teacher) {

@@ -69,6 +69,7 @@ class ClassView extends React.Component {
       teacherId: this.props.teachersClassView.targetClass.teacher_id,
       subjectId: this.props.teachersClassView.targetClass.subject_id
     })
+    // this.props.getStudentsBelongToAClass({ id: this.props.classId });
   }
   
   componentWillUpdate() {
@@ -76,7 +77,8 @@ class ClassView extends React.Component {
   }
 	
 	componentDidMount() {
-		this.props.getClassStatus(this.props.classId)
+    this.props.getClassStatus(this.props.classId)
+    this.props.getStudentsBelongToAClass({ id: this.props.classId });
 	}
 
 	componentWillUnmount() {
@@ -177,16 +179,19 @@ class ClassView extends React.Component {
 							)
 						})}
 					</Box>
-					<SearchInput placeHolder='Search'
-  					suggestions={this.props.studentNames} 
-					/>
-          <Button
+					<SearchInput
+              placeHolder="Search For A Student"
+              suggestions={this.props.studentNames}
+              //  onDOMChange={(target) => this.props.selectStudentToAdd(target)} />
+              onSelect={target => this.props.selectStudentToAdd(target)}
+            />
+            <Button
               label="Add Student"
               onClick={() => {
                 this.props.addAStudentToClass({
                   classId: this.props.classId,
                   studentId: this.props.teachersClassView.selectedStudent.sub.id
-                });
+                }, { id: this.props.classId });
               }}
             />
           <Box align="center" pad="medium" margin="small" colorIndex="light-2">
@@ -222,7 +227,7 @@ class ClassView extends React.Component {
 											return <Notification
 												message={answer.answer}
 												size='small'
-												status={answer.isCorrect ? 'ok' : 'critical'}
+												status={answer.correct ? 'ok' : 'critical'}
 											/>
 										})}
 									</Box>

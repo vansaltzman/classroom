@@ -15,7 +15,8 @@ export function teacherClassViewReducer(
     targetClass: {},
     selectedStudent: {},
 		showQuizBuilderModal: false,
-		quizzes: {}
+		quizzes: {},
+		students: []
   },
   action
 ) {
@@ -52,9 +53,12 @@ export function teacherClassViewReducer(
           value: each.first_name + " " + each.last_name,
           sub: each
         };
-      });
+			});
       return {
-        ...state,
+				...state,
+				targetClass: {
+					...state.targetClass
+				},
         students: action.students,
         studentNames: studentNames
       };
@@ -79,24 +83,34 @@ export function teacherClassViewReducer(
           quizzes: {}
         };
       }
-      //console.log('formatted students obj', studentsObj)
-      const targetClassWithStudents = state.targetClass;
-      targetClassWithStudents.students = studentsObj;
-      //console.log('class with students', targetClassWithStudents)
-      return { ...state, targetClass: targetClassWithStudents };
-    case actionTypes.CLASS_GO_LIVE_ACTION:
-      const goLiveClass = state.targetClass;
-      goLiveClass.isLive = !state.targetClass.isLive;
-      return { ...state, targetClass: goLiveClass };
+			return {
+				...state, 
+				targetClass: {
+					...state.targetClass,
+					students: studentsObj
+				} 
+			};
+		case actionTypes.CLASS_GO_LIVE_ACTION:
+			const goLiveClass = Object.assign({}, state.targetClass);
+			goLiveClass.isLive = !state.targetClass.isLive;
+			return {...state, targetClass: goLiveClass}
     case actionTypes.FETCH_CLASS_DATA:
       return { ...state };
-    case actionTypes.UPDATE_CLASS_DATA:
+		case actionTypes.UPDATE_CLASS_DATA_TEACHER:
+			// console.log()
       //console.log(action.classData)
       return { ...state, targetClass: action.classData };
     case actionTypes.SELECT_EXISTING_STUDENT_TO_ADD:
-      //console.log('selected student', action.student.suggestion)
-      return { ...state, selectedStudent: action.student.suggestion };
-    case actionTypes.ADD_A_STUDENT_TO_CLASS_ACTION:
+			//console.log('selected student', action.student.suggestion)
+			const studentsInClass = state.students.slice()
+			studentsInClass.push(action.student.suggestion)	
+      return {...state, 
+				selectedStudent: action.student.suggestion,
+				students: studentsInClass,
+			} 
+/***************************************** FIXING THIS ***************************************/
+		case actionTypes.ADD_A_STUDENT_TO_CLASS_ACTION:
+			console.log('studentssss', action.students)
 			return { ...state };
 		/**************************** QUIZ **************************/
     case actionTypes.SHOW_QUIZ_MODAL_ACTION:

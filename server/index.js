@@ -145,7 +145,7 @@ app.get('/getAllStudents', (req, res) => {
 })
 
 app.post('/getAllStudentsInAClass', (req, res) => {
-  //console.log('class id server side', req.body);
+  console.log('class id server side', req.body);
   main.getAllStudentsBelongToAClass(req.body.id)
   .then((data) => {
     //console.log('server side data', data.rows);
@@ -170,6 +170,7 @@ app.post('/getStudentsClasses', (req, res) => {
 })
 
 app.post('/addAStudentToClass', (req, res) => {
+
   main.addStudentToAClass(req.body.classId, req.body.studentId)
   //console.log('server student to be added', req.body)
 })
