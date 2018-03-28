@@ -35,7 +35,7 @@ const fbClassToPgObj = function(classObj) {
 
   // Gets student information for this class from db
   return db.query(`
-    SELECT students.id, students.first_name, students.last_name, students.email 
+    SELECT students.id, students.first_name, students.last_name, students.email, students.thumbnail_url 
     FROM students INNER JOIN classes_students 
     ON students .id = classes_students.student_id 
     WHERE classes_students.class_id=$1;`, [sqlClass.id]
@@ -47,6 +47,7 @@ const fbClassToPgObj = function(classObj) {
         isInClassroom: false,
         activeView: 'lobby',
         email: student.email,
+        thumbnail: student.thumbnail_url,
         quizzes: {}
       }
     })
