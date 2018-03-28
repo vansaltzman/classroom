@@ -6,7 +6,7 @@ export function teacherClassViewReducer(state={
 	classes: [],
 	showClassBuilderModal: false,
 	showQuizLauncherModal: false,
-	quizTime: '15:00',
+	quizTime: '00:00',
 	newClassName: '',
 	newClassSubject: '',
 	newClassQuarter: '',
