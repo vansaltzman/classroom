@@ -165,13 +165,13 @@ class NavigationBar extends React.Component {
                             <Route path="/quizViewContainer" component={quizViewContainer}  />
                             <Route path="/studentQuiz" component={quizContainer}/>
                             {/* <Route path="/studentClass" component={StudentClass}  /> */}
-                            {/* <Route path="/studentliveclass" component={StudentLiveClassView}/> */}
+                            <Route path="/studentliveclass" component={StudentLiveClassView}/>
                             
                             <Route path="/signUp" component={SignUp}/>
                             <Route path="/quiz" component={StudentViewQuiz}/>
                             {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
                             <Route path="/default" component={ClassViewDefault}/>
-                            <Route path="/studentLiveClass2" component={StudentLiveClassView}/>
+                            {/* <Route path="/studentLiveClass2" component={StudentLiveClassView}/> */}
                             
                         </Switch>
                 </nav>

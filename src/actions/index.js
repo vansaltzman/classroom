@@ -214,6 +214,10 @@ function getStudentsBelongToAClassAction(students) {
 }
 
 export function classGoLive(classId, classObj) {
+	classObj.handRaisedQueue= {};
+	for (var studentId in classObj.students) {
+		classObj.students[studentId].handRaised = false;
+	}
 	return (dispatch) => {
 		const classes = fb.ref('/classes');
 		classes.child(classId).set(classObj)
@@ -249,7 +253,7 @@ function watchClassGoLiveAction(classId) {
 }
 
 export function getClassStatus(classId) {
-	return (dispacth) => {
+	return (dispatch) => {
 		return fb.ref('/classes/' + classId + '/isLive').once('value')
 			.then(snap => {
 				if (snap.val()) {
@@ -341,14 +345,6 @@ function toggleStudentLiveClassStatusAction () {
 		}
 	}
 
-
-// // submit a student's responses to a quiz every time they check an answer
-// export function insertStudentAnswers(quizObj, studentId, quizId, classId) {
-// 	const currentStudent = fb.ref('classes/' + classId + '/students/' + studentId + '/quizzes/' + quizId );
-// 	return (dispatch) => {
-// 		currentStudent.set(quizObj);
-// 	}
-// }
  
 // get all class data for a live class
 export function fetchClassData (classId, type) {
