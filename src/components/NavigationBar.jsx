@@ -23,6 +23,7 @@ import quizContainer from './students/quizContainer.jsx'
 import StudentLiveClassView from './students/studentLiveClassView.jsx'
 import ClassViewDefault from './students/classViewDefault.jsx';
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
+import ImageUploader from './ImageUploader.jsx';
 
 
 
@@ -113,6 +114,11 @@ class NavigationBar extends React.Component {
                     {/* <Anchor path='/studentQuiz'>
                         studentQuiz
                     </Anchor> */}
+
+                    <Anchor path='/imageUploader'>
+                            Image Uploader
+                    </Anchor>
+
                 </div>
             }
         }
@@ -170,7 +176,8 @@ class NavigationBar extends React.Component {
                             {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
                             <Route path="/default" component={ClassViewDefault}/>
                             <Route path="/studentLiveClass" component={StudentLiveClassView}/>
-                            
+                            <Route path="/imageUploader" component={ImageUploader}/>
+
                         </Switch>
                 </nav>
                 </Router>

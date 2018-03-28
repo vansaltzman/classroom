@@ -190,6 +190,11 @@ const getClassesBelongToAStudent = function(studentEmail) {
   })
 }
 
+const addProfilePictureForStudent = function (studentId, url) {
+  const queryString = `UPDATE students SET thumbnail_url = '${url}' WHERE id=${studentId}`
+  return db.query(queryString)
+}
+
 module.exports = {
   addUser,
   verifyUser,
@@ -200,7 +205,9 @@ module.exports = {
   getAllStudents,
   getAllStudentsBelongToAClass,
   addStudentToAClass,
-  getClassesBelongToAStudent
+  getClassesBelongToAStudent,
+  addProfilePictureForStudent
+  
 }
 
 // to get all students belong to a class
