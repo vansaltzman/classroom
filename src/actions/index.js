@@ -132,6 +132,19 @@ function updateNewClassSubjectAction(event) {
 	}
 }
 
+export function selectExistingSubjectToAdd(subject) {
+	return (dispatch) => {
+		dispatch(selectExistingSubjectToAddAction(subject))
+	}
+}
+
+function selectExistingSubjectToAddAction (subject) {
+	return {
+		type: actionTypes.SELECT_EXISTING_SUBJECT_ACTION,
+		subject
+	}
+}
+
 export function updateNewClassQuarter(quarter) {
 	return (dispatch) => {
 		dispatch(updateNewClassQuarterAction(quarter))
@@ -153,6 +166,22 @@ function updateNewClassYearAction(year) {
 	return {
 		type: actionTypes.UPDATE_NEW_CLASS_YEAR_ACTION,
 		year
+	}
+}
+
+export function getAllExistingSubjects() {
+	return (dispatch) => {
+		axios.get('/getAllSubjects')
+		.then((res) => {
+			console.log('at actions subjects', res.data)
+			dispatch(getAllExistingSubjectsAction(res.data))
+		})
+	}
+}
+function getAllExistingSubjectsAction(subjects) {
+	return {
+		type: actionTypes.GET_ALL_SUBJECTS,
+		subjects
 	}
 }
 
@@ -198,10 +227,11 @@ function getAllStudentsAction(students) {
 }
 
 export function getStudentsBelongToAClass(idObj) {
+	//console.log('console.log', idObj)
 	return (dispatch) => {
 		axios.post('/getAllStudentsInAClass', idObj)
 		.then((res) => {
-			console.log('dataaaaaa', res.data);
+			//console.log('dataaaaaa', res.data);
 			dispatch(getStudentsBelongToAClassAction(res.data))
 		})
 	}
@@ -221,6 +251,7 @@ export function classGoLive(classId, classObj) {
 			dispatch(fetchClassData(classId, 'teacher'))
 		})
 		.then(()=> {
+			console.log('It is here')
 			const liveClass = fb.ref('/classes/' + classId)
 			return liveClass.child('isLive').set(true)
 		})
@@ -247,6 +278,7 @@ function watchClassGoLiveAction(classId) {
 		classId
 	}
 }
+
 
 export function getClassStatus(classId) {
 	return (dispatch) => {
@@ -275,12 +307,42 @@ export function updateQuizWeight(weight) {
 		newWeight
 	}
 }
+export function selectStudentToAdd(student) {
+	return (dispatch) => {
+		dispatch(selectStudentToAddAction(student))
+	}
+}
+
+function selectStudentToAddAction (student) {
+	return {
+		type: actionTypes.SELECT_EXISTING_STUDENT_TO_ADD,
+		student
+	}
+}
+
+export function addAStudentToClass(studentObj) {
+	console.log('selected student to be added')
+	return (dispatch) => {
+		axios.post('/addAStudentToClass', studentObj)
+		.then(() => {
+			dispatch(addAStudentToClassAction())
+		})
+	}
+}
+
+function addAStudentToClassAction (students) {
+	return {
+		type: ADD_A_STUDENT_TO_CLASS_ACTION
+	}
+}
+
 /******************************* GET ALL CLASSES THAT BELONGS TO A STUDENT **********************************/
 
 export function getClassesBelongToAStudent(studentIdObj) {
 	return (dispatch) => {
 		axios.post('/getStudentsClasses', studentIdObj)
 		.then((res) => {
+			//console.log('students classes', res.data)
 			dispatch(getClassesBelongToAStudentAction(res.data))
 		})
 	}
@@ -303,25 +365,6 @@ function updateStudentTargetClassAction(targetClass) {
 		targetClass
 	}
 }
-
-
-// join/exit live class from student pov
-// export function toggleStudentLiveClassStatus (classId, studentId) {
-// 	console.log('/' + classId + '/students/' + studentId);
-// 	return (dispatch) => {
-// 		const currentStudentStatus = fb.ref('/' + classId + '/students/' + studentId)
-// 		currentStudentStatus.set({isHere: true})
-// 		.then(() => {
-// 			dispatch(toggleStudentLiveClassStatusAction())
-// 		})
-// 	}
-// }
-// function toggleStudentLiveClassStatusAction () {
-// 	return {
-// 		type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
-// 	}
-// }
-
 
 // join/exit live class from student pov
 export function toggleStudentLiveClassStatus (classId, studentId) {
@@ -347,17 +390,8 @@ function toggleStudentLiveClassStatusAction () {
 		return {
 			type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
 		}
-	}
+}
 
-
-// // submit a student's responses to a quiz every time they check an answer
-// export function insertStudentAnswers(quizObj, studentId, quizId, classId) {
-// 	const currentStudent = fb.ref('classes/' + classId + '/students/' + studentId + '/quizzes/' + quizId );
-// 	return (dispatch) => {
-// 		currentStudent.set(quizObj);
-// 	}
-// }
- 
 // get all class data for a live class
 export function fetchClassData (classId, type) {
 	const currentClass = fb.ref('/classes/' + classId )
@@ -372,11 +406,6 @@ export function fetchClassData (classId, type) {
 		})
 	}
 }
-// function fetchClassDataAction () {
-// 	return {
-// 		type: actionTypes.FETCH_CLASS_DATA,
-// 	}
-// }
 
 // update global state with updated live class data
 export function updateClassDataStudent(classData) {
@@ -409,5 +438,150 @@ export function nextQuestion() {
 export function previousQuestion() {
 	return {
 		type: actionTypes.PREVIOUS_QUESTION
+	}
+}
+
+
+/******************************************** QUIZ/QUESTION BUILDER ***************************************/
+export function showQuizModal() {
+	return (dispatch) => {
+		dispatch(showQuizModalAction())
+	}
+}
+function showQuizModalAction() {
+	return {
+		type: actionTypes.SHOW_QUIZ_MODAL_ACTION
+	}
+}
+// SET_NEW_QUIZ_NAME_ACTION: 'set_new_quiz_name_action',
+// SET_NEW_QUIZ_SUBJECT_ACTIOn: 'set_new_quiz_subject_action'
+export function setNewQuizName(event) {
+	return (dispatch) => {
+		dispatch(setNewQuizNameAction(event))
+	}
+}
+function setNewQuizNameAction(event) {
+	return {
+		type: actionTypes.SET_NEW_QUIZ_NAME_ACTION,
+		event
+	}
+}
+
+export function setNewQuizSubject(event) {
+	return (dispatch) => {
+		dispatch(setNewQuizSubjectAction(event))
+	}
+}
+function setNewQuizSubjectAction(event) {
+	return {
+		type: actionTypes.SET_NEW_QUIZ_SUBJECT_ACTION,
+		event
+	}
+}
+
+export function setNewQuizSubjectBySelection(event) {
+	return (dispatch) => {
+		dispatch(setNewQuizSubjectBySelectionAction(event))
+	}
+}
+function setNewQuizSubjectBySelectionAction(event) {
+	return {
+		type: actionTypes.SET_NEW_QUIZ_SUBJECT_BY_SELECTION_ACTION,
+		event
+	}
+}
+
+export function setQuestionNumber() {
+	return (dispatch) => {
+		dispatch(setQuestionNumberAction())
+	}
+}
+function setQuestionNumberAction() {
+	return {
+		type: actionTypes.SET_QUESTION_NUMBER_ACTION
+	}
+}
+
+export function addQuestionText(event,index) {
+	return(dispatch) => {
+		dispatch(addQuestionTextAction(event,index))
+	}
+}
+function addQuestionTextAction(event, index) {
+	return {
+		type: actionTypes.ADD_QUESTION_TEXT_ACTION,
+		event,
+		index
+	}
+}
+
+export function addAnswer(index) {
+	return (dispatch) => {
+		dispatch(addAnswerAction(index))
+	}
+}
+function addAnswerAction(index) {
+	return {
+		type: actionTypes.ADD_ANSWER_ACTION,
+		index
+	}
+}
+
+export function addAnswerText(event, questionIndex, answerIndex) {
+	return (dispatch) => {
+		dispatch(addAnswerTextAction(event, questionIndex, answerIndex))
+	}
+}
+function addAnswerTextAction(event, questionIndex, answerIndex) {
+	return {
+		type: actionTypes.ADD_ANSWER_TEXT_ACTION,
+		event,
+		questionIndex,
+		answerIndex
+	}
+}
+
+export function chooseCorrectAnswer(questionIndex, answerIndex) {
+	return (dispatch) => {
+		dispatch(chooseCorrectAnswerAction(questionIndex, answerIndex));
+	}
+}
+function chooseCorrectAnswerAction(questionIndex, answerIndex) {
+	return {
+		type: actionTypes.CHOOSE_CORRECT_ANSWER_ACTION,
+		questionIndex,
+		answerIndex
+	}
+}
+
+// ADD_NEW_QUIZZES: 'add_new_quizzes',
+// 	FETCH_QUIZZES: 'fetch_quizzes'
+export function addNewQuiz(teacherId, quizObj) {
+	return (dispatch) => {
+		axios.post('/addQuiz', teacherId, quizObj)
+		.then(() => {
+			dispatch(addNewQuizzesAction())
+		})
+	}
+}
+function addNewQuizzesAction() {
+	return {
+		type: actionTypes.ADD_NEW_QUIZZES,
+	}
+}
+
+export function fetchQuizzes(reqObj) {
+	return (dispatch) => {
+		axios.post('/getQuizzes', reqObj)
+		.then((res) => {
+			console.log('data from server for all quizzes', res.data)
+			dispatch(fetchQuizzesAction(res.data))
+		})
+	}
+}
+function fetchQuizzesAction(quizzes) {
+	return {
+		type: actionTypes.FETCH_QUIZZES,
+		quizzes
 	}
 }

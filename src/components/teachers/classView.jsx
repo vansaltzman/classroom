@@ -28,13 +28,15 @@ import AccordionPanel from 'grommet/components/AccordionPanel';
 import Notification from 'grommet/components/Notification';
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
-import Label from 'grommet/components/Label';
 import NumberInput from 'grommet/components/NumberInput';
 import Animate from 'grommet/components/Animate';
+import AddCircleIcon from "grommet/components/icons/base/AddCircle";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as Actions from '../../actions/index.js';
+import * as Actions from "../../actions/index.js";
+import Label from "grommet/components/Label";
+import CheckBox from "grommet/components/CheckBox"
 
 import classRoom from '../../../data/quizDummyData.js';
 import fb from '../../../db/liveClassroom.js'
@@ -62,12 +64,21 @@ class ClassView extends React.Component {
 
 	componentWillMount() {
 		this.props.getAllStudents();
-		this.props.getStudentsBelongToAClass({id: this.props.classId});
-		this.props.getQuizzes(this.props.userId)
-	}
+    this.props.getStudentsBelongToAClass({ id: this.props.classId });
+    this.props.fetchQuizzes({
+      teacherId: this.props.teachersClassView.targetClass.teacher_id,
+      subjectId: this.props.teachersClassView.targetClass.subject_id
+    })
+    // this.props.getStudentsBelongToAClass({ id: this.props.classId });
+  }
+  
+  componentWillUpdate() {
+    //this.props.getStudentsBelongToAClass({ id: this.props.classId });
+  }
 	
 	componentDidMount() {
-		this.props.getClassStatus(this.props.classId)
+    this.props.getClassStatus(this.props.classId)
+    this.props.getStudentsBelongToAClass({ id: this.props.classId });
 	}
 
 	componentWillUnmount() {
@@ -88,48 +99,6 @@ class ClassView extends React.Component {
 
 	}
   render() {
-	
-		let quizzes = {
-			1: {
-				id: 1,
-				name: 'Recursion',
-				subject: 'JavaScript',
-				questions: {
-					1: {
-						id: 1, //question id
-						text: 'This is a question',
-						time: 70000,
-						answers: {
-						1: {text: 'this is an answer', isCorrect: true},
-						2: {text: 'this is an answer', isCorrect: false},
-						3: {text: 'this is an answer', isCorrect: false},
-						4: {text: 'this is an answer', isCorrect: false}
-						}
-					}, 
-					2: {
-						id: 2, //question id
-						text: 'This is another question',
-						time: 90000,
-						answers: {
-						1: {text: 'this is an answer', isCorrect: false},
-						2: {text: 'this is an answer', isCorrect: false},
-						3: {text: 'this is an answer', isCorrect: true}
-						}
-					},
-					3: {
-						id: 3, //question id
-						text: 'This is another question',
-						time: 90000,
-						answers: {
-						1: {text: 'this is an answer', isCorrect: false},
-						2: {text: 'this is an answer', isCorrect: false},
-						3: {text: 'this is an answer', isCorrect: true}
-						}
-					}
-				}
-			}
-		}
-
 		const { studentsInClass } = this.props;
 		const studentsArray = [];
 		for (var key in studentsInClass) {
@@ -210,9 +179,27 @@ class ClassView extends React.Component {
 							)
 						})}
 					</Box>
-					<SearchInput placeHolder='Search'
-  					suggestions={this.props.studentNames} 
-					/>
+					<SearchInput
+              placeHolder="Search For A Student"
+              suggestions={this.props.studentNames}
+              //  onDOMChange={(target) => this.props.selectStudentToAdd(target)} />
+              onSelect={target => this.props.selectStudentToAdd(target)}
+            />
+            <Button
+              label="Add Student"
+              onClick={() => {
+                this.props.addAStudentToClass({
+                  classId: this.props.classId,
+                  studentId: this.props.teachersClassView.selectedStudent.sub.id
+                }, { id: this.props.classId });
+              }}
+            />
+          <Box align="center" pad="medium" margin="small" colorIndex="light-2">
+						Quiz List
+						<Button 
+							label="Create New Quiz"
+							onClick={this.props.showQuizModal}/>
+          </Box>
 					{/* <Box align='center'
 						pad='none'
 						margin="none"
@@ -223,7 +210,7 @@ class ClassView extends React.Component {
 						<Accordion
 							onActive={(index)=> this.selectQuiz(quizzes[Object.keys(quizzes)[index]])}
 						>
-							{Object.values(quizzes).map(quiz => {
+							{Object.values(this.props.teachersClassView.quizzes).map(quiz => {
 							return <AccordionPanel heading={
 								<div>
 									{quiz.name}
@@ -231,16 +218,16 @@ class ClassView extends React.Component {
 								{Object.values(quiz.questions).map(question => {
 									 return <Box>
 										<Heading tag="h3">
-											{question.text}
+											{question.question}
 										</Heading>
 										<Label>
 											{moment.duration(question.time).humanize()}
 										</Label>
 										{Object.values(question.answers).map(answer=> {
 											return <Notification
-												message={answer.text}
+												message={answer.answer}
 												size='small'
-												status={answer.isCorrect ? 'ok' : 'critical'}
+												status={answer.correct ? 'ok' : 'critical'}
 											/>
 										})}
 									</Box>
@@ -312,13 +299,71 @@ class ClassView extends React.Component {
 					</Footer>
 				</Form>
 			</Layer>
-			}
+      }
+      {this.props.teachersClassView.showQuizBuilderModal ?
+					<Layer closer={true}
+								 flush={true} 
+								 overlayClose={true}>
+						<Form>
+              <Header pad={{ vertical: "medium", horizontal: "medium" }}>
+                <Heading>
+                  Create A New Quiz
+                </Heading>
+              </Header>
+                <Section pad={{ vertical: "medium", horizontal: "medium" }}>
+                  <FormFields>
+                    <TextInput 
+                      placeHolder="Please Name Your Quiz"
+                      onDOMChange={value => {
+                        this.props.setNewQuizName(value);
+                      }}/>
+                    <SearchInput 
+                      placeHolder="Quiz Subject"
+                      suggestions={this.props.subjects}
+                      // value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
+                      onDOMChange={(event) => this.props.setNewQuizSubject(event)}
+                      onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
+                      {this.props.teachersClassView.newQuiz.questions.map((each, index) => {
+                          return (
+                            <Section>
+                              <Label>{'Question' + ' ' + index+1}</Label>
+                              <TextInput placeHolder="Question..."
+                                         onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+                              {each.answers.map((eachAnswer, answerIndex) => {
+                                return (
+                                  <Section>
+                                    <TextInput placeHolder="Answer..."
+                                               onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
+                                    <CheckBox label='Correct'
+                                              toggle={false}
+                                              reverse={true} 
+                                              onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
+                                  </Section>
+                                )
+                              })}
+                              <Button icon={<AddCircleIcon />} 
+                                      label="Add Answer"
+                                      onClick={() => {this.props.addAnswer(index)}}/>
+                            </Section>
+                          )
+                        }) }
+                      <Button icon={<AddCircleIcon />}
+                                      onClick={() => this.props.setQuestionNumber()}
+                                      label="Add Question"/>
+                  </FormFields>
+                </Section>
+              <Footer pad={{"vertical": "medium", horizontal: "medium"}}>
+                <Button label='Add Quiz'
+                        onClick={() => this.props.addNewQuiz({authorId: this.props.auth.user.id, quiz: this.props.teachersClassView.newQuiz})}/>
+              </Footer>
+						</Form>
+					</Layer>
+				: <div></div>}
 			</Section>
 			</div>
 		)
 	}
 }
-
 
 function mapStateToProps(state) {
 	return {
@@ -331,13 +376,15 @@ function mapStateToProps(state) {
 		showQuizLauncherModal: state.teachersClassView.showQuizLauncherModal,
 		students: state.teachersClassView.students,
 		studentNames: state.teachersClassView.studentNames,
-		classId: state.teachersClassView.targetClass.id
+    classId: state.teachersClassView.targetClass.id,
+    teachersClassView: state.teachersClassView,
+    selectedStudent: state.teachersClassView.selectStudent,
+    auth: state.auth
 	}
 }
 
 function matchDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+  return bindActionCreators(Actions, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(ClassView)
-
+export default connect(mapStateToProps, matchDispatchToProps)(ClassView);

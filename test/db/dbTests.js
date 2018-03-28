@@ -2,7 +2,8 @@ var assert = require('assert')
 var bcrypt = require('bcrypt')
 var { db, addUser, verifyUser } = require('../../db/mainDb.js')
 
-var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
+// var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
+var testTeacher = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
 
 const addFrizzle = function(){
 
@@ -17,7 +18,7 @@ const addFrizzle = function(){
     })
     .catch(err => console.log('issue with add Frizzle', err))
 }
-//addFrizzle();
+addFrizzle();
 
 const removeFrizzle = function(){
   return db.query('DELETE FROM teachers WHERE email=$1', [testTeacher[2]])
@@ -137,6 +138,10 @@ let Jae = ['Jae', 'Jang', 'jj2837@columbia.edu', '123456'];
 let Adam = ['Adam', 'Mateo', 'adam@mateo.edu', '123456'];
 let Jerry = ['Jerry', 'Chen', 'jerry@chen.edu', '123456'];
 let Artem = ['Artem', 'Ipatev', 'artem@ipatev.edu', '123456'];
+let Riley = ['Riley', 'Alsman', 'riley@alsman.edu', '123456'];
+let Juan = ['Juan', 'Galan', 'juan@galan.edu', '123456'];
+let AlexL = ['Alex', 'Levine', 'alex@levine.edu', '123456'];
+let AlexC = ['Alex', 'Chojnacki', 'alex@chojnacki.edu', '123456'];
 
 const addStudents = function(student) {
   hashStudent = student.slice();
@@ -153,6 +158,42 @@ const addStudents = function(student) {
     }
   })
 }
-
 addStudents(Jae);
 
+let JoeJoe = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
+// const addTeachers = function(teacher) {
+//   hashTeacher = teacher.slice();
+//   let salt = 10;
+//   return bcrypt.hash(teacher[3], salt)
+//   .then((hashedPassword) => {
+//     //console.log(hashedPassword);
+//     hashedTeacher[3] = hashedPassword;
+//     db.query('INSERT INTO teachers (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)', hashTeacher);
+//   })
+//   .catch((err) => {
+//     if (err) {
+//       console.log('can not add teacher');
+//     }
+//   })
+// }
+
+// addTeachers(JoeJoe)
+
+// addStudents(Adam);
+// addStudents(Jerry);
+// addStudents(Artem);
+// addStudents(Riley);
+// addStudents(Juan);
+// addStudents(AlexL);
+// addStudents(AlexC);
+
+
+// `INSERT INTO draft_quizzes (name, subject_id, teacher_id) VALUES ('Schrodinger Cat', '1', '1');`
+// `INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('Which physicist below devised the paradox of Schrodinger Cat?', '1', '1');`
+// `INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) VALUES (1, 1, 1);`
+// `INSERT INTO draft_answers (answer, question_id, correct) VALUES ('Erwin Schrödinger', '1', 'true')`
+
+
+// // for getting all the quizzes belong to a teacher and the subject
+// `SELECT * FROM draft_quizzes WHERE teacher_id='1' AND subject_id='1';`
+// //get the quiz_id 

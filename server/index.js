@@ -111,10 +111,10 @@ app.use(bodyParser.json())
   // Complete Quiz
   
 app.post('/addClass', (req, res) => {
-  console.log('server side data for add class',  req.body);
+  //console.log('server side data for add class',  req.body);
   main.addNewClass(req.body)
   .then(() => {
-    console.log('Class is added')
+    //console.log('Class is added')
   })
   .catch((err) => {
     if (err) throw err;
@@ -148,7 +148,7 @@ app.post('/getAllStudentsInAClass', (req, res) => {
   console.log('class id server side', req.body);
   main.getAllStudentsBelongToAClass(req.body.id)
   .then((data) => {
-    console.log('server side data', data.rows);
+    //console.log('server side data', data.rows);
     res.send(data.rows);
     
   })
@@ -162,10 +162,45 @@ app.post('/getStudentsClasses', (req, res) => {
   main.getClassesBelongToAStudent(req.body.email)
   .then((data) => {
     res.send(data.rows);
-    console.log('server side data', data.rows);
+    //console.log('server side data', data.rows);
   })
   .catch((err) => {
     if (err) throw err
+  })
+})
+
+app.post('/addAStudentToClass', (req, res) => {
+
+  main.addStudentToAClass(req.body.classId, req.body.studentId)
+  //console.log('server student to be added', req.body)
+})
+
+app.get('/getAllSubjects', (req, res) => {
+  main.getAllExistingSubjects()
+  .then((data) => {
+    //console.log('server side all Subjects', data.rows)
+    res.send(data.rows)
+  })
+  .catch((err) => {
+    if (err) throw err;
+  })
+})
+
+app.post('/addQuiz', (req, res) => {
+  console.log('server side newQuiz', req.body);
+  main.addQuiz(req.body)
+})
+
+app.post('/getQuizzes', (req, res) => {
+  //console.log('serverside quizzes req obj', req.body)
+  main.getQuizzes(req.body.teacherId, req.body.subjectId)
+  .then((data) => {
+    console.log('-----------------serverside quizzes from DB----------------', data)
+    
+    // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions)
+    // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions[0].answers)
+    //console.log('first quiz', data[0][0][0].questions[0].answers);
+    res.send(data)
   })
 })
 

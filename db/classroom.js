@@ -10,8 +10,6 @@ module.exports =
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE IF NOT EXISTS  "classes" (
 	"id" serial NOT NULL,
 	"name" varchar(50) NOT NULL UNIQUE,
@@ -25,8 +23,6 @@ CREATE TABLE IF NOT EXISTS  "classes" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE IF NOT EXISTS  "subjects" (
 	"id" serial NOT NULL,
 	"name" varchar(50) NOT NULL UNIQUE,
@@ -34,8 +30,6 @@ CREATE TABLE IF NOT EXISTS  "subjects" (
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 CREATE TABLE IF NOT EXISTS  "students" (
 	"id" serial NOT NULL,
@@ -47,8 +41,6 @@ CREATE TABLE IF NOT EXISTS  "students" (
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 CREATE TABLE IF NOT EXISTS  "classes_students" (
 	"id" serial NOT NULL,
@@ -125,7 +117,6 @@ CREATE TABLE IF NOT EXISTS  "submitted_quizzes" (
   OIDS=FALSE
 );
 
-
 CREATE TABLE IF NOT EXISTS  "submitted_questions" (
 	"id" serial NOT NULL,
 	"question" varchar NOT NULL,
@@ -157,8 +148,6 @@ CREATE TABLE IF NOT EXISTS  "submitted_quizzes_submitted_questions" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE IF NOT EXISTS  "students_responses" (
 	"id" serial NOT NULL,
 	"student_id" integer NOT NULL,
@@ -170,7 +159,6 @@ CREATE TABLE IF NOT EXISTS  "students_responses" (
 ) WITH (
   OIDS=FALSE
 );
-
 
 ALTER TABLE "classes" ADD CONSTRAINT "classes_fk0" FOREIGN KEY ("teacher_id") REFERENCES "teachers"("id");
 ALTER TABLE "classes" ADD CONSTRAINT "classes_fk1" FOREIGN KEY ("subject_id") REFERENCES "subjects"("id");

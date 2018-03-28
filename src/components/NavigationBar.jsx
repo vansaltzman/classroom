@@ -9,7 +9,7 @@ import * as actions from "../actions/index";
 import TeacherMainView from "./teachers/mainView.jsx";
 import StudentMainView from "./students/studentMainView.jsx";
 import ClassView from "./teachers/classView.jsx";
-import Headline from "grommet/components/Headline"
+import Headline from "grommet/components/Headline";
 import Header from "grommet/components/Header";
 import Title from "grommet/components/Title";
 import Anchor from "grommet/components/Anchor";
@@ -30,8 +30,8 @@ import ClassViewDefault from './students/classViewDefault.jsx';
 import { readdir } from "fs";
 
 import "grommet/scss/hpinc/index.scss";
-import {logoutUser} from '../actions/index.js';
- 
+import { logoutUser } from "../actions/index.js";
+
 class NavigationBar extends React.Component {
   constructor(props) {
     super(props);
@@ -178,14 +178,67 @@ class NavigationBar extends React.Component {
                 </Router>
             </div>
         )
-    }
+    
+    return (
+      <div>
+        <Router history={this.props.history}>
+          <nav className="navbar navbar-default">
+            <Header style={{ background: navBarBackground }} size="medium">
+              <Headline margin="large" style={titleStyle} primary={true}>
+                Jaqen
+              </Headline>
+              <Box
+                flex={true}
+                margin="large"
+                justify="end"
+                direction="row"
+                responsive={false}
+              >
+                <Menu
+                  primary={false}
+                  direction="row"
+                  label={menuLabel}
+                  icon={<Actions />}
+                >
+                  {dropAnchors}
+                </Menu>
+              </Box>
+            </Header>
+
+            <Switch>
+              <Route path="/teachermainview" component={TeacherMainView} />
+              {/* <Route path="/studentmainview" component={TeacherMainView} /> */}
+              <Route exact path="/login" render={this.checkAuth} />
+              <Route path="/liveclass" component={ClassView} />
+              <Route path="/studentmainview" component={StudentMainView} />
+              <Route path="/login" component={SignIn} />
+              <Route path="/teacherQuiz" component={ClassView} />
+
+              <Route path="/quiz" component={QuizView} />
+              <Route path="/studentQuiz" component={quizContainer} />
+              {/* <Route path="/studentClass" component={StudentClass}  /> */}
+              {/* <Route path="/studentliveclass" component={StudentLiveClassView}/> */}
+
+              <Route path="/signUp" component={SignUp} />
+              <Route path="/quiz" component={StudentViewQuiz} />
+              {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
+              <Route path="/studentLiveClassView" component={Default} />
+              <Route path="/livequiz" component={Quiz} />
+              <Route path="/default" component={Default}/>
+            </Switch>
+          </nav>
+        </Router>
+      </div>
+    );
+  }
 }
 
 function mapStateToProps(state) {
   return {
     // subject to change
     auth: state.auth,
-    activeView: state.teachersClassView.targetClass.activeView
+    activeView: state.teachersClassView.targetClass.activeView,
+    studentClassView: state.studentClassView
   };
 }
 
