@@ -87,7 +87,6 @@ class ClassView extends React.Component {
 	endClass() {
 
 	}
-
   render() {
 	
 		let quizzes = {

@@ -41,6 +41,7 @@ const launchQuiz = function (classId, quizObj, quizTime) {
 	quizObj.time = moment().unix() + quizDuration;
 	quizObj.quizDuration = quizDuration;
 	quizObj.weight = quizWeight
+
 	return fb.ref('classes/' + classId + '/quizzes').child(quizObj.id).set(quizObj)
 	.then(() => {
 			const studentQuizObj = studentQuizObjConverter(quizObj);
