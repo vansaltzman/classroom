@@ -193,7 +193,7 @@ const addQuiz = function(quizObj) {
   return db.query(`INSERT INTO draft_quizzes (name, subject_id, teacher_id) VALUES ('${quizName}', '${subjectId}', '${teacherId}');`)
   .then(() => {
     return Promise.all(questions.map((each, index) => {
-      console.log('each question', each)
+      //console.log('each question', each)
       return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${subjectId}');`)
       .catch((err) => {
         if (err) throw err
@@ -202,7 +202,7 @@ const addQuiz = function(quizObj) {
   })
   .then(() => {
     return Promise.all(questions.map((each, index) => {
-      console.log('each questions to join table', each)
+      //console.log('each questions to join table', each)
       return db.query(`INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) 
                 VALUES ((SELECT id FROM draft_quizzes  WHERE name='${quizName}'), (SELECT id FROM draft_questions WHERE question='${each.question}'), '${index}')`)
       .catch((err) => {
@@ -226,7 +226,6 @@ const addQuiz = function(quizObj) {
 const getQuizzes = function(teacherId, subjectId) {
   return db.query(`SELECT * FROM draft_quizzes WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
   .then((data) => {
-    //console.log('data.rows quizzes', data.rows)
     const quizzes = data.rows.map((quiz) => {
       return {
         name: quiz.name,
@@ -237,53 +236,30 @@ const getQuizzes = function(teacherId, subjectId) {
   })
   .then((data) => {
     return Promise.all(data.map((eachQuiz, index) => {
-
         return db.query(`SELECT * FROM draft_questions INNER JOIN draft_quizzes_draft_questions
                        ON draft_questions.id = draft_quizzes_draft_questions.draft_question_id 
                        AND draft_quizzes_draft_questions.draft_quiz_id = '${eachQuiz.id}'`)
         .then((questions) => {
           eachQuiz.questions = questions.rows
-          return data
+          return eachQuiz
         })
       }))
   })
   .then((data) => {
-    const quizzesWithQuestionIds = data[0];
-    return Promise.all(quizzesWithQuestionIds.map((eachQuiz) => {
-      console.log('eachQuiz.questions', eachQuiz.questions)
+    return Promise.all(data.map((eachQuiz) => {
       return Promise.all(eachQuiz.questions.map((eachQuestion) => {
-        console.log('eachQuestion', eachQuestion)
         return db.query(`SELECT * FROM draft_answers WHERE question_id = '${eachQuestion.draft_question_id}'`)
         .then((answers) => {
           eachQuestion.answers = answers.rows
-          console.log("eachQuestion.answers", eachQuestion.answers)
-          return quizzesWithQuestionIds
+          return eachQuestion
         })
       }))
+      .then((questions) => {
+        eachQuiz.questions = questions
+        return eachQuiz
+      })
     }))
   })
-  
-  // return db.query(`SELECT * FROM draft_quizzes WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
-  // .then((data) => {
-  //   console.log('qiuzzes', data.rows)
-  //   return Promise.all(data.rows.map((eachQuiz, index) => {
-  //     return db.query(`SELECT * FROM draft_questions a INNER JOIN draft_quizzes_draft_questions b
-  //                      ON draft_questions.id = draft_quizzes_draft_questions.draft_question_id 
-  //                      AND draft_quizzes_draft_questions.draft_quiz_id = '${eachQuiz.id}'`);
-  //   }))
-  // })
-  // .then((data) => {
-  //   console.log('DATAAAA', data);
-  //   const quizQuestions = data.map((each) => {
-  //    return each.rows
-  //   })
-  //   return Promise.all(quizQuestions.map((eachQuiz) => {
-  //     return Promise.all(eachQuiz.map((eachQuestion) => {
-  //       return db.query(`SELECT * FROM draft_answers WHERE question_id = '${eachQuestion.draft_question_id}'`)
-  //       //return example
-  //     }))
-  //   }))
-  // })
 }
 
 module.exports = {

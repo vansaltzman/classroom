@@ -572,7 +572,7 @@ export function fetchQuizzes(reqObj) {
 		axios.post('/getQuizzes', reqObj)
 		.then((res) => {
 			console.log('data from server for all quizzes', res.data)
-			dispatch(fetchQuizzes(res.data))
+			dispatch(fetchQuizzesAction(res.data))
 		})
 	}
 }

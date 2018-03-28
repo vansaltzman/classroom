@@ -192,14 +192,15 @@ app.post('/addQuiz', (req, res) => {
 })
 
 app.post('/getQuizzes', (req, res) => {
-  console.log('serverside quizzes req obj', req.body)
+  //console.log('serverside quizzes req obj', req.body)
   main.getQuizzes(req.body.teacherId, req.body.subjectId)
   .then((data) => {
-    console.log('serverside quizzes from DB', data)
-    //console.log('first quiz', data[0][0]) -- we want this for a collection of quizzes
-    const collectionOfQuizzes = data[0][0];
+    console.log('-----------------serverside quizzes from DB----------------', data)
+    
+    // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions)
+    // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions[0].answers)
     //console.log('first quiz', data[0][0][0].questions[0].answers);
-    res.send(collectionOfQuizzes)
+    res.send(data)
   })
 })
 

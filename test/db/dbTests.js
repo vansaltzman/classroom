@@ -2,7 +2,8 @@ var assert = require('assert')
 var bcrypt = require('bcrypt')
 var { db, addUser, verifyUser } = require('../../db/mainDb.js')
 
-var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
+// var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
+var testTeacher = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
 
 const addFrizzle = function(){
 
@@ -158,6 +159,26 @@ const addStudents = function(student) {
   })
 }
 addStudents(Artem);
+
+let JoeJoe = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
+// const addTeachers = function(teacher) {
+//   hashTeacher = teacher.slice();
+//   let salt = 10;
+//   return bcrypt.hash(teacher[3], salt)
+//   .then((hashedPassword) => {
+//     //console.log(hashedPassword);
+//     hashedTeacher[3] = hashedPassword;
+//     db.query('INSERT INTO teachers (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)', hashTeacher);
+//   })
+//   .catch((err) => {
+//     if (err) {
+//       console.log('can not add teacher');
+//     }
+//   })
+// }
+
+// addTeachers(JoeJoe)
+
 // addStudents(Adam);
 // addStudents(Jerry);
 // addStudents(Artem);
