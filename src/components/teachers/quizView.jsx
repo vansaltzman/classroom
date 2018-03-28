@@ -13,6 +13,7 @@ import Sort from 'grommet-addons/components/Sort'
 import Animate from './animate.jsx';
 import fb from '../../../db/liveClassroom.js';
 import ScoreDistribution from './quizViewDistribution.jsx';
+import Timer from '../students/Timer.jsx'
 
 import moment from 'moment'
 
@@ -196,8 +197,8 @@ const students = {
 		}
 	}
 
-const QuizView = (props) => {
-	const targetClass = props.props.currentClass;
+const QuizView = ({ props }) => {
+	const targetClass = props.currentClass;
 	const students = targetClass.students;
 	const quiz = targetClass.quizzes[targetClass.activeView];
 	const quizIds = Object.keys(quiz.questions);
@@ -220,16 +221,21 @@ const QuizView = (props) => {
 			/> */}
 			
 
-			<Button icon={<DeployIcon />}
-							label='End Quiz'
-							primary={false}
-							secondary={false}
-							accent={true}
-							critical={false}
-							plain={false} 
-							path="/liveclass"
-							onClick={endQuiz.bind(this)}/>
-
+			<Button 
+				icon={<DeployIcon />}
+				label='End Quiz'
+				primary={false}
+				secondary={false}
+				accent={true}
+				critical={false}
+				plain={false} 
+				path="/liveclass"
+				onClick={endQuiz.bind(this)}
+			/>
+			<Timer 
+				quizEndTime={quiz.time}
+				quizDuration={quiz.quizDuration}
+			/>
 			<Table>
 			<TableHeader labels={['Name', 'Current Question', 'Time on Question', 'Score']}
 				sortIndex={false}
