@@ -244,6 +244,10 @@ function getStudentsBelongToAClassAction(students) {
 }
 
 export function classGoLive(classId, classObj) {
+	classObj.handRaisedQueue= {};
+	for (var studentId in classObj.students) {
+		classObj.students[studentId].handRaised = false;
+	}
 	return (dispatch) => {
 		const classes = fb.ref('/classes');
 		classes.child(classId).set(classObj)
@@ -390,8 +394,9 @@ function toggleStudentLiveClassStatusAction () {
 		return {
 			type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
 		}
-}
+	}
 
+ 
 // get all class data for a live class
 export function fetchClassData (classId, type) {
 	const currentClass = fb.ref('/classes/' + classId )

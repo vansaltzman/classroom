@@ -74,7 +74,11 @@ class StudentMainView extends React.Component {
                 <Button
                   label="Enter Class"
                   type="button"
+<<<<<<< HEAD
                   path="/studentLiveClassView"
+=======
+                  path="/studentliveclass"
+>>>>>>> grade-view
                   primary={true}
                   onClick={() => this.props.toggleStudentLiveClassStatus(item.class_id, item.student_id)}
                 />
