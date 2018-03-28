@@ -278,6 +278,7 @@ function watchClassGoLiveAction(classId) {
 	}
 }
 
+
 export function getClassStatus(classId) {
 	return (dispatch) => {
 		return fb.ref('/classes/' + classId + '/isLive').once('value')
@@ -363,19 +364,6 @@ function updateStudentTargetClassAction(targetClass) {
 	}
 }
 
-//student's main view to see which class is currently live
-export function watchClassGoLive(dispatch) {
-	fb.ref('/classes').on('child_added', (snap) => {
-		//console.log('snap.val()', snap.val())
-		dispatch(watchClassGoLiveAction(snap.val()));
-	})
-}
-function watchClassGoLiveAction(classId) {
-	return {
-		type: actionTypes.WATCH_CLASS_GO_LIVE_ACTION,
-		classId
-	}
-}
 
 // join/exit live class from student pov
 // export function toggleStudentLiveClassStatus (classId, studentId) {

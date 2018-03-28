@@ -28,9 +28,9 @@ import AccordionPanel from 'grommet/components/AccordionPanel';
 import Notification from 'grommet/components/Notification';
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
-import Label from 'grommet/components/Label';
 import NumberInput from 'grommet/components/NumberInput';
 import Animate from 'grommet/components/Animate';
+import AddCircleIcon from "grommet/components/icons/base/AddCircle";
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -69,7 +69,11 @@ class ClassView extends React.Component {
       teacherId: this.props.teachersClassView.targetClass.teacher_id,
       subjectId: this.props.teachersClassView.targetClass.subject_id
     })
-	}
+  }
+  
+  componentWillUpdate() {
+    //this.props.getStudentsBelongToAClass({ id: this.props.classId });
+  }
 	
 	componentDidMount() {
 		this.props.getClassStatus(this.props.classId)
@@ -93,48 +97,6 @@ class ClassView extends React.Component {
 
 	}
   render() {
-	
-		let quizzes = {
-			1: {
-				id: 1,
-				name: 'Recursion',
-				subject: 'JavaScript',
-				questions: {
-					1: {
-						id: 1, //question id
-						text: 'This is a question',
-						time: 70000,
-						answers: {
-						1: {text: 'this is an answer', isCorrect: true},
-						2: {text: 'this is an answer', isCorrect: false},
-						3: {text: 'this is an answer', isCorrect: false},
-						4: {text: 'this is an answer', isCorrect: false}
-						}
-					}, 
-					2: {
-						id: 2, //question id
-						text: 'This is another question',
-						time: 90000,
-						answers: {
-						1: {text: 'this is an answer', isCorrect: false},
-						2: {text: 'this is an answer', isCorrect: false},
-						3: {text: 'this is an answer', isCorrect: true}
-						}
-					},
-					3: {
-						id: 3, //question id
-						text: 'This is another question',
-						time: 90000,
-						answers: {
-						1: {text: 'this is an answer', isCorrect: false},
-						2: {text: 'this is an answer', isCorrect: false},
-						3: {text: 'this is an answer', isCorrect: true}
-						}
-					}
-				}
-			}
-		}
-
 		const { studentsInClass } = this.props;
 		const studentsArray = [];
 		for (var key in studentsInClass) {
@@ -243,7 +205,7 @@ class ClassView extends React.Component {
 						<Accordion
 							onActive={(index)=> this.selectQuiz(quizzes[Object.keys(quizzes)[index]])}
 						>
-							{Object.values(quizzes).map(quiz => {
+							{Object.values(this.props.teachersClassView.quizzes).map(quiz => {
 							return <AccordionPanel heading={
 								<div>
 									{quiz.name}
@@ -251,14 +213,14 @@ class ClassView extends React.Component {
 								{Object.values(quiz.questions).map(question => {
 									 return <Box>
 										<Heading tag="h3">
-											{question.text}
+											{question.question}
 										</Heading>
 										<Label>
 											{moment.duration(question.time).humanize()}
 										</Label>
 										{Object.values(question.answers).map(answer=> {
 											return <Notification
-												message={answer.text}
+												message={answer.answer}
 												size='small'
 												status={answer.isCorrect ? 'ok' : 'critical'}
 											/>

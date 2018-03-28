@@ -15,7 +15,6 @@ import Title from "grommet/components/Title";
 import Anchor from "grommet/components/Anchor";
 import Menu from "grommet/components/Menu";
 import Box from "grommet/components/Box";
-<<<<<<< HEAD
 import Actions from "grommet/components/icons/base/Actions.js";
 import quizViewContainer from "./teachers/quizViewContainer.jsx";
 import SignUp from './SignUp.jsx';
@@ -27,20 +26,6 @@ import ClassViewDefault from './students/classViewDefault.jsx';
 
 
 
-=======
-import Actions from "grommet/components/icons/base/Action.js";
-import QuizView from "./teachers/quizView.jsx";
-import SignUp from "./SignUp.jsx";
-import StudentViewQuiz from "./students/StudentViewQuiz.jsx";
-import quizContainer from "./students/quizContainer.jsx";
-import StudentLiveClassView from "./students/studentLiveClassView.jsx";
-import ClassViewDefault from "./students/classViewDefault.jsx";
-import Default from './students/classViewDefault.jsx'
-import Quiz from './students/StudentViewQuiz.jsx'
-// import StudentLiveClassView from "./students/studentLiveClassView.jsx";
-
-import quizView from "./teachers/quizView.jsx";
->>>>>>> afterMVP
 
 import { readdir } from "fs";
 
@@ -55,19 +40,10 @@ class NavigationBar extends React.Component {
     this.logout = this.logout.bind(this);
   }
   checkView() {
-<<<<<<< HEAD
     return <Redirect to="/default"/>
     // setTimeout(function() {
     //     return <Redirect to="/studentLiveClass2"/>
     // }, 3000) 
-=======
-    // if (this.props.studentClassView.targetClass.activeView === true) {
-    //   return <Redirect to='/livequiz' />
-    // } else {
-    //   return <Redirect to='/default' />
-    // }
-  }
->>>>>>> afterMVP
 
   }
   
@@ -83,7 +59,6 @@ class NavigationBar extends React.Component {
     } else {
       return <SignIn />;
     }
-<<<<<<< HEAD
 }
 
     logout (e) {
@@ -203,62 +178,7 @@ class NavigationBar extends React.Component {
                 </Router>
             </div>
         )
-=======
-  }
-  logout(e) {
-    e.preventDefault();
-    this.props.logoutUser();
-  }
-  logout(e) {
-    e.preventDefault();
-    this.props.logoutUser();
-  }
-
-  render() {
-    const titleStyle = {
-      marginLeft: "50px"
-    };
-    if (!this.props.auth.authenticated) {
-      var menuLabel = "Start";
-      var navBarBackground = "lightGreen";
-      var dropAnchors = (
-        <div>
-          <Anchor path="/login">Login</Anchor>
-          <Anchor path="/signup">Signup</Anchor>
-        </div>
-      );
-    } else {
-      if (this.props.auth.user.class === "teacher") {
-        var menuLabel = this.props.auth.user.email;
-        var navBarBackground = "lightCoral";
-        var dropAnchors = (
-          <div>
-            <Anchor path="/quiz">Quiz</Anchor>
-
-            <Anchor path="/quizView">Quiz View</Anchor>
-
-            <Anchor path="/login" onClick={this.logout}>
-              Logout
-            </Anchor>
-          </div>
-        );
-      }
-      if (this.props.auth.user.class === "student") {
-        var menuLabel = this.props.auth.user.email;
-        var navBarBackground = "lightBlue";
-        var dropAnchors = (
-          <div>
-            <Anchor path="/quiz">Quiz</Anchor>
-            <Anchor path="/login" onClick={this.logout}>
-              Logout
-            </Anchor>
-
-            <Anchor path="/studentQuiz">studentQuiz</Anchor>
-          </div>
-        );
-      }
->>>>>>> afterMVP
-    }
+    
     return (
       <div>
         <Router history={this.props.history}>

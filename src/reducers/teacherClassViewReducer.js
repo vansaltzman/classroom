@@ -14,7 +14,8 @@ export function teacherClassViewReducer(
     allStudents: [],
     targetClass: {},
     selectedStudent: {},
-    showQuizBuilderModal: false
+		showQuizBuilderModal: false,
+		quizzes: {}
   },
   action
 ) {
@@ -227,9 +228,14 @@ export function teacherClassViewReducer(
 				}
 				return eachQuiz
 			})
+			quizzes.reduce((acc, quiz) => {
+				let quizId = quiz.id;
+				acc[quizId] = quiz;
+				return acc;
+			}, {})
 			console.log('modified quizzes', quizzes);
 			return {
-				...state
+				...state, quizzes: quizzes
 			}
     default:
       return state;
