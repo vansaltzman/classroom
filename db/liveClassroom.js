@@ -34,24 +34,24 @@ const studentJoins = function(studentId, classId) { // Conncect this to actions.
 }
 
 const launchQuiz = function (classId, quizObj, quizTime) {
-	const timeValues = quizTime.split(':')
-	quizObj.time = moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('milliseconds')
-	console.log('classId, quizObj, quizTime ------> ' + classId, quizObj, quizTime + ' <------ ')
-
+	const timeValues = quizTime.split(':');
+	let quizDuration = moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('seconds');
+	quizObj.time = moment().unix() + quizDuration;
+	quizObj.quizDuration = quizDuration;
 	return fb.ref('classes/' + classId + '/quizzes').child(quizObj.id).set(quizObj)
 	.then(() => {
-		const studentQuizObj = studentQuizObjConverter(quizObj);
-		return fb.ref('/classes/' + classId + '/students').once('value', (snap)=> {
-			var students = snap.val()
-			console.log(students)
-			Object.values(students).forEach( student => {
-				let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id + '/quizzes');
-				studentRef.child(quizObj.id).set(studentQuizObj)
+			const studentQuizObj = studentQuizObjConverter(quizObj);
+			return fb.ref('/classes/' + classId + '/students').once('value', (snap)=> {
+					var students = snap.val()
+					console.log('students ------> ' + students + ' <------ ')
+					Object.values(students).forEach( student => {
+							let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id + '/quizzes');
+							studentRef.child(quizObj.id).set(studentQuizObj)
+					})
 			})
-		})
 	})
 	.then(()=> {
-		return updateActiveView(quizObj.id, classId)
+			return updateActiveView(quizObj.id, classId)
 	})
 }
 

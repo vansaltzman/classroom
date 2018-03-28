@@ -81,7 +81,7 @@ class ClassView extends React.Component {
 	}
 
   render() {
-
+	
 		let quizzes = {
 			1: {
 				id: 1,

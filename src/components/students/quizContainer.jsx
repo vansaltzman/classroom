@@ -11,7 +11,6 @@ import fb from '../../../db/liveClassroom.js';
 
 class QuizContainer extends React.Component {
   render() {
-    
     let classId = this.props.class.id
    
     let quizId = this.props.class.activeView
@@ -22,7 +21,7 @@ class QuizContainer extends React.Component {
 
     //The question NUMBER this student is on //from student portion
     let currentQuestion = this.props.class.students[studentId].quizzes[quizId].currentQuestion
-    console.log('current question ', currentQuestion); 
+
     //Student's responseObj at current question
     let quizResponseObj = this.props.class.students[studentId].quizzes[quizId]
     //The ACTUAL QUESTION this student is on // from the teachers quiz at key of students current question// to display question text
@@ -33,7 +32,10 @@ class QuizContainer extends React.Component {
     } else {
       var currentQuestionsAnswers = {};
     }
-    let questionId = keys[currentQuestion]
+    let questionId = keys[currentQuestion];
+    
+    let quizEndTime = this.props.class.quizzes[quizId].time;
+    let quizDuration = this.props.class.quizzes[quizId].quizDuration;
   
     return (
       
@@ -51,6 +53,8 @@ class QuizContainer extends React.Component {
                         quizResponseObj={quizResponseObj}
                         currentQuestionsAnswers={currentQuestionsAnswers}
                         questionId={questionId}
+                        quizEndTime={quizEndTime}
+                        quizDuration={quizDuration}
         />
       </div>
     )
