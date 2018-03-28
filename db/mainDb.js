@@ -248,9 +248,6 @@ const getQuizzes = function(teacherId, subjectId) {
       }))
   })
   .then((data) => {
-    //console.log('GYGIUHIGJGB--------------------------', data)
-    // console.log('QUIZ 1', data[0][0])
-    // console.log('QUIZ 2', data[0][1] )
     const quizzesWithQuestionIds = data[0];
     return Promise.all(quizzesWithQuestionIds.map((eachQuiz) => {
       console.log('eachQuiz.questions', eachQuiz.questions)
@@ -258,7 +255,6 @@ const getQuizzes = function(teacherId, subjectId) {
         console.log('eachQuestion', eachQuestion)
         return db.query(`SELECT * FROM draft_answers WHERE question_id = '${eachQuestion.draft_question_id}'`)
         .then((answers) => {
-          //console.log('answers', answers)
           eachQuestion.answers = answers.rows
           console.log("eachQuestion.answers", eachQuestion.answers)
           return quizzesWithQuestionIds
