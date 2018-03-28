@@ -15,6 +15,7 @@ import * as Actions from '../../actions/index.js';
 import Value from 'grommet/components/Value';
 import Timer from './Timer.jsx';
 
+
 class StudentViewQuiz extends React.Component {
   constructor(props) {
     super(props);

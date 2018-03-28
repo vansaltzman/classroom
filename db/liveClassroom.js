@@ -14,9 +14,12 @@ const selectClass = function(classId) {
   .then(classObj => classObj)
 }
 
+// this function appears to not be called anywhere
 const startClass = function(classObj) {
+	console.log('are we calling start class')
 	const classList = fb.ref('/classes/' + classObj.id) 
 	classObj.isLive = true
+	console.log('class obj when starting class ', classObj);
   return classList.child(classObj.id).set(classObj)
   .then(()=> console.log('Launched claass ' + classObj.name))
   .catch((err)=> console.log('Issue starting class' + err))
@@ -77,18 +80,36 @@ const stopFetchingClassData = function (classId) {
 	const currentClass = fb.ref('/classes/' + classId )
 		return currentClass.off('value')
 }
+const toggleStudentHandRaiseStatus = function (classId, studentId) {
+	const studentHandRaiseStatus = fb.ref('/classes/' + classId +'/students/'+studentId+'/handRaised');
+		return studentHandRaiseStatus.once('value', (snap) => {
+			let currentHandRaiseStatus = snap.val();
+			studentHandRaiseStatus.set( !currentHandRaiseStatus);
+		})
+	}
 
-// const endClass = function(classId) {
-// 	// create variable of snapshot of the ending class object
-// 	return fb.ref('/classes/' + classId).once('value')
-// 		.then(snap => {
-// 			// migrate class to postgress
-// 			return migrate.classToPg(snap.val())
-// 		})	
-// 		// when migrated, set isLive to false
-// 			// then remove class from firebase
-// 	// if error, exit function
-// }
+const updateHandRaiseQueue = function(classId, studentId) {
+	const currentClass = fb.ref('/classes/' + classId);
+	const nowInSeconds = new Date().getTime()/1000;
+	const studentInQueue = {
+		[studentId]: {
+			studentId: studentId,
+			time: nowInSeconds}
+	}
+	return currentClass.once('value', (snap) => {
+		let activeClass = snap.val();
+		if (activeClass.hasOwnProperty('handRaisedQueue')) {
+			if (activeClass.handRaisedQueue[studentId]) {
+				delete activeClass.handRaisedQueue[studentId]
+			} else {
+				activeClass.handRaisedQueue[studentId] = studentInQueue
+			}
+			currentClass.set(activeClass);
+		} else {
+			currentClass.child('handRaisedQueue').set(studentInQueue)
+		}
+	})
+}
 
 module.exports = {  
   fb,
@@ -97,5 +118,7 @@ module.exports = {
 	endClass,
   updateActiveView,
   insertStudentAnswers,
-  stopFetchingClassData
+	stopFetchingClassData,
+	toggleStudentHandRaiseStatus,
+	updateHandRaiseQueue
 }
