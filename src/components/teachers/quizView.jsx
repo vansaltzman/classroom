@@ -14,6 +14,7 @@ import Animate from './animate.jsx';
 import fb from '../../../db/liveClassroom.js';
 import ScoreDistribution from './quizViewDistribution.jsx';
 import Timer from '../students/Timer.jsx'
+import UserImage from '../UserImage.jsx'
 
 import moment from 'moment'
 
@@ -254,6 +255,9 @@ const QuizView = ({ props }) => {
 						background: studentQuiz.isFinished ? 'lightgreen' : students[studentId].isHere ? 'white' : 'lightgrey',
 						height: '100px'
 					}}>
+					<td width="50px">
+						<UserImage handRaised={true}/>
+					</td>
 					<td width="50px">
 						{students[studentId].name}
 					</td>

@@ -4,7 +4,7 @@ class Animate extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      textSize: '16px'
+      currentQuestion: ''
      }
   }
 
