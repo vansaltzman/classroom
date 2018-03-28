@@ -249,9 +249,10 @@ function watchClassGoLiveAction(classId) {
 }
 
 export function getClassStatus(classId) {
-	return (dispacth) => {
+	return (dispatch) => {
 		return fb.ref('/classes/' + classId + '/isLive').once('value')
 			.then(snap => {
+				console.log('Is class live?', snap.val())
 				if (snap.val()) {
 					dispatch(fetchClassData(classId, 'teacher'))
 					return
@@ -267,6 +268,13 @@ function getClassStatusAction(classStatus) {
 	classStatus
 }
 
+
+export function updateQuizWeight(weight) {
+	return {
+		type: actionTypes.SET_QUIZ_WEIGHT,
+		newWeight
+	}
+}
 /******************************* GET ALL CLASSES THAT BELONGS TO A STUDENT **********************************/
 
 export function getClassesBelongToAStudent(studentIdObj) {

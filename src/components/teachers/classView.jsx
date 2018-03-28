@@ -8,6 +8,8 @@ import Box from 'grommet/components/Box';
 import Button from 'grommet/components/Button';
 import Section from 'grommet/components/Section';
 import DeployIcon from 'grommet/components/icons/base/Deploy';
+import CloudUploadIcon from 'grommet/components/icons/base/CloudUpload';
+import ShareIcon from 'grommet/components/icons/base/Share';
 import SearchInput from 'grommet/components/SearchInput';
 import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
@@ -27,6 +29,8 @@ import Notification from 'grommet/components/Notification';
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
 import Label from 'grommet/components/Label';
+import NumberInput from 'grommet/components/NumberInput';
+import Animate from 'grommet/components/Animate';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -48,7 +52,7 @@ class ClassView extends React.Component {
 	}
 
 	launchNewQuiz(){
-		fb.launchQuiz(this.props.classId, this.state.selectedQuiz, this.props.quizTime)
+		fb.launchQuiz(this.props.classId, this.state.selectedQuiz, this.props.quizTime, this.props.quizWeight)
 			.then(()=> {
 				if (this.props.showQuizLauncherModal) {
 					this.props.toggleQuizLauncherModalAction()
@@ -61,7 +65,7 @@ class ClassView extends React.Component {
 		this.props.getStudentsBelongToAClass({id: this.props.classId});
 		this.props.getQuizzes(this.props.userId)
 	}
-
+	
 	componentDidMount() {
 		this.props.getClassStatus(this.props.classId)
 	}
@@ -80,6 +84,9 @@ class ClassView extends React.Component {
 		this.setState({showEndClassModal: !this.state.showEndClassModal})
 	}
 
+	endClass() {
+
+	}
   render() {
 	
 		let quizzes = {
@@ -100,7 +107,17 @@ class ClassView extends React.Component {
 						}
 					}, 
 					2: {
-						id: 1, //question id
+						id: 2, //question id
+						text: 'This is another question',
+						time: 90000,
+						answers: {
+						1: {text: 'this is an answer', isCorrect: false},
+						2: {text: 'this is an answer', isCorrect: false},
+						3: {text: 'this is an answer', isCorrect: true}
+						}
+					},
+					3: {
+						id: 3, //question id
 						text: 'This is another question',
 						time: 90000,
 						answers: {
@@ -119,23 +136,52 @@ class ClassView extends React.Component {
 			studentsArray.push(studentsInClass[key]);
 		}
 		return(
-			<Section>
-				
-				<Button icon={<DeployIcon />}
-					label= {this.props.targetClass.isLive ? 'End Class' : 'Go Live'}
+			<div>
+				{this.props.targetClass.isLive ?
+				<Animate 
+					enter={{"animation": "fade", "duration": 1000, "delay": 0}}
+					leave={{"animation": "fade", "duration": 1000, "delay": 0}}
+					keep={true}
+				>
+					<Notification
+						message={this.props.targetClass.name + ' is currently live'}
+						status={'ok'}
+					/>
+				</Animate> :
+				<Animate 
+				enter={{"animation": "fade", "duration": 1000, "delay": 0}}
+				leave={{"animation": "fade", "duration": 1000, "delay": 0}}
+				keep={true}
+			>
+				<Notification
+						message={this.props.targetClass.name + ' is currently offline'}
+						status={'warning'}
+				/> 
+			</Animate> 
+				}
+			<Section>				
+				{this.props.targetClass.isLive ?
+				<Button icon={<CloudUploadIcon />}
+					label= {'End Class'}
 					primary={false}
 					secondary={false}
-					accent={!this.props.targetClass.isLive}
+					accent={false}
 					critical={false}
 					plain={false} 
-					onClick={this.props.targetClass.isLive ? 
-						() =>  this.toggleClassEndConfirmation() :
-						() => this.props.classGoLive(this.props.classId, this.props.targetClass) 
-					}
-				/>
+					onClick={() =>  this.toggleClassEndConfirmation()}
+				/> :
+				<Button icon={<DeployIcon />}
+					label= {'Go Live'}
+					primary={false}
+					secondary={false}
+					accent={true}
+					critical={false}
+					plain={false} 
+					onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
+				/>}
 
 				{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
-				<Button icon={<DeployIcon />}
+				<Button icon={<ShareIcon />}
 					label={'Launch ' + this.state.selectedQuiz.name}
 					primary={false}
 					secondary={false}
@@ -224,6 +270,13 @@ class ClassView extends React.Component {
 							onChange={(time)=> this.props.setQuizTime(time)}
 							value={this.props.quizTime} 
 						/>
+					<NumberInput 
+						value={this.props.quizWeight}
+						onChange={(weight)=> this.props.updateQuizWeight(weight)} 
+						min={1}
+						max={100}
+						step={1}
+					/> 
 					</FormFields>
 					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
 						<Button 
@@ -261,6 +314,7 @@ class ClassView extends React.Component {
 			</Layer>
 			}
 			</Section>
+			</div>
 		)
 	}
 }
@@ -270,6 +324,7 @@ function mapStateToProps(state) {
 	return {
 		quizTemplates: state.teachersClassView.quizTemplates,
 		quizTime: state.teachersClassView.quizTime,
+		quizWeight: state.teachersClassView.quizWeight,
 		userId: state.auth.user.id,
 		targetClass: state.teachersClassView.targetClass,
 		studentsInClass: state.teachersClassView.targetClass.students,
