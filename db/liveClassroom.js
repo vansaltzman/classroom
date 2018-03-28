@@ -35,7 +35,7 @@ const studentJoins = function(studentId, classId) { // Conncect this to actions.
   })
 }
 
-const launchQuiz = function (classId, quizObj, quizTime) {
+const launchQuiz = function (classId, quizObj, quizTime, quizWeight) {
 	const timeValues = quizTime.split(':');
 	let quizDuration = moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('seconds');
 	quizObj.time = moment().unix() + quizDuration;
