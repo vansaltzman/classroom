@@ -34,7 +34,9 @@ import Animate from 'grommet/components/Animate';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as Actions from '../../actions/index.js';
+import * as Actions from "../../actions/index.js";
+import Label from "grommet/components/Label";
+import CheckBox from "grommet/components/CheckBox"
 
 import classRoom from '../../../data/quizDummyData.js';
 import fb from '../../../db/liveClassroom.js'
@@ -62,8 +64,11 @@ class ClassView extends React.Component {
 
 	componentWillMount() {
 		this.props.getAllStudents();
-		this.props.getStudentsBelongToAClass({id: this.props.classId});
-		this.props.getQuizzes(this.props.userId)
+    this.props.getStudentsBelongToAClass({ id: this.props.classId });
+    this.props.fetchQuizzes({
+      teacherId: this.props.teachersClassView.targetClass.teacher_id,
+      subjectId: this.props.teachersClassView.targetClass.subject_id
+    })
 	}
 	
 	componentDidMount() {
@@ -213,6 +218,21 @@ class ClassView extends React.Component {
 					<SearchInput placeHolder='Search'
   					suggestions={this.props.studentNames} 
 					/>
+          <Button
+              label="Add Student"
+              onClick={() => {
+                this.props.addAStudentToClass({
+                  classId: this.props.classId,
+                  studentId: this.props.teachersClassView.selectedStudent.sub.id
+                });
+              }}
+            />
+          <Box align="center" pad="medium" margin="small" colorIndex="light-2">
+						Quiz List
+						<Button 
+							label="Create New Quiz"
+							onClick={this.props.showQuizModal}/>
+          </Box>
 					{/* <Box align='center'
 						pad='none'
 						margin="none"
@@ -312,13 +332,71 @@ class ClassView extends React.Component {
 					</Footer>
 				</Form>
 			</Layer>
-			}
+      }
+      {this.props.teachersClassView.showQuizBuilderModal ?
+					<Layer closer={true}
+								 flush={true} 
+								 overlayClose={true}>
+						<Form>
+              <Header pad={{ vertical: "medium", horizontal: "medium" }}>
+                <Heading>
+                  Create A New Quiz
+                </Heading>
+              </Header>
+                <Section pad={{ vertical: "medium", horizontal: "medium" }}>
+                  <FormFields>
+                    <TextInput 
+                      placeHolder="Please Name Your Quiz"
+                      onDOMChange={value => {
+                        this.props.setNewQuizName(value);
+                      }}/>
+                    <SearchInput 
+                      placeHolder="Quiz Subject"
+                      suggestions={this.props.subjects}
+                      // value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
+                      onDOMChange={(event) => this.props.setNewQuizSubject(event)}
+                      onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
+                      {this.props.teachersClassView.newQuiz.questions.map((each, index) => {
+                          return (
+                            <Section>
+                              <Label>{'Question' + ' ' + index+1}</Label>
+                              <TextInput placeHolder="Question..."
+                                         onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+                              {each.answers.map((eachAnswer, answerIndex) => {
+                                return (
+                                  <Section>
+                                    <TextInput placeHolder="Answer..."
+                                               onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
+                                    <CheckBox label='Correct'
+                                              toggle={false}
+                                              reverse={true} 
+                                              onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
+                                  </Section>
+                                )
+                              })}
+                              <Button icon={<AddCircleIcon />} 
+                                      label="Add Answer"
+                                      onClick={() => {this.props.addAnswer(index)}}/>
+                            </Section>
+                          )
+                        }) }
+                      <Button icon={<AddCircleIcon />}
+                                      onClick={() => this.props.setQuestionNumber()}
+                                      label="Add Question"/>
+                  </FormFields>
+                </Section>
+              <Footer pad={{"vertical": "medium", horizontal: "medium"}}>
+                <Button label='Add Quiz'
+                        onClick={() => this.props.addNewQuiz({authorId: this.props.auth.user.id, quiz: this.props.teachersClassView.newQuiz})}/>
+              </Footer>
+						</Form>
+					</Layer>
+				: <div></div>}
 			</Section>
 			</div>
 		)
 	}
 }
-
 
 function mapStateToProps(state) {
 	return {
@@ -331,13 +409,15 @@ function mapStateToProps(state) {
 		showQuizLauncherModal: state.teachersClassView.showQuizLauncherModal,
 		students: state.teachersClassView.students,
 		studentNames: state.teachersClassView.studentNames,
-		classId: state.teachersClassView.targetClass.id
+    classId: state.teachersClassView.targetClass.id,
+    teachersClassView: state.teachersClassView,
+    selectedStudent: state.teachersClassView.selectStudent,
+    auth: state.auth
 	}
 }
 
 function matchDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+  return bindActionCreators(Actions, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(ClassView)
-
+export default connect(mapStateToProps, matchDispatchToProps)(ClassView);

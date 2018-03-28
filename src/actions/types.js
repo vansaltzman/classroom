@@ -11,6 +11,7 @@ const actionTypes = {
 	UPDATE_NEW_CLASS_YEAR_ACTION: 'update_new_class_year_action',
 	UPDATE_NEW_CLASS_NAME_ACTION: 'update_new_class_name_action',
 	UPDATE_NEW_CLASS_SUBJECT_ACTION: 'update_new_class_subject_action',
+	SELECT_EXISTING_SUBJECT_ACTION: 'select_existing_subject_action',
 	UPDATE_NEW_CLASS_QUARTER_ACTION: 'update_new_class_quarter_action',
 	GET_ALL_STUDENTS_ACTION: 'get_all_students_action',
 	TEACHER_ENTER_CLASS_ACTION: 'enter_class_action',
@@ -22,6 +23,10 @@ const actionTypes = {
 	UPDATE_NEW_CLASS_YEAR_ACTION: 'update_new_class_year_action',
 	UPDATE_CLASS_DATA_TEACHER: 'update_class_data_teacher',
 	UPDATE_CLASS_DATA_STUDENT: 'update_class_data_student',
+	UPDATE_CLASS_DATA: 'update_class_data',
+	SELECT_EXISTING_STUDENT_TO_ADD: 'select_existing_student_to_add',
+	ADD_A_STUDENT_TO_CLASS_ACTION: 'add_a_student_to_class_action',
+	GET_ALL_SUBJECTS: 'get_all_subjects',
 	////// StudentViewQuiz //////
 	GET_QUIZ: 'get_quiz',
 	NEXT_QUESTION: 'next_question',
@@ -36,6 +41,19 @@ const actionTypes = {
 	SET_QUIZ_TIME: 'SET_QUIZ_TIME',
 	GET_CLASS_STATUS: 'GET_CLASS_STATUS',
 	SET_QUIZ_WEIGHT: 'SET_QUIZ_WEIGHT',
+
+	/******************* Quiz/Question Builder*********************/
+	SHOW_QUIZ_MODAL_ACTION: 'show_quiz_modal_action',
+	SET_NEW_QUIZ_NAME_ACTION: 'set_new_quiz_name_action',
+	SET_NEW_QUIZ_SUBJECT_ACTION: 'set_new_quiz_subject_action',
+	SET_NEW_QUIZ_SUBJECT_BY_SELECTION_ACTION: 'set_new_quiz_subject_by_selection_action',
+	SET_QUESTION_NUMBER_ACTION: 'set_question_number_action',
+	ADD_ANSWER_ACTION: 'add_answer_action',
+	ADD_QUESTION_TEXT_ACTION: 'add_question_text_action',
+	ADD_ANSWER_TEXT_ACTION: 'add_answer_text_action',
+	CHOOSE_CORRECT_ANSWER_ACTION: 'choose_correct_answer_action',
+	ADD_NEW_QUIZZES: 'add_new_quizzes',
+	FETCH_QUIZZES: 'fetch_quizzes'
 }
 
 export default actionTypes
