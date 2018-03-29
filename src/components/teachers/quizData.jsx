@@ -5,7 +5,9 @@ import Box from 'grommet/components/Box';
 import Button from 'grommet/components/Button';
 import Section from 'grommet/components/Section';
 import DeployIcon from 'grommet/components/icons/base/Deploy';
+import CheckboxSelectedIcon from 'grommet/components/icons/base/CheckboxSelected'
 import Table from 'grommet/components/Table';
+import Distribution from 'grommet/components/Distribution';
 import TableRow from 'grommet/components/TableRow';
 import TableHeader from 'grommet/components/TableHeader';
 import Value from 'grommet/components/Value';
@@ -17,6 +19,7 @@ import Timer from '../students/Timer.jsx'
 import UserImage from '../UserImage.jsx'
 import Heading from 'grommet/components/Heading';
 import Label from 'grommet/components/Label';
+import Fade from 'grommet/components/Animate';
 
 import moment from 'moment'
 
@@ -57,24 +60,41 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz }) => {
 							{student.name}
 						</Heading>
 					</Box>
-
+					
 					<Box
 						direction="column"
 						justify="start"
 						// alignContent=""
 						style={{width: '500px', margin: '0 50px 0 50px'}}
 					>
-						{studentQuiz.currentQuestion >= 0 &&
-						<div>
-							<Label
-								size="small"
+						{studentQuiz.currentQuestion >= 0 ?
+							studentQuiz.isFinished ?
+							<Fade 
+								enter={{"animation": "slide-right", "duration": 300, "delay": 0}}
+								leave={{"animation": "slide-left", "duration": 300, "delay": 0}}
+								keep={false}
 							>
-								Working On:
-							</Label>
-							<Animate 
-								text={studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : ''}
-							/>
-						</div>
+								<Value value={'Completed!'}
+									icon={<CheckboxSelectedIcon />}
+									responsive={false}
+									reverse={false}
+									colorIndex='ok' 
+								/> 
+							</Fade>
+							: 
+							<div>
+								<Label
+									size="small"
+								>
+									Working On:
+								</Label>
+								<Animate 
+									text={studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : ''}
+								/>
+							</div>
+							:
+							<div>
+							</div>
 						}
 					</Box>
 					<Box
@@ -119,7 +139,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz }) => {
 					<ScoreDistribution
 						studentQuiz={studentQuiz}
 						quiz={quiz}
-					/>}
+					/> }
 				</Box>
 				</Box>
 			</td>

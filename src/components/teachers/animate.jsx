@@ -8,7 +8,8 @@ class Animate extends React.Component {
     super(props);
     this.state = { 
       currentQuestion: 'test',
-      visible: true
+      visible: true,
+      showFull: false
      }
   }
 
@@ -41,8 +42,32 @@ class Animate extends React.Component {
           keep={true}>
           <Heading
             tag="h4"
+            style={this.state.showFull ? {
+              overflow: 'visible',
+              whiteSpace: 'normal', 
+              backgroundColor: 'white',
+              textOverflow: 'ellipsis', 
+              height: '23px',
+              width: '500px', 
+              position: 'absolute',
+              display: 'block',
+              lineHeight: '23px',
+              zIndex: '999'
+            }: 
+            {
+              overflow: 'hidden', 
+              whiteSpace: 'nowrap', 
+              textOverflow: 'ellipsis', 
+              height: '23px', 
+              width: '500px', 
+              display: 'inline-block',
+              lineHeight: '23px',
+            }
+            }
+            onMouseEnter ={()=> this.setState({showFull: true})}
+            onMouseLeave ={()=> this.setState({showFull: false})}
           >
-            {this.state.currentQuestion.length >= 55 ? this.state.currentQuestion.slice(0, 55) + '...' : this.state.currentQuestion}
+            {this.state.currentQuestion}
           </Heading>
         </Fade>
      )
