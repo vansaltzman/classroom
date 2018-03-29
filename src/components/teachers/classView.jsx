@@ -73,7 +73,7 @@ class ClassView extends React.Component {
   }
   
   componentWillUpdate() {
-		this.props.getStudentsBelongToAClass({ id: this.props.classId });
+		//this.props.getStudentsBelongToAClass({ id: this.props.classId });
   }
 	
 	componentDidMount() {
@@ -378,8 +378,9 @@ function mapStateToProps(state) {
 		studentNames: state.teachersClassView.studentNames,
     classId: state.teachersClassView.targetClass.id,
     teachersClassView: state.teachersClassView,
-    selectedStudent: state.teachersClassView.selectStudent,
-    auth: state.auth
+		selectedStudent: state.teachersClassView.selectStudent,
+		subjects: state.teachersClassView.subjects,
+    auth: state.auth,
 	}
 }
 
