@@ -77,11 +77,6 @@ app.use(bodyParser.json())
     })
   })
  
-  app.get('/quizzes', (req, res)=> {
-    const { userId } = req.query
-
-    main
-  })
 
   // Answer Quiz Question
   app.post('/updateLiveQuizAnswers', (req, res)=> {
@@ -138,7 +133,8 @@ app.post('/allClasses', (req, res) => {
   //console.log('serverside /allClasses', req.body);
   main.getClassesForTeacherMainView(req.body.email)
   .then((data) => {
-    res.send(data.rows);
+    console.log('data ------> ', data)
+    res.send(data);
     //console.log('server side classes', data.rows)
   })
   .catch((err) => {
@@ -208,7 +204,7 @@ app.post('/addQuiz', (req, res) => {
   main.addQuiz(req.body)
   .then((data) => {
     console.log('refetched quizzes at server side', data)
-    res.send(data)
+    res.sendStatus(200)
   })
 })
 
@@ -216,11 +212,11 @@ app.post('/getQuizzes', (req, res) => {
   //console.log('serverside quizzes req obj', req.body)
   main.getQuizzes(req.body.teacherId, req.body.subjectId)
   .then((data) => {
-    console.log('-----------------serverside quizzes from DB----------------', data)
+  //   console.log('-----------------serverside quizzes from DB----------------', data)
     
-    // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions)
-    // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions[0].answers)
-    //console.log('first quiz', data[0][0][0].questions[0].answers);
+  //   // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions)
+  //   // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions[0].answers)
+  //   //console.log('first quiz', data[0][0][0].questions[0].answers);
     res.send(data)
   })
 })

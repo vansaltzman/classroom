@@ -31,7 +31,7 @@ const endClass = function(classId) {
 	return classToEnd.child('isLive').set(false)
 }
 
-const studentJoins = function(studentId, classId) { // Conncect this to actions. And create a set isInClassroom function
+const studentJoins = function(studentId, classId) {
   var studentStatus = fb.ref('classes/' + classId + '/students/' + studentId + '/isInClassroom')
   studentStatus.on('value', (snap)=> {
     return snap.val()
@@ -50,7 +50,6 @@ const launchQuiz = function (classId, quizObj, quizTime, quizWeight) {
 			const studentQuizObj = studentQuizObjConverter(quizObj);
 			return fb.ref('/classes/' + classId + '/students').once('value', (snap)=> {
 					var students = snap.val()
-					console.log('students ------> ' + students + ' <------ ')
 					Object.values(students).forEach( student => {
 							let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id + '/quizzes');
 							studentRef.child(quizObj.id).set(studentQuizObj)

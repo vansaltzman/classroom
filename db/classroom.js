@@ -143,6 +143,7 @@ CREATE TABLE IF NOT EXISTS  "submitted_quizzes_submitted_questions" (
 	"id" serial NOT NULL,
 	"submitted_quiz_id" integer NOT NULL,
 	"submitted_question_id" integer NOT NULL,
+	"position" integer NOT NULL,
 	CONSTRAINT submitted_quizzes_submitted_questions_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE

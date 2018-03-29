@@ -87,6 +87,7 @@ class ClassView extends React.Component {
 	}
 
 	selectQuiz(quizObj) {
+		console.log('quizObj ------> ', quizObj)
 		this.setState({selectedQuiz: quizObj || null})
 	}
 
@@ -207,7 +208,7 @@ class ClassView extends React.Component {
 					> */}
 						Quiz List
 						<Accordion
-							onActive={(index)=> this.selectQuiz(quizzes[Object.keys(quizzes)[index]])}
+							onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}
 						>
 							{Object.values(this.props.teachersClassView.quizzes).map(quiz => {
 							return <AccordionPanel heading={
@@ -223,10 +224,11 @@ class ClassView extends React.Component {
 											{moment.duration(question.time).humanize()}
 										</Label>
 										{Object.values(question.answers).map(answer=> {
+											console.log('answer!!!! ------> ', answer)
 											return <Notification
-												message={answer.answer}
+												message={answer.text}
 												size='small'
-												status={answer.correct ? 'ok' : 'critical'}
+												status={answer.isCorrect ? 'ok' : 'critical'}
 											/>
 										})}
 									</Box>
