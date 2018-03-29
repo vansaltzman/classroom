@@ -267,7 +267,7 @@ export function teacherClassViewReducer(
 			})
 			refetched.map((eachQuiz) => {
 				for (var key in eachQuiz.questions) {
-					eachQuiz.questions[key].answers = eachQuiz.questions[key].answers.reduce((accumulator, each) => {
+					eachQuiz.questions[key].answers = Object.values(eachQuiz.questions[key].answers).reduce((accumulator, each) => {
 						let eachAnswerId = each.id
 						accumulator[eachAnswerId] = each
 						return accumulator
