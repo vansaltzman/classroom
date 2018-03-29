@@ -251,7 +251,7 @@ export function teacherClassViewReducer(
 			}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
-			console.log('reducer action.quizzes', action.quizzes)
+			//console.log('reducer action.quizzes', action.quizzes)
 			quizzes.map((eachQuiz) => {
 				eachQuiz.questions = eachQuiz.questions.reduce((acc, eachQuestion) => {
 					let questionId = eachQuestion.id
@@ -268,7 +268,7 @@ export function teacherClassViewReducer(
 						accumulator[answerId] = each
 						return accumulator
 					}, {})
-					console.log('answers arrat', eachQuiz.questions[key].answers)
+					//console.log('answers arrat', eachQuiz.questions[key].answers)
 				}
 				return eachQuiz
 			})
