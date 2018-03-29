@@ -180,7 +180,8 @@ class ClassView extends React.Component {
 					</Box>
 					<SearchInput
               placeHolder="Search For A Student"
-              suggestions={this.props.studentNames}
+							suggestions={this.props.studentNames}
+							value={this.props.teachersClassView.selectedStudent.value}
               //  onDOMChange={(target) => this.props.selectStudentToAdd(target)} />
               onSelect={target => this.props.selectStudentToAdd(target)}
             />
