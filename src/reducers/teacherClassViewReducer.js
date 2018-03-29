@@ -114,10 +114,31 @@ export function teacherClassViewReducer(
 /***************************************** FIXING THIS ***************************************/
 		case actionTypes.ADD_A_STUDENT_TO_CLASS_ACTION:
 			console.log('studentssss', action.students)
-			return { ...state };
+			const withNewAddedStudents = {};
+      for (var i = 0; i < action.students.length; i++) {
+        let student_id = action.students[i].id;
+        withNewAddedStudents[student_id] = {
+          id: student_id,
+          name:
+            action.students[i].first_name + " " + action.students[i].last_name,
+          isHere: false,
+          email: action.students[i].email,
+          quizzes: {}
+        };
+      }
+			return {
+				...state, 
+				targetClass: {
+					...state.targetClass,
+					students: withNewAddedStudents
+				} 
+			};
+			
 		/**************************** QUIZ **************************/
     case actionTypes.SHOW_QUIZ_MODAL_ACTION:
-			return { ...state, showQuizBuilderModal: !state.showClassBuilderModal, newQuiz: {questions: []} };
+			return { ...state, showQuizBuilderModal: !state.showQuizBuilderModal, newQuiz: {questions: []} };
+		// case actionTypes.CLOSE_QUIZ_BUILDER_MODAL:
+		// 	return { ...state, showClassBuilderModal: !state.show}
 		case actionTypes.SET_NEW_QUIZ_NAME_ACTION:	
 			return {
 				...state,
@@ -223,7 +244,7 @@ export function teacherClassViewReducer(
 					}
 				}
 		case actionTypes.ADD_NEW_QUIZZES:
-			return {...state, showQuizBuilderModal: !state.showQuizBuilderModal}
+			return {...state}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
 			console.log('reducer action.quizzes', action.quizzes)

@@ -336,18 +336,20 @@ function selectStudentToAddAction (student) {
 }
 
 export function addAStudentToClass(studentObj) {
-	console.log('selected student to be added')
+	console.log('selected student to be added', studentObj)
 	return (dispatch) => {
 		axios.post('/addAStudentToClass', studentObj)
-		.then(() => {
-			dispatch(addAStudentToClassAction())
+		.then((res) => {
+			console.log('at add student action', res.data)
+			dispatch(addAStudentToClassAction(res.data))
 		})
 	}
 }
 
 function addAStudentToClassAction (students) {
 	return {
-		type: ADD_A_STUDENT_TO_CLASS_ACTION
+		type: actionTypes.ADD_A_STUDENT_TO_CLASS_ACTION,
+		students
 	}
 }
 
@@ -460,12 +462,24 @@ export function previousQuestion() {
 /******************************************** QUIZ/QUESTION BUILDER ***************************************/
 export function showQuizModal() {
 	return (dispatch) => {
+		console.log('Did we get here?')
 		dispatch(showQuizModalAction())
 	}
 }
 function showQuizModalAction() {
 	return {
 		type: actionTypes.SHOW_QUIZ_MODAL_ACTION
+	}
+}
+
+export function closeQuizBuilderModal() {
+	return (dispatch) => {
+		dispatch(closeQuizBuilderModalAction())
+	}
+}
+function closeQuizBuilderModalAction() {
+	return {
+		type: actionTypes.CLOSE_QUIZ_BUILDER_MODAL
 	}
 }
 // SET_NEW_QUIZ_NAME_ACTION: 'set_new_quiz_name_action',
@@ -584,6 +598,11 @@ function addNewQuizzesAction() {
 		type: actionTypes.ADD_NEW_QUIZZES,
 	}
 }
+
+// this.props.fetchQuizzes({
+// 	teacherId: this.props.teachersClassView.targetClass.teacher_id,
+// 	subjectId: this.props.teachersClassView.targetClass.subject_id
+// })
 
 export function fetchQuizzes(reqObj) {
 	return (dispatch) => {

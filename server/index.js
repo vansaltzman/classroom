@@ -185,6 +185,10 @@ app.post('/getStudentsClasses', (req, res) => {
 app.post('/addAStudentToClass', (req, res) => {
 
   main.addStudentToAClass(req.body.classId, req.body.studentId)
+  .then((data) => {
+    console.log('data at server side', data)
+    res.send(data.rows);
+  })
   //console.log('server student to be added', req.body)
 })
 
