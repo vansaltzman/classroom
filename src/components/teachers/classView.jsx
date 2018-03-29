@@ -321,7 +321,7 @@ class ClassView extends React.Component {
                     <SearchInput 
                       placeHolder="Quiz Subject"
 											suggestions={this.props.subjects}
-											//value={this.props.targetClass.newQuiz ? this.props.targetClass.newQuiz.subject.value : "" }
+											value={this.props.teachersClassView.newQuiz.subject.value ? this.props.teachersClassView.newQuiz.subject.value : ""}
                       // value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
                       onDOMChange={(event) => this.props.setNewQuizSubject(event)}
                       onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
