@@ -1,5 +1,6 @@
 import React from 'react'
 import Fade from 'grommet/components/Animate';
+import Heading from 'grommet/components/Heading';
 
 
 class Animate extends React.Component {
@@ -29,15 +30,20 @@ class Animate extends React.Component {
   }
 
   render() { 
+
+    // add a styled "is done" or "not started" 
+
     return ( 
         <Fade 
           visible={this.state.visible}
           enter={{"animation": "slide-right", "duration": 300, "delay": 0}}
           leave={{"animation": "slide-left", "duration": 300, "delay": 0}}
           keep={true}>
-          <span>
-            {this.state.currentQuestion}
-          </span>
+          <Heading
+            tag="h4"
+          >
+            {this.state.currentQuestion.length >= 55 ? this.state.currentQuestion.slice(0, 55) + '...' : this.state.currentQuestion}
+          </Heading>
         </Fade>
      )
   }

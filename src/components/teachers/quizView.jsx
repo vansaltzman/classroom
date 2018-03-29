@@ -238,6 +238,9 @@ const QuizView = ({ props }) => {
 				quizEndTime={quiz.time}
 				quizDuration={quiz.quizDuration}
 			/>
+
+			{/* Add Quiz Header Here */}
+
 			<Table>
 			{/* 
 
