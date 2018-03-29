@@ -38,13 +38,14 @@ class NavigationBar extends React.Component {
     this.checkAuth = this.checkAuth.bind(this);
     this.checkView = this.checkView.bind(this);
     this.logout = this.logout.bind(this);
+    this.goToNewClass = this.goToNewClass.bind(this);
   }
   checkView() {
     return <Redirect to="/default"/>
-    // setTimeout(function() {
-    //     return <Redirect to="/studentLiveClass2"/>
-    // }, 3000) 
+  }
 
+  goToNewClass() {
+    return <Redirect to="/liveclass"/>
   }
   
   checkAuth() {
@@ -209,7 +210,7 @@ class NavigationBar extends React.Component {
               <Route path="/teachermainview" component={TeacherMainView} />
               {/* <Route path="/studentmainview" component={TeacherMainView} /> */}
               <Route exact path="/login" render={this.checkAuth} />
-              <Route path="/liveclass" component={ClassView} />
+              <Route path="/liveclass" render={this.goToNewClass} />
               <Route path="/studentmainview" component={StudentMainView} />
               <Route path="/login" component={SignIn} />
               <Route path="/teacherQuiz" component={ClassView} />

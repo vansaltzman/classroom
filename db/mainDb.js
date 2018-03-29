@@ -127,7 +127,7 @@ const fetchQuizTemplates = function(teacherId) {
 
 /**************** INSERTING CLASS INTO POSTGRESQL ****************/
 const addNewClass = function(classObj) {
-  console.log('database side', classObj)
+  //console.log('database side', classObj)
   //const params = []
   const checkSubjectQuery = `SELECT * FROM subjects WHERE name='${classObj.subject}';`
   console.log(checkSubjectQuery);
@@ -148,6 +148,18 @@ const addNewClass = function(classObj) {
   })
   .catch((err)=> console.log(err))
   
+}
+
+const getNewAddedClass = function(email, classname) {
+  console.log('email', email, 'classname', classname)
+  const teacherIdqueryString = `SELECT id FROM teachers WHERE email='${email}'`;
+  return db.query(teacherIdqueryString)
+  .then((data) => {
+    const teacherId = data.rows[0].id;
+    const queryStringForClasses = `SELECT * FROM classes WHERE teacher_id='${teacherId}' AND name='${classname}';`
+    return db.query(queryStringForClasses)
+    console.log('teacher id data', data.rows[0].id);
+  })
 }
 
 const getClassesForTeacherMainView = function(email) {
@@ -175,7 +187,11 @@ const getAllStudentsBelongToAClass = function(classId) {
 
 const addStudentToAClass= function(classId, studentId) {
   const queryString = `INSERT INTO classes_students (class_id, student_id) VALUES ('${classId}', '${studentId}');`
-  return db.query(queryString);
+  return db.query(queryString)
+  .then(() => {
+    console.log('class Id to fetch student', classId)
+    return getAllStudentsBelongToAClass(classId)
+  })
 }
 
 const getClassesBelongToAStudent = function(studentEmail) {
@@ -228,6 +244,10 @@ const addQuiz = function(quizObj) {
                 ('${answer.text}', (SELECT id FROM draft_questions WHERE question='${q.question}'), '${answer.isCorrect}');`) 
       }))
     })))
+  })
+  .then(() => {
+    console.log('teacherId, subjectId for refetching quizzes', teacherId, subjectId)
+    return getQuizzes(teacherId, subjectId)
   })
   .catch((err) => {
     if (err) throw err;
@@ -286,7 +306,8 @@ module.exports = {
   getClassesBelongToAStudent,
   getAllExistingSubjects,
   addQuiz,
-  getQuizzes
+  getQuizzes,
+  getNewAddedClass
 }
 
 // to get all students belong to a class

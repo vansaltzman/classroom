@@ -51,6 +51,7 @@ class ClassView extends React.Component {
 
 		this.launchNewQuiz = this.launchNewQuiz.bind(this)
 		this.toggleClassEndConfirmation = this.toggleClassEndConfirmation.bind(this)
+		this.toggleQuizBuilderModal = this.toggleQuizBuilderModal.bind(this)
 	}
 
 	launchNewQuiz(){
@@ -61,7 +62,9 @@ class ClassView extends React.Component {
 				}
 			})
 	}
-
+	toggleQuizBuilderModal() {
+		this.props.showQuizModal()
+	}
 	componentWillMount() {
 		this.props.getAllStudents();
     this.props.getStudentsBelongToAClass({ id: this.props.classId });
@@ -70,10 +73,6 @@ class ClassView extends React.Component {
       subjectId: this.props.teachersClassView.targetClass.subject_id
     })
     // this.props.getStudentsBelongToAClass({ id: this.props.classId });
-  }
-  
-  componentWillUpdate() {
-    //this.props.getStudentsBelongToAClass({ id: this.props.classId });
   }
 	
 	componentDidMount() {
@@ -198,7 +197,7 @@ class ClassView extends React.Component {
 						Quiz List
 						<Button 
 							label="Create New Quiz"
-							onClick={this.props.showQuizModal}/>
+							onClick={this.toggleQuizBuilderModal}/>
           </Box>
 					{/* <Box align='center'
 						pad='none'
@@ -215,8 +214,8 @@ class ClassView extends React.Component {
 								<div>
 									{quiz.name}
 								</div>}> 
-								{Object.values(quiz.questions).map(question => {
-									 return <Box>
+								{Object.values(quiz.questions).map((question,i) => {
+									 return <Box key={i}>
 										<Heading tag="h3">
 											{question.question}
 										</Heading>
@@ -300,11 +299,12 @@ class ClassView extends React.Component {
 				</Form>
 			</Layer>
       }
-      {this.props.teachersClassView.showQuizBuilderModal ?
+      {this.props.teachersClassView.showQuizBuilderModal === true ?
 					<Layer closer={true}
 								 flush={true} 
-								 overlayClose={true}>
-						<Form>
+								 overlayClose={true}
+								 onClose={this.toggleQuizBuilderModal}>
+						<Form compact={false} pad={{ vertical: "medium", horizontal: "medium" }}>
               <Header pad={{ vertical: "medium", horizontal: "medium" }}>
                 <Heading>
                   Create A New Quiz
@@ -319,14 +319,15 @@ class ClassView extends React.Component {
                       }}/>
                     <SearchInput 
                       placeHolder="Quiz Subject"
-                      suggestions={this.props.subjects}
+											suggestions={this.props.subjects}
+											//value={this.props.targetClass.newQuiz ? this.props.targetClass.newQuiz.subject.value : "" }
                       // value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
                       onDOMChange={(event) => this.props.setNewQuizSubject(event)}
                       onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
                       {this.props.teachersClassView.newQuiz.questions.map((each, index) => {
                           return (
                             <Section>
-                              <Label>{'Question' + ' ' + index+1}</Label>
+                              <Label>{'Question' + ' ' + index + 1}</Label>
                               <TextInput placeHolder="Question..."
                                          onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
                               {each.answers.map((eachAnswer, answerIndex) => {
@@ -353,7 +354,8 @@ class ClassView extends React.Component {
                   </FormFields>
                 </Section>
               <Footer pad={{"vertical": "medium", horizontal: "medium"}}>
-                <Button label='Add Quiz'
+								<Button label='Add Quiz'
+												path="/teacherQuiz"
                         onClick={() => this.props.addNewQuiz({authorId: this.props.auth.user.id, quiz: this.props.teachersClassView.newQuiz})}/>
               </Footer>
 						</Form>
@@ -378,8 +380,9 @@ function mapStateToProps(state) {
 		studentNames: state.teachersClassView.studentNames,
     classId: state.teachersClassView.targetClass.id,
     teachersClassView: state.teachersClassView,
-    selectedStudent: state.teachersClassView.selectStudent,
-    auth: state.auth
+		selectedStudent: state.teachersClassView.selectStudent,
+		subjects: state.teachersClassView.subjects,
+    auth: state.auth,
 	}
 }
 
