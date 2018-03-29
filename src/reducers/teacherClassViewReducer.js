@@ -272,7 +272,8 @@ export function teacherClassViewReducer(
 			}, {})
 			return {
 				...state,
-				quizzes: refetched
+				quizzes: refetched,
+				showQuizBuilderModal: !state.showQuizBuilderModal
 			}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
