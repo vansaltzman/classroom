@@ -1,28 +1,75 @@
 import React from 'react'
+import Fade from 'grommet/components/Animate';
+import Heading from 'grommet/components/Heading';
+
 
 class Animate extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-      textSize: '16px'
+      currentQuestion: 'test',
+      visible: true,
+      showFull: false
      }
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillMount() {
+    this.setState({currentQuestion: this.props.text})
+  }
+
+  componentWillReceiveProps(nextProps) {
     if (nextProps.text !== this.props.text) {
-      this.setState({textSize: '24px'}, ()=> {
+      this.setState({visible: false}, ()=> {
         setTimeout(()=> {
-          this.setState({textSize: '16px'})
-        }, 1000)
+          this.setState({currentQuestion: nextProps.text})
+          setTimeout(()=> {
+            this.setState({visible: true})
+          }, 280)
+        }, 320)
       })
     }
   }
 
   render() { 
+
+    // add a styled "is done" or "not started" 
+
     return ( 
-      <span style={{fontSize: this.state.textSize}}>
-        {this.props.text}
-      </span>
+        <Fade 
+          visible={this.state.visible}
+          enter={{"animation": "slide-right", "duration": 300, "delay": 0}}
+          leave={{"animation": "slide-left", "duration": 300, "delay": 0}}
+          keep={true}>
+          <Heading
+            tag="h4"
+            style={this.state.showFull ? {
+              overflow: 'visible',
+              whiteSpace: 'normal', 
+              backgroundColor: 'white',
+              textOverflow: 'ellipsis', 
+              height: '23px',
+              width: '500px', 
+              position: 'absolute',
+              display: 'block',
+              lineHeight: '23px',
+              zIndex: '999'
+            }: 
+            {
+              overflow: 'hidden', 
+              whiteSpace: 'nowrap', 
+              textOverflow: 'ellipsis', 
+              height: '23px', 
+              width: '500px', 
+              display: 'inline-block',
+              lineHeight: '23px',
+            }
+            }
+            onMouseEnter ={()=> this.setState({showFull: true})}
+            onMouseLeave ={()=> this.setState({showFull: false})}
+          >
+            {this.state.currentQuestion}
+          </Heading>
+        </Fade>
      )
   }
 }

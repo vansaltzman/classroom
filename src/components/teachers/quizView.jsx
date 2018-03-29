@@ -3,8 +3,10 @@ import "grommet/scss/hpinc/index.scss";
 import Columns from 'grommet/components/Columns';
 import Box from 'grommet/components/Box';
 import Button from 'grommet/components/Button';
+import Anchor from 'grommet/components/Anchor';
 import Section from 'grommet/components/Section';
 import DeployIcon from 'grommet/components/icons/base/Deploy';
+import SubtractCircle from 'grommet/components/icons/base/SubtractCircle';
 import Table from 'grommet/components/Table';
 import TableRow from 'grommet/components/TableRow';
 import TableHeader from 'grommet/components/TableHeader';
@@ -13,6 +15,10 @@ import Sort from 'grommet-addons/components/Sort'
 import Animate from './animate.jsx';
 import fb from '../../../db/liveClassroom.js';
 import ScoreDistribution from './quizViewDistribution.jsx';
+import Timer from '../students/Timer.jsx'
+import UserImage from '../UserImage.jsx'
+import QuizData from './quizData.jsx'
+import Headline from 'grommet/components/Headline';
 
 import moment from 'moment'
 
@@ -196,8 +202,8 @@ const students = {
 		}
 	}
 
-const QuizView = (props) => {
-	const targetClass = props.props.currentClass;
+const QuizView = ({ props }) => {
+	const targetClass = props.currentClass;
 	const students = targetClass.students;
 	const quiz = targetClass.quizzes[targetClass.activeView];
 	const quizIds = Object.keys(quiz.questions);
@@ -219,41 +225,75 @@ const QuizView = (props) => {
 				onClick={()=> updateActiveView(false, currentClass.id)} 
 			/> */}
 			
-
-			<Button icon={<DeployIcon />}
-							label='End Quiz'
-							primary={false}
-							secondary={false}
-							accent={true}
-							critical={false}
-							plain={false} 
-							path="/liveclass"
-							onClick={endQuiz.bind(this)}/>
+			<Box
+				direction="row"
+				full="true"
+				justify="between"
+				alignContent="center"
+				margin="small"
+				colorIndex="light-2"
+				style={{margin: '25px 50px 0 50px', padding: '5px'}}
+			>
+				<Anchor 
+					icon={<SubtractCircle size="large" />}
+					label='End Quiz'
+					primary={false}
+					path="/liveclass"
+					style={{lineHeight: '100px', marginLeft: "10px"}}
+					onClick={endQuiz.bind(this)}
+				/>
+				<Headline
+					style={{marginBottom: 0, lineHeight: '100px'}}
+				>
+					{quiz.name}
+				</Headline>
+				<Timer 
+					quizEndTime={quiz.time}
+					quizDuration={quiz.quizDuration}
+				/>
+				</Box>
+			{/* Add Quiz Header Here */}
 
 			<Table>
+			{/* 
+
+				Error with Grommet source code relating to table headers
+			
 			<TableHeader labels={['Name', 'Current Question', 'Time on Question', 'Score']}
 				sortIndex={false}
 				sortAscending={true}
-			/>
+			/> */}
 			<tbody>
 			{Object.keys(students).map(studentId => {
 
-					// !-- Need to add more human readable variables for long object paths
-
 					let studentQuiz = students[studentId].quizzes[quiz.id]
+					let student = students[studentId]
 
-				return <TableRow
+				return <QuizData
+					targetClass={targetClass}
+					studentQuiz={studentQuiz}
+					student={student}
+					quiz={quiz}
+					quizIds={quizIds} 
+				/>
+
+				{/* return <TableRow
 					key={studentId}
 					style={{
 						background: studentQuiz.isFinished ? 'lightgreen' : students[studentId].isHere ? 'white' : 'lightgrey',
 						height: '100px'
 					}}>
 					<td width="50px">
+						<UserImage handRaised={true}/>
+					</td>
+					<td width="50px">
 						{students[studentId].name}
 					</td>
-					<td className='secondary' width="200px">
-						<Animate text={studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : null}
-					/>
+					<td width="200px">
+					{studentQuiz.currentQuestion >= 0 &&
+						<Animate text={studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : ''}
+						/>
+					}
 					</td>
 					<td className='secondary' width="100px">
 					{studentQuiz.currentQuestion >= 0 &&
@@ -280,7 +320,7 @@ const QuizView = (props) => {
 							quiz={quiz}
 						/>}
 					</td>
-				</TableRow>
+				</TableRow> */}
 			})
 			}
 			</tbody>
