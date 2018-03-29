@@ -2,8 +2,8 @@ var assert = require('assert')
 var bcrypt = require('bcrypt')
 var { db, addUser, verifyUser } = require('../../db/mainDb.js')
 
-var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
-//var testTeacher = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
+//var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
+var testTeacher = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
 
 const addFrizzle = function(){
 
@@ -159,7 +159,8 @@ const addStudents = function(student) {
     }
   })
 }
-addStudents(Juan);
+addStudents(Ara);
+
 
 //let JoeJoe = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
 // const addTeachers = function(teacher) {
