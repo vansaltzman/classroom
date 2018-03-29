@@ -37,7 +37,10 @@ export function teacherClassViewReducer(
       return { ...state, newClassQuarter: action.quarter.option };
     case actionTypes.UPDATE_NEW_CLASS_YEAR_ACTION:
       //console.log('reducer action.year', action.year.option)
-      return { ...state, newClassYear: action.year.option };
+			return { ...state, newClassYear: action.year.option };
+		case actionTypes.ADD_NEW_CLASS_ACTION:
+			console.log('reducer add class', action.classObj)
+			return { ...state}
     case actionTypes.GET_ALL_SUBJECTS:
       const subjects = action.subjects.map(each => {
         return {
@@ -219,6 +222,8 @@ export function teacherClassViewReducer(
 						questions: questionsCheckCorrect
 					}
 				}
+		case actionTypes.ADD_NEW_QUIZZES:
+			return {...state, showQuizBuilderModal: !state.showQuizBuilderModal}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
 			console.log('reducer action.quizzes', action.quizzes)

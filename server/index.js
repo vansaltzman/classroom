@@ -111,14 +111,27 @@ app.use(bodyParser.json())
   // Complete Quiz
   
 app.post('/addClass', (req, res) => {
-  //console.log('server side data for add class',  req.body);
+  console.log('server side data for add class',  req.body);
   main.addNewClass(req.body)
   .then(() => {
-    //console.log('Class is added')
+    console.log('Class is added')
+    res.sendStatus(200)
   })
   .catch((err) => {
     if (err) throw err;
   })
+})
+
+app.post('/getNewAddedClass', (req,res) => {
+  console.log('get data from server side for added class', req.body)
+  const className = req.body.classname
+  const email = req.body.email
+  main.getNewAddedClass(email, classname)
+  .then((data) => {
+    console.log('data on server side for newly added class', data)
+    res.send(data)
+  })
+  console.log()
 })
 
 app.post('/allClasses', (req, res) => {

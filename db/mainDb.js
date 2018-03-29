@@ -127,7 +127,7 @@ const fetchQuizTemplates = function(teacherId) {
 
 /**************** INSERTING CLASS INTO POSTGRESQL ****************/
 const addNewClass = function(classObj) {
-  console.log('database side', classObj)
+  //console.log('database side', classObj)
   //const params = []
   const checkSubjectQuery = `SELECT * FROM subjects WHERE name='${classObj.subject}';`
   console.log(checkSubjectQuery);
@@ -148,6 +148,18 @@ const addNewClass = function(classObj) {
   })
   .catch((err)=> console.log(err))
   
+}
+
+const getNewAddedClass = function(email, classname) {
+  console.log('email', email, 'classname', classname)
+  const teacherIdqueryString = `SELECT id FROM teachers WHERE email='${email}'`;
+  return db.query(teacherIdqueryString)
+  .then((data) => {
+    const teacherId = data.rows[0].id;
+    const queryStringForClasses = `SELECT * FROM classes WHERE teacher_id='${teacherId}' AND name='${classname}';`
+    return db.query(queryStringForClasses)
+    console.log('teacher id data', data.rows[0].id);
+  })
 }
 
 const getClassesForTeacherMainView = function(email) {
@@ -286,7 +298,8 @@ module.exports = {
   getClassesBelongToAStudent,
   getAllExistingSubjects,
   addQuiz,
-  getQuizzes
+  getQuizzes,
+  getNewAddedClass
 }
 
 // to get all students belong to a class

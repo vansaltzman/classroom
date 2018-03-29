@@ -2,8 +2,8 @@ var assert = require('assert')
 var bcrypt = require('bcrypt')
 var { db, addUser, verifyUser } = require('../../db/mainDb.js')
 
-// var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
-var testTeacher = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
+var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
+//var testTeacher = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
 
 const addFrizzle = function(){
 
@@ -142,6 +142,7 @@ let Riley = ['Riley', 'Alsman', 'riley@alsman.edu', '123456'];
 let Juan = ['Juan', 'Galan', 'juan@galan.edu', '123456'];
 let AlexL = ['Alex', 'Levine', 'alex@levine.edu', '123456'];
 let AlexC = ['Alex', 'Chojnacki', 'alex@chojnacki.edu', '123456'];
+let EricSin = ['Eric', 'Sin', 'eric@sin.edu', '123456'];
 
 const addStudents = function(student) {
   hashStudent = student.slice();
@@ -158,9 +159,9 @@ const addStudents = function(student) {
     }
   })
 }
-addStudents(Jae);
+addStudents(EricSin);
 
-let JoeJoe = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
+//let JoeJoe = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
 // const addTeachers = function(teacher) {
 //   hashTeacher = teacher.slice();
 //   let salt = 10;
