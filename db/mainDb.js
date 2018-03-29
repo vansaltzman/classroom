@@ -251,6 +251,9 @@ const addQuiz = function(quizObj) {
       }))
     })))
   })
+  .then(() => {
+    return getQuizzes(teacherId, subjectId)
+  })
   .catch((err) => {
     if (err) throw err;
   })

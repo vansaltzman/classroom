@@ -244,10 +244,35 @@ export function teacherClassViewReducer(
 					}
 				}
 		case actionTypes.ADD_NEW_QUIZZES:
-			// console.log('refetched quizzes at reducer', action.quizzes)
-			// const refetchedQuizzes = action.quizzes;
+			console.log('refetched quizzes at reducer', action.quizzes)
+			const refetched = action.quizzes;
+			refetched.map((eachQuiz) => {
+				eachQuiz.questions = eachQuiz.questions.reduce((acc, eachQuestion) => {
+					let qId = eachQuestion.id
+					acc[qId] = eachQuestion
+					return acc
+				}, {})
+				return eachQuiz
+			})
+			refetched.map((eachQuiz) => {
+				for (var key in eachQuiz.questions) {
+					eachQuiz.questions[key].answers = eachQuiz.questions[key].answers.reduce((accumulator, each) => {
+						let eachAnswerId = each.id
+						accumulator[eachAnswerId] = each
+						return accumulator
+					}, {})
+					//console.log('answers arrat', eachQuiz.questions[key].answers)
+				}
+				return eachQuiz
+			})
+			refetched.reduce((acc, quiz) => {
+				let quizsId = quiz.id;
+				acc[quizsId] = quiz;
+				return acc;
+			}, {})
 			return {
-				...state
+				...state,
+				quizzes: refetched
 			}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;

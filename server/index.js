@@ -206,10 +206,10 @@ app.get('/getAllSubjects', (req, res) => {
 app.post('/addQuiz', (req, res) => {
   //console.log('server side newQuiz', req.body);
   main.addQuiz(req.body)
-  // .then((data) => {
-  //   console.log('refetched quizzes at server side', data)
-  //   res.send(data)
-  // })
+  .then((data) => {
+    //console.log('refetched quizzes at server side', data)
+    res.send(data)
+  })
 })
 
 app.post('/getQuizzes', (req, res) => {
