@@ -188,14 +188,16 @@ const getAllStudents = function() {
 }
 
 const getAllStudentsBelongToAClass = function(classId) {
-  const queryString = `SELECT students.id, students.first_name, students.last_name, students.email
-                       FROM students INNER JOIN classes_students ON students.id = classes_students.student_id
-                       WHERE classes_students.class_id='${classId}'`
+  const queryString = 
+  `SELECT students.id, students.first_name, students.last_name, students.email
+  FROM students INNER JOIN classes_students ON students.id = classes_students.student_id
+  WHERE classes_students.class_id='${classId}'`
   return db.query(queryString);
 }
 
 const addStudentToAClass= function(classId, studentId) {
-  const queryString = `INSERT INTO classes_students (class_id, student_id) VALUES ('${classId}', '${studentId}');`
+  const queryString = 
+  `INSERT INTO classes_students (class_id, student_id) VALUES ('${classId}', '${studentId}');`
   return db.query(queryString)
   .then(() => {
     console.log('class Id to fetch student', classId)
