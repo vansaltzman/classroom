@@ -15,6 +15,7 @@ import fb from '../../../db/liveClassroom.js';
 import ScoreDistribution from './quizViewDistribution.jsx';
 import Timer from '../students/Timer.jsx'
 import UserImage from '../UserImage.jsx'
+import QuizData from './quizData.jsx'
 
 import moment from 'moment'
 
@@ -238,18 +239,29 @@ const QuizView = ({ props }) => {
 				quizDuration={quiz.quizDuration}
 			/>
 			<Table>
+			{/* 
+
+				Error with Grommet source code relating to table headers
+			
 			<TableHeader labels={['Name', 'Current Question', 'Time on Question', 'Score']}
 				sortIndex={false}
 				sortAscending={true}
-			/>
+			/> */}
 			<tbody>
 			{Object.keys(students).map(studentId => {
 
-					// !-- Need to add more human readable variables for long object paths
-
 					let studentQuiz = students[studentId].quizzes[quiz.id]
+					let student = students[studentId]
 
-				return <TableRow
+				return <QuizData
+					targetClass={targetClass}
+					studentQuiz={studentQuiz}
+					student={student}
+					quiz={quiz}
+					quizIds={quizIds} 
+				/>
+
+				{/* return <TableRow
 					key={studentId}
 					style={{
 						background: studentQuiz.isFinished ? 'lightgreen' : students[studentId].isHere ? 'white' : 'lightgrey',
@@ -261,9 +273,11 @@ const QuizView = ({ props }) => {
 					<td width="50px">
 						{students[studentId].name}
 					</td>
-					<td className='secondary' width="200px">
-						<Animate text={studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : null}
-					/>
+					<td width="200px">
+					{studentQuiz.currentQuestion >= 0 &&
+						<Animate text={studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : ''}
+						/>
+					}
 					</td>
 					<td className='secondary' width="100px">
 					{studentQuiz.currentQuestion >= 0 &&
@@ -290,7 +304,7 @@ const QuizView = ({ props }) => {
 							quiz={quiz}
 						/>}
 					</td>
-				</TableRow>
+				</TableRow> */}
 			})
 			}
 			</tbody>

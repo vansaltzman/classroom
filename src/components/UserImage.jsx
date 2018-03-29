@@ -23,7 +23,7 @@ let keyframes =
     }
 
 const UserImage = ({ url, handRaised, isFirst, clickHandler}) => {
-  isFirst = true
+  // isFirst = true
   return (
     <div style={{position: 'relative'}}>
       <img 
