@@ -176,7 +176,7 @@ export function teacherClassViewReducer(
 		case actionTypes.ADD_QUESTION_TEXT_ACTION:
 			const questionsWithText = state.newQuiz.questions.slice()
 			for (var j = 0; j < questionsWithText.length; j++) {
-				console.log('j === action.index', j === action.index)
+				//console.log('j === action.index', j === action.index)
 				if (j === action.index) {
 					questionsWithText[action.index].question = action.event.target.value
 				}
@@ -223,14 +223,14 @@ export function teacherClassViewReducer(
 					}
 				}
 			case actionTypes.CHOOSE_CORRECT_ANSWER_ACTION:
-				console.log(action.questionIndex, action.answerIndex)
+				//console.log(action.questionIndex, action.answerIndex)
 				const questionsCheckCorrect = state.newQuiz.questions.slice();
 				for (var n = 0; n < questionsCheckCorrect.length; n++) {
 					if (n === action.questionIndex) {
 						const question_answers = questionsCheckCorrect[action.questionIndex].answers;
 						for (var p = 0; p < question_answers.length; p++) {
 							if (p === action.answerIndex) {
-								console.log('isCorrect', state.newQuiz.questions[action.questionIndex].answers[action.answerIndex].isCorrect)
+								//console.log('isCorrect', state.newQuiz.questions[action.questionIndex].answers[action.answerIndex].isCorrect)
 								question_answers[action.answerIndex].isCorrect = !state.newQuiz.questions[action.questionIndex].answers[action.answerIndex].isCorrect
 							}
 						}
@@ -244,7 +244,11 @@ export function teacherClassViewReducer(
 					}
 				}
 		case actionTypes.ADD_NEW_QUIZZES:
-			return {...state}
+			console.log('refetched quizzes at reducer', action.quizzes)
+			const refetchedQuizzes = action.quizzes;
+			return {
+				...state
+			}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
 			console.log('reducer action.quizzes', action.quizzes)
