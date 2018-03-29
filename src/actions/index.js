@@ -592,7 +592,7 @@ export function addNewQuiz(teacherId, quizObj) {
 	return (dispatch) => {
 		axios.post('/addQuiz', teacherId, quizObj)
 		.then((res) => {
-			console.log('refetched quizzes at action', res.data)
+			//console.log('refetched quizzes at action', res.data)
 			dispatch(addNewQuizzesAction(res.data))
 		})
 	}

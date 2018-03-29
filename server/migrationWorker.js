@@ -2,6 +2,72 @@ const fb = require('../db/liveClassroom')
 const { db } = require('../db/mainDb')
 const main = require('../db/mainDb')
 
+const fbClassToPgObj = function(classObj) {
+  const classId = classObj.id
+  const { name, quizzes, students, teacher_id, subject_id } = classObj
+
+  // save quizzes into submitted quizzes
+  
+    // for each quiz, associate student responses with questions and answers
+        // save questions into submitted questions
+            // save answers into submitted answers
+               // save responses into students_responses
+
+
+
+}
+
+
+const submitQuiz = function(quizObj, studentResponses, classId) {
+  const teacherId = quizObj.authorId;
+  const questions = quizObj.quiz.questions;
+  const quizName = quizObj.quiz.name;
+  const prevQuizId = quizObj.quiz.id;
+  const quizWeight = quizObj.quiz.weight;
+  const subjectId = quizObj.quiz.subject.sub.id;
+  const subjectName = quizObj.quiz.subject.sub.name;
+  let quizId
+
+  return db.query(`INSERT INTO submitted_quizzes (name, subject_id, teacher_id, weight, previous_id, class_id) VALUES ('${quizName}', '${subjectId}', '${teacherId}', '${weight}', ${prevQuizId}, ${classId}) RETURNING id;`)
+  .then((submittedQuiz) => {
+    quizId = submitQuiz.rows[0].id
+    return Promise.all(questions.map((each, index) => {
+      //console.log('each question', each)
+      return db.query(`INSERT INTO submitted_questions (question, teacher_id, previous_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${question.id}', '${subjectId}' RETURNING id);`)
+      .catch((err) => {
+        if (err) throw err
+      })
+    }))
+  })
+  .then((submittedQuestions) => {
+    return Promise.all(submittedQuestions.map((question, index) => {
+      //console.log('each questions to join table', each)
+      return db.query(`INSERT INTO submitted_quizzes_submitted_questions (submitted_quiz_id, submitted_question_id, position) 
+                VALUES ('${quizId}', '${question.rows[0]}', '${index}')`)
+      .catch((err) => {
+        if (err) throw err
+      })   
+    }))
+  })
+  .then((submittedQuestions) => {
+    console.log(questions )
+    return Promise.all((questions.map((q, i) => {
+      return Promise.all(q.answers.map((answer, j) => {
+        return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
+                ('${answer.text}', (SELECT id FROM draft_questions WHERE question='${q.question}'), '${answer.isCorrect}');`) 
+      }))
+    })))
+  })
+  // .then(() => {
+  //   console.log('teacherId, subjectId for refetching quizzes', teacherId, subjectId)
+  //   return getQuizzes(teacherId, subjectId)
+  // })
+  .catch((err) => {
+    if (err) throw err;
+  })
+}
+
+
 
 // Converts a class in postgress to a sql obj
 const psqlClassToFbObj = function(sqlClass) {
@@ -18,18 +84,6 @@ const psqlClassToFbObj = function(sqlClass) {
     }
   }
 
-const fbClassToPgObj = function(classObj) {
-  const classId = classObj.id
-  const { name, quizzes, students, teacher_id, subject_id } = classObj
-
-  // save quizzes into submitted quizzes
-  
-    // for each quiz, associate student responses with questions and answers
-        // save questions into submitted questions
-            // save answers into submitted answers
-               // save responses into students_responses
-
-}
 
   // FIX: Consider doing this outise of this function
 
