@@ -245,6 +245,10 @@ const addQuiz = function(quizObj) {
       }))
     })))
   })
+  .then(() => {
+    console.log('teacherId, subjectId for refetching quizzes', teacherId, subjectId)
+    return getQuizzes(teacherId, subjectId)
+  })
   .catch((err) => {
     if (err) throw err;
   })

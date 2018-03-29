@@ -583,19 +583,19 @@ function chooseCorrectAnswerAction(questionIndex, answerIndex) {
 	}
 }
 
-// ADD_NEW_QUIZZES: 'add_new_quizzes',
-// 	FETCH_QUIZZES: 'fetch_quizzes'
 export function addNewQuiz(teacherId, quizObj) {
 	return (dispatch) => {
 		axios.post('/addQuiz', teacherId, quizObj)
-		.then(() => {
-			dispatch(addNewQuizzesAction())
+		.then((res) => {
+			console.log('refetched quizzes at action', res.data)
+			dispatch(addNewQuizzesAction(res.data))
 		})
 	}
 }
-function addNewQuizzesAction() {
+function addNewQuizzesAction(quizzes) {
 	return {
 		type: actionTypes.ADD_NEW_QUIZZES,
+		quizzes
 	}
 }
 

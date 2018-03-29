@@ -74,20 +74,8 @@ class ClassView extends React.Component {
     })
     // this.props.getStudentsBelongToAClass({ id: this.props.classId });
   }
-  
-  componentShouldUpdate() {
-		//this.props.getStudentsBelongToAClass({ id: this.props.classId });
-		this.props.fetchQuizzes({
-      teacherId: this.props.teachersClassView.targetClass.teacher_id,
-      subjectId: this.props.teachersClassView.targetClass.subject_id
-    })
-  }
 	
 	componentDidMount() {
-		this.props.fetchQuizzes({
-      teacherId: this.props.teachersClassView.targetClass.teacher_id,
-      subjectId: this.props.teachersClassView.targetClass.subject_id
-    })
     this.props.getClassStatus(this.props.classId)
     this.props.getStudentsBelongToAClass({ id: this.props.classId });
 	}
