@@ -256,6 +256,7 @@ export function teacherClassViewReducer(
 		case actionTypes.ADD_NEW_QUIZZES:
 			console.log('refetched quizzes at reducer', action.quizzes)
 			const refetched = action.quizzes;
+			console.log('refetched ------> ', refetched)
 			refetched.map((eachQuiz) => {
 				eachQuiz.questions = eachQuiz.questions.reduce((acc, eachQuestion) => {
 					let qId = eachQuestion.id
