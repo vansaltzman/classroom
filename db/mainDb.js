@@ -187,7 +187,11 @@ const getAllStudentsBelongToAClass = function(classId) {
 
 const addStudentToAClass= function(classId, studentId) {
   const queryString = `INSERT INTO classes_students (class_id, student_id) VALUES ('${classId}', '${studentId}');`
-  return db.query(queryString);
+  return db.query(queryString)
+  .then(() => {
+    console.log('class Id to fetch student', classId)
+    return getAllStudentsBelongToAClass(classId)
+  })
 }
 
 const getClassesBelongToAStudent = function(studentEmail) {
