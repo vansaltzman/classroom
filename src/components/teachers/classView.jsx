@@ -207,7 +207,7 @@ class ClassView extends React.Component {
 					> */}
 						Quiz List
 						<Accordion
-							onActive={(index)=> this.selectQuiz(quizzes[Object.keys(quizzes)[index]])}
+							onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView)[index]])}
 						>
 							{Object.values(this.props.teachersClassView.quizzes).map(quiz => {
 							return <AccordionPanel heading={

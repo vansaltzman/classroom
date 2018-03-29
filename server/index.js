@@ -204,19 +204,19 @@ app.get('/getAllSubjects', (req, res) => {
 })
 
 app.post('/addQuiz', (req, res) => {
-  console.log('server side newQuiz', req.body);
+  //console.log('server side newQuiz', req.body);
   main.addQuiz(req.body)
-  .then((data) => {
-    console.log('refetched quizzes at server side', data)
-    res.send(data)
-  })
+  // .then((data) => {
+  //   console.log('refetched quizzes at server side', data)
+  //   res.send(data)
+  // })
 })
 
 app.post('/getQuizzes', (req, res) => {
   //console.log('serverside quizzes req obj', req.body)
   main.getQuizzes(req.body.teacherId, req.body.subjectId)
   .then((data) => {
-    console.log('-----------------serverside quizzes from DB----------------', data)
+    //console.log('-----------------serverside quizzes from DB----------------', data)
     
     // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions)
     // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions[0].answers)

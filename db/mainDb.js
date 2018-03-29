@@ -217,37 +217,39 @@ const addQuiz = function(quizObj) {
   const quizName = quizObj.quiz.name;
   const subjectId = quizObj.quiz.subject.sub.id;
   const subjectName = quizObj.quiz.subject.sub.name;
-  return db.query(`INSERT INTO draft_quizzes (name, subject_id, teacher_id) VALUES ('${quizName}', '${subjectId}', '${teacherId}');`)
+  let quizId 
+  return db.query(`INSERT INTO draft_quizzes (name, subject_id, teacher_id) VALUES ('${quizName}', '${subjectId}', '${teacherId}') RETURNING *;`)
+  .then((data) => {
+    quizId = data.rows[0].id
+    return quizId
+  })
+  .then((data) => {
+    return Promise.all(questions.map((each, index) => {
+      return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${subjectId}') RETURNING *;`)
+      .then((data) => {
+        each.id = data.rows[0].id
+        return each
+      })  
+    }))
+  })
   .then(() => {
     return Promise.all(questions.map((each, index) => {
-      //console.log('each question', each)
-      return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${subjectId}');`)
-      .catch((err) => {
-        if (err) throw err
+      console.log('each questions with id to join table', each) //at this point we have the questions with id
+      return db.query(`INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) 
+                VALUES ('${quizId}', '${each.id}', '${index}');`) 
+      .then(() => {
+        return each
       })
     }))
   })
-  .then(() => {
-    return Promise.all(questions.map((each, index) => {
-      //console.log('each questions to join table', each)
-      return db.query(`INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) 
-                VALUES ((SELECT id FROM draft_quizzes  WHERE name='${quizName}'), (SELECT id FROM draft_questions WHERE question='${each.question}'), '${index}')`)
-      .catch((err) => {
-        if (err) throw err
-      })   
-    }))
-  })
-  .then(() => {
-    return Promise.all((questions.map((q, i) => {
+  .then((data) => {
+    console.log('dataaaaaa after draft_quizzes_draft_questions', data)
+    return Promise.all((data.map((q, i) => {
       return Promise.all(q.answers.map((answer, j) => {
         return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
-                ('${answer.text}', (SELECT id FROM draft_questions WHERE question='${q.question}'), '${answer.isCorrect}');`) 
+                ('${answer.text}', '${q.id}', '${answer.isCorrect}');`) 
       }))
     })))
-  })
-  .then(() => {
-    console.log('teacherId, subjectId for refetching quizzes', teacherId, subjectId)
-    return getQuizzes(teacherId, subjectId)
   })
   .catch((err) => {
     if (err) throw err;
@@ -310,8 +312,3 @@ module.exports = {
   getNewAddedClass
 }
 
-// to get all students belong to a class
-// select * 
-// from student s
-// join student_classes sc on s.student_id = sc.student_id
-// join classes c on c.class_id = sc.class_id

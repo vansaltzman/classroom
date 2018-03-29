@@ -244,8 +244,8 @@ export function teacherClassViewReducer(
 					}
 				}
 		case actionTypes.ADD_NEW_QUIZZES:
-			console.log('refetched quizzes at reducer', action.quizzes)
-			const refetchedQuizzes = action.quizzes;
+			// console.log('refetched quizzes at reducer', action.quizzes)
+			// const refetchedQuizzes = action.quizzes;
 			return {
 				...state
 			}
