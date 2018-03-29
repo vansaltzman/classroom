@@ -73,7 +73,7 @@ class ClassView extends React.Component {
   }
   
   componentWillUpdate() {
-    //this.props.getStudentsBelongToAClass({ id: this.props.classId });
+		this.props.getStudentsBelongToAClass({ id: this.props.classId });
   }
 	
 	componentDidMount() {
@@ -215,8 +215,8 @@ class ClassView extends React.Component {
 								<div>
 									{quiz.name}
 								</div>}> 
-								{Object.values(quiz.questions).map(question => {
-									 return <Box>
+								{Object.values(quiz.questions).map((question,i) => {
+									 return <Box key={i}>
 										<Heading tag="h3">
 											{question.question}
 										</Heading>

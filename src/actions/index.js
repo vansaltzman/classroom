@@ -169,6 +169,21 @@ function updateNewClassYearAction(year) {
 	}
 }
 
+export function addNewClass(classObj) {
+	return (dispatch) => {
+		axios.post('/addClass', classObj)
+		.then((res) => {
+			dispatch(addNewClassAction(res.data))
+		})
+	}
+}
+function addNewClassAction(classObj) {
+	return {
+		type: actionTypes.ADD_NEW_CLASS_ACTION,
+		classObj
+	}
+}
+
 export function getAllExistingSubjects() {
 	return (dispatch) => {
 		axios.get('/getAllSubjects')
