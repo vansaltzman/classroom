@@ -16,7 +16,8 @@ export function teacherClassViewReducer(
     selectedStudent: {},
 		showQuizBuilderModal: false,
 		quizzes: {},
-		students: []
+		students: [],
+		newQuiz: {questions: [], subject: {}}
   },
   action
 ) {
@@ -136,7 +137,7 @@ export function teacherClassViewReducer(
 			
 		/**************************** QUIZ **************************/
     case actionTypes.SHOW_QUIZ_MODAL_ACTION:
-			return { ...state, showQuizBuilderModal: !state.showQuizBuilderModal, newQuiz: {questions: []} };
+			return { ...state, showQuizBuilderModal: !state.showQuizBuilderModal };
 		// case actionTypes.CLOSE_QUIZ_BUILDER_MODAL:
 		// 	return { ...state, showClassBuilderModal: !state.show}
 		case actionTypes.SET_NEW_QUIZ_NAME_ACTION:	
