@@ -3,6 +3,7 @@ import Meter from 'grommet/components/Meter';
 import Value from 'grommet/components/Value';
 import Section from 'grommet/components/Section';
 import Heading from 'grommet/components/Heading';
+import moment from 'moment'
 
 class Timer extends React.Component {
     constructor(props) {
@@ -27,12 +28,16 @@ class Timer extends React.Component {
         currentTime: new Date()
         }, ()=> {
             this.setState({
-                timeLeft: this.props.quizEndTime - (this.state.currentTime.getTime()/1000)
+                timeLeft: this.props.quizEndTime * 1000 - (this.state.currentTime.getTime())
             })
         })
     }
     render() {
-        let timeLeft = this.state.timeLeft > 0 ?  Math.floor(this.state.timeLeft / 60)+':'+ Math.floor(this.state.timeLeft % 60) : '0:0';
+        let seconds = moment.duration(this.state.timeLeft).seconds().toString().length < 2 ? 
+        '0' + moment.duration(this.state.timeLeft).seconds().toString() 
+        : moment.duration(this.state.timeLeft).seconds().toString()
+        
+        let timeLeft = this.state.timeLeft > 0 ?  moment.duration(this.state.timeLeft).minutes() + ':' + seconds : '0:00'
         let quizDuration = this.props.quizDuration;
         if (this.state.timeLeft/quizDuration >= .40) {
             var meterColor = 'neutral-1'
@@ -44,12 +49,12 @@ class Timer extends React.Component {
         }
         return (
             <div>
-                <Section 
+                {/* <Section 
                     justify='center'
                     align='center'>
                     <Heading>
                         Time
-                    </Heading>
+                    </Heading> */}
                     <Meter size='xsmall'
                         type='circle'
                         label={<Value value={timeLeft }
@@ -58,7 +63,7 @@ class Timer extends React.Component {
                         value={this.state.timeLeft}
                         colorIndex={meterColor}
                     />
-                </Section>
+                {/* </Section> */}
             </div>
         )
     }

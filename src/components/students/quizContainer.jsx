@@ -41,20 +41,20 @@ class QuizContainer extends React.Component {
       
       <div>
         <StudentViewQuiz 
-                        class={this.props.class}
-                        studentId={studentId}
-                        classId={classId}
-                        quizId={quizId}
-                        studentId={studentId}
-                        insertStudentAnswers={fb.insertStudentAnswers}
-                        keys={keys}
-                        question={question}
-                        currentQuestion={currentQuestion}
-                        quizResponseObj={quizResponseObj}
-                        currentQuestionsAnswers={currentQuestionsAnswers}
-                        questionId={questionId}
-                        quizEndTime={quizEndTime}
-                        quizDuration={quizDuration}
+          class={this.props.class}
+          studentId={studentId}
+          classId={classId}
+          quizId={quizId}
+          studentId={studentId}
+          insertStudentAnswers={fb.insertStudentAnswers}
+          keys={keys}
+          question={question}
+          currentQuestion={currentQuestion}
+          quizResponseObj={quizResponseObj}
+          currentQuestionsAnswers={currentQuestionsAnswers}
+          questionId={questionId}
+          quizEndTime={quizEndTime}
+          quizDuration={quizDuration}
         />
       </div>
     )
