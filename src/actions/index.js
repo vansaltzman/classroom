@@ -591,16 +591,15 @@ function chooseCorrectAnswerAction(questionIndex, answerIndex) {
 export function addNewQuiz(teacherId, quizObj) {
 	return (dispatch) => {
 		axios.post('/addQuiz', teacherId, quizObj)
-		.then((res) => {
-			console.log('refetched quizzes at action', res.data)
-			dispatch(addNewQuizzesAction(res.data))
+		.then(() => {
+			//console.log('refetched quizzes at action', res.data)
+			dispatch(addNewQuizzesAction())
 		})
 	}
 }
-function addNewQuizzesAction(quizzes) {
+function addNewQuizzesAction() {
 	return {
-		type: actionTypes.ADD_NEW_QUIZZES,
-		quizzes
+		type: actionTypes.ADD_NEW_QUIZZES
 	}
 }
 

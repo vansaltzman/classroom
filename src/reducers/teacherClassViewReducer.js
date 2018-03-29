@@ -5,7 +5,9 @@ import axios from "axios";
 export function teacherClassViewReducer(
   state = {
     classes: [],
-    showClassBuilderModal: false,
+		showClassBuilderModal: false,
+		quizTime: '15:00',
+		quizWeight: 10,
     newClassName: "",
     newClassSubject: "",
     newClassQuarter: "",
@@ -15,6 +17,7 @@ export function teacherClassViewReducer(
     targetClass: {},
     selectedStudent: {},
 		showQuizBuilderModal: false,
+		showQuizLauncherModal: false,
 		quizzes: {},
 		students: [],
 		newQuiz: {questions: [], subject: {}}
@@ -22,6 +25,12 @@ export function teacherClassViewReducer(
   action
 ) {
   switch (action.type) {
+		case actionTypes.TOGGLE_QUIZ_LAUNCHER:
+			return {...state, showQuizLauncherModal: !state.showQuizLauncherModal}
+		case actionTypes.SET_QUIZ_TIME:
+			return {...state, quizTime: action.newTime}
+		case actionTypes.SET_QUIZ_WEIGHT:
+			return {...state, quizWeight: action.newWeight}
     case actionTypes.GET_TEACHERS_CLASSES:
       //console.log('action at reducer', action.classes);
       return { ...state, classes: action.classes };
@@ -278,7 +287,7 @@ export function teacherClassViewReducer(
 			}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
-			//console.log('reducer action.quizzes', action.quizzes)
+			console.log('reducer action.quizzes', action.quizzes)
 			quizzes.map((eachQuiz) => {
 				eachQuiz.questions = eachQuiz.questions.reduce((acc, eachQuestion) => {
 					let questionId = eachQuestion.id
@@ -290,11 +299,12 @@ export function teacherClassViewReducer(
 			quizzes.map((eachQuiz) => {
 				for (var key in eachQuiz.questions) {
 					var answerArray = eachQuiz.questions[key].answers
-					eachQuiz.questions[key].answers = eachQuiz.questions[key].answers.reduce((accumulator, each) => {
-						let answerId = each.id
-						accumulator[answerId] = each
-						return accumulator
-					}, {})
+					eachQuiz.questions[key].answers = eachQuiz.questions[key].answers
+					// .reduce((accumulator, each) => {
+					// 	let answerId = each.id
+					// 	accumulator[answerId] = each
+					// 	return accumulator
+					// }, {})
 					//console.log('answers arrat', eachQuiz.questions[key].answers)
 				}
 				return eachQuiz
