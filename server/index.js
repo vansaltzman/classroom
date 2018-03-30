@@ -9,9 +9,14 @@ const config = require('./config.js');
 const migration = require('./migrationWorker.js')
 const { fb, startClass } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
-const dummyStudentsData = require('../db/dummyStudentsData')
-  
+const dummyStudentsData = require('../db/dummyStudentsData');
 
+const dotenv = require('dotenv');
+const {error} = dotenv.config();
+console.log('process env project id in server ', process.env.projectId);
+if (error) {
+  console.log('error in dotenv ', error)
+}
 
 const app = express()
 
