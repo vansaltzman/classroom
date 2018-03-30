@@ -182,6 +182,16 @@ export function teacherClassViewReducer(
 					...state.newQuiz,
 					questions: questions
 				}
+			};
+		case actionTypes.DELETE_QUESTION_ACTION:
+			const listOfquestions = state.newQuiz.questions.slice()
+			listOfquestions.pop()
+			return {
+				...state,
+				newQuiz: {
+					...state.newQuiz,
+					questions: listOfquestions
+				}
 			}
 		case actionTypes.ADD_QUESTION_TEXT_ACTION:
 			const questionsWithText = state.newQuiz.questions.slice()
@@ -212,7 +222,23 @@ export function teacherClassViewReducer(
 					questions: questionsAddAnswers
 				}
 			}
-
+			case actionTypes.DELETE_ANSWER_ACTION:
+				console.log('at delete answr', action.index)
+				const listOfquestionsWithAnswers = state.newQuiz.questions.slice();
+				for (var indexOfQuestion = 0; indexOfQuestion < listOfquestionsWithAnswers.length; indexOfQuestion++) {
+					if (indexOfQuestion === action.index) {
+						var listOfAnswers = listOfquestionsWithAnswers[action.index].answers
+						listOfAnswers.pop()
+					}
+				}
+				console.log('at delete answr modified', listOfquestionsWithAnswers)
+				return {
+					...state,
+					newQuiz: {
+						...state.newQuiz,
+						questions: listOfquestionsWithAnswers
+					}
+				}
 			case actionTypes.ADD_ANSWER_TEXT_ACTION:
 				const questionsAddAnswerText = state.newQuiz.questions.slice();
 				for (var l = 0; l < questionsAddAnswerText.length; l++) {
@@ -288,7 +314,7 @@ export function teacherClassViewReducer(
 			}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
-			console.log('reducer action.quizzes', action.quizzes)
+			//console.log('reducer action.quizzes', action.quizzes)
 			quizzes.map((eachQuiz) => {
 				eachQuiz.questions = eachQuiz.questions.reduce((acc, eachQuestion) => {
 					let questionId = eachQuestion.id
@@ -315,7 +341,7 @@ export function teacherClassViewReducer(
 				acc[quizId] = quiz;
 				return acc;
 			}, {})
-			console.log('modified quizzes', quizzes);
+			//console.log('modified quizzes', quizzes);
 			return {
 				...state, quizzes: quizzes
 			}

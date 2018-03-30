@@ -536,6 +536,17 @@ function setQuestionNumberAction() {
 	}
 }
 
+export function deleteQuestion() {
+	return (dispatch) => {
+		dispatch(deleteQuestionAction())
+	}
+}
+function deleteQuestionAction() {
+	return {
+		type: actionTypes.DELETE_QUESTION_ACTION
+	}
+}
+
 export function addQuestionText(event,index) {
 	return(dispatch) => {
 		dispatch(addQuestionTextAction(event,index))
@@ -557,6 +568,18 @@ export function addAnswer(index) {
 function addAnswerAction(index) {
 	return {
 		type: actionTypes.ADD_ANSWER_ACTION,
+		index
+	}
+}
+
+export function deleteAnswer(index) {
+	return (dispatch) => {
+		dispatch(deleteAnswerAction(index))
+	}
+}
+function deleteAnswerAction(index) {
+	return {
+		type: actionTypes.DELETE_ANSWER_ACTION,
 		index
 	}
 }

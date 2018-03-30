@@ -1,6 +1,7 @@
 const { Pool } = require('pg')
 const schema = require('./classroom.js')
 const bcrypt = require('bcrypt')
+//const migrate = require('../data/studentsQuizDataMigratedFromFB.js')
 
 const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
 
@@ -332,6 +333,16 @@ const getQuizzes = function(teacherId, subjectId) {
   })
 }
 
+// const calculateAverageTimeForQuestions = function(classFromFB) {
+//   const studentsAndTheirResponses = classFromFB[1].students.slice(1);
+//   for (var i = 0; i < studentsAndTheirResponses.length; i++) {
+//     const eachStudentQuiz = Object.values(studentsAndTheirResponses[i].quizzes)[0];
+//     const questionsFromEachQuiz = eachStudentQuiz.questions.slice(1) //array of question objs...each question has
+  
+
+//   }
+// }
+
 module.exports = {
   addUser,
   verifyUser,
@@ -346,6 +357,7 @@ module.exports = {
   getAllExistingSubjects,
   addQuiz,
   getQuizzes,
-  getNewAddedClass
+  getNewAddedClass,
+  // calculateAverageTimeForQuestions
 }
 

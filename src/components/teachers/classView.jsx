@@ -31,6 +31,7 @@ import TableRow from 'grommet/components/TableRow';
 import NumberInput from 'grommet/components/NumberInput';
 import Animate from 'grommet/components/Animate';
 import AddCircleIcon from "grommet/components/icons/base/AddCircle";
+import SubtractCircleIcon from 'grommet/components/icons/base/SubtractCircle';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -162,23 +163,19 @@ class ClassView extends React.Component {
 				}
 
 				<Columns masonry={false}
+					justify="center"
 					maxCount={2}
 					size='large'
 					align='center'>
-				<Box align='center'
-					pad='medium'
-					margin='small'
-					colorIndex='light-2'
-				>
 					Side bar for students list
 					{studentsArray.map((each) => {
 							return (
-								<Box style={{color: each.isHere ? 'black' : 'lightgrey'}}>
+								<Box style={{color: each.isHere ? 'black' : 'lightgrey'}}
+										 align='center'>
 									{each.name}
 								</Box>
 							)
 						})}
-					</Box>
 					<SearchInput
               placeHolder="Search For A Student"
 							suggestions={this.props.studentNames}
@@ -195,20 +192,10 @@ class ClassView extends React.Component {
                 }, { id: this.props.classId });
               }}
             />
-          <Box align="center" pad="medium" margin="small" colorIndex="light-2">
+          <Box align="center" pad="medium" margin="small" >
 						Quiz List
-						<Button 
-							label="Create New Quiz"
-							onClick={this.toggleQuizBuilderModal}/>
           </Box>
-					{/* <Box align='center'
-						pad='none'
-						margin="none"
-						wrap="false"
-						colorIndex='light-2'
-					> */}
-						Quiz List
-						<Accordion
+					<Accordion
 							onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}
 						>
 							{Object.values(this.props.teachersClassView.quizzes).map(quiz => {
@@ -225,7 +212,7 @@ class ClassView extends React.Component {
 											{moment.duration(question.time).humanize()}
 										</Label>
 										{Object.values(question.answers).map(answer=> {
-											console.log('answer!!!! ------> ', answer)
+											//console.log('answer!!!! ------> ', answer)
 											return <Notification
 												message={answer.text}
 												size='small'
@@ -237,6 +224,17 @@ class ClassView extends React.Component {
 							</AccordionPanel>
 							})}
 						</Accordion>
+						<Button 
+							
+							label="Create New Quiz"
+							onClick={this.toggleQuizBuilderModal}/>
+					{/* <Box align='center'
+						pad='none'
+						margin="none"
+						wrap="false"
+						colorIndex='light-2'
+					> */}
+						
 						{/* </Box> */}
 				</Columns>
 
@@ -333,15 +331,17 @@ class ClassView extends React.Component {
                               <Label>{'Question' + ' ' + index + 1}</Label>
                               <TextInput placeHolder="Question..."
                                          onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+															<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteQuestion()}/>} />
                               {each.answers.map((eachAnswer, answerIndex) => {
                                 return (
                                   <Section>
                                     <TextInput placeHolder="Answer..."
                                                onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
-                                    <CheckBox label='Correct'
-                                              toggle={false}
-                                              reverse={true} 
-                                              onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
+																		<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteAnswer(index)}/>} />	
+																		<CheckBox label='Correct'
+																							toggle={false}
+																							reverse={true} 
+																							onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
                                   </Section>
                                 )
                               })}
