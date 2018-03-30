@@ -175,7 +175,7 @@ const getClassesForTeacherMainView = function(email) {
     return db.query(queryStringForClasses)
     .then(classes => {
       return classes.rows.map(eachClass => {
-        eachClass.teacher = eachClass.first_name + ' ' + eachClass.lastName
+        eachClass.teacher = eachClass.first_name + ' ' + eachClass.last_name
         return eachClass
       })
     })

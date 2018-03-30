@@ -14,11 +14,6 @@ Students:
 */
 
 
-// !--- Uncomment bellow to remove everything except the teacher
-
-// loaders.removeDummyData()
-// .then(() => process.exit())
-
 return loaders.addDummyData()
 .then(()=> {
   console.log('Added Teacher, Class and Students')
@@ -32,7 +27,9 @@ return loaders.addDummyData()
   console.log('Added Quiz')
 })
 
-db.query(`INSERT INTO draft_questions (question, subject_id, teacher_id) 
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, (SELECT id FROM subjects WHERE name='Magic'));`, )
+// !--- Uncomment bellow to remove everything except the teacher
+
+// loaders.removeDummyData()
+// .then(() => process.exit())
 
 .then(() => process.exit())
