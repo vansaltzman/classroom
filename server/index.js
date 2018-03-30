@@ -77,6 +77,19 @@ app.post('/imageUploader', upload.single('file'), (req, res) => {
   })
 })
 
+
+
+app.post('/profile', function(req, res) {
+   let user =req.body.user
+   main.getProfilePic(user)
+     .then(function(data){
+       res.send(data);
+    })
+     .catch(function(err) {
+       console.log('server profile post request -', err)
+    })    
+})  
+
 // Sign up
   app.post('/newAccount', (req, res)=> {
     const {firstName, lastName, email, password, userClass} = req.body.newAccount
