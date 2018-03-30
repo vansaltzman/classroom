@@ -19,6 +19,9 @@ export function teacherClassViewReducer(
 		showQuizBuilderModal: false,
 		showQuizLauncherModal: false,
 		quizzes: {},
+		questions: [],
+		selectedQuestion: {},
+		showAddQuestionButton: false,
 		students: [],
 		newQuiz: {questions: [], subject: {}}
   },
@@ -345,6 +348,30 @@ export function teacherClassViewReducer(
 			return {
 				...state, quizzes: quizzes
 			}
+			case actionTypes.FETCH_QUESTIONS:
+				console.log('questions FETCH_QUESTIONS', action.questions)
+				return {
+					...state,
+					questions: action.questions
+				}
+			case actionTypes.SELECT_QUESTION:
+				console.log('selection question', action.selectedQuestion)
+				return {
+					...state, 
+					selectedQuestion: action.selectedQuestion,
+					showAddQuestionButton: !state.showAddQuestionButton
+				}
+			case actionTypes.ADD_RECYCLED_QUESTION:
+				console.log('at add recycled question', action.question)
+				const newSetOfQuestions = state.newQuiz.questions;
+				newSetOfQuestions.push(action.question);
+				return {
+					...state,
+					newQuiz: {
+						...state.newQuiz,
+						questions: newSetOfQuestions
+					}
+				}
     default:
       return state;
   }

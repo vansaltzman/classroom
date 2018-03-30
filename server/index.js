@@ -90,7 +90,7 @@ app.use(bodyParser.json())
     // .catch((err)=> {
     //   console.log('err in updating quiz response ', err)
     // })
-    console.log('dummy data ', dummyAnswerData)
+    //console.log('dummy data ', dummyAnswerData)
   })
 
   // app.post('/answer', (req, res) => {
@@ -100,16 +100,16 @@ app.use(bodyParser.json())
 
   app.post('/answer', (req, res) => {
     let answer = req.body.answer
-    console.log('answer submitted', answer)
+    //console.log('answer submitted', answer)
   })
 
   // Complete Quiz
   
 app.post('/addClass', (req, res) => {
-  console.log('server side data for add class',  req.body);
+  //console.log('server side data for add class',  req.body);
   main.addNewClass(req.body)
   .then(() => {
-    console.log('Class is added')
+    //console.log('Class is added')
     res.sendStatus(200)
   })
   .catch((err) => {
@@ -118,15 +118,14 @@ app.post('/addClass', (req, res) => {
 })
 
 app.post('/getNewAddedClass', (req,res) => {
-  console.log('get data from server side for added class', req.body)
+  //console.log('get data from server side for added class', req.body)
   const className = req.body.classname
   const email = req.body.email
   main.getNewAddedClass(email, classname)
   .then((data) => {
-    console.log('data on server side for newly added class', data)
+    //console.log('data on server side for newly added class', data)
     res.send(data)
   })
-  console.log()
 })
 
 app.post('/allClasses', (req, res) => {
@@ -154,7 +153,7 @@ app.get('/getAllStudents', (req, res) => {
 })
 
 app.post('/getAllStudentsInAClass', (req, res) => {
-  console.log('class id server side', req.body);
+  //console.log('class id server side', req.body);
   main.getAllStudentsBelongToAClass(req.body.id)
   .then((data) => {
     //console.log('server side data', data.rows);
@@ -182,7 +181,7 @@ app.post('/addAStudentToClass', (req, res) => {
 
   main.addStudentToAClass(req.body.classId, req.body.studentId)
   .then((data) => {
-    console.log('data at server side', data)
+    //console.log('data at server side', data)
     res.send(data.rows);
   })
   //console.log('server student to be added', req.body)
@@ -212,15 +211,17 @@ app.post('/getQuizzes', (req, res) => {
   //console.log('serverside quizzes req obj', req.body)
   main.getQuizzes(req.body.teacherId, req.body.subjectId)
   .then((data) => {
-    //console.log('-----------------serverside quizzes from DB----------------', data)
-    
-  //   // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions)
-  //   // console.log('-----------------serverside quizzes from DB----------------', data[0][0].questions[0].answers)
-  //   //console.log('first quiz', data[0][0][0].questions[0].answers);
     res.send(data)
   })
 })
 
+app.post('/fetchQuestions', (req,res) => {
+  main.GetAllQuestionsBelongToTeacher(req.body.teacherId, req.body.subjectId)
+  .then((data) => {
+    console.log('serverside questions data', data)
+    res.send(data)
+  })
+})
 const port = 3000
 app.listen(port, function() {
 console.log('Listening on ' + port)

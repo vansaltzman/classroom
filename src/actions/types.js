@@ -56,7 +56,10 @@ const actionTypes = {
 	FETCH_QUIZZES: 'fetch_quizzes',
 	CLOSE_QUIZ_BUILDER_MODAL: 'close_quiz_modal_action',
 	DELETE_QUESTION_ACTION: 'delete_question_action',
-	DELETE_ANSWER_ACTION: 'delete_answer_action'
+	DELETE_ANSWER_ACTION: 'delete_answer_action',
+	FETCH_QUESTIONS: 'fetch_questions',
+	SELECT_QUESTION: 'select_question',
+	ADD_RECYCLED_QUESTION: 'add_recycled_question'
 }
 
 export default actionTypes

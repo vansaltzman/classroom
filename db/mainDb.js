@@ -326,13 +326,25 @@ const getQuizzes = function(teacherId, subjectId) {
       }))
       .then((questions) => {
         eachQuiz.questions = questions
-        console.log('eachQuiz ------> ', eachQuiz)
+        //console.log('eachQuiz ------> ', eachQuiz)
         return eachQuiz
       })
     }))
   })
 }
 
+const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
+  return db.query(`SELECT * FROM draft_questions WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
+  .then((data) => {
+    return Promise.all(data.rows.map((eachQuestion) => {
+      return db.query(`SELECT * FROM draft_answers WHERE question_id='${eachQuestion.id}'`)
+      .then((eachAnswer) => {
+        eachQuestion.answers = eachAnswer.rows
+        return eachQuestion
+      })
+    }))
+  })
+}
 // const calculateAverageTimeForQuestions = function(classFromFB) {
 //   const studentsAndTheirResponses = classFromFB[1].students.slice(1);
 //   for (var i = 0; i < studentsAndTheirResponses.length; i++) {
@@ -358,6 +370,7 @@ module.exports = {
   addQuiz,
   getQuizzes,
   getNewAddedClass,
+  GetAllQuestionsBelongToTeacher
   // calculateAverageTimeForQuestions
 }
 

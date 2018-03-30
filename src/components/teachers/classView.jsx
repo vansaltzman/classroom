@@ -32,6 +32,8 @@ import NumberInput from 'grommet/components/NumberInput';
 import Animate from 'grommet/components/Animate';
 import AddCircleIcon from "grommet/components/icons/base/AddCircle";
 import SubtractCircleIcon from 'grommet/components/icons/base/SubtractCircle';
+//import Pulse from 'grommet/components/Pulse';
+//import Split from 'grommet/components/Split';
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -72,7 +74,11 @@ class ClassView extends React.Component {
     this.props.fetchQuizzes({
       teacherId: this.props.teachersClassView.targetClass.teacher_id,
       subjectId: this.props.teachersClassView.targetClass.subject_id
-    })
+		})
+		this.props.fetchQuestions({
+			teacherId: this.props.teachersClassView.targetClass.teacher_id,
+      subjectId: this.props.teachersClassView.targetClass.subject_id
+		})
     // this.props.getStudentsBelongToAClass({ id: this.props.classId });
   }
 	
@@ -305,63 +311,100 @@ class ClassView extends React.Component {
 								 flush={true} 
 								 overlayClose={true}
 								 onClose={this.toggleQuizBuilderModal}>
-						<Form compact={false} pad={{ vertical: "medium", horizontal: "medium" }}>
-              <Header pad={{ vertical: "medium", horizontal: "medium" }}>
-                <Heading>
-                  Create A New Quiz
-                </Heading>
-              </Header>
-                <Section pad={{ vertical: "medium", horizontal: "medium" }}>
-                  <FormFields>
-                    <TextInput 
-                      placeHolder="Please Name Your Quiz"
-                      onDOMChange={value => {
-                        this.props.setNewQuizName(value);
-                      }}/>
-                    <SearchInput 
-                      placeHolder="Quiz Subject"
-											suggestions={this.props.subjects}
-											value={this.props.teachersClassView.newQuiz.subject.value ? this.props.teachersClassView.newQuiz.subject.value : ""}
-                      // value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
-                      onDOMChange={(event) => this.props.setNewQuizSubject(event)}
-                      onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
-                      {this.props.teachersClassView.newQuiz.questions.map((each, index) => {
-                          return (
-                            <Section>
-                              <Label>{'Question' + ' ' + index + 1}</Label>
-                              <TextInput placeHolder="Question..."
-                                         onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
-															<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteQuestion()}/>} />
-                              {each.answers.map((eachAnswer, answerIndex) => {
-                                return (
-                                  <Section>
-                                    <TextInput placeHolder="Answer..."
-                                               onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
-																		<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteAnswer(index)}/>} />	
-																		<CheckBox label='Correct'
-																							toggle={false}
-																							reverse={true} 
-																							onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
-                                  </Section>
-                                )
-                              })}
-                              <Button icon={<AddCircleIcon />} 
-                                      label="Add Answer"
-                                      onClick={() => {this.props.addAnswer(index)}}/>
-                            </Section>
-                          )
-                        }) }
-                      <Button icon={<AddCircleIcon />}
-                                      onClick={() => this.props.setQuestionNumber()}
-                                      label="Add Question"/>
-                  </FormFields>
-                </Section>
-              <Footer pad={{"vertical": "medium", horizontal: "medium"}}>
-								<Button label='Add Quiz'
-												path="/teacherQuiz"
-                        onClick={() => this.props.addNewQuiz({authorId: this.props.auth.user.id, quiz: this.props.teachersClassView.newQuiz})}/>
-              </Footer>
-						</Form>
+						<Split fixed={false}
+									 separator={false}
+									 showOnResponsive='both'>
+							<Box size="xlarge">
+								<Header pad={{ vertical: "medium", horizontal: "medium" }}>
+									<Heading>
+										Create A New Quiz
+									</Heading>
+								</Header>
+								<Form compact={false} pad={{ vertical: "medium", horizontal: "medium" }}>
+										<Section pad={{ vertical: "medium", horizontal: "medium" }}>
+											<FormFields>
+												<TextInput 
+													placeHolder="Please Name Your Quiz"
+													onDOMChange={value => {
+														this.props.setNewQuizName(value);
+													}}/>
+												<SearchInput 
+													placeHolder="Quiz Subject"
+													suggestions={this.props.subjects}
+													value={this.props.teachersClassView.newQuiz.subject.value ? this.props.teachersClassView.newQuiz.subject.value : ""}
+													// value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
+													onDOMChange={(event) => this.props.setNewQuizSubject(event)}
+													onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
+													{this.props.teachersClassView.newQuiz.questions.map((each, index) => {
+															return (
+																<Section>
+																	<Label>{'Question' + ' ' + index + 1}</Label>
+																	<TextInput placeHolder="Question..."
+																						 value={each.question ? each.question : ""}
+																						onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+																	<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteQuestion()}/>} />
+																	{each.answers.map((eachAnswer, answerIndex) => {
+																		return (
+																			<Section>
+																				<TextInput placeHolder="Answer..."
+																									 value={eachAnswer.answer ? eachAnswer.answer : ""}
+																									 onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
+																				<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteAnswer(index)}/>} />	
+																				<CheckBox label='Correct'
+																									toggle={false}
+																									reverse={true} 
+																									checked={eachAnswer.correct ? true : false}
+																									onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
+																			</Section>
+																		)
+																	})}
+																	<Button icon={<AddCircleIcon />} 
+																					label="Add Answer"
+																					onClick={() => {this.props.addAnswer(index)}}/>
+																</Section>
+															)
+														}) }
+													<Button icon={<AddCircleIcon />}
+																					onClick={() => this.props.setQuestionNumber()}
+																					label="Add Question"/>
+											</FormFields>
+										</Section>
+									<Footer pad={{"vertical": "medium", horizontal: "medium"}}>
+										<Button label='Add Quiz'
+														path="/teacherQuiz"
+														onClick={() => this.props.addNewQuiz({authorId: this.props.auth.user.id, quiz: this.props.teachersClassView.newQuiz})}/>
+									</Footer>
+								</Form>
+							</Box>
+							<Box size="xlarge">
+								<Header pad={{ vertical: "medium", horizontal: "medium" }}>
+									<Heading>
+										Previous Question
+									</Heading>
+								</Header>
+								<Accordion openMulti={true}
+													 onActive={(index) => this.props.selectedQuestion(this.props.teachersClassView.questions[index])}>
+									{this.props.teachersClassView.questions.map((question, i) => {
+										return (
+											<AccordionPanel key={i} heading={question.question}>
+												<Label>
+													{question.avg_time}
+													{this.props.teachersClassView.showAddQuestionButton ? <Button onClick={() => this.props.addRecycledQuestion(question)}>Add Question</Button> : <div></div>}
+												</Label>
+												{question.answers.map((eachAnswer) => {
+													return (
+														<Notification
+															message={eachAnswer.answer}
+															size='small'
+															status={eachAnswer.correct ? 'ok' : 'critical'}/>
+													)
+												})}
+											</AccordionPanel>
+										)
+									})}		
+								</Accordion>
+							</Box>
+						</Split>
 					</Layer>
 				: <div></div>}
 			</Section>

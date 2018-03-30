@@ -627,11 +627,6 @@ function addNewQuizzesAction(quizzes) {
 	}
 }
 
-// this.props.fetchQuizzes({
-// 	teacherId: this.props.teachersClassView.targetClass.teacher_id,
-// 	subjectId: this.props.teachersClassView.targetClass.subject_id
-// })
-
 export function fetchQuizzes(reqObj) {
 	return (dispatch) => {
 		axios.post('/getQuizzes', reqObj)
@@ -645,5 +640,45 @@ function fetchQuizzesAction(quizzes) {
 	return {
 		type: actionTypes.FETCH_QUIZZES,
 		quizzes
+	}
+}
+
+export function fetchQuestions(reqObj) {
+	//reqObj should have teacher Id and subject Id
+	return (dispatch) => {
+		axios.post('/fetchQuestions', reqObj)
+		.then((res) => {
+			dispatch(fetchQuestionsAction(res.data))
+		}) 
+	}
+}
+function fetchQuestionsAction(questions) {
+	return {
+		type: actionTypes.FETCH_QUESTIONS,
+		questions
+	}
+}
+
+export function selectedQuestion(selectedQuestion) {
+	return (dispatch) => {
+		dispatch(selectQuestionAction(selectedQuestion))
+	}
+}
+function selectQuestionAction(selectedQuestion) {
+	return {
+		type: actionTypes.SELECT_QUESTION,
+		selectedQuestion
+	}
+}
+
+export function addRecycledQuestion(question) {
+	return (dispatch) => {
+		dispatch(addRecycledQuestionAction(question))
+	}
+}
+function addRecycledQuestionAction(question) {
+	return {
+		type: actionTypes.ADD_RECYCLED_QUESTION,
+		question
 	}
 }
