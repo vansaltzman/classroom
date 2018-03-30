@@ -18,12 +18,24 @@ const fbClassToPgObj = function(classObj) {
     })
 
     submitQuiz(quizzes[quizId], responsesObj, classId)
-    // submitParticipation()
+    .then(()=> {
+      return submitParticipation(classId, students)
+    })
+    .then(()=> {
+      return updateQuestionTimes()
+    })
   })
 }
 
-// Need to create studentResponsens obj for each quiz that includes studentId and responses
-// removed teacherID for reasons
+const submitParticipation = function(classId, students) {
+  return Promise.all(students.map(student=> {
+    return db.query(
+      `UPDATE classes_students SET participation = participation + $1 WHERE class_id = $2 AND student_id = $3`, 
+      [student.participation, classId, student.id])
+  }))
+}
+
+
 const submitQuiz = function(quizObj, studentResponses, classId) {
 
   const prevQuizId = quizObj.id;
@@ -74,7 +86,6 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
           return Promise.all(Object.values(studentResponses).map(student => {
             let responseForThisQuestion = student.responses[question.previous_id]
             let studentsAnswer = answerMapper[Object.keys(responseForThisQuestion.answers).find(key => responseForThisQuestion.answers[key] === true)] || {newId: null, isCorrect: false}
-            console.log('studentsAnswer.newId ------> ', studentsAnswer)
             return db.query(
             `INSERT INTO students_responses (student_id, response_id, question_id, draft_question_id, time_spent, correct) 
             VALUES ($1, $2, $3, $4, $5, $6)`, [student.id, studentsAnswer.newId, question.id, question.previous_id, responseForThisQuestion.time, studentsAnswer.isCorrect])
@@ -215,7 +226,6 @@ const psqlClassToFbObj = function(sqlClass) {
 const migrateClassToFB = function(classId){
   main.fetchClass(classId)
   .then(classRow => {
-    console.log(classRow[0])
     return psqlClassToFbObj(classRow[0])
   })
   .then(fbObj => {
