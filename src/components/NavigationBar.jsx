@@ -24,6 +24,7 @@ import StudentLiveClassView from './students/studentLiveClassView.jsx'
 import ClassViewDefault from './students/classViewDefault.jsx';
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 import ImageUploader from './ImageUploader.jsx';
+import ProfilePic from './students/ProfilePic.jsx'
 
 
 
@@ -68,6 +69,8 @@ class NavigationBar extends React.Component {
     }
     
     render() {
+
+
         const titleStyle = {
             marginLeft: '50px'
         }
@@ -104,6 +107,7 @@ class NavigationBar extends React.Component {
             if (this.props.auth.user.class === 'student') {
                 var menuLabel = this.props.auth.user.email;
                 var navBarBackground = 'lightBlue'
+            var pic = <ProfilePic userId={this.props.auth.user.id}/>
                 var dropAnchors = 
                 <div>
                     <Anchor path='/login' onClick={this.logout}>
@@ -115,8 +119,8 @@ class NavigationBar extends React.Component {
                         studentQuiz
                     </Anchor> */}
 
-                    <Anchor path='/imageUploader'>
-                            Image Uploader
+                    <Anchor path='/profileSettings'>
+                            Profile Settings
                     </Anchor>
 
                 </div>
@@ -138,12 +142,14 @@ class NavigationBar extends React.Component {
                     justify='end'
                     direction='row'
                     responsive={false}>
+                   {pic}
                     <Menu 
                         primary={false}
                         direction='row'
                         label={menuLabel}
                         icon={<Actions/>}>
                         {dropAnchors}
+
                     </Menu>
                 </Box>
             </Header>
@@ -176,7 +182,9 @@ class NavigationBar extends React.Component {
                             {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
                             <Route path="/default" component={ClassViewDefault}/>
                             <Route path="/studentLiveClass" component={StudentLiveClassView}/>
-                            <Route path="/imageUploader" component={ImageUploader}/>
+                            <Route path="/profileSettings" component={ImageUploader}/>
+                        
+                            
 
                         </Switch>
                 </nav>
