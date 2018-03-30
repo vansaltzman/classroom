@@ -87,7 +87,6 @@ class ClassView extends React.Component {
 	}
 
 	selectQuiz(quizObj) {
-		console.log('quizObj ------> ', quizObj)
 		this.setState({selectedQuiz: quizObj || null})
 	}
 

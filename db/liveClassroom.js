@@ -9,6 +9,9 @@ const moment = require('moment')
 firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
 
+fb.ref('/').once('value')
+.then(snap=> console.log(JSON.parse(JSON.stringify(snap.val()))))
+
 const selectClass = function(classId) {
   return migrate.migrateClassToFB(classId)
   .then(classObj => classObj)

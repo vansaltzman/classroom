@@ -17,23 +17,34 @@ const fbClassToPgObj = function(classObj) {
 
 }
 
-
+// Need to create studentResponsens obj for each quiz that includes studentId and responses
+// removed teacherID for reasons
 const submitQuiz = function(quizObj, studentResponses, classId) {
-  const teacherId = quizObj.authorId;
-  const questions = quizObj.quiz.questions;
-  const quizName = quizObj.quiz.name;
-  const prevQuizId = quizObj.quiz.id;
-  const quizWeight = quizObj.quiz.weight;
-  const subjectId = quizObj.quiz.subject.sub.id;
-  const subjectName = quizObj.quiz.subject.sub.name;
-  let quizId
 
-  return db.query(`INSERT INTO submitted_quizzes (name, subject_id, teacher_id, weight, previous_id, class_id) VALUES ('${quizName}', '${subjectId}', '${teacherId}', '${weight}', ${prevQuizId}, ${classId}) RETURNING id;`)
+  console.log(quizObj)
+
+  const questions = quizObj.questions;
+  const quizName = quizObj.name;
+  const prevQuizId = quizObj.id;
+  const quizWeight = quizObj.weight;
+  const quizSubject = quizObj.subject
+  const quizDuration = quizObj.duration
+  const quizTime = quizObj.time
+  const subjectId = 1
+
+  let submittedQuizId
+
+  // Add back TIME AND DURATION !!!
+  return db.query(
+    `INSERT INTO submitted_quizzes (name, subject_id, weight, previous_id, class_id) 
+    VALUES ('${quizName}', '${subjectId}', '${quizWeight}', ${prevQuizId}, ${classId}) RETURNING id;`)
   .then((submittedQuiz) => {
-    quizId = submitQuiz.rows[0].id
-    return Promise.all(questions.map((each, index) => {
-      //console.log('each question', each)
-      return db.query(`INSERT INTO submitted_questions (question, teacher_id, previous_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${question.id}', '${subjectId}' RETURNING id);`)
+    submittedQuizId = submittedQuiz.rows[0].id
+    return Promise.all(Object.values(questions).map((each, index) => {
+      // ADD QUIZ ID w/ SUBMITTED QUIZ ID '${submittedQuizId}', position w/ '${each.position}'
+      return db.query(
+        `INSERT INTO submitted_questions (question, previous_id, subject_id) 
+        VALUES ('${each.question}', '${each.id}', '${subjectId}' ) RETURNING id, previous_id;`)
       .catch((err) => {
         if (err) throw err
       })
@@ -41,31 +52,114 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
   })
   .then((submittedQuestions) => {
     return Promise.all(submittedQuestions.map((question, index) => {
-      //console.log('each questions to join table', each)
-      return db.query(`INSERT INTO submitted_quizzes_submitted_questions (submitted_quiz_id, submitted_question_id, position) 
-                VALUES ('${quizId}', '${question.rows[0]}', '${index}')`)
-      .catch((err) => {
-        if (err) throw err
-      })   
-    }))
-  })
-  .then((submittedQuestions) => {
-    console.log(questions )
-    return Promise.all((questions.map((q, i) => {
-      return Promise.all(q.answers.map((answer, j) => {
-        return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
-                ('${answer.text}', (SELECT id FROM draft_questions WHERE question='${q.question}'), '${answer.isCorrect}');`) 
-      }))
-    })))
-  })
+      question = question.rows[0]
+        return Promise.all(Object.values(questions[question.previous_id].answers).map(answer => {
+          return db.query(
+            `INSERT INTO submitted_answers (answer, question_id, correct) 
+            VALUES ($1, $2, $3) RETURNING id, question_id, correct`, [answer.text, question.id, answer.isCorrect])
+            .then(queryResponse=> {
+              let subAnswer = queryResponse.rows[0]
+              subAnswer.previousAnswerId = answer.id
+              return subAnswer
+            }) 
+        }))
+      .then(submittedAnswers => {
+        console.log(' ------> GOT THERE!')
+
+        let answerMapper = {}
+
+        submittedAnswers.forEach(submittedAnswer => {
+          answerMapper[submittedAnswer.previousAnswerId] = {newId: submittedAnswer.id, isCorrect: submittedAnswer.correct}
+        })
+        return Promise.all(Object.values(studentResponses).map(student => {
+          let responseForThisQuestion = student.responses[question.previous_id]
+          let studentsAnswer = answerMapper[Object.keys(responseForThisQuestion.answers).find(key => responseForThisQuestion.answers[key] === true)]
+
+          return db.query(
+          `INSERT INTO students_responses (student_id, response_id, question_id, draft_question_id, time_spent, correct) 
+          VALUES ($1, $2, $3, $4, $5, $6)`, [student.studentId, studentsAnswer.newId, question.previous_id, responseForThisQuestion.time, studentsAnswer.isCorrect])
+        }))
+      })
+    })
+  )})
+}
+
+var QUIZOBJ = {  
+  "id":8,
+  "name":"Test",
+  "weight":10,
+  "duration": 900000,
+  "time": 12345,
+  "questions": {
+    9: {
+      answers: {
+        16: {
+          id: 16,
+          isCorrect: true,
+          text: '1'
+        },
+        17: {
+          "id" : 17,
+          "isCorrect" : false,
+          "text" : "2"
+        }
+      },
+      draft_question_id: 9,
+      id: 9,
+      position: 0,
+      text: 'test'
+    },
+    10: {
+      answers: {
+        "18" : {
+          "id" : 18,
+          "isCorrect" : false,
+          "text" : "3"
+        },
+        "19" : {
+          "id" : 19,
+          "isCorrect" : true,
+          "text" : "1"
+        }
+      },
+      draft_question_id: 9,
+      id: 9,
+      position: 0,
+      text: 'test'
+      }
+    }
+  }
+
+var RESPONSES = {
+    1: {
+      "studentId": 1,
+      "responses" : {
+        "9" : {
+          "answers" : {
+            "16" : true,
+            "17" : false
+          },
+          "id" : "9",
+          "time" : 100
+        },
+        "10" : {
+          "answers" : {
+            "18" : false,
+            "19" : true
+          },
+          "id" : "10",
+          "time" : 100
+        }
+      }
+    }
+  }
+
+submitQuiz(QUIZOBJ, RESPONSES, 1, 1)
+
   // .then(() => {
   //   console.log('teacherId, subjectId for refetching quizzes', teacherId, subjectId)
   //   return getQuizzes(teacherId, subjectId)
   // })
-  .catch((err) => {
-    if (err) throw err;
-  })
-}
 
 
 
