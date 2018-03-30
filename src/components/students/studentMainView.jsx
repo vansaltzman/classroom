@@ -49,13 +49,6 @@ class StudentMainView extends React.Component {
     // will need to create a function that is called here to stop the listener from update values based on 
     // changes to the live status of their class
   }
-
-  componentDidMount() {
-    console.log(this.props)
-  }
-  // updateTargetClassAndStudentStatus() {
-  //   this.props.updateStudentTargetClass(this.props.targetClassId, this.props.studentId)
-  // }
   
   render() {
     return (
@@ -74,13 +67,16 @@ class StudentMainView extends React.Component {
                 <Button
                   label="Enter Class"
                   type="button"
+<<<<<<< HEAD
                   path="/studentLiveClassView"
+=======
+                  path="/studentliveclass"
+>>>>>>> handraise-touchups
                   primary={true}
                   onClick={() => this.props.toggleStudentLiveClassStatus(item.class_id, item.student_id)}
                 />
               </Tile>
             );
-            // return <StudentClassLabel item={item} key={index} clickHandler={this.props.updateStudentTargetClass}/>;
           })}
         </Tiles>
       </div>

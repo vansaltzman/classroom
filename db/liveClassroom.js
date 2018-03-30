@@ -2,11 +2,17 @@ const firebase = require('firebase');
 const config = require('../server/config.js');
 const dummyStudentData=require('../db/dummyStudentsData');
 const studentQuizObjConverter = require('../src/utils/studentQuizObjConverter.js');
-const moment = require('moment')
+const moment = require('moment');
+const fs = require('fs');
 // const migrate = require('../server/migrationWorker.js')
-
+const dotenv = require('dotenv');
+const {error} = dotenv.config();
+if (error) {
+  console.log('error in dotenv ', error)
+}
 
 firebase.initializeApp(config.fbConfig);
+
 const fb = firebase.database();
 
 const selectClass = function(classId) {
