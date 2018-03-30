@@ -154,7 +154,7 @@ var RESPONSES = {
     }
   }
 
-submitQuiz(QUIZOBJ, RESPONSES, 1, 1)
+// submitQuiz(QUIZOBJ, RESPONSES, 1, 1)
 
   // .then(() => {
   //   console.log('teacherId, subjectId for refetching quizzes', teacherId, subjectId)
