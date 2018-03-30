@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
 
 const db = new Pool({
-  user: process.env.USER,
+  user: process.env.PG_USER,
   database: 'classroom',
   host: 'localhost',
   password: null,
