@@ -52,7 +52,12 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 						style={{width: '400px'}}
 						style={{marginRight: 'auto'}}
 					>
-						<UserImage handRaised={student.handRaised} nextInLine={nextInLine}/>
+						<UserImage 
+							handRaised={student.handRaised} 
+							nextInLine={nextInLine} 
+							student={student}
+							targetClass={targetClass}
+						/>
 						<Heading 
 							tag="h3"
 							style={{textAlign: 'center', lineHeight: '50px', marginLeft: '20px', marginBottom: 0}}

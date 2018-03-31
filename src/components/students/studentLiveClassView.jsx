@@ -21,6 +21,7 @@ class StudentLiveClassView extends React.Component {
   constructor() {
 		super();
 		this.handleRaiseHand = this.handleRaiseHand.bind(this);
+		this.handleToastClose = this.handleToastClose.bind(this);
 	}
 	handleRaiseHand(e) {
 		let studentId = this.props.auth.user.id;
@@ -28,10 +29,17 @@ class StudentLiveClassView extends React.Component {
 		fb.toggleStudentHandRaiseStatus(classId, studentId);
 		fb.updateHandRaiseQueue(classId, studentId);
 	}
+
+	handleToastClose () {
+		let studentId = this.props.auth.user.id;
+		let classId = this.props.activeView.id;
+		fb.updateHandRaiseAcknowledgement(classId, studentId, 'acknowledge')
+	}
 	
   render() {
-		console.log('this props in studnet live calss view ', this.props)
+		
 		var liveView;
+		let studentId = this.props.auth.user.id;
 		if(this.props.studentState.targetClass && this.props.studentState.targetClass.activeView){
 				liveView = <QuizContainer/>
 			} else if (this.props.studentState.targetClass && !this.props.studentState.targetClass.activeView) {
@@ -39,20 +47,16 @@ class StudentLiveClassView extends React.Component {
 			} else {
 					liveView = <div></div>
 			}
-			if (this.props.studentState.targetClass && this.props.studentState.targetClass.students[this.props.auth.user.id].handRaised) {
+			if (this.props.studentState.targetClass && this.props.studentState.targetClass.students[studentId].handRaised) {
 				let handRaisedQueue = this.props.activeView.handRaisedQueue;
 				let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
-				if (this.props.auth.user.id === lowestQueueTimeId) {
+				if (studentId === lowestQueueTimeId) {
 					var handRaiseLabel = "You are next in line!"
  				} else {
 					var handRaiseLabel = 'Click to exit the queue';
 				 }
 				var queueIcon =  <UserExpert />
 				var critical = true;
-				var toast = 
-						<Toast status='ok' size='small' > 
-						You have entered the help queue, please wait for a teacher to provide assistance
-						</Toast>
 
 			} else {
 				var handRaiseLabel = 'Raise your hand';
@@ -60,11 +64,19 @@ class StudentLiveClassView extends React.Component {
 				var critical = false;
 				var toast = <div></div>
 			}
-
+			console.log('this props in studnet live calss view ', this.props)
 			return (
 				<div>
 						{liveView}
-						{toast}
+						{ 
+							this.props.studentState.targetClass
+							&& this.props.activeView.communication 
+							&& this.props.activeView.communication[studentId]
+							&&  this.props.activeView.communication[studentId].method === 'acknowledge' ?
+							<Toast status='ok' size='medium' onClose={this.handleToastClose}> 
+								Someone is on the way to help!
+							</Toast> : <div></div>
+							}
 
 						<Button 
 							icon={queueIcon} 
