@@ -112,6 +112,8 @@ CREATE TABLE IF NOT EXISTS  "submitted_quizzes" (
 	"class_id" integer NOT NULL,
 	"previous_id" integer NOT NULL,
 	"weight" integer NOT NULL,
+	"time" integer NOT NULL,
+	"duration" integer NOT NULL,
 	CONSTRAINT submitted_quizzes_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -120,8 +122,10 @@ CREATE TABLE IF NOT EXISTS  "submitted_quizzes" (
 CREATE TABLE IF NOT EXISTS  "submitted_questions" (
 	"id" serial NOT NULL,
 	"question" varchar NOT NULL,
+	"position" integer NOT NULL,
 	"subject_id" integer NOT NULL,
 	"previous_id" integer NOT NULL,
+	"quiz_id" integer NOT NULL,
 	CONSTRAINT submitted_questions_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -138,22 +142,12 @@ CREATE TABLE IF NOT EXISTS  "submitted_answers" (
   OIDS=FALSE
 );
 
-
-CREATE TABLE IF NOT EXISTS  "submitted_quizzes_submitted_questions" (
-	"id" serial NOT NULL,
-	"submitted_quiz_id" integer NOT NULL,
-	"submitted_question_id" integer NOT NULL,
-	"position" integer NOT NULL,
-	CONSTRAINT submitted_quizzes_submitted_questions_pk PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
 CREATE TABLE IF NOT EXISTS  "students_responses" (
 	"id" serial NOT NULL,
 	"student_id" integer NOT NULL,
 	"response_id" integer NOT NULL,
 	"question_id" integer NOT NULL,
+	"draft_question_id" integer NOT NULL,
 	"time_spent" integer,
 	"correct" BOOLEAN NOT NULL,
 	CONSTRAINT students_responses_pk PRIMARY KEY ("id")
@@ -182,13 +176,12 @@ ALTER TABLE "submitted_quizzes" ADD CONSTRAINT "submitted_quizzes_fk2" FOREIGN K
 
 ALTER TABLE "submitted_questions" ADD CONSTRAINT "submitted_questions_fk0" FOREIGN KEY ("subject_id") REFERENCES "subjects"("id");
 ALTER TABLE "submitted_questions" ADD CONSTRAINT "submitted_questions_fk1" FOREIGN KEY ("previous_id") REFERENCES "draft_questions"("id");
-
-ALTER TABLE "submitted_quizzes_submitted_questions" ADD CONSTRAINT "submitted_quizzes_submitted_questions_fk0" FOREIGN KEY ("submitted_quiz_id") REFERENCES "submitted_quizzes"("id");
-ALTER TABLE "submitted_quizzes_submitted_questions" ADD CONSTRAINT "submitted_quizzes_submitted_questions_fk1" FOREIGN KEY ("submitted_question_id") REFERENCES "submitted_questions"("id");
+ALTER TABLE "submitted_questions" ADD CONSTRAINT "submitted_questions_fk2" FOREIGN KEY ("quiz_id") REFERENCES "submitted_quizzes"("id");
 
 ALTER TABLE "students_responses" ADD CONSTRAINT "students_responses_fk0" FOREIGN KEY ("student_id") REFERENCES "students"("id");
-ALTER TABLE "students_responses" ADD CONSTRAINT "students_responses_fk1" FOREIGN KEY ("question_id") REFERENCES "submitted_quizzes_submitted_questions"("id");
+ALTER TABLE "students_responses" ADD CONSTRAINT "students_responses_fk1" FOREIGN KEY ("question_id") REFERENCES "submitted_questions"("id");
 ALTER TABLE "students_responses" ADD CONSTRAINT "students_responses_fk2" FOREIGN KEY ("response_id") REFERENCES "submitted_answers"("id");
+ALTER TABLE "students_responses" ADD CONSTRAINT "students_responses_fk3" FOREIGN KEY ("draft_question_id") REFERENCES "submitted_answers"("id");
 
 ALTER TABLE "draft_answers" ADD CONSTRAINT "draft_answers_fk0" FOREIGN KEY ("question_id") REFERENCES "draft_questions"("id");
 

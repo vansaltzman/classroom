@@ -79,7 +79,6 @@ const addStudentsAndClass = function() {
         return hashedStudent
       })
       .then(hashedStudent => {
-        console.log(hashedStudent)
 
         // Assign students to class
         return db.query(
@@ -91,6 +90,74 @@ const addStudentsAndClass = function() {
   })
 }
 
+const addQuestions = function(){
+  // [text, teacherId, subjectId, avgTime = 0]
+  let teacherId
+  let subjId
+
+  return db.query(`SELECT id FROM teachers WHERE email='mfrizz@magic.bus'`)
+    .then(teacherData => {
+      teacherId = teacherData.rows[0].id
+      return db.query(`SELECT id FROM subjects WHERE name='Magic'`)
+    })
+    .then(subjData=> {
+      subjId = subjData.rows[0].id
+    })
+    .then(()=> {
+      const questions = [
+        ['What is a closure?', teacherId, subjId], 
+        ['How old is Hack Reactor?', teacherId, subjId], 
+        ['What year did The Magic School Bus first air?', teacherId, subjId], 
+        ['How many flies are currently in the office?', teacherId, subjId], 
+        ['Who is the best house in GoT?', teacherId, subjId], 
+      ]
+
+      const answers = [
+        [['Function objects', false],
+          ['Scope where function’s variables are resolved', false],
+          ['Both Function objects and Scope where function’s variables are resolved', true],
+          ['None of the above', false],
+        ],
+        [['2010', false],['2012', true],['2014', false]],
+        [['1980', false],['1998', false],['1994', true],['1977', false],['1990', false]],
+        [['0', false],['Too many', true],],
+        [['Grey Joy', false],['Lanister', false],['Tyrell', false],['Stark', true],],
+      ]
+      return Promise.all(questions.map((questionArr, questionIndx) => {
+         return db.query(
+          `INSERT INTO draft_questions (question, teacher_id, subject_id) 
+          VALUES ($1, $2, $3) RETURNING id;`, questionArr)
+          .then(questionId=> {
+            questionId = questionId.rows[0].id
+            // add answers
+            return Promise.all(answers[questionIndx].map(answer => {
+              return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
+              ($1, ${questionId}, $2);`, answer)
+            }))
+            .then(()=> questionId)
+          })
+      }))
+      .then(questionIds => {
+        var returnObj = {questionIdArr: questionIds, teacherId: teacherId, subjId: subjId}
+        return returnObj
+      })
+    })
+}
+
+const addQuiz = function({questionIdArr, teacherId, subjId}) {
+  return db.query(
+    `INSERT INTO draft_quizzes (name, subject_id, teacher_id) 
+    VALUES ($1, $2, $3) RETURNING id`, ['Dummy Quiz', subjId, teacherId])
+    .then(quizData=> {
+      if (questionIdArr) {
+       return Promise.all(questionIdArr.map((questionId, index) => {
+         return db.query(
+            `INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) 
+            VALUES (${quizData.rows[0].id}, ${questionId}, '${index}');`, )
+       }))
+      }
+    })
+  }
 
 const removeStudentsAndClass = function() {
 
@@ -132,4 +199,6 @@ exports.classMigration = function() {
 }
 
 exports.addDummyData = addStudentsAndClass;
+exports.addQuestions = addQuestions;
+exports.addQuiz = addQuiz;
 exports.removeDummyData = removeStudentsAndClass;
