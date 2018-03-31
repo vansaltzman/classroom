@@ -536,14 +536,15 @@ function setQuestionNumberAction() {
 	}
 }
 
-export function deleteQuestion() {
+export function deleteQuestion(index) {
 	return (dispatch) => {
-		dispatch(deleteQuestionAction())
+		dispatch(deleteQuestionAction(index))
 	}
 }
-function deleteQuestionAction() {
+function deleteQuestionAction(index) {
 	return {
-		type: actionTypes.DELETE_QUESTION_ACTION
+		type: actionTypes.DELETE_QUESTION_ACTION,
+		index
 	}
 }
 

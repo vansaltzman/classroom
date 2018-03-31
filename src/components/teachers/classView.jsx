@@ -339,7 +339,7 @@ class ClassView extends React.Component {
 																						 //style={{color: each.question ? 'pink' : 'black'}}
 																						 value={each.id ? each.question : each.text}
 																						 onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
-																	<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteQuestion()}/>} />
+																	<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteQuestion(index)}/>} />
 																	{each.answers.map((eachAnswer, answerIndex) => {
 																		return (
 																			<Section>

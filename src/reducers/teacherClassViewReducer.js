@@ -188,7 +188,7 @@ export function teacherClassViewReducer(
 			};
 		case actionTypes.DELETE_QUESTION_ACTION:
 			const listOfquestions = state.newQuiz.questions.slice()
-			listOfquestions.pop()
+			listOfquestions.splice(action.index, 1)
 			return {
 				...state,
 				newQuiz: {
