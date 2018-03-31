@@ -182,7 +182,9 @@ class NavigationBar extends React.Component {
                             {/* <Route path="/quiz" component={StudentViewQuiz}/> */}
                             {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
                             <Route path="/default" component={ClassViewDefault}/>
-                            {/* <Route path="/studentLiveClass2" component={StudentLiveClassView}/> */}
+                            <Route path="/studentLiveClass" component={StudentLiveClassView}/>
+                            <Route path="/profileSettings" component={ImageUploader}/>
+                        
                             
                             <Route path="/studentLiveClass" component={StudentLiveClassView}/>
                             <Route path="/profileSettings" component={ImageUploader}/>

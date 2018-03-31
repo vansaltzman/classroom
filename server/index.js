@@ -227,7 +227,7 @@ app.post('/getAllStudentsInAClass', (req, res) => {
   //console.log('class id server side', req.body);
   main.getAllStudentsBelongToAClass(req.body.id)
   .then((data) => {
-    //console.log('server side data', data.rows);
+    console.log('server side data with thumbnails', data.rows);
     res.send(data.rows);
     
   })

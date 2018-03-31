@@ -347,6 +347,15 @@ const getQuizzes = function(teacherId, subjectId) {
     }))
   })
 }
+const addProfilePictureForStudent = function (studentId, url) {
+  const queryString = `UPDATE students SET thumbnail_url = '${url}' WHERE id=${studentId}`
+  return db.query(queryString)
+}
+
+const getProfilePic = function (userId) {
+  const queryString = `SELECT thumbnail_url FROM students WHERE id=${userId}`
+  return db.query(queryString)
+}
 
 const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
   return db.query(`SELECT * FROM draft_questions WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
