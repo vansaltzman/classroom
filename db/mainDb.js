@@ -131,7 +131,6 @@ const addNewClass = function(classObj) {
   //console.log('database side', classObj)
   //const params = []
   const checkSubjectQuery = `SELECT * FROM subjects WHERE name='${classObj.subject}';`
-  console.log(checkSubjectQuery);
   return db.query(checkSubjectQuery)
   .then((count) => {
     console.log('count', count);
@@ -140,7 +139,6 @@ const addNewClass = function(classObj) {
     }
   })
   .then(() => {
-    console.log('got there', classObj.classname)
     const queryString = `INSERT INTO classes (name, teacher_id, subject_id, year, quarter, thunmbnail)
                        VALUES ('${classObj.classname}', (SELECT id FROM teachers WHERE email='${classObj.email}'),
                        (SELECT id FROM subjects WHERE name='${classObj.subject}'), '${classObj.year}', '${classObj.quarter}', '${classObj.thumbnail}')`
@@ -179,7 +177,7 @@ const getClassesForTeacherMainView = function(email) {
     return db.query(queryStringForClasses)
     .then(classes => {
       return classes.rows.map(eachClass => {
-        eachClass.teacher = eachClass.first_name + ' ' + eachClass.lastName
+        eachClass.teacher = eachClass.first_name + ' ' + eachClass.last_name
         return eachClass
       })
     })
@@ -266,7 +264,7 @@ const addQuiz = function(quizObj) {
     }))
   })
   .then((data) => {
-    console.log('dataaaaaa after draft_quizzes_draft_questions', data)
+    // console.log('dataaaaaa after draft_quizzes_draft_questions', data)
     return Promise.all((data.map((q, i) => {
       return Promise.all(q.answers.map((answer, j) => {
         if (answer.id) {
@@ -287,7 +285,7 @@ const addQuiz = function(quizObj) {
 }
 
 const getQuizzes = function(teacherId, subjectId) {
-  //console.log('teacherId, subjectId ------> ', teacherId, subjectId)
+  // console.log('teacherId, subjectId ------> ', teacherId, subjectId)
   return db.query(`SELECT draft_quizzes.name, draft_quizzes.id, subjects.name as subject FROM draft_quizzes INNER JOIN subjects ON draft_quizzes.subject_id = subjects.id WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
   .then((data) => {
     const quizzes = data.rows.map((quiz) => {
@@ -309,12 +307,12 @@ const getQuizzes = function(teacherId, subjectId) {
 
           questions.rows.forEach(question=> {
             let formattedQuestion = {}
-            formattedQuestion.id = question.id
+            formattedQuestion.id = question.draft_question_id
             formattedQuestion.text = question.question
             formattedQuestion.position = question.position
             formattedQuestion.draft_question_id = question.draft_question_id
-
-            eachQuiz.questions[question.id] = formattedQuestion
+           
+            eachQuiz.questions[question.draft_question_id] = formattedQuestion
           })
           return eachQuiz
         })
@@ -341,7 +339,6 @@ const getQuizzes = function(teacherId, subjectId) {
       }))
       .then((questions) => {
         eachQuiz.questions = questions
-        //console.log('eachQuiz ------> ', eachQuiz)
         return eachQuiz
       })
     }))

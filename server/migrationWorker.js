@@ -5,69 +5,102 @@ const main = require('../db/mainDb')
 const fbClassToPgObj = function(classObj) {
   const classId = classObj.id
   const { name, quizzes, students, teacher_id, subject_id } = classObj
+  return submitParticipation(classId, students)
+  .then(()=> {
+    if (quizzes) {
+      return Promise.all(Object.keys(quizzes).map(quizId => {
+    
+        responsesObj = {}
+        
+        Object.values(students).forEach(student => {
+            studentObj = {}
+            studentObj.id = student.id   
+            studentObj.responses = student.quizzes[quizId].responses
+            responsesObj[student.id] = studentObj
+        })
+    
+      
+        return submitQuiz(quizzes[quizId], responsesObj, classId)
+      }))
+    }
+  })
+  // .then(()=> {
+  //   return updateQuestionTimes()
+  // })
+}
 
-  // save quizzes into submitted quizzes
-  
-    // for each quiz, associate student responses with questions and answers
-        // save questions into submitted questions
-            // save answers into submitted answers
-               // save responses into students_responses
-
-
-
+const submitParticipation = function(classId, students) {
+  return Promise.all(Object.values(students).map(student=> {
+    let newParticipation = student.participation || 0
+    return db.query(
+      `UPDATE classes_students SET participation = participation + $1 WHERE class_id = $2 AND student_id = $3 RETURNING participation`, 
+      [newParticipation, classId, student.id])
+  }))
 }
 
 
 const submitQuiz = function(quizObj, studentResponses, classId) {
-  const teacherId = quizObj.authorId;
-  const questions = quizObj.quiz.questions;
-  const quizName = quizObj.quiz.name;
-  const prevQuizId = quizObj.quiz.id;
-  const quizWeight = quizObj.quiz.weight;
-  const subjectId = quizObj.quiz.subject.sub.id;
-  const subjectName = quizObj.quiz.subject.sub.name;
-  let quizId
+  console.log('Submit Quiz for: ', quizObj.name)
 
-  return db.query(`INSERT INTO submitted_quizzes (name, subject_id, teacher_id, weight, previous_id, class_id) VALUES ('${quizName}', '${subjectId}', '${teacherId}', '${weight}', ${prevQuizId}, ${classId}) RETURNING id;`)
-  .then((submittedQuiz) => {
-    quizId = submitQuiz.rows[0].id
-    return Promise.all(questions.map((each, index) => {
-      //console.log('each question', each)
-      return db.query(`INSERT INTO submitted_questions (question, teacher_id, previous_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${question.id}', '${subjectId}' RETURNING id);`)
-      .catch((err) => {
-        if (err) throw err
-      })
-    }))
-  })
-  .then((submittedQuestions) => {
-    return Promise.all(submittedQuestions.map((question, index) => {
-      //console.log('each questions to join table', each)
-      return db.query(`INSERT INTO submitted_quizzes_submitted_questions (submitted_quiz_id, submitted_question_id, position) 
-                VALUES ('${quizId}', '${question.rows[0]}', '${index}')`)
-      .catch((err) => {
-        if (err) throw err
-      })   
-    }))
-  })
-  .then((submittedQuestions) => {
-    console.log(questions )
-    return Promise.all((questions.map((q, i) => {
-      return Promise.all(q.answers.map((answer, j) => {
-        return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
-                ('${answer.text}', (SELECT id FROM draft_questions WHERE question='${q.question}'), '${answer.isCorrect}');`) 
+  const prevQuizId = quizObj.id;
+  const quizName = quizObj.name;
+  const questions = quizObj.questions;
+  const quizDuration = quizObj.quizDuration
+  const quizSubject = quizObj.subject
+  const quizTime = quizObj.time
+  const quizWeight = quizObj.weight;
+  
+  let subjectId
+  let submittedQuizId
+
+  return db.query(`SELECT id FROM subjects WHERE name=$1`, [quizObj.subject])
+  .then((subjectData)=> {
+    subjectId = subjectData.rows[0].id
+    return db.query(
+      `INSERT INTO submitted_quizzes (name, subject_id, weight, previous_id, class_id, duration, time) 
+      VALUES ('${quizName}', '${subjectId}', '${quizWeight}', ${prevQuizId}, ${classId}, ${quizDuration}, ${quizTime}) RETURNING id;`)
+    .then((submittedQuiz) => {
+      submittedQuizId = submittedQuiz.rows[0].id
+      return Promise.all(Object.values(questions).map((each, index) => {
+        console.log('each ------> ', each)
+        return db.query(
+          `INSERT INTO submitted_questions (question, previous_id, subject_id, quiz_id, position) 
+          VALUES ('${each.text}', '${each.id}', '${subjectId}', '${submittedQuizId}', '${each.position}') RETURNING id, previous_id;`)
       }))
-    })))
-  })
-  // .then(() => {
-  //   console.log('teacherId, subjectId for refetching quizzes', teacherId, subjectId)
-  //   return getQuizzes(teacherId, subjectId)
-  // })
-  .catch((err) => {
-    if (err) throw err;
+    })
+    .then((submittedQuestions) => {
+      return Promise.all(Object.values(submittedQuestions).map((question, index) => {
+        question = question.rows[0]
+          return Promise.all(Object.values(questions[question.previous_id].answers).map(answer => {
+            return db.query(
+              `INSERT INTO submitted_answers (answer, question_id, correct) 
+              VALUES ($1, $2, $3) RETURNING id, question_id, correct`, [answer.text, question.id, answer.isCorrect])
+              .then(queryResponse=> {
+                let subAnswer = queryResponse.rows[0]
+                subAnswer.previousAnswerId = answer.id
+                return subAnswer
+              }) 
+          }))
+        .then(submittedAnswers => {
+          let answerMapper = {}
+  
+          submittedAnswers.forEach(submittedAnswer => {
+            answerMapper[submittedAnswer.previousAnswerId] = {newId: submittedAnswer.id, isCorrect: submittedAnswer.correct}
+          })
+
+          return Promise.all(Object.values(studentResponses).map(student => {
+            let responseForThisQuestion = student.responses[question.previous_id]
+            let studentsAnswer = answerMapper[Object.keys(responseForThisQuestion.answers).find(key => responseForThisQuestion.answers[key] === true)] || {newId: null, isCorrect: false}
+            responseForThisQuestion.time = responseForThisQuestion.time || null
+            return db.query(
+            `INSERT INTO students_responses (student_id, response_id, question_id, draft_question_id, time_spent, correct) 
+            VALUES ($1, $2, $3, $4, $5, $6)`, [student.id, studentsAnswer.newId, question.id, question.previous_id, responseForThisQuestion.time, studentsAnswer.isCorrect])
+          }))
+        })
+      }))
+    })
   })
 }
-
-
 
 // Converts a class in postgress to a sql obj
 const psqlClassToFbObj = function(sqlClass) {
@@ -112,7 +145,6 @@ const psqlClassToFbObj = function(sqlClass) {
 const migrateClassToFB = function(classId){
   main.fetchClass(classId)
   .then(classRow => {
-    console.log(classRow[0])
     return psqlClassToFbObj(classRow[0])
   })
   .then(fbObj => {
@@ -126,4 +158,5 @@ const migrateClassToFB = function(classId){
 
 module.exports = {
   migrateClassToFB, 
+  fbClassToPgObj,
 }

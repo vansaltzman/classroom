@@ -11,6 +11,10 @@ class QuizViewContainer extends React.Component {
     super();
   }
 
+  componentDidMount() {
+    this.props.startListening()
+  }
+
   render() {
     console.log('this props in teach quiz view conteinar ', this.props)
     return (

@@ -98,7 +98,7 @@ export function teacherClassViewReducer(
           email: action.students[i].email,
           quizzes: {}
         };
-      }
+			}
 			return {
 				...state, 
 				targetClass: {
@@ -300,7 +300,6 @@ export function teacherClassViewReducer(
 						accumulator[eachAnswerId] = each
 						return accumulator
 					}, {})
-					//console.log('answers arrat', eachQuiz.questions[key].answers)
 				}
 				return eachQuiz
 			})

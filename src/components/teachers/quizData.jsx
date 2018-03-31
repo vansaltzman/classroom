@@ -32,6 +32,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 	const endQuiz = function() {
 		fb.updateActiveView(false, targetClass.id)
 	}
+
 	return (
 		<TableRow>
 			<td>
@@ -67,7 +68,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 						// alignContent=""
 						style={{width: '500px', margin: '0 50px 0 50px'}}
 					>
-						{studentQuiz.currentQuestion >= 0 ?
+						{studentQuiz && studentQuiz.currentQuestion >= 0 ?
 							studentQuiz.isFinished ?
 							<Fade 
 								enter={{"animation": "slide-right", "duration": 300, "delay": 0}}
@@ -89,7 +90,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 									Working On:
 								</Label>
 								<Animate 
-									text={studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : ''}
+									text={studentQuiz && studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : ''}
 								/>
 							</div>
 							:
@@ -103,7 +104,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 						alignContent="center"
 						style={{width: '250px'}}
 					>
-						{studentQuiz.currentQuestion >= 0 &&
+						{studentQuiz && studentQuiz.currentQuestion >= 0 &&
 						<div>
 							<Label
 								size="small"
@@ -113,7 +114,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 							<div style={{marginTop: '-8px'}}>
 								<Value 
 									size="medium"
-									value={studentQuiz.currentQuestion >= 0 ? moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).minutes() : null}
+									value={studentQuiz && studentQuiz.currentQuestion >= 0 ? moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).minutes() : null}
 									responsive={false} />
 								<Value 
 									size="medium"
@@ -135,7 +136,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 					size="full"
 					// style={{marginTop: '10px'}}
 				>
-					{studentQuiz.currentQuestion >= 0 && 
+					{studentQuiz && studentQuiz.currentQuestion >= 0 && 
 					<ScoreDistribution
 						studentQuiz={studentQuiz}
 						quiz={quiz}

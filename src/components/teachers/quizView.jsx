@@ -283,51 +283,6 @@ const QuizView = ({ props }) => {
 					quizIds={quizIds} 
 					nextInLine={nextInLine}
 				/>
-
-				{/* return <TableRow
-					key={studentId}
-					style={{
-						background: studentQuiz.isFinished ? 'lightgreen' : students[studentId].isHere ? 'white' : 'lightgrey',
-						height: '100px'
-					}}>
-					<td width="50px">
-						<UserImage handRaised={true}/>
-					</td>
-					<td width="50px">
-						{students[studentId].name}
-					</td>
-					<td width="200px">
-					{studentQuiz.currentQuestion >= 0 &&
-						<Animate text={studentQuiz.currentQuestion >= 0 ? quiz.questions[quizIds[studentQuiz.currentQuestion]].text : ''}
-						/>
-					}
-					</td>
-					<td className='secondary' width="100px">
-					{studentQuiz.currentQuestion >= 0 &&
-					<div>
-						<Value 
-							value={studentQuiz.currentQuestion >= 0 ? moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).minutes() : null}
-							responsive={false} />
-						<Value 
-							value={':'}
-							responsive={false} />
-						<Value 
-							value={
-									moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds().toString().length < 2 ?
-									'0' + moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds() : 
-									moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds()}
-							responsive={false} />
-						</div>
-						}
-					</td>
-					<td className='secondary'>
-						{studentQuiz.currentQuestion >= 0 && 
-						<ScoreDistribution
-							studentQuiz={studentQuiz}
-							quiz={quiz}
-						/>}
-					</td>
-				</TableRow> */}
 			})
 			}
 			</tbody>
