@@ -164,7 +164,7 @@ class NavigationBar extends React.Component {
                             <Route path="/quizViewContainer" component={quizViewContainer}  />
                             <Route path="/studentQuiz" component={quizContainer}/>
                             {/* <Route path="/studentClass" component={StudentClass}  /> */}
-                            <Route path="/studentliveclass" component={StudentLiveClassView}/>
+                            <Route path="/studentLiveClassView" component={StudentLiveClassView}/>
                             
                             <Route path="/signUp" component={SignUp}/>
                             {/* <Route path="/quiz" component={StudentViewQuiz}/> */}
