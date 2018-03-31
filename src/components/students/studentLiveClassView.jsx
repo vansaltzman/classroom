@@ -41,8 +41,8 @@ class StudentLiveClassView extends React.Component {
 			}
 			if (this.props.studentState.targetClass && this.props.studentState.targetClass.students[this.props.auth.user.id].handRaised) {
 				let handRaisedQueue = this.props.activeView.handRaisedQueue;
-				let lowestQueueTime = Math.min(Object.keys(handRaisedQueue).map((id) =>  handRaisedQueue[id].time));
-				if (handRaisedQueue[this.props.auth.user.id].time === lowestQueueTime) {
+				let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
+				if (this.props.auth.user.id === lowestQueueTimeId) {
 					var handRaiseLabel = "You are next in line!"
  				} else {
 					var handRaiseLabel = 'Click to exit the queue';

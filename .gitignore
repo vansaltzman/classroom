@@ -37,6 +37,7 @@ build/Release
 
 # Auth key 
 server/config.js
+.env
 
 # Dependency directories
 node_modules/

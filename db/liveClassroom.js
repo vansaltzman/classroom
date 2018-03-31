@@ -2,11 +2,17 @@ const firebase = require('firebase');
 const config = require('../server/config.js');
 const dummyStudentData=require('../db/dummyStudentsData');
 const studentQuizObjConverter = require('../src/utils/studentQuizObjConverter.js');
-const moment = require('moment')
+const moment = require('moment');
+const fs = require('fs');
 // const migrate = require('../server/migrationWorker.js')
-
+const dotenv = require('dotenv');
+const {error} = dotenv.config();
+if (error) {
+  console.log('error in dotenv ', error)
+}
 
 firebase.initializeApp(config.fbConfig);
+
 const fb = firebase.database();
 
 const selectClass = function(classId) {
@@ -16,10 +22,8 @@ const selectClass = function(classId) {
 
 // this function appears to not be called anywhere
 const startClass = function(classObj) {
-	console.log('are we calling start class')
 	const classList = fb.ref('/classes/' + classObj.id) 
 	classObj.isLive = true
-	console.log('class obj when starting class ', classObj);
   return classList.child(classObj.id).set(classObj)
   .then(()=> console.log('Launched claass ' + classObj.name))
   .catch((err)=> console.log('Issue starting class' + err))
@@ -101,7 +105,7 @@ const updateHandRaiseQueue = function(classId, studentId) {
 			if (activeClass.handRaisedQueue[studentId]) {
 				delete activeClass.handRaisedQueue[studentId]
 			} else {
-				activeClass.handRaisedQueue[studentId] = studentInQueue
+				activeClass.handRaisedQueue[studentId] = studentInQueue[studentId]
 			}
 			currentClass.set(activeClass);
 		} else {
