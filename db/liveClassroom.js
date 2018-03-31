@@ -129,6 +129,29 @@ const updateHandRaiseQueue = function(classId, studentId) {
 	})
 }
 
+const updateHandRaiseAcknowledgement = function (classId, studentId, type) {
+	const currentClass = fb.ref('/classes/' + classId);
+	const communicationMethod = {
+		[studentId]: {
+			studentId: studentId,
+			method: type}
+	}
+	return currentClass.once('value', snap => {
+		let activeClass = snap.val();
+		if( activeClass.hasOwnProperty('communication') ) {
+			if (activeClass.communication[studentId]) {
+				delete activeClass.communication[studentId]
+			} else {
+				activeClass.communication[studentId] = communicationMethod[studentId]
+			}
+			currentClass.set(activeClass);
+		} else {
+			currentClass.child('communication').set(communicationMethod)
+		}
+	})
+}
+
+
 module.exports = {  
   fb,
   startClass,
@@ -140,5 +163,6 @@ module.exports = {
   insertStudentAnswers,
 	stopFetchingClassData,
 	toggleStudentHandRaiseStatus,
-	updateHandRaiseQueue
+	updateHandRaiseQueue,
+	updateHandRaiseAcknowledgement
 }
