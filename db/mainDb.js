@@ -379,15 +379,6 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
 //   }
 // }
 
-const addProfilePictureForStudent = function (studentId, url) {
-  const queryString = `UPDATE students SET thumbnail_url = '${url}' WHERE id=${studentId}`
-  return db.query(queryString)
-}
-
-const getProfilePic = function (userId) {
-  const queryString = `SELECT thumbnail_url FROM students WHERE id=${userId}`
-  return db.query(queryString)
-}
 
 module.exports = {
   addUser,
@@ -406,7 +397,6 @@ module.exports = {
   getNewAddedClass,
   GetAllQuestionsBelongToTeacher,
   // calculateAverageTimeForQuestions
-  addProfilePictureForStudent,
   addProfilePictureForStudent,
   getProfilePic
   
