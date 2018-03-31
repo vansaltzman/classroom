@@ -190,7 +190,7 @@ exports.classMigration = function() {
 
         })
 
-        xit('should update the active view for students and teacher', function(done) {
+        it('should update the active view for students and teacher', function(done) {
 
         })
       })
