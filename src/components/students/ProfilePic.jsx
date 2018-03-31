@@ -19,8 +19,12 @@ class ProfilePic extends React.Component {
     this.setState({user: this.props.userId}, function(){
       axios.post('/profile', {user: this.state.user})
       .then((response)=> {
-        this.setState({pic: response.data.rows[0].thumbnail_url})
-        console.log('profile pic mounted--', response.data.rows[0].thumbnail_url)
+        if(response.data.rows[0].thumbnail_url === null){
+          this.setState({pic: 'https://s3.us-east-2.amazonaws.com/jaqen-app/default-profile.png'})
+        } else {
+            this.setState({pic: response.data.rows[0].thumbnail_url})
+            console.log('profile pic mounted--', response.data.rows[0].thumbnail_url)
+        }
     })
       .catch((error)=>{
         console.log('error in ProfilePic.jsx', error)
