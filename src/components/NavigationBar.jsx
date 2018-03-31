@@ -23,6 +23,8 @@ import quizContainer from './students/quizContainer.jsx'
 import StudentLiveClassView from './students/studentLiveClassView.jsx'
 import ClassViewDefault from './students/classViewDefault.jsx';
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
+import ImageUploader from './ImageUploader.jsx';
+import ProfilePic from './students/ProfilePic.jsx'
 
 
 
@@ -68,6 +70,8 @@ class NavigationBar extends React.Component {
     }
     
     render() {
+
+
         const titleStyle = {
             marginLeft: '50px'
         }
@@ -104,18 +108,22 @@ class NavigationBar extends React.Component {
             if (this.props.auth.user.class === 'student') {
                 var menuLabel = this.props.auth.user.email;
                 var navBarBackground = 'lightBlue'
+            var pic = <ProfilePic userId={this.props.auth.user.id}/>
                 var dropAnchors = 
                 <div>
-                    <Anchor path="/quiz">
-                        Quiz 
-                    </Anchor>
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
                     </Anchor>
 
-                    <Anchor path='/studentQuiz'>
+
+                    {/* <Anchor path='/studentQuiz'>
                         studentQuiz
+                    </Anchor> */}
+
+                    <Anchor path='/profileSettings'>
+                            Profile Settings
                     </Anchor>
+
                 </div>
             }
         }
@@ -135,12 +143,14 @@ class NavigationBar extends React.Component {
                     justify='end'
                     direction='row'
                     responsive={false}>
+                   {pic}
                     <Menu 
                         primary={false}
                         direction='row'
                         label={menuLabel}
                         icon={<Actions/>}>
                         {dropAnchors}
+
                     </Menu>
                 </Box>
             </Header>
@@ -162,18 +172,15 @@ class NavigationBar extends React.Component {
                             <Route path="/studentmainview" component={StudentMainView} />
                             <Route path="/login" component={SignIn}  />
                             <Route path="/teacherQuiz" component={ClassView}  />
-                        
                             <Route path="/quizViewContainer" component={quizViewContainer}  />
                             <Route path="/studentQuiz" component={quizContainer}/>
-                            {/* <Route path="/studentClass" component={StudentClass}  /> */}
                             <Route path="/studentliveclass" component={StudentLiveClassView}/>
-                            
                             <Route path="/signUp" component={SignUp}/>
-                            <Route path="/quiz" component={StudentViewQuiz}/>
-                            {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
                             <Route path="/default" component={ClassViewDefault}/>
-                            {/* <Route path="/studentLiveClass2" component={StudentLiveClassView}/> */}
+                            <Route path="/profileSettings" component={ImageUploader}/>
+                        
                             
+
                         </Switch>
                 </nav>
                 </Router>

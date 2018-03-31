@@ -92,7 +92,7 @@ const verifyUser = function(email, password) {
     return bcrypt.compare(password, user.password)
       .then(auth => {
         if (auth) {
-          return {class: res.class, id: user.id}
+          return {class: res.class, id: user.id, pic: user.thumbnail_url}
         } else {
           return false
         }
@@ -192,10 +192,9 @@ const getAllStudents = function() {
 }
 
 const getAllStudentsBelongToAClass = function(classId) {
-  const queryString = 
-  `SELECT students.id, students.first_name, students.last_name, students.email
-  FROM students INNER JOIN classes_students ON students.id = classes_students.student_id
-  WHERE classes_students.class_id='${classId}'`
+  const queryString = `SELECT students.id, students.first_name, students.last_name, students.email, students.thumbnail_url
+                       FROM students INNER JOIN classes_students ON students.id = classes_students.student_id
+                       WHERE classes_students.class_id='${classId}'`
   return db.query(queryString);
 }
 
@@ -348,6 +347,15 @@ const getQuizzes = function(teacherId, subjectId) {
     }))
   })
 }
+const addProfilePictureForStudent = function (studentId, url) {
+  const queryString = `UPDATE students SET thumbnail_url = '${url}' WHERE id=${studentId}`
+  return db.query(queryString)
+}
+
+const getProfilePic = function (userId) {
+  const queryString = `SELECT thumbnail_url FROM students WHERE id=${userId}`
+  return db.query(queryString)
+}
 
 const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
   return db.query(`SELECT * FROM draft_questions WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
@@ -371,6 +379,7 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
 //   }
 // }
 
+
 module.exports = {
   addUser,
   verifyUser,
@@ -386,7 +395,10 @@ module.exports = {
   addQuiz,
   getQuizzes,
   getNewAddedClass,
-  GetAllQuestionsBelongToTeacher
+  GetAllQuestionsBelongToTeacher,
   // calculateAverageTimeForQuestions
+  addProfilePictureForStudent,
+  getProfilePic
+  
 }
 
