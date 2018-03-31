@@ -41,8 +41,8 @@ class Animate extends React.Component {
           leave={{"animation": "slide-left", "duration": 300, "delay": 0}}
           keep={true}>
           <Heading
-            tag="h4"
-            style={this.state.showFull ? {
+            tag="div"
+            style={this.state.showFull && this.state.currentQuestion.length >= 55 ? {
               overflow: 'visible',
               whiteSpace: 'normal', 
               backgroundColor: 'white',
@@ -50,9 +50,10 @@ class Animate extends React.Component {
               height: '23px',
               width: '500px', 
               position: 'absolute',
-              display: 'block',
+              display: 'inline-block',
               lineHeight: '23px',
-              zIndex: '999'
+              zIndex: '999',
+              cursor: 'default'
             }: 
             {
               overflow: 'hidden', 

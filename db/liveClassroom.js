@@ -15,9 +15,23 @@ firebase.initializeApp(config.fbConfig);
 
 const fb = firebase.database();
 
+fb.ref('/').once('value')
+.then(snap=> console.log('Initialized App with target class: ', Object.values(snap.toJSON().classes)[0].name))
+
 const selectClass = function(classId) {
   return migrate.migrateClassToFB(classId)
   .then(classObj => classObj)
+}
+
+const fetchClassData = function(classId) {
+	return fb.ref('/classes/' + classId).once('value')
+		.then(snap => {
+			return snap.toJSON()
+		})
+}
+
+const removeClass = function(classId) {
+	return fb.ref('/classes/').child(classId).remove()
 }
 
 // this function appears to not be called anywhere
@@ -31,7 +45,6 @@ const startClass = function(classObj) {
 
 const endClass = function(classId) {
 	const classToEnd = fb.ref('/classes/' + classId)
-
 	return classToEnd.child('isLive').set(false)
 }
 
@@ -43,6 +56,7 @@ const studentJoins = function(studentId, classId) {
 }
 
 const launchQuiz = function (classId, quizObj, quizTime, quizWeight) {
+	console.log('quizObj ------> ', quizObj)
 	const timeValues = quizTime.split(':');
 	let quizDuration = moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('seconds');
 	quizObj.time = moment().unix() + quizDuration;
@@ -54,6 +68,7 @@ const launchQuiz = function (classId, quizObj, quizTime, quizWeight) {
 			const studentQuizObj = studentQuizObjConverter(quizObj);
 			return fb.ref('/classes/' + classId + '/students').once('value', (snap)=> {
 					var students = snap.val()
+					console.log('students ------> ', students)
 					Object.values(students).forEach( student => {
 							let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id + '/quizzes');
 							studentRef.child(quizObj.id).set(studentQuizObj)
@@ -119,6 +134,8 @@ module.exports = {
   startClass,
 	launchQuiz,
 	endClass,
+	removeClass,
+	fetchClassData,
   updateActiveView,
   insertStudentAnswers,
 	stopFetchingClassData,

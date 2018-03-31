@@ -22,6 +22,7 @@ import StudentViewQuiz from './students/StudentViewQuiz.jsx'
 import quizContainer from './students/quizContainer.jsx'
 import StudentLiveClassView from './students/studentLiveClassView.jsx'
 import ClassViewDefault from './students/classViewDefault.jsx';
+import ClassViewContainer from './teachers/classViewContainer.jsx';
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 import ImageUploader from './ImageUploader.jsx';
 import ProfilePic from './students/ProfilePic.jsx'
@@ -94,7 +95,7 @@ class NavigationBar extends React.Component {
                 var dropAnchors = 
                 <div>
 
-                     <Anchor path='/quizViewContainer'>
+                     <Anchor path='/classViewContainer'>
                         Quiz View
                     </Anchor>
 
@@ -168,11 +169,13 @@ class NavigationBar extends React.Component {
                             <Route exact path="/login"  render={
                                     this.checkAuth
                             } />  
-                            <Route path="/liveclass" component={ClassView}/>
+                            <Route path="/liveclass" component={ClassViewContainer}/>
                             <Route path="/studentmainview" component={StudentMainView} />
                             <Route path="/login" component={SignIn}  />
                             <Route path="/teacherQuiz" component={ClassView}  />
                             <Route path="/quizViewContainer" component={quizViewContainer}  />
+                        
+                            <Route path="/classViewContainer" component={ClassViewContainer}  />
                             <Route path="/studentQuiz" component={quizContainer}/>
                             <Route path="/studentliveclass" component={StudentLiveClassView}/>
                             <Route path="/signUp" component={SignUp}/>

@@ -18,7 +18,7 @@ const classViewDefault = () => {
     }}>
       <Heading align="center">
   
-        No quiz is active now.
+        {isLive ? 'No quiz is active now.' : 'This clas is currently offline'}
   
       </Heading>
 

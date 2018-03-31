@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
 // const config = require('./config.js');
 const config = require('./config.js');
-const migration = require('./migrationWorker.js')
+const migrate = require('./migrationWorker.js')
 const { fb, startClass } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
 const dummyStudentsData = require('../db/dummyStudentsData');
@@ -134,7 +134,7 @@ app.post('/profile', function(req, res) {
   app.post('/startClass', (req, res) => {
     const { classId } = req.body
 
-    migration.migrateClassToFB(classId)
+    migrate.migrateClassToFB(classId)
     .then(()=> {
 
       // update redux state?
@@ -174,7 +174,20 @@ app.post('/profile', function(req, res) {
     //console.log('answer submitted', answer)
   })
 
-  // Complete Quiz
+app.post('/endClass', (req, res)=> {
+
+  const { classObj } = req.body
+
+  migrate.fbClassToPgObj(classObj)
+    .then(()=> {
+      console.log('Sucessfully Added to MainDB')
+      res.sendStatus(200)
+    })
+    .catch(err => {
+      console.log('Failed to migrate to MainDB ------> ', err)
+      res.sendStatus(500)
+    })
+})
   
 app.post('/addClass', (req, res) => {
   //console.log('server side data for add class',  req.body);
@@ -203,7 +216,6 @@ app.post('/allClasses', (req, res) => {
   //console.log('serverside /allClasses', req.body);
   main.getClassesForTeacherMainView(req.body.email)
   .then((data) => {
-    //console.log('data ------> ', data)
     res.send(data);
     //console.log('server side classes', data.rows)
   })
@@ -224,7 +236,6 @@ app.get('/getAllStudents', (req, res) => {
 })
 
 app.post('/getAllStudentsInAClass', (req, res) => {
-  //console.log('class id server side', req.body);
   main.getAllStudentsBelongToAClass(req.body.id)
   .then((data) => {
     console.log('server side data with thumbnails', data.rows);

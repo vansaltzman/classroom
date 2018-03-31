@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS  "classes_students" (
 	"id" serial NOT NULL,
 	"student_id" integer NOT NULL,
 	"class_id" integer NOT NULL,
+	"participation" integer NOT NULL DEFAULT 0,
 	CONSTRAINT classes_students_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -146,7 +147,7 @@ CREATE TABLE IF NOT EXISTS  "submitted_answers" (
 CREATE TABLE IF NOT EXISTS  "students_responses" (
 	"id" serial NOT NULL,
 	"student_id" integer NOT NULL,
-	"response_id" integer NOT NULL,
+	"response_id" integer,
 	"question_id" integer NOT NULL,
 	"draft_question_id" integer NOT NULL,
 	"time_spent" integer,

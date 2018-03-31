@@ -201,7 +201,7 @@ const QuizView = ({studentQuiz, quiz}) => {
 
 			if (isCorrect) {
 				++correct
-			} else if (studentQuiz.responses[questionKey].answers.includes(true)) {
+			} else if (Object.values(studentQuiz.responses[questionKey].answers).includes(true)) {
 				++wrong
 			}	
 		})

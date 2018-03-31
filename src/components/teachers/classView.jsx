@@ -1,6 +1,7 @@
 import React from 'react';
 import * as actions from '../../actions/index.js';
 import moment from 'moment';
+import axios from 'axios'
 
 import "grommet/scss/hpinc/index.scss";
 import Columns from 'grommet/components/Columns';
@@ -40,6 +41,7 @@ import { bindActionCreators } from "redux";
 import * as Actions from "../../actions/index.js";
 import Label from "grommet/components/Label";
 import CheckBox from "grommet/components/CheckBox"
+import QuizViewContainer from "./quizViewContainer.jsx"
 
 import classRoom from '../../../data/quizDummyData.js';
 import fb from '../../../db/liveClassroom.js'
@@ -53,17 +55,13 @@ class ClassView extends React.Component {
 		}
 
 		this.launchNewQuiz = this.launchNewQuiz.bind(this)
+		this.endClass = this.endClass.bind(this)
 		this.toggleClassEndConfirmation = this.toggleClassEndConfirmation.bind(this)
 		this.toggleQuizBuilderModal = this.toggleQuizBuilderModal.bind(this)
 	}
 
 	launchNewQuiz(){
 		fb.launchQuiz(this.props.classId, this.state.selectedQuiz, this.props.quizTime, this.props.quizWeight)
-			.then(()=> {
-				if (this.props.showQuizLauncherModal) {
-					this.props.toggleQuizLauncherModalAction()
-				}
-			})
 	}
 	toggleQuizBuilderModal() {
 		this.props.showQuizModal()
@@ -88,17 +86,20 @@ class ClassView extends React.Component {
 	
 	componentDidMount() {
     this.props.getClassStatus(this.props.classId)
-    this.props.getStudentsBelongToAClass({ id: this.props.classId });
+		this.props.getStudentsBelongToAClass({ id: this.props.classId });
 	}
 
 	componentWillUnmount() {
 		if (this.props.showQuizLauncherModal) {
 			this.props.toggleQuizLauncherModalAction()
 		}
+		if (!this.props.targetClass.activeView){
+			fb.stopFetchingClassData(this.props.classId)
+			console.log('Stopped Fetching Class Data')
+		}
 	}
 
 	selectQuiz(quizObj) {
-		console.log('quizObj ------> ', quizObj)
 		this.setState({selectedQuiz: quizObj || null})
 	}
 
@@ -107,71 +108,94 @@ class ClassView extends React.Component {
 	}
 
 	endClass() {
+		this.toggleClassEndConfirmation()
 
+		return fb.endClass(this.props.classId)
+		.then(()=> {
+			return fb.fetchClassData(this.props.classId)
+		})
+		.then((classObj)=> {
+			console.log('Class to End ------> ', classObj)
+			classObj = classObj || this.props.targetClass
+			return axios.post('/endClass', {classObj})
+			.then(()=> {
+				return classObj
+			})
+		})
+		.then((classObj)=> {
+			return fb.stopFetchingClassData(this.props.classId)
+		})
+		.then(()=> {
+			return fb.removeClass(this.props.classId)
+		})
+		.catch(err => {
+			console.log('Error Ending Class ------> ', err)
+			if (err && !this.state.showEndClassModal) this.toggleClassEndConfirmation()
+		})
 	}
+
   render() {
 		const { studentsInClass } = this.props;
 		const studentsArray = [];
 		for (var key in studentsInClass) {
 			studentsArray.push(studentsInClass[key]);
 		}
-		return(
-			<div>
-				{this.props.targetClass.isLive ?
-				<Animate 
+			return(
+				<div>
+					{this.props.targetClass.isLive ?
+					<Animate 
+						enter={{"animation": "fade", "duration": 1000, "delay": 0}}
+						leave={{"animation": "fade", "duration": 1000, "delay": 0}}
+						keep={true}
+					>
+						<Notification
+							message={this.props.targetClass.name + ' is currently live'}
+							status={'ok'}
+						/>
+					</Animate> :
+					<Animate 
 					enter={{"animation": "fade", "duration": 1000, "delay": 0}}
 					leave={{"animation": "fade", "duration": 1000, "delay": 0}}
 					keep={true}
 				>
 					<Notification
-						message={this.props.targetClass.name + ' is currently live'}
-						status={'ok'}
+							message={this.props.targetClass.name + ' is currently offline'}
+							status={'warning'}
+					/> 
+				</Animate> 
+					}
+				<Section>				
+					{this.props.targetClass.isLive ?
+					<Button icon={<CloudUploadIcon />}
+						label= {'End Class'}
+						primary={false}
+						secondary={false}
+						accent={false}
+						critical={false}
+						plain={false} 
+						onClick={()=> this.toggleClassEndConfirmation()}
+					/> :
+					<Button icon={<DeployIcon />}
+						label= {'Go Live'}
+						primary={false}
+						secondary={false}
+						accent={true}
+						critical={false}
+						plain={false} 
+						onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
+					/>}
+	
+					{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
+					<Button icon={<ShareIcon />}
+						label={'Launch ' + this.state.selectedQuiz.name}
+						primary={false}
+						secondary={false}
+						accent={true}
+						critical={false}
+						plain={false} 
+						onClick={this.props.toggleQuizLauncherModalAction}
 					/>
-				</Animate> :
-				<Animate 
-				enter={{"animation": "fade", "duration": 1000, "delay": 0}}
-				leave={{"animation": "fade", "duration": 1000, "delay": 0}}
-				keep={true}
-			>
-				<Notification
-						message={this.props.targetClass.name + ' is currently offline'}
-						status={'warning'}
-				/> 
-			</Animate> 
 				}
-			<Section>				
-				{this.props.targetClass.isLive ?
-				<Button icon={<CloudUploadIcon />}
-					label= {'End Class'}
-					primary={false}
-					secondary={false}
-					accent={false}
-					critical={false}
-					plain={false} 
-					onClick={() =>  this.toggleClassEndConfirmation()}
-				/> :
-				<Button icon={<DeployIcon />}
-					label= {'Go Live'}
-					primary={false}
-					secondary={false}
-					accent={true}
-					critical={false}
-					plain={false} 
-					onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
-				/>}
-
-				{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
-				<Button icon={<ShareIcon />}
-					label={'Launch ' + this.state.selectedQuiz.name}
-					primary={false}
-					secondary={false}
-					accent={true}
-					critical={false}
-					plain={false} 
-					onClick={this.props.toggleQuizLauncherModalAction}
-				/>
-				}
-
 				<Split fixed={false}
 							 separator={false}
 							 showOnResponsive="both">
@@ -221,7 +245,6 @@ class ClassView extends React.Component {
 												{moment.duration(question.time).humanize()}
 											</Label>
 											{Object.values(question.answers).map(answer=> {
-												//console.log('answer!!!! ------> ', answer)
 												return <Notification
 													message={answer.text}
 													size='small'
@@ -293,10 +316,7 @@ class ClassView extends React.Component {
 							label="Yes, I want to end the class" 
 							type="button"
 							primary={true} 
-							onClick={()=> {
-								fb.endClass(this.props.classId)
-								this.toggleClassEndConfirmation()
-							}}
+							onClick={this.endClass}
 						/>
 					</Footer>
 				</Form>
