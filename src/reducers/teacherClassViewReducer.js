@@ -309,10 +309,12 @@ export function teacherClassViewReducer(
 				acc[quizsId] = quiz;
 				return acc;
 			}, {})
+			const resetNewQuiz = {questions: [], subject: {}}
 			return {
 				...state,
 				quizzes: refetched,
-				showQuizBuilderModal: false
+				showQuizBuilderModal: false,
+				newQuiz: resetNewQuiz
 			}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
