@@ -108,14 +108,21 @@ class ClassView extends React.Component {
 			return fb.fetchClassData(this.props.classId)
 		})
 		.then((classObj)=> {
-			console.log('classObj ------> ', classObj)
+			console.log('Class to End ------> ', classObj)
 			classObj = classObj || this.props.targetClass
-			return  axios.post('endClass', {classObj})
+			return axios.post('/endClass', {classObj})
+			.then(()=> {
+				return classObj
+			})
 		})
-		.then((response)=> {
-			fb.removeClass(this.props.classId)
+		.then((classObj)=> {
+			return fb.stopFetchingClassData(this.props.classId)
+		})
+		.then(()=> {
+			return fb.removeClass(this.props.classId)
 		})
 		.catch(err => {
+			console.log('Error Ending Class ------> ', err)
 			if (err && !this.state.showEndClassModal) this.toggleClassEndConfirmation()
 		})
 	}

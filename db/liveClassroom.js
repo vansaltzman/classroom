@@ -10,7 +10,7 @@ firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
 
 fb.ref('/').once('value')
-.then(snap=> console.log(JSON.parse(JSON.stringify(snap.val()))))
+.then(snap=> console.log('Initialized App with target class: ', Object.values(snap.toJSON().classes)[0].name))
 
 const selectClass = function(classId) {
   return migrate.migrateClassToFB(classId)
@@ -24,7 +24,7 @@ const fetchClassData = function(classId) {
 		})
 }
 
-const remvoeClass = function(classId) {
+const removeClass = function(classId) {
 	return fb.ref('/classes/').child(classId).remove()
 }
 
@@ -128,6 +128,7 @@ module.exports = {
   startClass,
 	launchQuiz,
 	endClass,
+	removeClass,
 	fetchClassData,
   updateActiveView,
   insertStudentAnswers,

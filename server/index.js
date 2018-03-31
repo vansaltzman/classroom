@@ -109,6 +109,7 @@ app.post('/endClass', (req, res)=> {
 
   migrate.fbClassToPgObj(classObj)
     .then(()=> {
+      console.log('Sucessfully Added to MainDB')
       res.sendStatus(200)
     })
     .catch(err => {
@@ -138,14 +139,12 @@ app.post('/getNewAddedClass', (req,res) => {
     console.log('data on server side for newly added class', data)
     res.send(data)
   })
-  console.log()
 })
 
 app.post('/allClasses', (req, res) => {
   //console.log('serverside /allClasses', req.body);
   main.getClassesForTeacherMainView(req.body.email)
   .then((data) => {
-    console.log('data ------> ', data)
     res.send(data);
     //console.log('server side classes', data.rows)
   })
@@ -166,7 +165,6 @@ app.get('/getAllStudents', (req, res) => {
 })
 
 app.post('/getAllStudentsInAClass', (req, res) => {
-  console.log('class id server side', req.body);
   main.getAllStudentsBelongToAClass(req.body.id)
   .then((data) => {
     //console.log('server side data', data.rows);
