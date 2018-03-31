@@ -347,7 +347,7 @@ class ClassView extends React.Component {
 																									 //style={{color: each.question ? 'pink' : 'black'}}
 																									 value={eachAnswer.answer ? eachAnswer.answer : eachAnswer.text}
 																									 onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
-																				<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteAnswer(index)}/>} />	
+																				<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteAnswer(index, answerIndex)}/>} />	
 																				<CheckBox label='Correct'
 																									toggle={false}
 																									reverse={true} 

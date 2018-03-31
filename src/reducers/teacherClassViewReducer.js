@@ -231,7 +231,7 @@ export function teacherClassViewReducer(
 				for (var indexOfQuestion = 0; indexOfQuestion < listOfquestionsWithAnswers.length; indexOfQuestion++) {
 					if (indexOfQuestion === action.index) {
 						var listOfAnswers = listOfquestionsWithAnswers[action.index].answers
-						listOfAnswers.pop()
+						listOfAnswers.splice(action.answerIndex, 1)
 					}
 				}
 				console.log('at delete answr modified', listOfquestionsWithAnswers)

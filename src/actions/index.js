@@ -573,15 +573,16 @@ function addAnswerAction(index) {
 	}
 }
 
-export function deleteAnswer(index) {
+export function deleteAnswer(index, answerIndex) {
 	return (dispatch) => {
-		dispatch(deleteAnswerAction(index))
+		dispatch(deleteAnswerAction(index, answerIndex))
 	}
 }
-function deleteAnswerAction(index) {
+function deleteAnswerAction(index, answerIndex) {
 	return {
 		type: actionTypes.DELETE_ANSWER_ACTION,
-		index
+		index,
+		answerIndex
 	}
 }
 
