@@ -52,8 +52,8 @@ export function teacherClassViewReducer(
       //console.log('reducer action.year', action.year.option)
 			return { ...state, newClassYear: action.year.option };
 		case actionTypes.ADD_NEW_CLASS_ACTION:
-			console.log('reducer add class', action.classObj)
-			return { ...state}
+			console.log('reducer add class', action.classes)
+			return { ...state, classes: action.classes, targetClass: action.classes[action.classes.length - 1]}
     case actionTypes.GET_ALL_SUBJECTS:
       const subjects = action.subjects.map(each => {
         return {

@@ -169,18 +169,19 @@ function updateNewClassYearAction(year) {
 	}
 }
 
-export function addNewClass(classObj) {
+export function addNewClass(reqObj) {
 	return (dispatch) => {
-		axios.post('/addClass', classObj)
+		axios.post('/addClass', reqObj)
 		.then((res) => {
+			console.log('all classes coming back after class is added', res.data)
 			dispatch(addNewClassAction(res.data))
 		})
 	}
 }
-function addNewClassAction(classObj) {
+function addNewClassAction(classes) {
 	return {
 		type: actionTypes.ADD_NEW_CLASS_ACTION,
-		classObj
+		classes
 	}
 }
 

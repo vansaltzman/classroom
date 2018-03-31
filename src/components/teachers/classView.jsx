@@ -334,7 +334,7 @@ class ClassView extends React.Component {
 													{this.props.teachersClassView.newQuiz.questions.map((each, index) => {
 															return (
 																<Section>
-																	<Label>{'Question' + ' ' + index + 1}</Label>
+																	<Label>{'Question' + ' ' + Number(index + 1)}</Label>
 																	<TextInput placeHolder="Question..."
 																						 //style={{color: each.question ? 'pink' : 'black'}}
 																						 value={each.id ? each.question : each.text}

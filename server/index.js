@@ -108,9 +108,9 @@ app.use(bodyParser.json())
 app.post('/addClass', (req, res) => {
   //console.log('server side data for add class',  req.body);
   main.addNewClass(req.body)
-  .then(() => {
-    //console.log('Class is added')
-    res.sendStatus(200)
+  .then((data) => {
+    console.log('Class is added', data)
+    res.send(data)
   })
   .catch((err) => {
     if (err) throw err;

@@ -147,6 +147,9 @@ const addNewClass = function(classObj) {
     //console.log(queryString);
     return db.query(queryString)
   })
+  .then(() => {
+    return getClassesForTeacherMainView(classObj.email)
+  })
   .catch((err)=> console.log(err))
   
 }
