@@ -38,6 +38,7 @@ import { bindActionCreators } from "redux";
 import * as Actions from "../../actions/index.js";
 import Label from "grommet/components/Label";
 import CheckBox from "grommet/components/CheckBox"
+import QuizViewContainer from "./quizViewContainer.jsx"
 
 import classRoom from '../../../data/quizDummyData.js';
 import fb from '../../../db/liveClassroom.js'
@@ -58,11 +59,6 @@ class ClassView extends React.Component {
 
 	launchNewQuiz(){
 		fb.launchQuiz(this.props.classId, this.state.selectedQuiz, this.props.quizTime, this.props.quizWeight)
-			.then(()=> {
-				if (this.props.showQuizLauncherModal) {
-					this.props.toggleQuizLauncherModalAction()
-				}
-			})
 	}
 	toggleQuizBuilderModal() {
 		this.props.showQuizModal()
@@ -79,7 +75,7 @@ class ClassView extends React.Component {
 	
 	componentDidMount() {
     this.props.getClassStatus(this.props.classId)
-    this.props.getStudentsBelongToAClass({ id: this.props.classId });
+		this.props.getStudentsBelongToAClass({ id: this.props.classId });
 	}
 
 	componentWillUnmount() {
@@ -133,265 +129,265 @@ class ClassView extends React.Component {
 		for (var key in studentsInClass) {
 			studentsArray.push(studentsInClass[key]);
 		}
-		return(
-			<div>
-				{this.props.targetClass.isLive ?
-				<Animate 
+			return(
+				<div>
+					{this.props.targetClass.isLive ?
+					<Animate 
+						enter={{"animation": "fade", "duration": 1000, "delay": 0}}
+						leave={{"animation": "fade", "duration": 1000, "delay": 0}}
+						keep={true}
+					>
+						<Notification
+							message={this.props.targetClass.name + ' is currently live'}
+							status={'ok'}
+						/>
+					</Animate> :
+					<Animate 
 					enter={{"animation": "fade", "duration": 1000, "delay": 0}}
 					leave={{"animation": "fade", "duration": 1000, "delay": 0}}
 					keep={true}
 				>
 					<Notification
-						message={this.props.targetClass.name + ' is currently live'}
-						status={'ok'}
-					/>
-				</Animate> :
-				<Animate 
-				enter={{"animation": "fade", "duration": 1000, "delay": 0}}
-				leave={{"animation": "fade", "duration": 1000, "delay": 0}}
-				keep={true}
-			>
-				<Notification
-						message={this.props.targetClass.name + ' is currently offline'}
-						status={'warning'}
-				/> 
-			</Animate> 
-				}
-			<Section>				
-				{this.props.targetClass.isLive ?
-				<Button icon={<CloudUploadIcon />}
-					label= {'End Class'}
-					primary={false}
-					secondary={false}
-					accent={false}
-					critical={false}
-					plain={false} 
-					onClick={()=> this.toggleClassEndConfirmation()}
-				/> :
-				<Button icon={<DeployIcon />}
-					label= {'Go Live'}
-					primary={false}
-					secondary={false}
-					accent={true}
-					critical={false}
-					plain={false} 
-					onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
-				/>}
-
-				{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
-				<Button icon={<ShareIcon />}
-					label={'Launch ' + this.state.selectedQuiz.name}
-					primary={false}
-					secondary={false}
-					accent={true}
-					critical={false}
-					plain={false} 
-					onClick={this.props.toggleQuizLauncherModalAction}
-				/>
-				}
-
-				<Columns masonry={false}
-					maxCount={2}
-					size='large'
-					align='center'>
-				<Box align='center'
-					pad='medium'
-					margin='small'
-					colorIndex='light-2'
-				>
-					Side bar for students list
-					{studentsArray.map((each) => {
-							return (
-								<Box style={{color: each.isHere ? 'black' : 'lightgrey'}}>
-									{each.name}
-								</Box>
-							)
-						})}
-					</Box>
-					<SearchInput
-              placeHolder="Search For A Student"
-							suggestions={this.props.studentNames}
-							value={this.props.teachersClassView.selectedStudent.value}
-              //  onDOMChange={(target) => this.props.selectStudentToAdd(target)} />
-              onSelect={target => this.props.selectStudentToAdd(target)}
-            />
-            <Button
-              label="Add Student"
-              onClick={() => {
-                this.props.addAStudentToClass({
-                  classId: this.props.classId,
-                  studentId: this.props.teachersClassView.selectedStudent.sub.id
-                }, { id: this.props.classId });
-              }}
-            />
-          <Box align="center" pad="medium" margin="small" colorIndex="light-2">
-						Quiz List
-						<Button 
-							label="Create New Quiz"
-							onClick={this.toggleQuizBuilderModal}/>
-          </Box>
-					{/* <Box align='center'
-						pad='none'
-						margin="none"
-						wrap="false"
-						colorIndex='light-2'
-					> */}
-						Quiz List
-						<Accordion
-							onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}
-						>
-							{Object.values(this.props.teachersClassView.quizzes).map(quiz => {
-							return <AccordionPanel heading={
-								<div>
-									{quiz.name}
-								</div>}> 
-								{Object.values(quiz.questions).map((question,i) => {
-									 return <Box key={i}>
-										<Heading tag="h3">
-											{question.question}
-										</Heading>
-										<Label>
-											{moment.duration(question.time).humanize()}
-										</Label>
-										{Object.values(question.answers).map(answer=> {
-											return <Notification
-												message={answer.text}
-												size='small'
-												status={answer.isCorrect ? 'ok' : 'critical'}
-											/>
-										})}
-									</Box>
-								})}
-							</AccordionPanel>
-							})}
-						</Accordion>
-						{/* </Box> */}
-				</Columns>
-
-			{this.props.showQuizLauncherModal &&
-			<Layer
-				closer={true}
-				flush={true}
-				overlayClose={true}
-				onClose={this.props.toggleQuizLauncherModalAction}
-			>
-				<Form>
-					<Header pad={{ vertical: "medium", horizontal: "medium" }}>
-						Launch Quiz
-					</Header>
-					<FormFields pad={{ horizontal: "medium" }}>
-						<DateTime
-							name="quizLength"
-							placeHolder="Set Test time"
-							format='mm:ss'
-							onChange={(time)=> this.props.setQuizTime(time)}
-							value={this.props.quizTime} 
-						/>
-					<NumberInput 
-						value={this.props.quizWeight}
-						onChange={(weight)=> this.props.updateQuizWeight(weight)} 
-						min={1}
-						max={100}
-						step={1}
+							message={this.props.targetClass.name + ' is currently offline'}
+							status={'warning'}
 					/> 
-					</FormFields>
-					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
-						<Button 
-							label="Launch Quiz" 
-							type="button"
-							primary={true} 
-							onClick={() => this.launchNewQuiz()}
-						/>
-					</Footer>
-				</Form>
-			</Layer>}
-			{this.state.showEndClassModal && 
-			<Layer
-				closer={true}
-				flush={true}
-				overlayClose={true}
-				onClose={this.toggleClassEndConfirmation}
-			>
+				</Animate> 
+					}
+				<Section>				
+					{this.props.targetClass.isLive ?
+					<Button icon={<CloudUploadIcon />}
+						label= {'End Class'}
+						primary={false}
+						secondary={false}
+						accent={false}
+						critical={false}
+						plain={false} 
+						onClick={()=> this.toggleClassEndConfirmation()}
+					/> :
+					<Button icon={<DeployIcon />}
+						label= {'Go Live'}
+						primary={false}
+						secondary={false}
+						accent={true}
+						critical={false}
+						plain={false} 
+						onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
+					/>}
+	
+					{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
+					<Button icon={<ShareIcon />}
+						label={'Launch ' + this.state.selectedQuiz.name}
+						primary={false}
+						secondary={false}
+						accent={true}
+						critical={false}
+						plain={false} 
+						onClick={this.props.toggleQuizLauncherModalAction}
+					/>
+					}
+	
+					<Columns masonry={false}
+						maxCount={2}
+						size='large'
+						align='center'>
+					<Box align='center'
+						pad='medium'
+						margin='small'
+						colorIndex='light-2'
+					>
+						Side bar for students list
+						{studentsArray.map((each) => {
+								return (
+									<Box style={{color: each.isHere ? 'black' : 'lightgrey'}}>
+										{each.name}
+									</Box>
+								)
+							})}
+						</Box>
+						<SearchInput
+								placeHolder="Search For A Student"
+								suggestions={this.props.studentNames}
+								value={this.props.teachersClassView.selectedStudent.value}
+								//  onDOMChange={(target) => this.props.selectStudentToAdd(target)} />
+								onSelect={target => this.props.selectStudentToAdd(target)}
+							/>
+							<Button
+								label="Add Student"
+								onClick={() => {
+									this.props.addAStudentToClass({
+										classId: this.props.classId,
+										studentId: this.props.teachersClassView.selectedStudent.sub.id
+									}, { id: this.props.classId });
+								}}
+							/>
+						<Box align="center" pad="medium" margin="small" colorIndex="light-2">
+							Quiz List
+							<Button 
+								label="Create New Quiz"
+								onClick={this.toggleQuizBuilderModal}/>
+						</Box>
+						{/* <Box align='center'
+							pad='none'
+							margin="none"
+							wrap="false"
+							colorIndex='light-2'
+						> */}
+							Quiz List
+							<Accordion
+								onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}
+							>
+								{Object.values(this.props.teachersClassView.quizzes).map(quiz => {
+								return <AccordionPanel heading={
+									<div>
+										{quiz.name}
+									</div>}> 
+									{Object.values(quiz.questions).map((question,i) => {
+										 return <Box key={i}>
+											<Heading tag="h3">
+												{question.question}
+											</Heading>
+											<Label>
+												{moment.duration(question.time).humanize()}
+											</Label>
+											{Object.values(question.answers).map(answer=> {
+												return <Notification
+													message={answer.text}
+													size='small'
+													status={answer.isCorrect ? 'ok' : 'critical'}
+												/>
+											})}
+										</Box>
+									})}
+								</AccordionPanel>
+								})}
+							</Accordion>
+							{/* </Box> */}
+					</Columns>
+	
+				{this.props.showQuizLauncherModal &&
+				<Layer
+					closer={true}
+					flush={true}
+					overlayClose={true}
+					onClose={this.props.toggleQuizLauncherModalAction}
+				>
 					<Form>
-					<Header pad={{ vertical: "medium", horizontal: "medium" }}>
-						Are you user you want to end the class?
-					</Header>
-					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
-						<Button 
-							label="Yes, I want to end the class" 
-							type="button"
-							primary={true} 
-							onClick={this.endClass}
-						/>
-					</Footer>
-				</Form>
-			</Layer>
-      }
-      {this.props.teachersClassView.showQuizBuilderModal === true ?
-					<Layer closer={true}
-								 flush={true} 
-								 overlayClose={true}
-								 onClose={this.toggleQuizBuilderModal}>
-						<Form compact={false} pad={{ vertical: "medium", horizontal: "medium" }}>
-              <Header pad={{ vertical: "medium", horizontal: "medium" }}>
-                <Heading>
-                  Create A New Quiz
-                </Heading>
-              </Header>
-                <Section pad={{ vertical: "medium", horizontal: "medium" }}>
-                  <FormFields>
-                    <TextInput 
-                      placeHolder="Please Name Your Quiz"
-                      onDOMChange={value => {
-                        this.props.setNewQuizName(value);
-                      }}/>
-                    <SearchInput 
-                      placeHolder="Quiz Subject"
-											suggestions={this.props.subjects}
-											value={this.props.teachersClassView.newQuiz.subject.value ? this.props.teachersClassView.newQuiz.subject.value : ""}
-                      // value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
-                      onDOMChange={(event) => this.props.setNewQuizSubject(event)}
-                      onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
-                      {this.props.teachersClassView.newQuiz.questions.map((each, index) => {
-                          return (
-                            <Section>
-                              <Label>{'Question' + ' ' + index + 1}</Label>
-                              <TextInput placeHolder="Question..."
-                                         onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
-                              {each.answers.map((eachAnswer, answerIndex) => {
-                                return (
-                                  <Section>
-                                    <TextInput placeHolder="Answer..."
-                                               onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
-                                    <CheckBox label='Correct'
-                                              toggle={false}
-                                              reverse={true} 
-                                              onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
-                                  </Section>
-                                )
-                              })}
-                              <Button icon={<AddCircleIcon />} 
-                                      label="Add Answer"
-                                      onClick={() => {this.props.addAnswer(index)}}/>
-                            </Section>
-                          )
-                        }) }
-                      <Button icon={<AddCircleIcon />}
-                                      onClick={() => this.props.setQuestionNumber()}
-                                      label="Add Question"/>
-                  </FormFields>
-                </Section>
-              <Footer pad={{"vertical": "medium", horizontal: "medium"}}>
-								<Button label='Add Quiz'
-												path="/teacherQuiz"
-                        onClick={() => this.props.addNewQuiz({authorId: this.props.auth.user.id, quiz: this.props.teachersClassView.newQuiz})}/>
-              </Footer>
-						</Form>
-					</Layer>
-				: <div></div>}
-			</Section>
-			</div>
-		)
+						<Header pad={{ vertical: "medium", horizontal: "medium" }}>
+							Launch Quiz
+						</Header>
+						<FormFields pad={{ horizontal: "medium" }}>
+							<DateTime
+								name="quizLength"
+								placeHolder="Set Test time"
+								format='mm:ss'
+								onChange={(time)=> this.props.setQuizTime(time)}
+								value={this.props.quizTime} 
+							/>
+						<NumberInput 
+							value={this.props.quizWeight}
+							onChange={(weight)=> this.props.updateQuizWeight(weight)} 
+							min={1}
+							max={100}
+							step={1}
+						/> 
+						</FormFields>
+						<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
+							<Button 
+								label="Launch Quiz" 
+								type="button"
+								primary={true} 
+								onClick={() => this.launchNewQuiz()}
+							/>
+						</Footer>
+					</Form>
+				</Layer>}
+				{this.state.showEndClassModal && 
+				<Layer
+					closer={true}
+					flush={true}
+					overlayClose={true}
+					onClose={this.toggleClassEndConfirmation}
+				>
+						<Form>
+						<Header pad={{ vertical: "medium", horizontal: "medium" }}>
+							Are you user you want to end the class?
+						</Header>
+						<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
+							<Button 
+								label="Yes, I want to end the class" 
+								type="button"
+								primary={true} 
+								onClick={this.endClass}
+							/>
+						</Footer>
+					</Form>
+				</Layer>
+				}
+				{this.props.teachersClassView.showQuizBuilderModal === true ?
+						<Layer closer={true}
+									 flush={true} 
+									 overlayClose={true}
+									 onClose={this.toggleQuizBuilderModal}>
+							<Form compact={false} pad={{ vertical: "medium", horizontal: "medium" }}>
+								<Header pad={{ vertical: "medium", horizontal: "medium" }}>
+									<Heading>
+										Create A New Quiz
+									</Heading>
+								</Header>
+									<Section pad={{ vertical: "medium", horizontal: "medium" }}>
+										<FormFields>
+											<TextInput 
+												placeHolder="Please Name Your Quiz"
+												onDOMChange={value => {
+													this.props.setNewQuizName(value);
+												}}/>
+											<SearchInput 
+												placeHolder="Quiz Subject"
+												suggestions={this.props.subjects}
+												value={this.props.teachersClassView.newQuiz.subject.value ? this.props.teachersClassView.newQuiz.subject.value : ""}
+												// value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
+												onDOMChange={(event) => this.props.setNewQuizSubject(event)}
+												onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
+												{this.props.teachersClassView.newQuiz.questions.map((each, index) => {
+														return (
+															<Section>
+																<Label>{'Question' + ' ' + index + 1}</Label>
+																<TextInput placeHolder="Question..."
+																					 onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+																{each.answers.map((eachAnswer, answerIndex) => {
+																	return (
+																		<Section>
+																			<TextInput placeHolder="Answer..."
+																								 onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
+																			<CheckBox label='Correct'
+																								toggle={false}
+																								reverse={true} 
+																								onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
+																		</Section>
+																	)
+																})}
+																<Button icon={<AddCircleIcon />} 
+																				label="Add Answer"
+																				onClick={() => {this.props.addAnswer(index)}}/>
+															</Section>
+														)
+													}) }
+												<Button icon={<AddCircleIcon />}
+																				onClick={() => this.props.setQuestionNumber()}
+																				label="Add Question"/>
+										</FormFields>
+									</Section>
+								<Footer pad={{"vertical": "medium", horizontal: "medium"}}>
+									<Button label='Add Quiz'
+													path="/teacherQuiz"
+													onClick={() => this.props.addNewQuiz({authorId: this.props.auth.user.id, quiz: this.props.teachersClassView.newQuiz})}/>
+								</Footer>
+							</Form>
+						</Layer>
+					: <div></div>}
+				</Section>
+				</div>
+			)
 	}
 }
 
