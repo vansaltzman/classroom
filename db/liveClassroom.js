@@ -17,6 +17,17 @@ const selectClass = function(classId) {
   .then(classObj => classObj)
 }
 
+const fetchClassData = function(classId) {
+	return fb.ref('/classes/' + classId).once('value')
+		.then(snap => {
+			return snap.toJSON()
+		})
+}
+
+const remvoeClass = function(classId) {
+	return fb.ref('/classes/').child(classId).remove()
+}
+
 // this function appears to not be called anywhere
 const startClass = function(classObj) {
 	console.log('are we calling start class')
@@ -30,7 +41,6 @@ const startClass = function(classObj) {
 
 const endClass = function(classId) {
 	const classToEnd = fb.ref('/classes/' + classId)
-
 	return classToEnd.child('isLive').set(false)
 }
 
@@ -118,6 +128,7 @@ module.exports = {
   startClass,
 	launchQuiz,
 	endClass,
+	fetchClassData,
   updateActiveView,
   insertStudentAnswers,
 	stopFetchingClassData,

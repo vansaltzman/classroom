@@ -6,20 +6,24 @@ const fbClassToPgObj = function(classObj) {
   const classId = classObj.id
   const { name, quizzes, students, teacher_id, subject_id } = classObj
 
+  console.log('quizzes ------> ', quizzes)
+  
   Object.keys(quizzes).forEach(quizId => {
 
     responsesObj = {}
-
-    students.forEach(student => {
-      studentObj = {}
-      studentObj.id = student.id
-      studentObj.responses = student.quizzes[quizId].responses
-      responsesObj[student.id] = studentObj
+    
+    Object.values(students).forEach(student => {
+        studentObj = {}
+        studentObj.id = student.id
+        if (student.quizzes) {
+          studentObj.responses = student.quizzes[quizId].responses
+          responsesObj[student.id] = studentObj
+        }
     })
 
-    submitQuiz(quizzes[quizId], responsesObj, classId)
+    submitParticipation(classId, students)
     .then(()=> {
-      return submitParticipation(classId, students)
+      return submitQuiz(quizzes[quizId], responsesObj, classId)
     })
     .then(()=> {
       return updateQuestionTimes()
@@ -95,15 +99,6 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
     )})
   })
 }
-
-// fb.fb.ref('/classes/1').once('value')
-// .then(snap=> {
-//   console.log('snap.val() ------> ', snap.val())
-//   return fbClassToPgObj(snap.val())
-// })
-// .then(()=> {
-//   console.log('done')
-// })
 
 // var QUIZOBJ = {  
 //   "id":8,
@@ -239,4 +234,5 @@ const migrateClassToFB = function(classId){
 
 module.exports = {
   migrateClassToFB, 
+  fbClassToPgObj,
 }

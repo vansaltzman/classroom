@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
 // const config = require('./config.js');
 const config = require('./config.js');
-const migration = require('./migrationWorker.js')
+const migrate = require('./migrationWorker.js')
 const { fb, startClass } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
 const dummyStudentsData = require('../db/dummyStudentsData')
@@ -63,7 +63,7 @@ app.use(bodyParser.json())
   app.post('/startClass', (req, res) => {
     const { classId } = req.body
 
-    migration.migrateClassToFB(classId)
+    migrate.migrateClassToFB(classId)
     .then(()=> {
 
       // update redux state?
@@ -103,7 +103,19 @@ app.use(bodyParser.json())
     console.log('answer submitted', answer)
   })
 
-  // Complete Quiz
+app.post('/endClass', (req, res)=> {
+
+  const { classObj } = req.body
+
+  migrate.fbClassToPgObj(classObj)
+    .then(()=> {
+      res.sendStatus(200)
+    })
+    .catch(err => {
+      console.log('Failed to migrate to MainDB ------> ', err)
+      res.sendStatus(500)
+    })
+})
   
 app.post('/addClass', (req, res) => {
   console.log('server side data for add class',  req.body);

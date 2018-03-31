@@ -1,6 +1,7 @@
 import React from 'react';
 import * as actions from '../../actions/index.js';
 import moment from 'moment';
+import axios from 'axios'
 
 import "grommet/scss/hpinc/index.scss";
 import Columns from 'grommet/components/Columns';
@@ -50,6 +51,7 @@ class ClassView extends React.Component {
 		}
 
 		this.launchNewQuiz = this.launchNewQuiz.bind(this)
+		this.endClass = this.endClass.bind(this)
 		this.toggleClassEndConfirmation = this.toggleClassEndConfirmation.bind(this)
 		this.toggleQuizBuilderModal = this.toggleQuizBuilderModal.bind(this)
 	}
@@ -84,6 +86,10 @@ class ClassView extends React.Component {
 		if (this.props.showQuizLauncherModal) {
 			this.props.toggleQuizLauncherModalAction()
 		}
+		if (!this.props.targetClass.activeView){
+			fb.stopFetchingClassData(this.props.classId)
+			console.log('Stopped Fetching Class Data')
+		}
 	}
 
 	selectQuiz(quizObj) {
@@ -95,8 +101,25 @@ class ClassView extends React.Component {
 	}
 
 	endClass() {
+		this.toggleClassEndConfirmation()
 
+		return fb.endClass(this.props.classId)
+		.then(()=> {
+			return fb.fetchClassData(this.props.classId)
+		})
+		.then((classObj)=> {
+			console.log('classObj ------> ', classObj)
+			classObj = classObj || this.props.targetClass
+			return  axios.post('endClass', {classObj})
+		})
+		.then((response)=> {
+			fb.removeClass(this.props.classId)
+		})
+		.catch(err => {
+			if (err && !this.state.showEndClassModal) this.toggleClassEndConfirmation()
+		})
 	}
+
   render() {
 		const { studentsInClass } = this.props;
 		const studentsArray = [];
@@ -136,7 +159,7 @@ class ClassView extends React.Component {
 					accent={false}
 					critical={false}
 					plain={false} 
-					onClick={() =>  this.toggleClassEndConfirmation()}
+					onClick={()=> this.toggleClassEndConfirmation()}
 				/> :
 				<Button icon={<DeployIcon />}
 					label= {'Go Live'}
@@ -224,7 +247,6 @@ class ClassView extends React.Component {
 											{moment.duration(question.time).humanize()}
 										</Label>
 										{Object.values(question.answers).map(answer=> {
-											console.log('answer!!!! ------> ', answer)
 											return <Notification
 												message={answer.text}
 												size='small'
@@ -292,10 +314,7 @@ class ClassView extends React.Component {
 							label="Yes, I want to end the class" 
 							type="button"
 							primary={true} 
-							onClick={()=> {
-								fb.endClass(this.props.classId)
-								this.toggleClassEndConfirmation()
-							}}
+							onClick={this.endClass}
 						/>
 					</Footer>
 				</Form>
