@@ -306,6 +306,7 @@ const getQuizzes = function(teacherId, subjectId) {
           eachQuiz.questions = {}
 
           questions.rows.forEach(question=> {
+            console.log("------------- eachQuestion", question)
             let formattedQuestion = {}
             formattedQuestion.id = question.draft_question_id
             formattedQuestion.text = question.question
@@ -366,15 +367,13 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
     }))
   })
 }
-// const calculateAverageTimeForQuestions = function(classFromFB) {
-//   const studentsAndTheirResponses = classFromFB[1].students.slice(1);
-//   for (var i = 0; i < studentsAndTheirResponses.length; i++) {
-//     const eachStudentQuiz = Object.values(studentsAndTheirResponses[i].quizzes)[0];
-//     const questionsFromEachQuiz = eachStudentQuiz.questions.slice(1) //array of question objs...each question has
-  
 
-//   }
-// }
+const calculateAverageTimeForQuestions = function(classObj) {
+  //get the quiz id and question id from class obj
+  const takenQuizId = Object.values(classFromFB.classes[1].quizzes)[0].id;
+  return db.query(`SELECT draft_question_id WHERE draft_quiz_id='${takenQuizId}'`);
+  
+}
 
 const getQuizDataForStudentInClass = function(studentId, classId) {
   return db.query(`SELECT * FROM submitted_quizzes WHERE class_id='${classId}'`)
