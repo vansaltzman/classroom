@@ -4,7 +4,8 @@ import React from 'react'
 import Heading from 'grommet/components/Heading';
 import Button from 'grommet/components/Button';
 
-const classViewDefault = () => {
+const classViewDefault = ({live}) => {
+  console.log('-----LOGGED IN classViewDefault')
   return (
     <div style={{
       left: 0,
@@ -17,7 +18,7 @@ const classViewDefault = () => {
     }}>
       <Heading align="center">
   
-        No quiz is active now.
+        {live ? 'No quiz is active now.' : 'This clas is currently offline'}
   
       </Heading>
 

@@ -225,7 +225,6 @@ class ClassView extends React.Component {
 											{moment.duration(question.time).humanize()}
 										</Label>
 										{Object.values(question.answers).map(answer=> {
-											console.log('answer!!!! ------> ', answer)
 											return <Notification
 												message={answer.text}
 												size='small'
