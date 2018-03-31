@@ -19,6 +19,9 @@ export function teacherClassViewReducer(
 		showQuizBuilderModal: false,
 		showQuizLauncherModal: false,
 		quizzes: {},
+		questions: [],
+		selectedQuestion: {},
+		showAddQuestionButton: false,
 		students: [],
 		newQuiz: {questions: [], subject: {}}
   },
@@ -49,8 +52,8 @@ export function teacherClassViewReducer(
       //console.log('reducer action.year', action.year.option)
 			return { ...state, newClassYear: action.year.option };
 		case actionTypes.ADD_NEW_CLASS_ACTION:
-			console.log('reducer add class', action.classObj)
-			return { ...state}
+			console.log('reducer add class', action.classes)
+			return { ...state, classes: action.classes, targetClass: action.classes[action.classes.length - 1]}
     case actionTypes.GET_ALL_SUBJECTS:
       const subjects = action.subjects.map(each => {
         return {
@@ -175,12 +178,22 @@ export function teacherClassViewReducer(
 			}
 		case actionTypes.SET_QUESTION_NUMBER_ACTION:
 			const questions = state.newQuiz.questions.slice()
-			questions.push({question: "", answers: []})
+			questions.push({text: "", answers: []})
 			return {
 				...state, 
 				newQuiz: {
 					...state.newQuiz,
 					questions: questions
+				}
+			};
+		case actionTypes.DELETE_QUESTION_ACTION:
+			const listOfquestions = state.newQuiz.questions.slice()
+			listOfquestions.splice(action.index, 1)
+			return {
+				...state,
+				newQuiz: {
+					...state.newQuiz,
+					questions: listOfquestions
 				}
 			}
 		case actionTypes.ADD_QUESTION_TEXT_ACTION:
@@ -188,7 +201,7 @@ export function teacherClassViewReducer(
 			for (var j = 0; j < questionsWithText.length; j++) {
 				//console.log('j === action.index', j === action.index)
 				if (j === action.index) {
-					questionsWithText[action.index].question = action.event.target.value
+					questionsWithText[action.index].text = action.event.target.value
 				}
 			}
 			return {
@@ -212,7 +225,23 @@ export function teacherClassViewReducer(
 					questions: questionsAddAnswers
 				}
 			}
-
+			case actionTypes.DELETE_ANSWER_ACTION:
+				console.log('at delete answr', action.index)
+				const listOfquestionsWithAnswers = state.newQuiz.questions.slice();
+				for (var indexOfQuestion = 0; indexOfQuestion < listOfquestionsWithAnswers.length; indexOfQuestion++) {
+					if (indexOfQuestion === action.index) {
+						var listOfAnswers = listOfquestionsWithAnswers[action.index].answers
+						listOfAnswers.splice(action.answerIndex, 1)
+					}
+				}
+				console.log('at delete answr modified', listOfquestionsWithAnswers)
+				return {
+					...state,
+					newQuiz: {
+						...state.newQuiz,
+						questions: listOfquestionsWithAnswers
+					}
+				}
 			case actionTypes.ADD_ANSWER_TEXT_ACTION:
 				const questionsAddAnswerText = state.newQuiz.questions.slice();
 				for (var l = 0; l < questionsAddAnswerText.length; l++) {
@@ -256,7 +285,6 @@ export function teacherClassViewReducer(
 		case actionTypes.ADD_NEW_QUIZZES:
 			console.log('refetched quizzes at reducer', action.quizzes)
 			const refetched = action.quizzes;
-			console.log('refetched ------> ', refetched)
 			refetched.map((eachQuiz) => {
 				eachQuiz.questions = eachQuiz.questions.reduce((acc, eachQuestion) => {
 					let qId = eachQuestion.id
@@ -281,14 +309,16 @@ export function teacherClassViewReducer(
 				acc[quizsId] = quiz;
 				return acc;
 			}, {})
+			const resetNewQuiz = {questions: [], subject: {}}
 			return {
 				...state,
 				quizzes: refetched,
-				showQuizBuilderModal: !state.showQuizBuilderModal
+				showQuizBuilderModal: false,
+				newQuiz: resetNewQuiz
 			}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
-			console.log('reducer action.quizzes', action.quizzes)
+			//console.log('reducer action.quizzes', action.quizzes)
 			quizzes.map((eachQuiz) => {
 				eachQuiz.questions = eachQuiz.questions.reduce((acc, eachQuestion) => {
 					let questionId = eachQuestion.id
@@ -315,10 +345,34 @@ export function teacherClassViewReducer(
 				acc[quizId] = quiz;
 				return acc;
 			}, {})
-			console.log('modified quizzes', quizzes);
+			//console.log('modified quizzes', quizzes);
 			return {
 				...state, quizzes: quizzes
 			}
+			case actionTypes.FETCH_QUESTIONS:
+				console.log('questions FETCH_QUESTIONS', action.questions)
+				return {
+					...state,
+					questions: action.questions
+				}
+			case actionTypes.SELECT_QUESTION:
+				console.log('selection question', action.selectedQuestion)
+				return {
+					...state, 
+					selectedQuestion: action.selectedQuestion,
+					showAddQuestionButton: true
+				}
+			case actionTypes.ADD_RECYCLED_QUESTION:
+				console.log('at add recycled question', action.question)
+				const newSetOfQuestions = state.newQuiz.questions;
+				newSetOfQuestions.push(action.question);
+				return {
+					...state,
+					newQuiz: {
+						...state.newQuiz,
+						questions: newSetOfQuestions
+					}
+				}
     default:
       return state;
   }
