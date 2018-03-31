@@ -265,16 +265,23 @@ const QuizView = ({ props }) => {
 			/> */}
 			<tbody>
 			{Object.keys(students).map(studentId => {
-
 					let studentQuiz = students[studentId].quizzes[quiz.id]
-					let student = students[studentId]
+					let student = students[studentId];
+					var nextInLine = false;
+					if (props.currentClass && props.currentClass.handRaisedQueue) {
+						let handRaisedQueue = props.currentClass.handRaisedQueue;
+						let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
+						if ( parseInt(lowestQueueTimeId) === parseInt(studentId)) nextInLine = true
+					}
 
 				return <QuizData
+					key={studentId}
 					targetClass={targetClass}
 					studentQuiz={studentQuiz}
 					student={student}
 					quiz={quiz}
 					quizIds={quizIds} 
+					nextInLine={nextInLine}
 				/>
 
 				{/* return <TableRow

@@ -51,6 +51,8 @@
     "react": "^15.4.2",
     "react-cookie": "^2.1.4",
     "react-dom": "^15.4.2",
+    "react-floating-button-menu": "^1.0.8",
+    "react-icons": "^2.2.7",
     "react-moment": "^0.7.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",

@@ -23,7 +23,7 @@ import Fade from 'grommet/components/Animate';
 
 import moment from 'moment'
 
-const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz }) => {
+const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine }) => {
 	// const targetClass = props.currentClass;
 	// const students = targetClass.students;
 	// const quiz = targetClass.quizzes[targetClass.activeView];
@@ -38,7 +38,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz }) => {
 			<Box
 				direction="column"
 				size="full"
-				margin="medium"
+				margin="small"
 			>
 				<Box
 					direction="row"
@@ -52,7 +52,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz }) => {
 						style={{width: '400px'}}
 						style={{marginRight: 'auto'}}
 					>
-						<UserImage handRaised={true}/>
+						<UserImage handRaised={student.handRaised} nextInLine={nextInLine}/>
 						<Heading 
 							tag="h3"
 							style={{textAlign: 'center', lineHeight: '50px', marginLeft: '20px', marginBottom: 0}}
