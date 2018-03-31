@@ -240,15 +240,12 @@ const addQuiz = function(quizObj) {
       if (each.id) {
         return db.query(`UPDATE draft_questions SET question='${each.question}' WHERE id='${each.id}' RETURNING *;`)
         .then((data) => {
-          console.log('data for id !== null', data.rows[0].id)
           each.id = data.rows[0].id
           return each
         })
       } else {
-        console.log('Are we even hereeee?')
-        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${subjectId}') RETURNING *;`)
+        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.text}', '${teacherId}', '${subjectId}') RETURNING *;`)
         .then((data) => {
-          console.log('data for id !== null', data.rows[0].id)
           each.id = data.rows[0].id
           return each
         })
@@ -258,7 +255,7 @@ const addQuiz = function(quizObj) {
   .then(() => {
     console.log('Did we get here ai all???')
     return Promise.all(questions.map((each, index) => {
-      console.log('each questions with id to join table', each) //at this point we have the questions with id
+      // console.log('each questions with id to join table', each) //at this point we have the questions with id
       return db.query(`INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) 
                 VALUES ('${quizId}', '${each.id}', '${index}');`) 
       .then(() => {
@@ -271,10 +268,8 @@ const addQuiz = function(quizObj) {
     return Promise.all((data.map((q, i) => {
       return Promise.all(q.answers.map((answer, j) => {
         if (answer.id) {
-          console.log('going to add answer for recycled answer ')
           return db.query(`UPDATE draft_answers SET answer='${answer.answer}', correct='${answer.correct}' WHERE id='${answer.id}' AND question_id='${answer.question_id}'`)
         } else {
-          console.log('going to add answer for new answer ')
           return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
                 ('${answer.text}', '${q.id}', '${answer.isCorrect}');`) 
         }
@@ -282,7 +277,6 @@ const addQuiz = function(quizObj) {
     })))
   })
   .then(() => {
-    console.log('-------------------- after adding answer did we get here? -------------------')
     return getQuizzes(teacherId, subjectId)
   })
   .catch((err) => {

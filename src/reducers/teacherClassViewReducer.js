@@ -178,7 +178,7 @@ export function teacherClassViewReducer(
 			}
 		case actionTypes.SET_QUESTION_NUMBER_ACTION:
 			const questions = state.newQuiz.questions.slice()
-			questions.push({question: "", answers: []})
+			questions.push({text: "", answers: []})
 			return {
 				...state, 
 				newQuiz: {
@@ -201,7 +201,7 @@ export function teacherClassViewReducer(
 			for (var j = 0; j < questionsWithText.length; j++) {
 				//console.log('j === action.index', j === action.index)
 				if (j === action.index) {
-					questionsWithText[action.index].question = action.event.target.value
+					questionsWithText[action.index].text = action.event.target.value
 				}
 			}
 			return {
