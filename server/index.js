@@ -66,8 +66,14 @@ app.post('/imageUploader', upload.single('file'), (req, res) => {
 
               fs.unlink(req.file.path, (err) => {
                 if (err) console.log(err);
-               
-              main.addProfilePictureForStudent(req.body.text, fileUrl) 
+              
+                //req.body.classPic//true for teacher view//false for student view
+                if(req.body.classPic){
+                  main.addClassPic(fileUrl)
+                } else {
+                  main.addProfilePictureForStudent(req.body.text, fileUrl)
+                }
+              //main.addProfilePictureForStudent(req.body.text, fileUrl) 
               })
             })
           }

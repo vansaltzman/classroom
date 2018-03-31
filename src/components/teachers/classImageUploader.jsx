@@ -8,7 +8,7 @@ import Dropzone from 'react-dropzone';
 import Section from 'grommet/components/Section';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import * as Actions from '../actions/index.js';
+import * as Actions from '../../actions/index.js';
 import Image from 'grommet/components/Image';
 import Quote from 'grommet/components/Quote';
 import Box from 'grommet/components/Box';
@@ -18,8 +18,10 @@ import Title from 'grommet/components/Title';
 import Paragraph from 'grommet/components/Paragraph';
 import Add from 'grommet/components/icons/base/add';
 import DocumentImage from 'grommet/components/icons/base/documentimage'
+import Label from 'grommet/components/Label';
 
-class ImageUploader extends React.Component {
+
+class ClassImageUploader extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -33,7 +35,7 @@ class ImageUploader extends React.Component {
     let data = new FormData()
     data.append('file', files[0]);
     data.append('text', this.props.auth.user.id)
-    data.append('classPic', false)
+    data.append('classPic', true)
 
     axios.post('/imageUploader', data)
       .then((response) => {
@@ -44,66 +46,52 @@ class ImageUploader extends React.Component {
       })
   }
 
-
-  render() {
-    const dpStyle={
+render() {
+  const dpStyle={
     margin: 'auto',
-    // width: '100%',
-    // maxHeight: '100%',
-    // maxHeight: '100%',
     height: '75px',
     width:'150px',
-    // border: '3px dashed grey',
     padding: '10px',
     textAlign: 'center',
     margin:'auto',
-    display:'block'
-    }
+    display:'inline'
+  }
+  const imgStyle={ 
+    height: '40px',
+    width: '40px',
+    marginLeft: '50px',
+    padding: '0'
 
-    const preview={
-      margin: 'auto', 
-      borderRadius: '50%',
-      height: '150px',
-      width: '150px',
-      padding: '30px'
-    }
-    const title={margin:'auto', textAlign: 'center', padding: '30px'}
+  }
+  const box={
+    borderBottom: '2px solid lightGrey',
+    padding: '13px'
+  }
+  const iconStyle={
+    float: 'right',
+    verticalAlign: 'middle',
+    marginRight: '6px',
+    // position: 'relative',
+    display: 'inline'
+  }
+  const labelStyle={
+    color: 'lightGrey',
+    fontSize: '17px',
+    // marginLeft: '3px'
+  }
 
-    const imgStyle={ 
-      // position: 'relative',
-      // margin: 'auto',
-      borderRadius: '50%',
-      // maxHeight: '100px',
-      // maxHeight: '100px',
-      textAlign: 'center',
-      // display:'block'
-      
-    }
-    console.log('this.props.auth', this.props.auth)
-    return(
-<Section>
-
-
-
-<Paragraph size='xlarge' style={title}>
-Click or Drag and Drop an Image Here!
-</Paragraph>
-  <Box direction='row' justify='start' align='center' wrap={true} pad='medium' margin='small'>
-    <Dropzone onDrop={this.onDrop} size={100} style={dpStyle}>
-      <DocumentImage size="xlarge" >
-      </DocumentImage>
-    </Dropzone>
-  </Box>
-
-  <Section>
-    <Box direction='row' justify='start' align='center' wrap={true} pad='medium' margin='small' style={preview}>
-      <Image src={this.state.image} full={false} style={imgStyle} alt={''} fit='contain'/>
-        <Paragraph size='medium' style={title}>
-          Profile Preview
-        </Paragraph>
-    </Box>
-  </Section>
-</Section>
+  return (
+    <div style={box}>
+      <Dropzone onDrop={this.onDrop} style={dpStyle}>
+      <Label style={labelStyle}>Click or Drag and Drop an Image Here!
+        
+          <img src={this.state.image} style={imgStyle} alt={''}/>
+            <DocumentImage size="small"  style={iconStyle}>
+            </DocumentImage>
+    
+      </Label>
+      </Dropzone>
+    </div>
     )
   }
 }
@@ -118,7 +106,7 @@ function matchDispatchToProps(dispatch) {
 	return bindActionCreators(Actions, dispatch);
 }
 
-export default connect(mapStateToProps, matchDispatchToProps)(ImageUploader);
+export default connect(mapStateToProps, matchDispatchToProps)(ClassImageUploader);
 
 
 

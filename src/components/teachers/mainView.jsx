@@ -31,6 +31,7 @@ import FormFields from "grommet/components/FormFields";
 import TextInput from "grommet/components/TextInput";
 import Select from "grommet/components/Select";
 import SearchInput from "grommet/components/SearchInput";
+import ClassImageUploader from './classImageUploader.jsx'
 // import Header from 'grommet/components/Header'
 
 /****** Grommet Stuff ******/
@@ -177,7 +178,11 @@ class TeacherMainView extends React.Component {
                   value={this.props.newClassQuarter}
                   onChange={value => this.newClassQuarterChangeHandler(value)}
                 />
+                <ClassImageUploader/>
+
+
               </FormFields>
+
               <Footer pad={{ vertical: "medium", horizontal: "medium" }}>
                 <Button
                   label="Create Class"
