@@ -99,22 +99,6 @@ class TeacherMainView extends React.Component {
       thumbnail:
         "https://regmedia.co.uk/2016/10/17/javascript_photo_via_shutterstock.jpg?x=442&y=293&crop=1"
     })
-    // axios
-    //   .post("/addClass", {
-    //     email: this.props.auth.user.email,
-    //     classname: this.props.newClassName,
-    //     subject: this.props.newClassSubject,
-    //     year: this.props.newClassYear,
-    //     quarter: this.props.newClassQuarter,
-    //     thumbnail:
-    //       "https://regmedia.co.uk/2016/10/17/javascript_photo_via_shutterstock.jpg?x=442&y=293&crop=1"
-    //   })
-    //   .then(() => {
-    //     console.log("class added");
-    //   })
-    //   .catch(err => {
-    //     if (err) throw err;
-    //   });
   }
 
   render() {

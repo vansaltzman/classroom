@@ -1,6 +1,7 @@
 const { Pool } = require('pg')
 const schema = require('./classroom.js')
 const bcrypt = require('bcrypt')
+//const migrate = require('../data/studentsQuizDataMigratedFromFB.js')
 
 const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
 
@@ -146,6 +147,9 @@ const addNewClass = function(classObj) {
     //console.log(queryString);
     return db.query(queryString)
   })
+  .then(() => {
+    return getClassesForTeacherMainView(classObj.email)
+  })
   .catch((err)=> console.log(err))
   
 }
@@ -236,16 +240,25 @@ const addQuiz = function(quizObj) {
   })
   .then((data) => {
     return Promise.all(questions.map((each, index) => {
-      return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${subjectId}') RETURNING *;`)
-      .then((data) => {
-        each.id = data.rows[0].id
-        return each
-      })  
+      if (each.id) {
+        return db.query(`UPDATE draft_questions SET question='${each.question}' WHERE id='${each.id}' RETURNING *;`)
+        .then((data) => {
+          each.id = data.rows[0].id
+          return each
+        })
+      } else {
+        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.text}', '${teacherId}', '${subjectId}') RETURNING *;`)
+        .then((data) => {
+          each.id = data.rows[0].id
+          return each
+        })
+      }
     }))
   })
   .then(() => {
+    console.log('Did we get here ai all???')
     return Promise.all(questions.map((each, index) => {
-      console.log('each questions with id to join table', each) //at this point we have the questions with id
+      // console.log('each questions with id to join table', each) //at this point we have the questions with id
       return db.query(`INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) 
                 VALUES ('${quizId}', '${each.id}', '${index}');`) 
       .then(() => {
@@ -257,8 +270,12 @@ const addQuiz = function(quizObj) {
     console.log('dataaaaaa after draft_quizzes_draft_questions', data)
     return Promise.all((data.map((q, i) => {
       return Promise.all(q.answers.map((answer, j) => {
-        return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
+        if (answer.id) {
+          return db.query(`UPDATE draft_answers SET answer='${answer.answer}', correct='${answer.correct}' WHERE id='${answer.id}' AND question_id='${answer.question_id}'`)
+        } else {
+          return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
                 ('${answer.text}', '${q.id}', '${answer.isCorrect}');`) 
+        }
       }))
     })))
   })
@@ -271,7 +288,7 @@ const addQuiz = function(quizObj) {
 }
 
 const getQuizzes = function(teacherId, subjectId) {
-  console.log('teacherId, subjectId ------> ', teacherId, subjectId)
+  //console.log('teacherId, subjectId ------> ', teacherId, subjectId)
   return db.query(`SELECT draft_quizzes.name, draft_quizzes.id, subjects.name as subject FROM draft_quizzes INNER JOIN subjects ON draft_quizzes.subject_id = subjects.id WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
   .then((data) => {
     const quizzes = data.rows.map((quiz) => {
@@ -325,12 +342,34 @@ const getQuizzes = function(teacherId, subjectId) {
       }))
       .then((questions) => {
         eachQuiz.questions = questions
-        console.log('eachQuiz ------> ', eachQuiz)
+        //console.log('eachQuiz ------> ', eachQuiz)
         return eachQuiz
       })
     }))
   })
 }
+
+const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
+  return db.query(`SELECT * FROM draft_questions WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
+  .then((data) => {
+    return Promise.all(data.rows.map((eachQuestion) => {
+      return db.query(`SELECT * FROM draft_answers WHERE question_id='${eachQuestion.id}'`)
+      .then((eachAnswer) => {
+        eachQuestion.answers = eachAnswer.rows
+        return eachQuestion
+      })
+    }))
+  })
+}
+// const calculateAverageTimeForQuestions = function(classFromFB) {
+//   const studentsAndTheirResponses = classFromFB[1].students.slice(1);
+//   for (var i = 0; i < studentsAndTheirResponses.length; i++) {
+//     const eachStudentQuiz = Object.values(studentsAndTheirResponses[i].quizzes)[0];
+//     const questionsFromEachQuiz = eachStudentQuiz.questions.slice(1) //array of question objs...each question has
+  
+
+//   }
+// }
 
 module.exports = {
   addUser,
@@ -346,6 +385,8 @@ module.exports = {
   getAllExistingSubjects,
   addQuiz,
   getQuizzes,
-  getNewAddedClass
+  getNewAddedClass,
+  GetAllQuestionsBelongToTeacher
+  // calculateAverageTimeForQuestions
 }
 
