@@ -179,58 +179,6 @@ class NavigationBar extends React.Component {
                 </Router>
             </div>
         )
-    
-    return (
-      <div>
-        <Router history={this.props.history}>
-          <nav className="navbar navbar-default">
-            <Header style={{ background: navBarBackground }} size="medium">
-              <Headline margin="large" style={titleStyle} primary={true}>
-                Jaqen
-              </Headline>
-              <Box
-                flex={true}
-                margin="large"
-                justify="end"
-                direction="row"
-                responsive={false}
-              >
-                <Menu
-                  primary={false}
-                  direction="row"
-                  label={menuLabel}
-                  icon={<Actions />}
-                >
-                  {dropAnchors}
-                </Menu>
-              </Box>
-            </Header>
-
-            <Switch>
-              <Route path="/teachermainview" component={TeacherMainView} />
-              {/* <Route path="/studentmainview" component={TeacherMainView} /> */}
-              <Route exact path="/login" render={this.checkAuth} />
-              <Route path="/liveclass" render={this.goToNewClass} />
-              <Route path="/studentmainview" component={StudentMainView} />
-              <Route path="/login" component={SignIn} />
-              <Route path="/teacherQuiz" component={ClassView} />
-
-              <Route path="/quiz" component={QuizView} />
-              <Route path="/studentQuiz" component={quizContainer} />
-              {/* <Route path="/studentClass" component={StudentClass}  /> */}
-              {/* <Route path="/studentliveclass" component={StudentLiveClassView}/> */}
-
-              <Route path="/signUp" component={SignUp} />
-              <Route path="/quiz" component={StudentViewQuiz} />
-              {/* <Route path="/studentLiveClass" render={this.checkView}/> */}
-              <Route path="/studentLiveClassView" component={Default} />
-              <Route path="/livequiz" component={Quiz} />
-              <Route path="/default" component={Default}/>
-            </Switch>
-          </nav>
-        </Router>
-      </div>
-    );
   }
 }
 
