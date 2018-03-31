@@ -237,14 +237,26 @@ const addQuiz = function(quizObj) {
   })
   .then((data) => {
     return Promise.all(questions.map((each, index) => {
-      return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${subjectId}') RETURNING *;`)
-      .then((data) => {
-        each.id = data.rows[0].id
-        return each
-      })  
+      if (each.id) {
+        return db.query(`UPDATE draft_questions SET question='${each.question}' WHERE id='${each.id}' RETURNING *;`)
+        .then((data) => {
+          console.log('data for id !== null', data.rows[0].id)
+          each.id = data.rows[0].id
+          return each
+        })
+      } else {
+        console.log('Are we even hereeee?')
+        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.question}', '${teacherId}', '${subjectId}') RETURNING *;`)
+        .then((data) => {
+          console.log('data for id !== null', data.rows[0].id)
+          each.id = data.rows[0].id
+          return each
+        })
+      }
     }))
   })
   .then(() => {
+    console.log('Did we get here ai all???')
     return Promise.all(questions.map((each, index) => {
       console.log('each questions with id to join table', each) //at this point we have the questions with id
       return db.query(`INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) 
@@ -258,12 +270,19 @@ const addQuiz = function(quizObj) {
     console.log('dataaaaaa after draft_quizzes_draft_questions', data)
     return Promise.all((data.map((q, i) => {
       return Promise.all(q.answers.map((answer, j) => {
-        return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
+        if (answer.id) {
+          console.log('going to add answer for recycled answer ')
+          return db.query(`UPDATE draft_answers SET answer='${answer.answer}', correct='${answer.correct}' WHERE id='${answer.id}' AND question_id='${answer.question_id}'`)
+        } else {
+          console.log('going to add answer for new answer ')
+          return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
                 ('${answer.text}', '${q.id}', '${answer.isCorrect}');`) 
+        }
       }))
     })))
   })
   .then(() => {
+    console.log('-------------------- after adding answer did we get here? -------------------')
     return getQuizzes(teacherId, subjectId)
   })
   .catch((err) => {
@@ -272,7 +291,7 @@ const addQuiz = function(quizObj) {
 }
 
 const getQuizzes = function(teacherId, subjectId) {
-  console.log('teacherId, subjectId ------> ', teacherId, subjectId)
+  //console.log('teacherId, subjectId ------> ', teacherId, subjectId)
   return db.query(`SELECT draft_quizzes.name, draft_quizzes.id, subjects.name as subject FROM draft_quizzes INNER JOIN subjects ON draft_quizzes.subject_id = subjects.id WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
   .then((data) => {
     const quizzes = data.rows.map((quiz) => {

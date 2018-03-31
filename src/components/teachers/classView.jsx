@@ -67,6 +67,10 @@ class ClassView extends React.Component {
 	}
 	toggleQuizBuilderModal() {
 		this.props.showQuizModal()
+		this.props.fetchQuestions({
+			teacherId: this.props.teachersClassView.targetClass.teacher_id,
+      subjectId: this.props.teachersClassView.targetClass.subject_id
+		})
 	}
 	componentWillMount() {
 		this.props.getAllStudents();
@@ -212,7 +216,7 @@ class ClassView extends React.Component {
 								{Object.values(quiz.questions).map((question,i) => {
 									 return <Box key={i}>
 										<Heading tag="h3">
-											{question.question}
+											{question.text}
 										</Heading>
 										<Label>
 											{moment.duration(question.time).humanize()}
@@ -340,20 +344,22 @@ class ClassView extends React.Component {
 																<Section>
 																	<Label>{'Question' + ' ' + index + 1}</Label>
 																	<TextInput placeHolder="Question..."
+																						 style={{color: each.question ? 'pink' : 'black'}}
 																						 value={each.question ? each.question : ""}
-																						onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+																						 onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
 																	<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteQuestion()}/>} />
 																	{each.answers.map((eachAnswer, answerIndex) => {
 																		return (
 																			<Section>
 																				<TextInput placeHolder="Answer..."
-																									 value={eachAnswer.answer ? eachAnswer.answer : ""}
+																									 style={{color: each.question ? 'pink' : 'black'}}
+																									 value={eachAnswer.answer ? eachAnswer.answer : eachAnswer.text}
 																									 onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
 																				<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteAnswer(index)}/>} />	
 																				<CheckBox label='Correct'
 																									toggle={false}
 																									reverse={true} 
-																									checked={eachAnswer.correct ? true : false}
+																									checked={eachAnswer.correct ? true : eachAnswer.isCorrect ? true : false}
 																									onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
 																			</Section>
 																		)
@@ -371,8 +377,7 @@ class ClassView extends React.Component {
 										</Section>
 									<Footer pad={{"vertical": "medium", horizontal: "medium"}}>
 										<Button label='Add Quiz'
-														path="/teacherQuiz"
-														onClick={() => this.props.addNewQuiz({authorId: this.props.auth.user.id, quiz: this.props.teachersClassView.newQuiz})}/>
+														onClick={() => this.props.addNewQuiz({authorId: this.props.teachersClassView.targetClass.teacher_id, quiz: this.props.teachersClassView.newQuiz})}/>
 									</Footer>
 								</Form>
 							</Box>
@@ -382,7 +387,7 @@ class ClassView extends React.Component {
 										Previous Question
 									</Heading>
 								</Header>
-								<Accordion openMulti={true}
+								<Accordion openMulti={false}
 													 onActive={(index) => this.props.selectedQuestion(this.props.teachersClassView.questions[index])}>
 									{this.props.teachersClassView.questions.map((question, i) => {
 										return (

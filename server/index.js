@@ -132,7 +132,7 @@ app.post('/allClasses', (req, res) => {
   //console.log('serverside /allClasses', req.body);
   main.getClassesForTeacherMainView(req.body.email)
   .then((data) => {
-    console.log('data ------> ', data)
+    //console.log('data ------> ', data)
     res.send(data);
     //console.log('server side classes', data.rows)
   })
@@ -199,10 +199,10 @@ app.get('/getAllSubjects', (req, res) => {
 })
 
 app.post('/addQuiz', (req, res) => {
-  //console.log('server side newQuiz', req.body);
+  console.log('server side newQuiz', req.body);
   main.addQuiz(req.body)
   .then((data) => {
-    //console.log('refetched quizzes at server side', data)
+    console.log('refetched quizzes at server side', data)
     res.send(data)
   })
 })
@@ -218,7 +218,7 @@ app.post('/getQuizzes', (req, res) => {
 app.post('/fetchQuestions', (req,res) => {
   main.GetAllQuestionsBelongToTeacher(req.body.teacherId, req.body.subjectId)
   .then((data) => {
-    console.log('serverside questions data', data)
+    //console.log('serverside questions data', data)
     res.send(data)
   })
 })

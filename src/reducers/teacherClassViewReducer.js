@@ -285,7 +285,6 @@ export function teacherClassViewReducer(
 		case actionTypes.ADD_NEW_QUIZZES:
 			console.log('refetched quizzes at reducer', action.quizzes)
 			const refetched = action.quizzes;
-			console.log('refetched ------> ', refetched)
 			refetched.map((eachQuiz) => {
 				eachQuiz.questions = eachQuiz.questions.reduce((acc, eachQuestion) => {
 					let qId = eachQuestion.id
@@ -313,7 +312,7 @@ export function teacherClassViewReducer(
 			return {
 				...state,
 				quizzes: refetched,
-				showQuizBuilderModal: !state.showQuizBuilderModal
+				showQuizBuilderModal: false
 			}
 		case actionTypes.FETCH_QUIZZES:
 			const quizzes = action.quizzes;
@@ -359,7 +358,7 @@ export function teacherClassViewReducer(
 				return {
 					...state, 
 					selectedQuestion: action.selectedQuestion,
-					showAddQuestionButton: !state.showAddQuestionButton
+					showAddQuestionButton: true
 				}
 			case actionTypes.ADD_RECYCLED_QUESTION:
 				console.log('at add recycled question', action.question)
