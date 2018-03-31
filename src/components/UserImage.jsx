@@ -6,6 +6,10 @@ import MdAdd from 'react-icons/lib/md/add';
 import MdClose from 'react-icons/lib/md/close';
 import FaUser from 'react-icons/lib/fa/user';
 import IoIosChatboxes from 'react-icons/lib/io/ios-chatboxes';
+import fb from '../../db/liveClassroom.js';
+// import Alert from 'react-s-alert';
+// import 'react-s-alert/dist/s-alert-default.css';
+// import 'react-s-alert/dist/s-alert-css-effects/flip.css';
 
 let styleSheet = document.styleSheets[0];
 let keyframes =
@@ -41,8 +45,20 @@ class UserImage extends React.Component {
     console.log('running start chat ')
   }
 
-  acknowledgeStudent() {
-    console.log('running acknwlijdf studetn ')
+  acknowledgeStudent(e) {
+    console.log('this props in ack student ', this.props)
+    let classId = this.props.targetClass.id;
+    let studentId = this.props.student.id;
+    let type = 'acknowledge';
+    e.preventDefault();
+    fb.toggleStudentHandRaiseStatus(classId, studentId);
+    fb.updateHandRaiseQueue(classId, studentId);
+    fb.updateHandRaiseAcknowledgement(classId, studentId, type);
+    // Alert.warning('Responded to Nicky Jam! ', {
+    //   position: 'top-right',
+    //   effect: 'flip',
+    //   timeout: '1000'
+    // })
   }
 
   render( ) {
@@ -73,6 +89,7 @@ class UserImage extends React.Component {
           >
           </div> }
         </div> 
+        // const userIcon = <FaUser />
     return (
       <div>
         { handRaised ? 
@@ -85,7 +102,6 @@ class UserImage extends React.Component {
             buttonSize="1"
           />
           <ChildButton
-            label='On my way!'
             iconButton={FaUser}
             iconColor="black"
             order={1}
@@ -94,7 +110,6 @@ class UserImage extends React.Component {
             onClick={this.acknowledgeStudent}
           />
           <ChildButton
-            label='open chat'
             iconButton={IoIosChatboxes}
             iconColor="black"
             order={2}
@@ -102,7 +117,7 @@ class UserImage extends React.Component {
             buttonSize="56"
             onClick={this.startChat}
           />
-        </FloatingMenu> : studentImage
+        </FloatingMenu>  : studentImage
     }
       </div>
     )

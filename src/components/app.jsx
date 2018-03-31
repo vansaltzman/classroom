@@ -24,6 +24,7 @@ import Button from 'grommet/components/Button';
 /****** Grommet Stuff ******/
 import SignUp from './SignUp.jsx'
 import StudentViewQuiz from './students/StudentViewQuiz.jsx';
+// import 'react-s-alert/dist/s-alert-default.css';
 
 class App extends React.Component {
   render() {
