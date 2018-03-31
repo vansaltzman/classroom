@@ -20,8 +20,19 @@ class ThumbPoll extends React.Component {
 
     return (
       <div>
-      
-        
+        <div style={{
+          left: 0,
+          lineHeight: '200px',
+          marginTop: '-100px',
+          position: 'absolute',
+          textAlign: 'center',
+          top: '50%',
+          width: '100%'
+        }}>
+
+          <h1>TEST--------</h1>        
+
+        </div>
       </div>
     )
   }
