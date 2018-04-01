@@ -38,6 +38,7 @@ class StudentMainView extends React.Component {
   constructor() {
     super();
   }
+
   componentWillMount() {
     this.props.getClassesBelongToAStudent({
       email: this.props.auth.user.email
@@ -48,6 +49,7 @@ class StudentMainView extends React.Component {
   componentWillUnmount () {
     // will need to create a function that is called here to stop the listener from update values based on 
     // changes to the live status of their class
+    
   }
   
   render() {
@@ -69,7 +71,7 @@ class StudentMainView extends React.Component {
                   type="button"
                   path="/studentliveclass"
                   primary={true}
-                  onClick={() => this.props.toggleStudentLiveClassStatus(item.class_id, item.student_id)}
+                  onClick={() => this.props.updateStudentTargetClass(item)}
                 />
               </Tile>
             );

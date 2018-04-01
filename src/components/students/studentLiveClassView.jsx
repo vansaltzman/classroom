@@ -22,6 +22,11 @@ class StudentLiveClassView extends React.Component {
 		super();
 		this.handleRaiseHand = this.handleRaiseHand.bind(this);
 	}
+
+	componentWillMount() {
+		this.props.fetchClassData(this.props.activeView.id, 'student')
+	}
+
 	handleRaiseHand(e) {
 		let studentId = this.props.auth.user.id;
 		let classId = this.props.activeView.id;

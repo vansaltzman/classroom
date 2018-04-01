@@ -16,7 +16,9 @@ firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
 
 fb.ref('/').once('value')
-.then(snap=> console.log('Initialized App with target class: ', Object.values(snap.toJSON().classes)[0].name))
+.then(snap=> {
+	if (snap.toJSON().classes) console.log('Classes live on app launch: ', Object.values(snap.toJSON().classes).map(each => each.name))
+})
 
 const selectClass = function(classId) {
   return migrate.migrateClassToFB(classId)

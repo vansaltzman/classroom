@@ -25,7 +25,6 @@ export function studentClassViewReducer(
 			const updatedClasses = state.classes.slice()
 
 			updatedClasses.forEach(eachClass => {
-				console.log('eachClass ------> ', eachClass)
 				if (classesFromAction && classesFromAction.hasOwnProperty(eachClass.class_id)) {
 					eachClass.isLive = true
 				} else {
@@ -36,7 +35,6 @@ export function studentClassViewReducer(
 		case actionTypes.TOGGLE_STUDENT_LIVE_STATUS:
 			return {...state}
 		case actionTypes.UPDATE_CLASS_DATA_STUDENT:
-			console.log('action.classData', action.classData)
 			return {...state, targetClass: action.classData}
 		
     default:
