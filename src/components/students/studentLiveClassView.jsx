@@ -32,7 +32,10 @@ class StudentLiveClassView extends React.Component {
   render() {
 		console.log('this props in studnet live calss view ', this.props)
 		var liveView;
-			if (!this.props.studentState.targetClass.isLive) {
+			if (!this.props.studentState.targetClass) {
+				return <div>loading</div>
+			}
+			else if (!this.props.studentState.targetClass.isLive) {
 				liveView = <Default live={false} />
 			}
 			else if(this.props.studentState.targetClass && this.props.studentState.targetClass.activeView){

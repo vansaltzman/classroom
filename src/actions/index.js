@@ -288,14 +288,15 @@ function classGoLiveAction(classes) {
 export function watchClassGoLive() {
 	return (dispatch) => {
 		fb.ref('/classes').on('value', (snap) => {
-			dispatch(watchClassGoLiveAction(snap.val()));
+			console.log('snap.toJSON() ------> ', snap.toJSON())
+			dispatch(watchClassGoLiveAction(snap.toJSON()))
 		})
 	}
 }
-function watchClassGoLiveAction(classId) {
+function watchClassGoLiveAction(classes) {
 	return {
 		type: actionTypes.WATCH_CLASS_GO_LIVE_ACTION,
-		classId
+		classes
 	}
 }
 

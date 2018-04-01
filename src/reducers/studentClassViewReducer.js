@@ -22,20 +22,17 @@ export function studentClassViewReducer(
 		case actionTypes.WATCH_CLASS_GO_LIVE_ACTION:
 
 			const classesFromAction = action.classes;
-			const updatedClasses = state.classes.slice();
-			if (Array.isArray(classesFromAction)) {
-				for (var i = 0; i < classesFromAction.length; i++) {
-					if ( classesFromAction[i] ) {
-						for (var j = 0; j < updatedClasses.length; j ++) {
-							if (updatedClasses[j].class_id === classesFromAction[i].id) {
-								updatedClasses[j].isLive = classesFromAction[i].isLive;
-							}
-						}
-					}
-				}
-				return {...state, classes: updatedClasses}
-			} 
+			const updatedClasses = state.classes.slice()
 
+			updatedClasses.forEach(eachClass => {
+				console.log('eachClass ------> ', eachClass)
+				if (classesFromAction && classesFromAction.hasOwnProperty(eachClass.class_id)) {
+					eachClass.isLive = true
+				} else {
+					eachClass.isLive = false
+				}
+			})
+			return {...state, classes: updatedClasses}
 		case actionTypes.TOGGLE_STUDENT_LIVE_STATUS:
 			return {...state}
 		case actionTypes.UPDATE_CLASS_DATA_STUDENT:
