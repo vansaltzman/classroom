@@ -24,7 +24,7 @@ class StudentLiveClassView extends React.Component {
 	}
 
 	componentWillMount() {
-		this.props.fetchClassData(this.props.activeView.id, 'student')
+		// this.props.fetchClassData(this.props.activeView.id, 'student')
 	}
 
 	handleRaiseHand(e) {
@@ -50,7 +50,7 @@ class StudentLiveClassView extends React.Component {
 			} else {
 					liveView = <div></div>
 			}
-			if (this.props.studentState.targetClass && this.props.studentState.targetClass.students[this.props.auth.user.id].handRaised) {
+			if (this.props.studentState.targetClass.isLive && this.props.studentState.targetClass.students[this.props.auth.user.id].handRaised) {
 				let handRaisedQueue = this.props.activeView.handRaisedQueue;
 				let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
 				if (this.props.auth.user.id === lowestQueueTimeId) {
@@ -72,26 +72,28 @@ class StudentLiveClassView extends React.Component {
 				var toast = <div></div>
 			}
 
-			return (
-				<div>
-						{liveView}
-						{toast}
+				return (
+					<div>
+							{liveView}
+							{toast}
 
-						<Button 
-							icon={queueIcon} 
-							style={{position: "fixed", bottom:100, right:100}}
-							label={handRaiseLabel}
-							type={'submit'}
-							primary={false}
-							secondary={false}
-							accent={false}
-							critical={critical}
-							plain={false} 
-							onClick={(e) => this.handleRaiseHand(e)} 
-						/>
-						
-					</div>
-			)
+							{this.props.studentState.targetClass.isLive &&
+							<Button 
+								icon={queueIcon} 
+								style={{position: "fixed", bottom:100, right:100}}
+								label={handRaiseLabel}
+								type={'submit'}
+								primary={false}
+								secondary={false}
+								accent={false}
+								critical={critical}
+								plain={false} 
+								onClick={(e) => this.handleRaiseHand(e)} 
+							/>}
+
+						</div>
+				)
+			
 		}
 }
 
