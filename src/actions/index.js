@@ -408,7 +408,7 @@ export function toggleStudentLiveClassStatus (classId, studentId) {
 		})
 	}
 }
-function toggleStudentLiveClassStatusAction () {
+function toggleStudentLiveClassStatusAction (classId, studentId, targetClass) {
 		return {
 			type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
 		}

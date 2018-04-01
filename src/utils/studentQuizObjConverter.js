@@ -6,7 +6,6 @@ const studentQuizObjectConverter = function (quizObject) {
     studentResponseObj.currentQuestion = -1;
     studentResponseObj.responses = {};
     for (var question in quizObject.questions) {
-        debugger
         let questionResponses = {};
         questionResponses.id = question;
         questionResponses.time = null;
