@@ -426,11 +426,11 @@ export function fetchClassData (classId, type) {
 	return (dispatch) => {
 		currentClass.on('value', function(snap) {
 			if(type === 'teacher') {
-				dispatch(updateClassDataTeacher(snap.val()))
+				dispatch(updateClassDataTeacher(snap.toJSON()))
 			} 
 			if (type === 'student') {
 				console.log('snap.val(stud) ------> ', snap.val())
-				dispatch(updateClassDataStudent(snap.val()))
+				dispatch(updateClassDataStudent(snap.toJSON()))
 			}
 		})
 	}

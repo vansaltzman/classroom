@@ -24,7 +24,9 @@ class StudentLiveClassView extends React.Component {
 	}
 
 	componentWillMount() {
-		// this.props.fetchClassData(this.props.activeView.id, 'student')
+		if (this.props.studentState.targetClass.isLive) {
+			this.props.fetchClassData(this.props.activeView.id, 'student')
+		}
 	}
 
 	handleRaiseHand(e) {
@@ -50,7 +52,7 @@ class StudentLiveClassView extends React.Component {
 			} else {
 					liveView = <div></div>
 			}
-			if (this.props.studentState.targetClass.isLive && this.props.studentState.targetClass.students[this.props.auth.user.id].handRaised) {
+			if (this.props.studentState.targetClass.handRaisedQueue && this.props.studentState.targetClass.students[this.props.auth.user.id].handRaised) {
 				let handRaisedQueue = this.props.activeView.handRaisedQueue;
 				let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
 				if (this.props.auth.user.id === lowestQueueTimeId) {

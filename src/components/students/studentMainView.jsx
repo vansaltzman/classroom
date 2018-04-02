@@ -51,6 +51,11 @@ class StudentMainView extends React.Component {
     // changes to the live status of their class
     
   }
+
+  enterClass(classObj) {
+    this.props.updateStudentTargetClass(classObj)
+
+  }
   
   render() {
     return (
@@ -71,7 +76,7 @@ class StudentMainView extends React.Component {
                   type="button"
                   path="/studentliveclass"
                   primary={true}
-                  onClick={() => this.props.updateStudentTargetClass(item)}
+                  onClick={() => this.enterClass(item)}
                 />
               </Tile>
             );

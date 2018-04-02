@@ -18,7 +18,12 @@ export function studentClassViewReducer(
       return { ...state, classes: classes };
     case actionTypes.UPDATE_STUDENT_TARGET_CLASS_ACTION:
 			const targetClass = action.targetClass;
-			return { ...state, targetClass: action.targetClass };
+			if (!targetClass.students) {
+				targetClass.students = {}
+			}
+			targetClass.id = targetClass.class_id
+			console.log('targetClass ------> ', targetClass)
+			return { ...state, targetClass: targetClass };
 		case actionTypes.WATCH_CLASS_GO_LIVE_ACTION:
 
 			const classesFromAction = action.classes;
