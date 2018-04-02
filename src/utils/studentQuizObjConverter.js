@@ -1,6 +1,5 @@
 const studentQuizObjectConverter = function (quizObject) {
     var studentResponseObj = {};
-    // studentResponseObj[quizObject.id] = {};
     studentResponseObj.id = quizObject.id;
     studentResponseObj.isFinished = false;
     studentResponseObj.currentQuestion = -1;

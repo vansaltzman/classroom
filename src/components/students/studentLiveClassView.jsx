@@ -16,6 +16,7 @@ import UserExpert from "grommet/components/icons/base/UserExpert.js";
 import WorkshopIcon from 'grommet/components/icons/base/Workshop';
 import Toast from 'grommet/components/Toast';
 import ThumbVote from './thumbVote.jsx'
+import StudentQuizGradesView from './StudentQuizGradesView.jsx';
 
 
 
@@ -72,10 +73,15 @@ class StudentLiveClassView extends React.Component {
 		var studentId = this.props.auth.user.id
 		var liveView;
 			if (!this.props.studentState.targetClass) {
-				return <div>loading</div>
+				liveView = <div>loading</div>
 			}
 			else if (!this.props.studentState.targetClass.isLive) {
-				liveView = <Default live={false} />
+				liveView = <StudentQuizGradesView
+							className = {this.props.activeView.name}
+							classId = {this.props.activeView.id}
+							studentId={this.props.auth.user.id}
+							getQuizDataForStudentInClass={this.props.getQuizDataForStudentInClass}
+							/>
 			}
 			else if(this.props.studentState.targetClass && this.props.studentState.targetClass.activeView){
 				liveView = <QuizContainer/>
@@ -86,7 +92,8 @@ class StudentLiveClassView extends React.Component {
 			} else {
 					liveView = <div></div>
 			}
-			if (this.props.studentState.targetClass.handRaisedQueue && this.props.studentState.targetClass.students[this.props.auth.user.id].handRaised) {
+			if (this.props.studentState.targetClass.handRaisedQueue
+				&& this.props.studentState.targetClass.students[studentId].handRaised) {
 				let handRaisedQueue = this.props.activeView.handRaisedQueue;
 				let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
 				if (studentId === lowestQueueTimeId) {
@@ -107,7 +114,6 @@ class StudentLiveClassView extends React.Component {
 				return (
 					<div>
 							{liveView}
-							{toast}
 
 							{this.props.studentState.targetClass.isLive &&
 							<Button 

@@ -376,6 +376,25 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
 //   }
 // }
 
+const getQuizDataForStudentInClass = function(studentId, classId) {
+  return db.query(`SELECT * FROM submitted_quizzes WHERE class_id='${classId}'`)
+  .then((quizzes) => {
+    console.log('quizzes', quizzes.rows)
+    const constructedQuizzes = quizzes.rows.map((quiz) => {
+      return {
+        name: quiz.name,
+        id: quiz.id,
+        previousId: quiz.previous_id, //this id referring to id in draft_quizze table?
+        weight: quiz.weight,
+        time: quiz.time,
+        duration: quiz.duration
+      }
+    })
+    console.log('constructed quizzes ', constructedQuizzes)
+    return constructedQuizzes;
+  })
+}
+
 
 module.exports = {
   addUser,
@@ -395,7 +414,7 @@ module.exports = {
   GetAllQuestionsBelongToTeacher,
   // calculateAverageTimeForQuestions
   addProfilePictureForStudent,
-  getProfilePic
-  
+  getProfilePic,
+  getQuizDataForStudentInClass
 }
 
