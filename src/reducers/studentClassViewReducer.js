@@ -18,28 +18,28 @@ export function studentClassViewReducer(
       return { ...state, classes: classes };
     case actionTypes.UPDATE_STUDENT_TARGET_CLASS_ACTION:
 			const targetClass = action.targetClass;
-			return { ...state, targetClass: action.targetClass };
+			if (!targetClass.students) {
+				targetClass.students = {}
+			}
+			targetClass.id = targetClass.class_id
+			console.log('targetClass ------> ', targetClass)
+			return { ...state, targetClass: targetClass };
 		case actionTypes.WATCH_CLASS_GO_LIVE_ACTION:
 
 			const classesFromAction = action.classes;
-			const updatedClasses = state.classes.slice();
-			if (Array.isArray(classesFromAction)) {
-				for (var i = 0; i < classesFromAction.length; i++) {
-					if ( classesFromAction[i] ) {
-						for (var j = 0; j < updatedClasses.length; j ++) {
-							if (updatedClasses[j].class_id === classesFromAction[i].id) {
-								updatedClasses[j].isLive = classesFromAction[i].isLive;
-							}
-						}
-					}
-				}
-				return {...state, classes: updatedClasses}
-			} 
+			const updatedClasses = state.classes.slice()
 
+			updatedClasses.forEach(eachClass => {
+				if (classesFromAction && classesFromAction.hasOwnProperty(eachClass.class_id)) {
+					eachClass.isLive = true
+				} else {
+					eachClass.isLive = false
+				}
+			})
+			return {...state, classes: updatedClasses}
 		case actionTypes.TOGGLE_STUDENT_LIVE_STATUS:
 			return {...state}
 		case actionTypes.UPDATE_CLASS_DATA_STUDENT:
-			console.log('action.classData', action.classData)
 			return {...state, targetClass: action.classData}
 		
     default:

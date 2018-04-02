@@ -286,17 +286,25 @@ function classGoLiveAction(classes) {
 }
 
 //student's main view to see which class is currently live
-export function watchClassGoLive() {
+export function watchClassGoLive(shouldStop) {
 	return (dispatch) => {
-		fb.ref('/classes').on('value', (snap) => {
-			dispatch(watchClassGoLiveAction(snap.val()));
-		})
+		if (shouldStop === 'stop') {
+			fb.ref('/classes').off('value', (snap) => {
+				// dispatch(watchClassGoLiveAction(snap.toJSON()))
+				console.log('WATCH OFF snap.val() ------> ', snap.val())
+			})
+		} else {
+			fb.ref('/classes').on('value', (snap) => {
+				dispatch(watchClassGoLiveAction(snap.toJSON()))
+			})
+		}
 	}
 }
-function watchClassGoLiveAction(classId) {
+function watchClassGoLiveAction(classes) {
+	console.log('classes ------> ', classes)
 	return {
 		type: actionTypes.WATCH_CLASS_GO_LIVE_ACTION,
-		classId
+		classes
 	}
 }
 
@@ -363,10 +371,10 @@ function addAStudentToClassAction (students) {
 
 export function getClassesBelongToAStudent(studentIdObj) {
 	return (dispatch) => {
-		axios.post('/getStudentsClasses', studentIdObj)
+		return axios.post('/getStudentsClasses', studentIdObj)
 		.then((res) => {
 			//console.log('students classes', res.data)
-			dispatch(getClassesBelongToAStudentAction(res.data))
+			return dispatch(getClassesBelongToAStudentAction(res.data))
 		})
 	}
 }
@@ -394,7 +402,10 @@ export function toggleStudentLiveClassStatus (classId, studentId) {
 	console.log('Toggle Student Class Status' , classId, studentId)
 	const currentStudentStatus = fb.ref('/classes/' + classId + '/students/' + studentId + '/isHere')
 	return (dispatch) => {
-		currentStudentStatus.set(true)
+		currentStudentStatus.once('value')
+		.then(snap => {
+			currentStudentStatus.set(!snap.val())
+		})
 		.then(()=> {
 			dispatch(toggleStudentLiveClassStatusAction())
 			return currentStudentStatus.once('value')
@@ -402,6 +413,7 @@ export function toggleStudentLiveClassStatus (classId, studentId) {
 		.then((snap) => {
 			const status = snap.val();
 			// if (status) {
+				console.log(' ------> Fetch Class Data Student')
 				dispatch(fetchClassData(classId, 'student'))
 			// } else {
 			// 	dispatch(stopFetchingClassData(classId))
@@ -418,14 +430,16 @@ function toggleStudentLiveClassStatusAction () {
  
 // get all class data for a live class
 export function fetchClassData (classId, type) {
+	console.log('classId, type ------> ', classId, type)
 	const currentClass = fb.ref('/classes/' + classId )
 	return (dispatch) => {
 		currentClass.on('value', function(snap) {
 			if(type === 'teacher') {
-				dispatch(updateClassDataTeacher(snap.val()))
+				dispatch(updateClassDataTeacher(snap.toJSON()))
 			} 
 			if (type === 'student') {
-				dispatch(updateClassDataStudent(snap.val()))
+				console.log('snap.val(stud) ------> ', snap.val())
+				dispatch(updateClassDataStudent(snap.toJSON()))
 			}
 		})
 	}

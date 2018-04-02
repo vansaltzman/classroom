@@ -23,6 +23,23 @@ class StudentLiveClassView extends React.Component {
 		this.handleRaiseHand = this.handleRaiseHand.bind(this);
 		this.handleToastClose = this.handleToastClose.bind(this);
 	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.activeView.isLive) {
+			fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, true)
+		}
+	}
+
+	componentWillUnmount() {
+		fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, false)
+	}
+
+	componentWillMount() {
+		if (this.props.studentState.targetClass.isLive) {
+			this.props.fetchClassData(this.props.activeView.id, 'student')
+		}
+	}
+
 	handleRaiseHand(e) {
 		let studentId = this.props.auth.user.id;
 		let classId = this.props.activeView.id;
@@ -39,7 +56,10 @@ class StudentLiveClassView extends React.Component {
   render() {
 		
 		var liveView;
-			if (!this.props.studentState.targetClass.isLive) {
+			if (!this.props.studentState.targetClass) {
+				return <div>loading</div>
+			}
+			else if (!this.props.studentState.targetClass.isLive) {
 				liveView = <Default live={false} />
 			}
 			else if(this.props.studentState.targetClass && this.props.studentState.targetClass.activeView){
@@ -49,7 +69,7 @@ class StudentLiveClassView extends React.Component {
 			} else {
 					liveView = <div></div>
 			}
-			if (this.props.studentState.targetClass && this.props.studentState.targetClass.students[studentId].handRaised) {
+			if (this.props.studentState.targetClass.handRaisedQueue && this.props.studentState.targetClass.students[this.props.auth.user.id].handRaised) {
 				let handRaisedQueue = this.props.activeView.handRaisedQueue;
 				let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
 				if (studentId === lowestQueueTimeId) {
@@ -66,35 +86,29 @@ class StudentLiveClassView extends React.Component {
 				var critical = false;
 				var toast = <div></div>
 			}
-			console.log('this props in studnet live calss view ', this.props)
-			return (
-				<div>
-						{liveView}
-						{ 
-							this.props.studentState.targetClass
-							&& this.props.activeView.communication 
-							&& this.props.activeView.communication[studentId]
-							&&  this.props.activeView.communication[studentId].method === 'acknowledge' ?
-							<Toast status='ok' size='medium' onClose={this.handleToastClose}> 
-								Someone is on the way to help!
-							</Toast> : <div></div>
-							}
 
-						<Button 
-							icon={queueIcon} 
-							style={{position: "fixed", bottom:100, right:100}}
-							label={handRaiseLabel}
-							type={'submit'}
-							primary={false}
-							secondary={false}
-							accent={false}
-							critical={critical}
-							plain={false} 
-							onClick={(e) => this.handleRaiseHand(e)} 
-						/>
-						
-					</div>
-			)
+				return (
+					<div>
+							{liveView}
+							{toast}
+
+							{this.props.studentState.targetClass.isLive &&
+							<Button 
+								icon={queueIcon} 
+								style={{position: "fixed", bottom:100, right:100}}
+								label={handRaiseLabel}
+								type={'submit'}
+								primary={false}
+								secondary={false}
+								accent={false}
+								critical={critical}
+								plain={false} 
+								onClick={(e) => this.handleRaiseHand(e)} 
+							/>}
+
+						</div>
+				)
+			
 		}
 }
 
