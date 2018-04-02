@@ -306,10 +306,13 @@ app.post('/fetchQuestions', (req,res) => {
 
 app.post('/getQuizDataForStudentInClass', (req,res) => {
   main.getQuizDataForStudentInClass(req.body.studentId, req.body.classId)
+<<<<<<< HEAD
   .then((studentQuizzesData) => {
     // console.log('student quizzes data ', studentQuizzesData);
     res.send(studentQuizzesData)
   })
+=======
+>>>>>>> saved changes for rebase
   
 })
 

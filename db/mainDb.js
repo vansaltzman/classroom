@@ -378,13 +378,19 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
 
 const getQuizDataForStudentInClass = function(studentId, classId) {
   return db.query(`SELECT * FROM submitted_quizzes WHERE class_id='${classId}'`)
+<<<<<<< HEAD
   //getting all submitted quizzes for a given class
   .then((quizzes) => {
 
+=======
+  .then((quizzes) => {
+    console.log('quizzes', quizzes.rows)
+>>>>>>> saved changes for rebase
     const constructedQuizzes = quizzes.rows.map((quiz) => {
       return {
         name: quiz.name,
         id: quiz.id,
+<<<<<<< HEAD
         previousId: quiz.previous_id, 
         weight: quiz.weight,
         time: quiz.time,
@@ -475,6 +481,16 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
     .then((allQuizzes)=> {
       return allQuizzes;
     })
+=======
+        previousId: quiz.previous_id, //this id referring to id in draft_quizze table?
+        weight: quiz.weight,
+        time: quiz.time,
+        duration: quiz.duration
+      }
+    })
+    console.log('constructed quizzes ', constructedQuizzes)
+    return constructedQuizzes;
+>>>>>>> saved changes for rebase
   })
 }
 
