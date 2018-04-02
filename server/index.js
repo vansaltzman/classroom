@@ -304,6 +304,12 @@ app.post('/fetchQuestions', (req,res) => {
     res.send(data)
   })
 })
+
+app.post('/getQuizDataForStudentInClass', (req,res) => {
+  main.getQuizDataForStudentInClass(req.body.studentId, req.body.classId)
+  
+})
+
 const port = 3000
 app.listen(port, function() {
 console.log('Listening on ' + port)
