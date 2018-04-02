@@ -16,11 +16,25 @@ firebase.initializeApp(config.fbConfig);
 const fb = firebase.database();
 
 fb.ref('/').once('value')
-.then(snap=> console.log('Initialized App with target class: ', Object.values(snap.toJSON().classes)[0].name))
+.then(snap=> {
+	if (snap.toJSON().classes) console.log('Classes live on app launch: ', Object.values(snap.toJSON().classes).map(each => each.name))
+})
 
 const selectClass = function(classId) {
   return migrate.migrateClassToFB(classId)
   .then(classObj => classObj)
+}
+
+const toggleStudentLiveClassStatus = function(classId, studentId, newStatus) {
+	const currentStudentStatus = fb.ref('/classes/' + classId + '/students/' + studentId + '/isHere')
+	currentStudentStatus.once('value')
+	.then(snap => {
+		if (newStatus !== undefined) {
+			currentStudentStatus.set(newStatus)
+		} else {
+			currentStudentStatus.set(snap.toJSON() === 'true' ? true : false)
+		}
+	})
 }
 
 const fetchClassData = function(classId) {
@@ -56,7 +70,6 @@ const studentJoins = function(studentId, classId) {
 }
 
 const launchQuiz = function (classId, quizObj, quizTime, quizWeight) {
-	console.log('quizObj ------> ', quizObj)
 	const timeValues = quizTime.split(':');
 	let quizDuration = moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('seconds');
 	quizObj.time = moment().unix() + quizDuration;
@@ -68,7 +81,6 @@ const launchQuiz = function (classId, quizObj, quizTime, quizWeight) {
 			const studentQuizObj = studentQuizObjConverter(quizObj);
 			return fb.ref('/classes/' + classId + '/students').once('value', (snap)=> {
 					var students = snap.val()
-					console.log('students ------> ', students)
 					Object.values(students).forEach( student => {
 							let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id + '/quizzes');
 							studentRef.child(quizObj.id).set(studentQuizObj)
@@ -159,6 +171,7 @@ module.exports = {
 	endClass,
 	removeClass,
 	fetchClassData,
+	toggleStudentLiveClassStatus,
   updateActiveView,
   insertStudentAnswers,
 	stopFetchingClassData,

@@ -41,7 +41,6 @@ class QuizContainer extends React.Component {
       
       <div>
         <StudentViewQuiz 
-          class={this.props.class}
           studentId={studentId}
           classId={classId}
           quizId={quizId}
