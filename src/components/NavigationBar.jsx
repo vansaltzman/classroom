@@ -25,7 +25,8 @@ import ClassViewDefault from './students/classViewDefault.jsx';
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 import ImageUploader from './ImageUploader.jsx';
 import ProfilePic from './students/ProfilePic.jsx'
-
+import ThumbPoll from './teachers/thumbPoll.jsx'
+import ThumbVote from './students/thumbVote.jsx'
 
 
 
@@ -94,6 +95,11 @@ class NavigationBar extends React.Component {
                 var dropAnchors = 
                 <div>
 
+                  
+                  <Anchor path='/thumb'>
+                        Thumb Poll
+                    </Anchor>
+
                      <Anchor path='/quizViewContainer'>
                         Quiz View
                     </Anchor>
@@ -122,6 +128,10 @@ class NavigationBar extends React.Component {
 
                     <Anchor path='/profileSettings'>
                             Profile Settings
+                    </Anchor>
+
+                        <Anchor path='/thumbvote'>
+                        Thumb Vote
                     </Anchor>
 
                 </div>
@@ -184,6 +194,8 @@ class NavigationBar extends React.Component {
                             <Route path="/default" component={ClassViewDefault}/>
                             <Route path="/studentLiveClass" component={StudentLiveClassView}/>
                             <Route path="/profileSettings" component={ImageUploader}/>
+                            <Route path="/thumb" component={ThumbPoll}/>
+                            <Route path="/thumbvote" component={ThumbVote}/>
                         
                             
 

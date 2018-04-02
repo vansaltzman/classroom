@@ -260,6 +260,7 @@ function getStudentsBelongToAClassAction(students) {
 
 export function classGoLive(classId, classObj) {
 	classObj.handRaisedQueue= {};
+	classObj.thumbTotal = -90
 	for (var studentId in classObj.students) {
 		classObj.students[studentId].handRaised = false;
 	}

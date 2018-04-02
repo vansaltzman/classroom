@@ -92,7 +92,8 @@ export function teacherClassViewReducer(
           name:
             action.students[i].first_name + " " + action.students[i].last_name,
           isHere: false,
-          email: action.students[i].email,
+					email: action.students[i].email,
+					thumb: -90,
           quizzes: {}
         };
       }

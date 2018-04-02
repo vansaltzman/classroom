@@ -37,7 +37,7 @@ build/Release
 
 # Auth key 
 server/config.js
-server.configAWS.js
+server/configAWS.js
 
 # Dependency directories
 node_modules/
