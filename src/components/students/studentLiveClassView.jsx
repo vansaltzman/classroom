@@ -23,6 +23,16 @@ class StudentLiveClassView extends React.Component {
 		this.handleRaiseHand = this.handleRaiseHand.bind(this);
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.activeView.isLive) {
+			fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, true)
+		}
+	}
+
+	componentWillUnmount() {
+		fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, false)
+	}
+
 	componentWillMount() {
 		if (this.props.studentState.targetClass.isLive) {
 			this.props.fetchClassData(this.props.activeView.id, 'student')

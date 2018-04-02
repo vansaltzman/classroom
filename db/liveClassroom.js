@@ -25,6 +25,20 @@ const selectClass = function(classId) {
   .then(classObj => classObj)
 }
 
+const toggleStudentLiveClassStatus = function(classId, studentId, newStatus) {
+	const currentStudentStatus = fb.ref('/classes/' + classId + '/students/' + studentId + '/isHere')
+	currentStudentStatus.once('value')
+	.then(snap => {
+		if (newStatus !== undefined) {
+			console.log('newStatus, typeof newStatus ------> ', newStatus, typeof newStatus)
+			currentStudentStatus.set(newStatus)
+		} else {
+			console.log('snap, snap type ------> ', snap.toJSON() === 'true' ? true : false, typeof snap.toJSON() === 'true' ? true : false)
+			currentStudentStatus.set(snap.toJSON() === 'true' ? true : false)
+		}
+	})
+}
+
 const fetchClassData = function(classId) {
 	return fb.ref('/classes/' + classId).once('value')
 		.then(snap => {
@@ -138,6 +152,7 @@ module.exports = {
 	endClass,
 	removeClass,
 	fetchClassData,
+	toggleStudentLiveClassStatus,
   updateActiveView,
   insertStudentAnswers,
 	stopFetchingClassData,

@@ -54,7 +54,6 @@ class StudentMainView extends React.Component {
 
   enterClass(classObj) {
     this.props.updateStudentTargetClass(classObj)
-
   }
   
   render() {
