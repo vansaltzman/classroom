@@ -87,18 +87,17 @@ export function teacherClassViewReducer(
       return { ...state, targetClass: targetClass };
     case actionTypes.GET_STUDENTS_BELONGS_TO_A_CLASS_ACTION:
       //console.log('action.students in a class at reducers', action.students)
-      const studentsObj = {};
-      for (var i = 0; i < action.students.length; i++) {
-        let student_id = action.students[i].id;
-        studentsObj[student_id] = {
-          id: student_id,
-          name:
-            action.students[i].first_name + " " + action.students[i].last_name,
+			const studentsObj = {};
+			Object.values(action.students).forEach(student => {
+				studentsObj[student.id] = {
+					id: student.id,
+          name: student.first_name + " " + student.last_name,
           isHere: false,
-          email: action.students[i].email,
+					email: student.email,
+					thumbnail: student.thumbnail_url,
           quizzes: {}
-        };
-			}
+				}
+			})
 			return {
 				...state, 
 				targetClass: {

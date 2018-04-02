@@ -27,6 +27,7 @@ class StudentViewQuiz extends React.Component {
     this.forwardClick = this.forwardClick.bind(this)
     this.backwardClick = this.backwardClick.bind(this);
     this.getDuration = this.getDuration.bind(this);
+    this.submitQuiz = this.submitQuiz.bind(this);
     
     console.log('PROPS IN StudentViwQuiz.jsx', this.props);
   }
@@ -64,6 +65,16 @@ forwardClick(e) {
     copy.currentQuestion++
   
     this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
+}
+
+submitQuiz(e) {
+  console.log('this.state.count ------> ', this.state.count)
+  let quizResponseObj = this.props.quizResponseObj
+  let copy = Object.assign({}, quizResponseObj)
+
+  copy.isFinished = true
+
+  this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
 }
 
 backwardClick(e) {
@@ -171,7 +182,7 @@ if (currentQuestion >= 0 && currentQuestion < this.state.arrayOfQuestionIds.leng
                               accent={false}
                               critical={false}
                               plain={false}
-                              onClick={(e)=> this.forwardClick(e)}
+                              onClick={(e)=> this.submitQuiz(e)}
                           />
                         </div>
                           : <span></span>}

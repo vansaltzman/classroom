@@ -65,12 +65,13 @@ class UserImage extends React.Component {
     const url = this.props.url;
     const handRaised = this.props.handRaised;
     const nextInLine = this.props.nextInLine;
+    const isHere = this.props.isHere;
     const clickHandler = this.props.clickHandler;
     let studentImage = 
         <div style={{position: 'relative'}} onClick={this.toggleShowMenu} >  
           <img 
             src={url || "https://ca.slack-edge.com/T2SUXDE72-U8SAGQ1E0-8fa5cea28518-72"} 
-            style={{height: '50px', width: '50px', borderRadius: '50%', cursor:'pointer'}}
+            style={{height: '50px', width: '50px', borderRadius: '50%', cursor:'pointer', opacity: isHere ? 1 : 0.3}}
             
           />
           { handRaised &&

@@ -58,6 +58,8 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 							nextInLine={nextInLine} 
 							student={student}
 							targetClass={targetClass}
+							isHere={student.isHere}
+							url={student.thumbnail}
 						/>
 						<Heading 
 							tag="h3"
