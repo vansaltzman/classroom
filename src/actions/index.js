@@ -700,3 +700,15 @@ function addRecycledQuestionAction(question) {
 		question
 	}
 }
+
+/*********************** Student Quiz Grades view ***************************************/
+
+export function getQuizDataForStudentInClass(reqObj) {
+	return (dispatch) => {
+		axios.post('/getQuizDataForStudentInClass', reqObj)
+		.then((res) => {
+			console.log('data from server for all quizzes', res.data)
+			// dispatch(fetchQuizzesAction(res.data))
+		})
+	}
+}
