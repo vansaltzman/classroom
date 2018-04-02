@@ -30,10 +30,8 @@ const toggleStudentLiveClassStatus = function(classId, studentId, newStatus) {
 	currentStudentStatus.once('value')
 	.then(snap => {
 		if (newStatus !== undefined) {
-			console.log('newStatus, typeof newStatus ------> ', newStatus, typeof newStatus)
 			currentStudentStatus.set(newStatus)
 		} else {
-			console.log('snap, snap type ------> ', snap.toJSON() === 'true' ? true : false, typeof snap.toJSON() === 'true' ? true : false)
 			currentStudentStatus.set(snap.toJSON() === 'true' ? true : false)
 		}
 	})
@@ -72,7 +70,6 @@ const studentJoins = function(studentId, classId) {
 }
 
 const launchQuiz = function (classId, quizObj, quizTime, quizWeight) {
-	console.log('quizObj ------> ', quizObj)
 	const timeValues = quizTime.split(':');
 	let quizDuration = moment.duration({minutes: parseInt(timeValues[0]), seconds: parseInt(timeValues[1])}).as('seconds');
 	quizObj.time = moment().unix() + quizDuration;
@@ -84,7 +81,6 @@ const launchQuiz = function (classId, quizObj, quizTime, quizWeight) {
 			const studentQuizObj = studentQuizObjConverter(quizObj);
 			return fb.ref('/classes/' + classId + '/students').once('value', (snap)=> {
 					var students = snap.val()
-					console.log('students ------> ', students)
 					Object.values(students).forEach( student => {
 							let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id + '/quizzes');
 							studentRef.child(quizObj.id).set(studentQuizObj)

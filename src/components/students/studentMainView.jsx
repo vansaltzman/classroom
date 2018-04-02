@@ -42,14 +42,15 @@ class StudentMainView extends React.Component {
   componentWillMount() {
     this.props.getClassesBelongToAStudent({
       email: this.props.auth.user.email
-    });
-    this.props.watchClassGoLive()
+    }).then(()=> {
+      this.props.watchClassGoLive()
+    })
   }
 
   componentWillUnmount () {
     // will need to create a function that is called here to stop the listener from update values based on 
     // changes to the live status of their class
-    
+    this.props.watchClassGoLive('stop')
   }
 
   enterClass(classObj) {
@@ -61,6 +62,7 @@ class StudentMainView extends React.Component {
       <div>
         <Tiles flush={false} selectable={true}>
           {this.props.classes.map((item, index) => {
+            console.log('ITEM', item)
             return (
               <Tile key={index}>
                 <Card

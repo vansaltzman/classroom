@@ -285,14 +285,22 @@ function classGoLiveAction(classes) {
 }
 
 //student's main view to see which class is currently live
-export function watchClassGoLive(inClass) {
+export function watchClassGoLive(shouldStop) {
 	return (dispatch) => {
-		fb.ref('/classes').on('value', (snap) => {
-			dispatch(watchClassGoLiveAction(snap.toJSON()))
-		})
+		if (shouldStop === 'stop') {
+			fb.ref('/classes').off('value', (snap) => {
+				// dispatch(watchClassGoLiveAction(snap.toJSON()))
+				console.log('WATCH OFF snap.val() ------> ', snap.val())
+			})
+		} else {
+			fb.ref('/classes').on('value', (snap) => {
+				dispatch(watchClassGoLiveAction(snap.toJSON()))
+			})
+		}
 	}
 }
 function watchClassGoLiveAction(classes) {
+	console.log('classes ------> ', classes)
 	return {
 		type: actionTypes.WATCH_CLASS_GO_LIVE_ACTION,
 		classes
@@ -362,10 +370,10 @@ function addAStudentToClassAction (students) {
 
 export function getClassesBelongToAStudent(studentIdObj) {
 	return (dispatch) => {
-		axios.post('/getStudentsClasses', studentIdObj)
+		return axios.post('/getStudentsClasses', studentIdObj)
 		.then((res) => {
 			//console.log('students classes', res.data)
-			dispatch(getClassesBelongToAStudentAction(res.data))
+			return dispatch(getClassesBelongToAStudentAction(res.data))
 		})
 	}
 }
