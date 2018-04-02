@@ -23,7 +23,8 @@ export function teacherClassViewReducer(
 		selectedQuestion: {},
 		showAddQuestionButton: false,
 		students: [],
-		newQuiz: {questions: [], subject: {}}
+		newQuiz: {questions: [], subject: {}},
+		takenQuizzes: []
   },
   action
 ) {
@@ -349,20 +350,20 @@ export function teacherClassViewReducer(
 				...state, quizzes: quizzes
 			}
 			case actionTypes.FETCH_QUESTIONS:
-				console.log('questions FETCH_QUESTIONS', action.questions)
+				//console.log('questions FETCH_QUESTIONS', action.questions)
 				return {
 					...state,
 					questions: action.questions
 				}
 			case actionTypes.SELECT_QUESTION:
-				console.log('selection question', action.selectedQuestion)
+				//console.log('selection question', action.selectedQuestion)
 				return {
 					...state, 
 					selectedQuestion: action.selectedQuestion,
 					showAddQuestionButton: true
 				}
 			case actionTypes.ADD_RECYCLED_QUESTION:
-				console.log('at add recycled question', action.question)
+				//console.log('at add recycled question', action.question)
 				const newSetOfQuestions = state.newQuiz.questions;
 				newSetOfQuestions.push(action.question);
 				return {
@@ -372,6 +373,9 @@ export function teacherClassViewReducer(
 						questions: newSetOfQuestions
 					}
 				}
+			case actionTypes.GET_TAKEN_QUIZZES_ACTION:
+				console.log('taken quizzes at reducers', action.quizzes);
+				return {...state, takenQuizzes: action.quizzes}
     default:
       return state;
   }

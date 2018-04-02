@@ -159,7 +159,7 @@ const addStudents = function(student) {
     }
   })
 }
-addStudents(Ara);
+addStudents(Artem);
 
 
 //let JoeJoe = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']

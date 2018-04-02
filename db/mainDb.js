@@ -364,15 +364,93 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
         eachQuestion.answers = eachAnswer.rows
         return eachQuestion
       })
+      .then((eachQuestionWithAnswers) => {
+        return db.query(`SELECT time_spent FROM students_responses WHERE draft_question_id='${eachQuestionWithAnswers.id}'`)
+      })
+      .then((timeSpent) => {
+        eachQuestion.timeSpent = timeSpent.rows.map((each) => {
+          return each.time_spent
+        })
+        // const times = eachQuestion.timeSpent.length;
+        // const sum = 0;
+        // for (var i = 0; i < eachQuestion.timeSpent.length; i++) {
+        //   sum += eachQuestion.timeSpent[i]
+        // }
+        // eachQuestion.timeSpent = sum / times;
+        return eachQuestion
+      })
     }))
   })
 }
 
-const calculateAverageTimeForQuestions = function(classObj) {
-  //get the quiz id and question id from class obj
-  const takenQuizId = Object.values(classFromFB.classes[1].quizzes)[0].id;
-  return db.query(`SELECT draft_question_id WHERE draft_quiz_id='${takenQuizId}'`);
-  
+const getTakenQuizzes = function(targetClassId) {
+  console.log('targetClassId', targetClassId)
+  return db.query(`SELECT * FROM submitted_quizzes WHERE class_id='${targetClassId}'`)
+  .then((quizzes) => {
+    console.log('quizzes', quizzes.rows)
+    const constructedQuizzes = quizzes.rows.map((quiz) => {
+      return {
+        name: quiz.name,
+        id: quiz.id,
+        previousId: quiz.previous_id, //this id referring to id in draft_quizze table?
+        weight: quiz.weight,
+        time: quiz.time,
+        duration: quiz.duration
+      }
+    })
+    return constructedQuizzes;
+  })
+  .then((data) => {
+    console.log('constructed quizOBj', data)
+    return Promise.all(data.map((eachQuiz) => {
+      return db.query(`SELECT * FROM draft_questions INNER JOIN draft_quizzes_draft_questions
+                       ON draft_questions.id = draft_quizzes_draft_questions.draft_question_id 
+                       AND draft_quizzes_draft_questions.draft_quiz_id = '${eachQuiz.previousId}'`)
+      .then((questions) => {
+        eachQuiz.questions = {}
+          questions.rows.forEach(question=> {
+            //console.log("------------- eachQuestion", question)
+            let formattedQuestion = {}
+            formattedQuestion.id = question.draft_question_id
+            formattedQuestion.text = question.question
+            formattedQuestion.position = question.position
+            formattedQuestion.draft_question_id = question.draft_question_id
+           
+            eachQuiz.questions[question.draft_question_id] = formattedQuestion
+          })
+          return eachQuiz
+      })
+    }))
+  })
+  .then((data) => {
+    console.log('dataaaaaaaaaaaaaaaa', data)
+    return Promise.all(data.map((eachQuiz) => {
+      return Promise.all(Object.keys(eachQuiz.questions).map((eachQuestionId) => {
+        let eachQuestion = eachQuiz.questions[eachQuestionId]
+        return db.query(`SELECT * FROM draft_answers WHERE question_id = '${eachQuestion.draft_question_id}'`)
+        .then((answers) => {
+          eachQuestion.answers = {}
+
+          answers.rows.forEach(answer=> {
+            let formattedAnswer = {}
+            formattedAnswer.id = answer.id
+            formattedAnswer.text = answer.answer
+            formattedAnswer.isCorrect = answer.correct
+
+            eachQuestion.answers[answer.id] = formattedAnswer
+          })
+          return eachQuestion
+        })
+      }))
+      .then((questions) => {
+        eachQuiz.questions = questions
+        return eachQuiz
+      })
+    }))
+  })
+  .then((takenQuizzes) => {
+    console.log('takenQuizzes', takenQuizzes)
+  })
 }
 
 
@@ -392,9 +470,8 @@ module.exports = {
   getQuizzes,
   getNewAddedClass,
   GetAllQuestionsBelongToTeacher,
-  // calculateAverageTimeForQuestions
   addProfilePictureForStudent,
-  getProfilePic
-  
+  getProfilePic,
+  getTakenQuizzes
 }
 

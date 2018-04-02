@@ -179,9 +179,8 @@ app.post('/endClass', (req, res)=> {
   const { classObj } = req.body
 
   migrate.fbClassToPgObj(classObj)
-    .then(()=> {
-      console.log('Sucessfully Added to MainDB')
-      res.sendStatus(200)
+    .then(() => {
+      migrate.averagetimeForSubmittedQuestions(classObj)
     })
     .catch(err => {
       console.log('Failed to migrate to MainDB ------> ', err)
@@ -301,8 +300,16 @@ app.post('/fetchQuestions', (req,res) => {
   main.GetAllQuestionsBelongToTeacher(req.body.teacherId, req.body.subjectId)
   .then((data) => {
     //console.log('serverside questions data', data)
+    // data.map((eachQuestion) => {
+    //  return eachQuestion.timeSpent.time_spent
+    // })
     res.send(data)
   })
+})
+
+app.post('/getTakenQuizzes', (req, res) => {
+  console.log('class Id server sideeeee', req.body)
+  main.getTakenQuizzes(req.body.id)
 })
 const port = 3000
 app.listen(port, function() {

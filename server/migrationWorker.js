@@ -3,6 +3,7 @@ const { db } = require('../db/mainDb')
 const main = require('../db/mainDb')
 
 const fbClassToPgObj = function(classObj) {
+  console.log('classOBj from fb', classObj)
   const classId = classObj.id
   const { name, quizzes, students, teacher_id, subject_id } = classObj
   return submitParticipation(classId, students)
@@ -156,7 +157,31 @@ const migrateClassToFB = function(classId){
   .catch((err)=> console.log('Issue starting class' + err))
 }
 
+// const averagetimeForSubmittedQuestions = function(classObj) {
+//   const classId = classObj.id;
+//   const takenQuiz = Object.values(classObj.quizzes)[0];
+//   const takenQuizId = takenQuiz.id;
+//   const quizQuetions = {};
+//   const studentsInClass = classObj.students
+//   for (var questionId in takenQuiz.questions) {
+//     quizQuestions[questionId] = {
+//       sum: 0,
+//       counter: 0
+//     }
+//     for (var studentId in studentsInClass) {
+//       //each student respnse time for each question
+//       const responseTime = studentsInClass[studentId].quizzes.takenQuizId.responses.questionId.time;
+//       quizQuestions[questionId].sum += responseTime;
+//       quizQuestions[questionId].counter += 1;
+//     }
+//   }
+//   return Promise.all(quizQuestions.map((eachQuestion, key) => {
+//     const avg_time = eachQuestion.sum / eachQuestion.counter
+//     return db.query(`INSERT INTO draft_questions avg_time VALUES '${avg_time}' WHERE id='${key}'`)
+//   }))
+// }
+
 module.exports = {
   migrateClassToFB, 
-  fbClassToPgObj,
+  fbClassToPgObj
 }

@@ -26,6 +26,7 @@ import ClassViewContainer from './teachers/classViewContainer.jsx';
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 import ImageUploader from './ImageUploader.jsx';
 import ProfilePic from './students/ProfilePic.jsx'
+import Statistics from './teachers/statistics.jsx'
 
 
 
@@ -181,7 +182,7 @@ class NavigationBar extends React.Component {
                             <Route path="/signUp" component={SignUp}/>
                             <Route path="/default" component={ClassViewDefault}/>
                             <Route path="/profileSettings" component={ImageUploader}/>
-                        
+                            <Route path="/statistics" component={Statistics}/>
                             
 
                         </Switch>

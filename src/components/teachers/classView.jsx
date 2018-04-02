@@ -184,6 +184,16 @@ class ClassView extends React.Component {
 						plain={false} 
 						onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
 					/>}
+					<Button icon={<DeployIcon />}
+						label= {'Statistics'}
+						primary={false}
+						secondary={false}
+						accent={true}
+						critical={false}
+						path="/statistics"
+						plain={false} 
+						onClick={() => this.props.getTakenQuizzes({id: this.props.classId}) }
+					/>}
 	
 					{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
 					<Button icon={<ShareIcon />}

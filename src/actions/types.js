@@ -59,7 +59,8 @@ const actionTypes = {
 	DELETE_ANSWER_ACTION: 'delete_answer_action',
 	FETCH_QUESTIONS: 'fetch_questions',
 	SELECT_QUESTION: 'select_question',
-	ADD_RECYCLED_QUESTION: 'add_recycled_question'
+	ADD_RECYCLED_QUESTION: 'add_recycled_question',
+	GET_TAKEN_QUIZZES_ACTION: 'get_taken_quizzes_action'
 }
 
 export default actionTypes
