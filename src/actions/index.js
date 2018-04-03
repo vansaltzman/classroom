@@ -713,6 +713,7 @@ export function getQuizDataForStudentInClass(reqObj) {
 	return (dispatch) => {
 		axios.post('/getQuizDataForStudentInClass', reqObj)
 <<<<<<< HEAD
+<<<<<<< HEAD
 		.then((studentQuizData) => {
 			console.log('data from server for all quizzes in student quiz data', studentQuizData.data)
 			dispatch(getQuizDataForStudentAction(studentQuizData.data))
@@ -731,4 +732,17 @@ function getQuizDataForStudentAction(studentQuizData) {
 		})
 	}
 >>>>>>> saved changes for rebase
+=======
+		.then((studentQuizData) => {
+			console.log('data from server for all quizzes', studentQuizData.data)
+			dispatch(getQuizDataForStudentAction(studentQuizData.data))
+		})
+	}
+}
+function getQuizDataForStudentAction(studentQuizData) {
+	return {
+		type: actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW,
+		quizData: studentQuizData
+	}
+>>>>>>> add quiz data for a student to props
 }

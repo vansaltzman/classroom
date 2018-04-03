@@ -379,6 +379,7 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
 const getQuizDataForStudentInClass = function(studentId, classId) {
   return db.query(`SELECT * FROM submitted_quizzes WHERE class_id='${classId}'`)
 <<<<<<< HEAD
+<<<<<<< HEAD
   //getting all submitted quizzes for a given class
   .then((quizzes) => {
 
@@ -386,10 +387,16 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
   .then((quizzes) => {
     console.log('quizzes', quizzes.rows)
 >>>>>>> saved changes for rebase
+=======
+  //getting all submitted quizzes for a given class
+  .then((quizzes) => {
+
+>>>>>>> add quiz data for a student to props
     const constructedQuizzes = quizzes.rows.map((quiz) => {
       return {
         name: quiz.name,
         id: quiz.id,
+<<<<<<< HEAD
 <<<<<<< HEAD
         previousId: quiz.previous_id, 
         weight: quiz.weight,
@@ -483,14 +490,102 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
     })
 =======
         previousId: quiz.previous_id, //this id referring to id in draft_quizze table?
+=======
+        previousId: quiz.previous_id, 
+>>>>>>> add quiz data for a student to props
         weight: quiz.weight,
         time: quiz.time,
-        duration: quiz.duration
+        duration: quiz.duration,
+        subjectId: quiz.subject_id,
+        classId: quiz.class_id
       }
     })
-    console.log('constructed quizzes ', constructedQuizzes)
     return constructedQuizzes;
+<<<<<<< HEAD
 >>>>>>> saved changes for rebase
+=======
+    //returning formatted array of quizzes (ie, no longer has 'anonymous' in data)
+  })
+  .then((constructedQuizzes) => {
+    return Promise.all(constructedQuizzes.map((eachQuiz) => {
+      return db.query(`SELECT * FROM submitted_questions WHERE quiz_id = '${eachQuiz.id}'`)
+      // for each submitted quiz, get all of its questions
+      .then((questions) => {
+        eachQuiz.questions = {}
+          questions.rows.forEach(question=> {
+            let formattedQuestion = {}
+            formattedQuestion.id = question.id
+            formattedQuestion.text = question.question
+            formattedQuestion.position = question.position
+            formattedQuestion.previousId = question.previous_id
+            formattedQuestion.subjectedId = question.subject_id
+            formattedQuestion.quizId = question.quiz_id
+            eachQuiz.questions[question.id] = formattedQuestion
+          })
+          return eachQuiz
+      })
+    }))
+  })
+  .then((quizzesWithQuestions) => {
+    return Promise.all(quizzesWithQuestions.map((eachQuiz) => {
+      return Promise.all(Object.keys(eachQuiz.questions).map((eachQuestionId) => {
+        // for each question of the quiz, get all of its associated answers (without student responses yet)
+        let eachQuestion = eachQuiz.questions[eachQuestionId]
+        return db.query(`SELECT * FROM submitted_answers WHERE question_id = '${eachQuestion.id}'`)
+        .then((answers) => {
+          // console.log('question id ',eachQuestion.id  ,'answers  ', answers.rows);
+          eachQuestion.answers = {}
+          answers.rows.forEach(answer=> {
+            let formattedAnswer = {}
+            formattedAnswer.id = answer.id
+            formattedAnswer.text = answer.answer
+            formattedAnswer.isCorrect = answer.correct
+            eachQuestion.answers[answer.id] = formattedAnswer
+          })
+          //return array of questions with their associated answers as a key
+          return eachQuestion
+        })
+      }))
+      .then((questions) => {
+        eachQuiz.questions = questions
+        // put the questions object into each quiz's object
+        return eachQuiz
+      })
+      .then((eachQuiz)=> {
+        return db.query(`SELECT * FROM students_responses WHERE student_id='${studentId}'`)
+        // get all responses for a given student
+        .then((submittedQuestions) => {
+          eachQuiz.responses = {};
+          submittedQuestions.rows.forEach((eachSubmittedQuestion) => {
+            // console.log('each submitted question ', eachSubmittedQuestion);
+            // iterate through all students submitted answers
+            eachQuiz.questions.forEach((quizQuestion) => {
+              //then iterate through all of our questions
+              if (quizQuestion.id === eachSubmittedQuestion.question_id) {
+                // if a student's answer's question ID matches one of ones in our quizzes
+                  // created a formatted responses object
+                let submittedResponse = {}
+                submittedResponse.studentQuestionSubmissionId = eachSubmittedQuestion.id;
+                submittedResponse.studentId = studentId;
+                submittedResponse.responseId = eachSubmittedQuestion.response_id;
+                submittedResponse.questionId = eachSubmittedQuestion.question_id;
+                submittedResponse.draftQuestionId = eachSubmittedQuestion.draft_question_id;
+                submittedResponse.timeSpent = eachSubmittedQuestion.time_spent;
+                submittedResponse.correct = eachSubmittedQuestion.correct;
+                // add the formatted response object to each quiz, in the responses propery
+                // with the question's id as its key
+                eachQuiz.responses[eachSubmittedQuestion.question_id] = submittedResponse
+              }
+            })
+          })
+          return eachQuiz
+        })
+      })
+    }))
+    .then((allQuizzes)=> {
+      return allQuizzes;
+    })
+>>>>>>> add quiz data for a student to props
   })
 }
 

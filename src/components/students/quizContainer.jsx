@@ -41,10 +41,6 @@ class QuizContainer extends React.Component {
       
       <div>
         <StudentViewQuiz 
-<<<<<<< HEAD
-=======
-          // class={this.props.class}
->>>>>>> saved changes for rebase
           studentId={studentId}
           classId={classId}
           quizId={quizId}

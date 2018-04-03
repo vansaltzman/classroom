@@ -307,12 +307,18 @@ app.post('/fetchQuestions', (req,res) => {
 app.post('/getQuizDataForStudentInClass', (req,res) => {
   main.getQuizDataForStudentInClass(req.body.studentId, req.body.classId)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> add quiz data for a student to props
   .then((studentQuizzesData) => {
     // console.log('student quizzes data ', studentQuizzesData);
     res.send(studentQuizzesData)
   })
+<<<<<<< HEAD
 =======
 >>>>>>> saved changes for rebase
+=======
+>>>>>>> add quiz data for a student to props
   
 })
 
