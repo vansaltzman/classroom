@@ -93,13 +93,11 @@ class NavigationBar extends React.Component {
                 var menuLabel = this.props.auth.user.email;
                 var navBarBackground = 'lightCoral'
                 var dropAnchors = 
-                <div>
+                <div >
 
-                     <Anchor path='/classViewContainer'>
+                    <Anchor path='/classViewContainer'>
                         Quiz View
                     </Anchor>
-
-
 
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
@@ -111,7 +109,7 @@ class NavigationBar extends React.Component {
                 var navBarBackground = 'lightBlue'
             var pic = <ProfilePic userId={this.props.auth.user.id}/>
                 var dropAnchors = 
-                <div>
+                <div style={{marginTop: '38px'}}>
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
                     </Anchor>
@@ -134,25 +132,29 @@ class NavigationBar extends React.Component {
                 <nav className="navbar navbar-default"> 
 
             <Header
+                fixed={true}
                 style={{background: navBarBackground}}
                 size='medium'>
-                <Headline margin='large' style={titleStyle} primary={true} >
-                    Jaqen
+                <Headline 
+                  margin='medium'
+                  style={titleStyle} 
+                  primary={true} 
+                >
+                  Jaqen
                 </Headline>
                 <Box flex={true}
-                    margin='large'
+                    margin='medium'
                     justify='end'
                     direction='row'
-                    responsive={false}>
+                    >
                    {pic}
-                    <Menu 
-                        primary={false}
-                        direction='row'
-                        label={menuLabel}
-                        icon={<Actions/>}>
-                        {dropAnchors}
-
-                    </Menu>
+                <Menu 
+                  primary={false}
+                  label={menuLabel}
+                  // icon={<Actions/>}
+                  >
+                  {dropAnchors}
+                </Menu>
                 </Box>
             </Header>
                            

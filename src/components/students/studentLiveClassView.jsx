@@ -13,6 +13,7 @@ import DeployIcon from 'grommet/components/icons/base/Deploy';
 import fb from '../../../db/liveClassroom.js';
 import UserNew from "grommet/components/icons/base/UserNew.js";
 import UserExpert from "grommet/components/icons/base/UserExpert.js";
+import WorkshopIcon from 'grommet/components/icons/base/Workshop';
 import Toast from 'grommet/components/Toast';
 
 
@@ -31,7 +32,9 @@ class StudentLiveClassView extends React.Component {
 	}
 
 	componentWillUnmount() {
-		fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, false)
+		if (this.props.studentState.targetClass.isLive) { // Handles when student leaves class after class has ended
+			fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, false)
+		}
 	}
 
 	componentWillMount() {
@@ -54,7 +57,7 @@ class StudentLiveClassView extends React.Component {
 	}
 	
   render() {
-		
+		var studentId = this.props.auth.user.id
 		var liveView;
 			if (!this.props.studentState.targetClass) {
 				return <div>loading</div>
@@ -82,7 +85,7 @@ class StudentLiveClassView extends React.Component {
 
 			} else {
 				var handRaiseLabel = 'Raise your hand';
-				var queueIcon =  <UserNew />
+				var queueIcon =  <WorkshopIcon />
 				var critical = false;
 				var toast = <div></div>
 			}

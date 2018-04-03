@@ -251,7 +251,7 @@ const QuizView = ({ props }) => {
 					quizEndTime={quiz.time}
 					quizDuration={quiz.quizDuration}
 				/>
-				</Box>
+			</Box>
 			{/* Add Quiz Header Here */}
 
 			<Table>
@@ -276,7 +276,7 @@ const QuizView = ({ props }) => {
 					var nextInLine = false;
 					if (props.currentClass && props.currentClass.handRaisedQueue) {
 						let handRaisedQueue = props.currentClass.handRaisedQueue;
-						let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].student.id;
+						let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
 						if ( parseInt(lowestQueueTimeId) === parseInt(student.id)) nextInLine = true
 					}
 

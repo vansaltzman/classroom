@@ -3,14 +3,17 @@ import axios from 'axios';
 import Question from './Question.jsx';
 import data from '../../../data/quizDummyData.js'
 import Header from 'grommet/components/Header';
+import Headline from 'grommet/components/Headline';
 import Heading from 'grommet/components/Heading';
 import Button from 'grommet/components/Button';
+import Anchor from 'grommet/components/Anchor';
+import DocumentUploadIcon from 'grommet/components/icons/base/DocumentUpload';
+import DeployIcon from 'grommet/components/icons/base/Deploy';
 import Section from 'grommet/components/Section';
 import Box from 'grommet/components/Box';
 import Columns from 'grommet/components/Columns';
 import Label from 'grommet/components/Label';
 import Title from 'grommet/components/Title';
-import DeployIcon from 'grommet/components/icons/base/Deploy';
 import * as Actions from '../../actions/index.js';
 import Value from 'grommet/components/Value';
 import Timer from './Timer.jsx';
@@ -62,7 +65,10 @@ forwardClick(e) {
   if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion]]) {
     copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time = duration;
   }
-    copy.currentQuestion++
+  copy.currentQuestion++
+  if(copy.currentQuestion === this.state.arrayOfQuestionIds.length - 1) {
+    copy.canSubmit = true
+  }
   
     this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
 }
@@ -93,22 +99,22 @@ backwardClick(e) {
 render() {
    
     var currentQuestion = this.props.currentQuestion;
-    if (currentQuestion < 0) {
-      var quizView = <div>
-                    <Button icon={<DeployIcon />}
-                    label='Start Quiz'
-                    primary={false}
-                    secondary={false}
-                    accent={true}
-                    critical={false}
-                    plain={false} 
-                    onClick={(e) => this.forwardClick(e)} 
+    // if (currentQuestion < 0) {
+    //   var quizView = <div>
+    //                 <Button icon={<DeployIcon />}
+    //                 label='Start Quiz'
+    //                 primary={false}
+    //                 secondary={false}
+    //                 accent={true}
+    //                 critical={false}
+    //                 plain={false} 
+    //                 onClick={(e) => this.forwardClick(e)} 
                     
-                  />
-              </div>
-    }
+    //               />
+    //           </div>
+    // }
     // get rid of condition that currentQuestion >=0
-    else if(currentQuestion >= 0 && currentQuestion >= this.state.arrayOfQuestionIds.length) {
+     if(currentQuestion >= 0 && currentQuestion >= this.state.arrayOfQuestionIds.length) {
       var quizView = <div>
                       <Button icon={<DeployIcon />}
                         label={`Congrats, you're done! Click here to go back`}
@@ -127,12 +133,6 @@ if (currentQuestion >= 0 && currentQuestion < this.state.arrayOfQuestionIds.leng
       var quizView = 
           <div>
             <Section pad='large'>    
-                  <Header>
-                    <Heading>
-                      Quiz
-                    </Heading>
-                  </Header>
-                
                   <Title>Question {currentQuestion + 1} </Title>
 
                     <Question question={this.props.question}
@@ -146,7 +146,11 @@ if (currentQuestion >= 0 && currentQuestion < this.state.arrayOfQuestionIds.leng
                       quizId={this.props.quizId} 
                       />
                     
-                      <Box>
+                      <Box
+                        direction="row"
+                        full="true"
+                        justify="between"
+                      >
                         {currentQuestion > 0 ? 
                         
                         <Button label='Previous Question'
@@ -171,21 +175,6 @@ if (currentQuestion >= 0 && currentQuestion < this.state.arrayOfQuestionIds.leng
                             plain={false}
                             onClick={(e)=> this.forwardClick(e)}/>
                           : <span></span>}
-                        
-                          {this.state.count.length === this.props.keys.length ? 
-                        <div>
-                            <Button 
-                              label='Submit Quiz'
-                              href='#'
-                              primary={true}
-                              secondary={false}
-                              accent={false}
-                              critical={false}
-                              plain={false}
-                              onClick={(e)=> this.submitQuiz(e)}
-                          />
-                        </div>
-                          : <span></span>}
                       </Box>
             </Section>
 
@@ -195,11 +184,67 @@ if (currentQuestion >= 0 && currentQuestion < this.state.arrayOfQuestionIds.leng
 
     return (
         <div>
-          {quizView}
-          <Timer
-            quizEndTime={this.props.quizEndTime}
-            quizDuration={this.props.quizDuration}
-          />
+          <Box
+              direction="row"
+              full="true"
+              justify="between"
+              alignContent="center"
+              margin="small"
+              colorIndex="light-2"
+              style={{margin: '25px 50px 0 50px', padding: '5px'}}
+            >
+              {this.props.currentQuestion < 0 ? 
+              <Anchor 
+                icon={<DeployIcon size="large" />}
+                label='Start'
+                primary={false}
+                style={{lineHeight: '100px', marginLeft: "10px", width: '124.39px'}}
+                onClick={(e) => this.forwardClick(e)}
+              /> :
+              this.props.quizResponseObj.canSubmit ?
+              <Anchor 
+                icon={<DocumentUploadIcon size="large" />}
+                label='Submit'
+                primary={false}
+                style={{lineHeight: '100px', marginLeft: "10px"}}
+                onClick={(e)=> this.submitQuiz(e)}
+              /> :
+              <div style={{width: '124.39px', marginLeft: '10px'}}
+              >
+              </div>
+              }
+              <Headline
+                style={{marginBottom: 0, lineHeight: '100px'}}
+              >
+                {this.props.quizName}
+              </Headline>
+              <Timer
+                quizEndTime={this.props.quizEndTime}
+                quizDuration={this.props.quizDuration}
+              />
+            </Box>
+          {this.props.quizResponseObj.isFinished ? 
+          <div style={{
+            left: 0,
+            lineHeight: '200px',
+            marginTop: '100px',
+            position: 'relative',
+            textAlign: 'center',
+            top: '50%',
+            width: '100%'
+          }}>
+            <Heading align="center">
+        
+             You have already submitted your quiz.
+        
+            </Heading>
+      
+            {/* Button should link to prev student quiz data */}
+            <Button label='View Quizzes'
+              href='#'
+              accent={true} />
+          </div>
+          : quizView}
         </div>
       )
   }
