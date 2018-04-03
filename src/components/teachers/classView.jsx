@@ -42,6 +42,7 @@ import * as Actions from "../../actions/index.js";
 import Label from "grommet/components/Label";
 import CheckBox from "grommet/components/CheckBox"
 import QuizViewContainer from "./quizViewContainer.jsx"
+import UserImage from "../UserImage.jsx"
 
 import classRoom from '../../../data/quizDummyData.js';
 import fb from '../../../db/liveClassroom.js'
@@ -128,6 +129,27 @@ class ClassView extends React.Component {
 		.then(()=> {
 			return fb.removeClass(this.props.classId)
 		})
+		.then(()=> {
+			// handles updating student isHere at end of class
+			let thisClass = Object.assign({}, this.props.teachersClassView.classes.find(each => each.id === this.props.classId))
+			// Object.keys(this.props.targetClass.students).forEach(studentId => {
+			// 	thisClass.students[studentId] = Object.assign({}, this.props.targetClass.students[studentId])
+			// 	thisClass.students[studentId].quizzes = {}
+			// 	thisClass.students[studentId].isHere = false
+			// })
+			return this.props.updateTargetClass(thisClass)
+		})
+		.then(()=> {
+			this.props.getStudentsBelongToAClass({ id: this.props.classId });
+			this.props.fetchQuizzes({
+				teacherId: this.props.teachersClassView.targetClass.teacher_id,
+				subjectId: this.props.teachersClassView.targetClass.subject_id
+			})
+			this.props.fetchQuestions({
+				teacherId: this.props.teachersClassView.targetClass.teacher_id,
+				subjectId: this.props.teachersClassView.targetClass.subject_id
+			})
+		})
 		.catch(err => {
 			console.log('Error Ending Class ------> ', err)
 			if (err && !this.state.showEndClassModal) this.toggleClassEndConfirmation()
@@ -201,11 +223,44 @@ class ClassView extends React.Component {
 							 showOnResponsive="both">
 					<Box size="xlarge">
 						Side bar for students list
-						{studentsArray.map((each) => {
+						{studentsArray
+						.sort((a, b) => {
+							if (a.isHere === b.isHere) {
+								return a.name.split(' ')[0] > b.name.split(' ')[0]
+							} else {
+								return b.isHere - a.isHere
+							}
+						})
+						.map((student) => {
+								let nextInLine = false;
+								if (this.props.targetClass && this.props.targetClass.handRaisedQueue) {
+									let handRaisedQueue = this.props.targetClass.handRaisedQueue;
+									let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
+									if ( parseInt(lowestQueueTimeId) === parseInt(student.id)) nextInLine = true
+								}
 								return (
-									<Box style={{color: each.isHere ? 'black' : 'lightgrey'}}
-											align='center'>
-										{each.name}
+									<Box
+										direction="row"
+										justify="start"
+										alignContent="between"
+										style={{width: '400px'}}
+										style={{marginRight: 'auto', marginLeft: '20px'}}
+									>
+										<UserImage 
+											handRaised={student.handRaised} 
+											nextInLine={nextInLine} 
+											student={student}
+											targetClass={this.props.targetClass}
+											isHere={student.isHere}
+											url={student.thumbnail}
+										/>
+										<Heading 
+											tag="h3"
+											truncate={true}
+											style={{textAlign: 'center', lineHeight: '50px', marginLeft: '20px', marginBottom: 0}}
+										>
+											{student.name}
+										</Heading>
 									</Box>
 								)
 							})}

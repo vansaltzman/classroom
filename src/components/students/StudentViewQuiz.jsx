@@ -202,7 +202,7 @@ if (currentQuestion >= 0 && currentQuestion < this.state.arrayOfQuestionIds.leng
                 style={{lineHeight: '100px', marginLeft: "10px", width: '124.39px'}}
                 onClick={(e) => this.forwardClick(e)}
               /> :
-              this.props.quizResponseObj.canSubmit ?
+              this.props.quizResponseObj.canSubmit && !this.props.quizResponseObj.isFinished ?
               <Anchor 
                 icon={<DocumentUploadIcon size="large" />}
                 label='Submit'
