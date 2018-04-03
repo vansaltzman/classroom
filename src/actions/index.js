@@ -706,9 +706,15 @@ function addRecycledQuestionAction(question) {
 export function getQuizDataForStudentInClass(reqObj) {
 	return (dispatch) => {
 		axios.post('/getQuizDataForStudentInClass', reqObj)
-		.then((res) => {
-			console.log('data from server for all quizzes', res.data)
-			// dispatch(fetchQuizzesAction(res.data))
+		.then((studentQuizData) => {
+			console.log('data from server for all quizzes', studentQuizData.data)
+			dispatch(getQuizDataForStudentAction(studentQuizData.data))
 		})
+	}
+}
+function getQuizDataForStudentAction(studentQuizData) {
+	return {
+		type: actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW,
+		quizData: studentQuizData
 	}
 }
