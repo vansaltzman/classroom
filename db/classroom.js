@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS  "draft_questions" (
   "question" varchar(2000),
   "teacher_id" integer,
 	"subject_id" integer,
-	"avg_time" integer,
+	"avg_time" bigint,
   CONSTRAINT draft_questions_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -114,8 +114,8 @@ CREATE TABLE IF NOT EXISTS  "submitted_quizzes" (
 	"class_id" integer NOT NULL,
 	"previous_id" integer NOT NULL,
 	"weight" integer NOT NULL,
-	"time" integer NOT NULL,
-	"duration" integer NOT NULL,
+	"time" bigint NOT NULL,
+	"duration" bigint NOT NULL,
 	CONSTRAINT submitted_quizzes_pk PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS  "students_responses" (
 	"response_id" integer,
 	"question_id" integer NOT NULL,
 	"draft_question_id" integer NOT NULL,
-	"time_spent" integer,
+	"time_spent" bigint,
 	"correct" BOOLEAN NOT NULL,
 	CONSTRAINT students_responses_pk PRIMARY KEY ("id")
 ) WITH (

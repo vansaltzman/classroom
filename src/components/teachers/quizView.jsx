@@ -231,8 +231,9 @@ const QuizView = ({ props }) => {
 				justify="between"
 				alignContent="center"
 				margin="small"
+				pad="small"
 				colorIndex="light-2"
-				style={{margin: '25px 50px 0 50px', padding: '5px'}}
+				style={{margin: '0', position: 'sticky', top: '112px', zIndex: '9999'}}
 			>
 				<Anchor 
 					icon={<SubtractCircle size="large" />}
@@ -251,7 +252,7 @@ const QuizView = ({ props }) => {
 					quizEndTime={quiz.time}
 					quizDuration={quiz.quizDuration}
 				/>
-				</Box>
+			</Box>
 			{/* Add Quiz Header Here */}
 
 			<Table>
@@ -264,18 +265,24 @@ const QuizView = ({ props }) => {
 				sortAscending={true}
 			/> */}
 			<tbody>
-			{Object.keys(students).map(studentId => {
-					let studentQuiz = students[studentId].quizzes[quiz.id]
-					let student = students[studentId];
+			{Object.values(students)
+			.sort((a, b) => {
+				if (a.isHere === b.isHere) {
+					return a.name.split(' ')[0] > b.name.split(' ')[0]
+				} else {
+					return b.isHere - a.isHere
+				}
+			}).map(student => {
+					let studentQuiz = students[student.id].quizzes[quiz.id]
 					var nextInLine = false;
 					if (props.currentClass && props.currentClass.handRaisedQueue) {
 						let handRaisedQueue = props.currentClass.handRaisedQueue;
 						let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
-						if ( parseInt(lowestQueueTimeId) === parseInt(studentId)) nextInLine = true
+						if ( parseInt(lowestQueueTimeId) === parseInt(student.id)) nextInLine = true
 					}
 
 				return <QuizData
-					key={studentId}
+					key={student.id}
 					targetClass={targetClass}
 					studentQuiz={studentQuiz}
 					student={student}

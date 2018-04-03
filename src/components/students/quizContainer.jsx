@@ -44,7 +44,7 @@ class QuizContainer extends React.Component {
           studentId={studentId}
           classId={classId}
           quizId={quizId}
-          studentId={studentId}
+          quizName={this.props.class.quizzes[quizId].name}
           insertStudentAnswers={fb.insertStudentAnswers}
           keys={keys}
           question={question}

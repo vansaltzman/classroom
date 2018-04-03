@@ -38,7 +38,8 @@ class Timer extends React.Component {
         : moment.duration(this.state.timeLeft).seconds().toString()
         
         let timeLeft = this.state.timeLeft > 0 ?  moment.duration(this.state.timeLeft).minutes() + ':' + seconds : '0:00'
-        let quizDuration = this.props.quizDuration;
+        let quizDuration = this.props.quizDuration * 1000;
+
         if (this.state.timeLeft/quizDuration >= .40) {
             var meterColor = 'neutral-1'
         }  
@@ -57,7 +58,7 @@ class Timer extends React.Component {
                     </Heading> */}
                     <Meter size='xsmall'
                         type='circle'
-                        label={<Value value={timeLeft }
+                        label={<Value value={timeLeft}
                         size='xsmall' />}
                         max={quizDuration}
                         value={this.state.timeLeft}
