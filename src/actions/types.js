@@ -42,6 +42,9 @@ const actionTypes = {
 	GET_CLASS_STATUS: 'GET_CLASS_STATUS',
 	SET_QUIZ_WEIGHT: 'SET_QUIZ_WEIGHT',
 
+	/******************* Quiz Grades views*********************/
+	ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW: 'add_student_quiz_grades_studentview',
+
 	/******************* Quiz/Question Builder*********************/
 	SHOW_QUIZ_MODAL_ACTION: 'show_quiz_modal_action',
 	SET_NEW_QUIZ_NAME_ACTION: 'set_new_quiz_name_action',
