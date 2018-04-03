@@ -40,6 +40,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 				direction="column"
 				size="full"
 				margin="small"
+				alignContent="between"
 			>
 				<Box
 					direction="row"
@@ -58,9 +59,12 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 							nextInLine={nextInLine} 
 							student={student}
 							targetClass={targetClass}
+							isHere={student.isHere}
+							url={student.thumbnail}
 						/>
 						<Heading 
 							tag="h3"
+							truncate={true}
 							style={{textAlign: 'center', lineHeight: '50px', marginLeft: '20px', marginBottom: 0}}
 						>
 							{student.name}
@@ -70,8 +74,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 					<Box
 						direction="column"
 						justify="start"
-						// alignContent=""
-						style={{width: '500px', margin: '0 50px 0 50px'}}
+						style={{margin: '0 50px 0 50px'}}
 					>
 						{studentQuiz && studentQuiz.currentQuestion >= 0 ?
 							studentQuiz.isFinished ?
@@ -82,9 +85,11 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 							>
 								<Value value={'Completed!'}
 									icon={<CheckboxSelectedIcon />}
+									align="start"
 									responsive={false}
 									reverse={false}
 									colorIndex='ok' 
+									style={{width: '500px', justify: 'start'}}
 								/> 
 							</Fade>
 							: 
@@ -107,7 +112,8 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 						direction="column"
 						justify="start"
 						alignContent="center"
-						style={{width: '250px'}}
+						// style={{width: '250px'}}
+						style={{marginRight: '30px'}}
 					>
 						{studentQuiz && studentQuiz.currentQuestion >= 0 &&
 						<div>

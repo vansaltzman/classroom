@@ -62,12 +62,12 @@ const addStudentsAndClass = function() {
     )
   })
   .then(()=> {
-
+    console.log('create students')
     let students = [
-      ['Arnold', 'Perlstein', 'aperl@magic.bus', 'ap'],
-      ['Carlos', 'Ramon', 'cramo@magic.bus', 'cr'],
-      ['Dorothy', 'Rourke', 'drour@magic.bus', 'dr'],
-      ['Keesha,', 'Franklin', 'kfrank@magic.bus', 'kf']
+      ['Arnold', 'Perlstein', 'aperl@magic.bus', 'ap', 'https://vignette.wikia.nocookie.net/magicschoolbus/images/7/70/MSB_S1_E9_021.jpg/revision/latest/scale-to-width-down/260?cb=20170603223817'],
+      ['Carlos', 'Ramon', 'cramo@magic.bus', 'cr', 'http://i0.kym-cdn.com/entries/icons/facebook/000/012/528/Naamloos-2.jpg'],
+      ['Dorothy', 'Rourke', 'drour@magic.bus', 'dr', 'https://vignette.wikia.nocookie.net/magicschoolbus/images/7/7e/Da_pickle01.jpg/revision/latest?cb=20140604124745'],
+      ['Keesha', 'Franklin', 'kfrank@magic.bus', 'kf', 'https://vignette.wikia.nocookie.net/magicschoolbus/images/a/a6/MSB_S1_E4_072.jpg/revision/latest?cb=20170703233927']
     ]
 
     return Promise.all(students.map(student => {
@@ -75,11 +75,11 @@ const addStudentsAndClass = function() {
       .then(hashedStudent => {
 
         // Add students
-        db.query('INSERT INTO students (first_name, last_name, email, password) VALUES ($1, $2, $3, $4)', hashedStudent)
+        db.query('INSERT INTO students (first_name, last_name, email, password, thumbnail_url) VALUES ($1, $2, $3, $4, $5)', hashedStudent)
         return hashedStudent
       })
       .then(hashedStudent => {
-
+        console.log('hashedStudent ------> ', hashedStudent)
         // Assign students to class
         return db.query(
           `INSERT INTO classes_students (class_id, student_id) 
