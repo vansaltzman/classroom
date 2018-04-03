@@ -231,8 +231,9 @@ const QuizView = ({ props }) => {
 				justify="between"
 				alignContent="center"
 				margin="small"
+				pad="small"
 				colorIndex="light-2"
-				style={{margin: '25px 50px 0 50px', padding: '5px'}}
+				style={{margin: '0', position: 'sticky', top: '112px', zIndex: '9999'}}
 			>
 				<Anchor 
 					icon={<SubtractCircle size="large" />}
