@@ -24,7 +24,8 @@ export function teacherClassViewReducer(
 		showAddQuestionButton: false,
 		students: [],
 		newQuiz: {questions: [], subject: {}},
-		takenQuizzes: []
+		takenQuizzes: [],
+		selectedGraphs: []
   },
   action
 ) {
@@ -374,8 +375,70 @@ export function teacherClassViewReducer(
 					}
 				}
 			case actionTypes.GET_TAKEN_QUIZZES_ACTION:
-				console.log('taken quizzes at reducers', action.quizzes);
-				return {...state, takenQuizzes: action.quizzes}
+				var quizAverages = {}
+				var studentsAndPerformances = {};
+				for (var quizIndex = 0; quizIndex < action.quizzes.length; quizIndex++) {
+					let quizSum = 0;
+					let quizId = action.quizzes[quizIndex].id;
+					let quizAverage;
+					let students = action.quizzes[quizIndex].students;
+					let numberOfStudents = students.length;
+					for (var studentIndex = 0; studentIndex < numberOfStudents; studentIndex++) {	
+						let studentSum = 0;
+						const studentId = students[studentIndex].id;
+						const scores = {}
+						const eachStudent = action.quizzes[quizIndex].students[studentIndex]
+						const eachStudentResponses = Object.values(eachStudent.responses);
+						const numberOfResponses = eachStudentResponses.length;
+						for (var responseIndex = 0; responseIndex < eachStudentResponses.length; responseIndex++) {
+							if (eachStudentResponses[responseIndex].correct === true) {
+								studentSum += 1;
+							}
+						}
+						const studentScore = (studentSum / numberOfResponses) * 100;
+						scores[action.quizzes[quizIndex].id] = studentScore;
+						quizSum += studentScore;
+						eachStudent.scores = scores
+						if (studentsAndPerformances[studentId] === undefined) {
+							studentsAndPerformances[studentId] = {
+								value: eachStudent.first_name + ' ' + eachStudent.last_name,
+								thumbnail: eachStudent.thumbnail_url,
+								sub: [eachStudent.scores]
+							}
+						} else {
+							studentsAndPerformances[studentId].sub.push(eachStudent.scores)
+						}
+					}
+					quizAverage = quizSum / numberOfStudents;
+					quizAverages[action.quizzes[quizIndex].id] = quizAverage
+				}
+				var quizAveragesSub = Object.keys(quizAverages).map((eachKey) => {
+					let quizObj = {};
+					quizObj[eachKey] = quizAverages[eachKey]
+					return quizObj
+				})
+				const quizAverageGraph = {
+					value: "Averages",
+					sub: quizAveragesSub
+				}
+				const graphsWithAverages = state.selectedGraphs.slice()
+				graphsWithAverages.push(quizAverageGraph);
+				return {
+					...state, 
+					takenQuizzes: action.quizzes, 
+					takenQuizzesAverages: quizAverages, 
+					selectedGraphs: graphsWithAverages,
+					studentsAndPerformances: studentsAndPerformances
+				}
+
+				case actionTypes.SELECT_GRAPH_TO_SHOW_ACTION:
+				console.log("action.target.suggestion.value", action.target.option)
+					const graphs = state.selectedGraphs.slice();
+					graphs.push(action.target.option);
+				return {
+					...state,
+					selectedGraphs: graphs
+				}
     default:
       return state;
   }

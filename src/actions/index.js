@@ -688,15 +688,29 @@ function addRecycledQuestionAction(question) {
 }
 
 export function getTakenQuizzes(classIdObj) {
-	axios.post('/getTakenQuizzes', classIdObj)
-	.then((res) => {
-		console.log('taken quizzes at action', res.data)
-		return dispatch(getTakenQuizzesAction(res.data))
-	})
+	return (dispatch) => {
+		axios.post('/getTakenQuizzes', classIdObj)
+		.then((res) => {
+			console.log('taken quizzes at action', res.data)
+			return dispatch(getTakenQuizzesAction(res.data))
+		})
+	}
 }
 function getTakenQuizzesAction(quizzes) {
 	return {
 		type: actionTypes.GET_TAKEN_QUIZZES_ACTION,
 		quizzes
+	}
+}
+
+export function selectGraphToShow(target) {
+	return (dispatch) => {
+		dispatch(selectGraphToShowAction(target))
+	}
+}
+function selectGraphToShowAction(target) {
+	return {
+		type: actionTypes.SELECT_GRAPH_TO_SHOW_ACTION,
+		target
 	}
 }

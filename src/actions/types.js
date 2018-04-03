@@ -60,7 +60,8 @@ const actionTypes = {
 	FETCH_QUESTIONS: 'fetch_questions',
 	SELECT_QUESTION: 'select_question',
 	ADD_RECYCLED_QUESTION: 'add_recycled_question',
-	GET_TAKEN_QUIZZES_ACTION: 'get_taken_quizzes_action'
+	GET_TAKEN_QUIZZES_ACTION: 'get_taken_quizzes_action',
+	SELECT_GRAPH_TO_SHOW_ACTION: 'select_graph_to_show_action'
 }
 
 export default actionTypes

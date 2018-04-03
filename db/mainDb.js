@@ -371,19 +371,13 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
         eachQuestion.timeSpent = timeSpent.rows.map((each) => {
           return each.time_spent
         })
-        // const times = eachQuestion.timeSpent.length;
-        // const sum = 0;
-        // for (var i = 0; i < eachQuestion.timeSpent.length; i++) {
-        //   sum += eachQuestion.timeSpent[i]
-        // }
-        // eachQuestion.timeSpent = sum / times;
         return eachQuestion
       })
     }))
   })
 }
 
-const getTakenQuizzes = function(targetClassId) {
+const getTakenQuizzesAndStudentsPerformance = function(targetClassId) {
   console.log('targetClassId', targetClassId)
   return db.query(`SELECT * FROM submitted_quizzes WHERE class_id='${targetClassId}'`)
   .then((quizzes) => {
@@ -449,7 +443,39 @@ const getTakenQuizzes = function(targetClassId) {
     }))
   })
   .then((takenQuizzes) => {
-    console.log('takenQuizzes', takenQuizzes)
+    return Promise.all(takenQuizzes.map((eachTakenQuiz) => {
+      return getAllStudentsBelongToAClass(targetClassId)
+      .then((students) => {
+        eachTakenQuiz.students = students.rows
+        return eachTakenQuiz
+      })
+    }))
+  })
+  .then((takenQuizzesWithStudents) => {
+    console.log("takenQuizzesWithStudents", takenQuizzesWithStudents)
+    return Promise.all(takenQuizzesWithStudents.map((eachQuiz) => {
+      return Promise.all(eachQuiz.students.map((eachStudent) => {
+        return db.query(`SELECT * FROM students_responses WHERE student_id='${eachStudent.id}'`)
+        .then((submittedQuestions) => {
+          console.log("submittedQuestions", submittedQuestions.rows)
+          eachStudent.responses = {};
+          submittedQuestions.rows.forEach((each) => {
+            eachQuiz.questions.forEach((quizQuestion) => {
+              if (quizQuestion.draft_question_id === each.draft_question_id) {
+                console.log('HIIIIIIIII', each )
+                eachStudent.responses[each.draft_question_id] = each
+              }
+            })
+          })
+          return eachStudent
+        })
+      }))
+      .then((data) => {
+        console.log('eachQuiz ---------', data)
+        eachQuiz.students = data
+        return eachQuiz
+      })
+    }))
   })
 }
 
@@ -472,6 +498,6 @@ module.exports = {
   GetAllQuestionsBelongToTeacher,
   addProfilePictureForStudent,
   getProfilePic,
-  getTakenQuizzes
+  getTakenQuizzesAndStudentsPerformance
 }
 
