@@ -43,10 +43,9 @@ export function studentClassViewReducer(
 			return {...state, targetClass: action.classData}
 		
 			case actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW:
-			console.log('action in student class view reducer ', action);
-			console.log('state in student class view reducer ', state);
-			state.targetClass.quizGrades = action.quizData
-			return {...state, targetClass: targetClass}
+			let newTargetClass = Object.assign( {}, state.targetClass);
+			newTargetClass.quizGrades = action.quizData
+			return {...state, targetClass: newTargetClass}
 		
     default:
       return state;
