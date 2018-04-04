@@ -456,6 +456,9 @@ export function teacherClassViewReducer(
 				case actionTypes.SELECT_GRAPH_TO_SHOW_ACTION:
 				//console.log("action.target.suggestion.value", action.target.option)
 					const graphs = state.selectedGraphs.slice();
+					const colors = ['accent-1', 'graph-2', 'graph-3', 'accent-2', 'accent-3','accent-1', 'graph-2', 'graph-3', 'accent-2', 'accent-3', 'accent-1', 'graph-2', 'graph-3', 'accent-2', 'accent-3'];
+					const color = colors[Math.floor(Math.random()*colors.length)];
+					action.target.option.color = color;
 					graphs.push(action.target.option);
 				return {
 					...state,

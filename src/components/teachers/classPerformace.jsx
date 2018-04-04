@@ -19,10 +19,6 @@ import * as Actions from "../../actions/index.js";
 
 class ClassPerformance extends React.Component {
   render() {
-    console.log(
-      "hiii",
-      Object.values(this.props.teachersClassView.takenQuizzesAverages)
-    );
     return (
       <Chart full={true}>
         <Axis
@@ -37,6 +33,8 @@ class ClassPerformance extends React.Component {
             {this.props.teachersClassView.selectedGraphs.map(eachGraph => {
               return (
                 <Line
+									//colorIndex='accent-4'
+									colorIndex={eachGraph.color || 'graph-1'}
                   points={true}
                   values={eachGraph.sub.map(eachScore => {
                     return Object.values(eachScore)[0];
