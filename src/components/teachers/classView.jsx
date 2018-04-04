@@ -7,8 +7,11 @@ import "grommet/scss/hpinc/index.scss";
 import Columns from 'grommet/components/Columns';
 import Box from 'grommet/components/Box';
 import Button from 'grommet/components/Button';
+import Anchor from 'grommet/components/Anchor';
 import Section from 'grommet/components/Section';
+import Headline from 'grommet/components/Headline';
 import DeployIcon from 'grommet/components/icons/base/Deploy';
+import Status from 'grommet/components/icons/Status';
 import CloudUploadIcon from 'grommet/components/icons/base/CloudUpload';
 import ShareIcon from 'grommet/components/icons/base/Share';
 import SearchInput from 'grommet/components/SearchInput';
@@ -42,6 +45,7 @@ import * as Actions from "../../actions/index.js";
 import Label from "grommet/components/Label";
 import CheckBox from "grommet/components/CheckBox"
 import QuizViewContainer from "./quizViewContainer.jsx"
+import UserImage from "../UserImage.jsx"
 
 import classRoom from '../../../data/quizDummyData.js';
 import fb from '../../../db/liveClassroom.js'
@@ -128,6 +132,27 @@ class ClassView extends React.Component {
 		.then(()=> {
 			return fb.removeClass(this.props.classId)
 		})
+		.then(()=> {
+			// handles updating student isHere at end of class
+			let thisClass = Object.assign({}, this.props.teachersClassView.classes.find(each => each.id === this.props.classId))
+			// Object.keys(this.props.targetClass.students).forEach(studentId => {
+			// 	thisClass.students[studentId] = Object.assign({}, this.props.targetClass.students[studentId])
+			// 	thisClass.students[studentId].quizzes = {}
+			// 	thisClass.students[studentId].isHere = false
+			// })
+			return this.props.updateTargetClass(thisClass)
+		})
+		.then(()=> {
+			this.props.getStudentsBelongToAClass({ id: this.props.classId });
+			this.props.fetchQuizzes({
+				teacherId: this.props.teachersClassView.targetClass.teacher_id,
+				subjectId: this.props.teachersClassView.targetClass.subject_id
+			})
+			this.props.fetchQuestions({
+				teacherId: this.props.teachersClassView.targetClass.teacher_id,
+				subjectId: this.props.teachersClassView.targetClass.subject_id
+			})
+		})
 		.catch(err => {
 			console.log('Error Ending Class ------> ', err)
 			if (err && !this.state.showEndClassModal) this.toggleClassEndConfirmation()
@@ -141,33 +166,25 @@ class ClassView extends React.Component {
 			studentsArray.push(studentsInClass[key]);
 		}
 			return(
-				<div>
-					{this.props.targetClass.isLive ?
-					<Animate 
-						enter={{"animation": "fade", "duration": 1000, "delay": 0}}
-						leave={{"animation": "fade", "duration": 1000, "delay": 0}}
-						keep={true}
-					>
-						<Notification
-							message={this.props.targetClass.name + ' is currently live'}
-							status={'ok'}
-						/>
-					</Animate> :
-					<Animate 
-					enter={{"animation": "fade", "duration": 1000, "delay": 0}}
-					leave={{"animation": "fade", "duration": 1000, "delay": 0}}
-					keep={true}
+			<div>
+				<Section
+					margin="none"
+					pad="none"
 				>
-					<Notification
-							message={this.props.targetClass.name + ' is currently offline'}
-							status={'warning'}
-					/> 
-				</Animate> 
-					}
-				<Section>				
+				<Box
+					direction="row"
+					full="true"
+					justify="between"
+					alignContent="center"
+					margin="small"
+					pad="small"
+					colorIndex="light-2"
+					style={{margin: '0', position: 'sticky', top: '112px', zIndex:'2'}}
+				>
 					{this.props.targetClass.isLive ?
-					<Button icon={<CloudUploadIcon />}
+					<Anchor icon={<CloudUploadIcon size="large" />}
 						label= {'End Class'}
+						style={{lineHeight: '100px', marginLeft: "10px", width: '175px'}}
 						primary={false}
 						secondary={false}
 						accent={false}
@@ -175,8 +192,9 @@ class ClassView extends React.Component {
 						plain={false} 
 						onClick={()=> this.toggleClassEndConfirmation()}
 					/> :
-					<Button icon={<DeployIcon />}
+					<Anchor icon={<DeployIcon size="large" />}
 						label= {'Go Live'}
+						style={{lineHeight: '100px', marginLeft: "10px", width: '175px'}}
 						primary={false}
 						secondary={false}
 						accent={true}
@@ -184,32 +202,109 @@ class ClassView extends React.Component {
 						plain={false} 
 						onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
 					/>}
-	
-					{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
-					<Button icon={<ShareIcon />}
-						label={'Launch ' + this.state.selectedQuiz.name}
+					<Box
+						direction="row"
+					>
+					{this.props.targetClass.isLive ?
+						<Box
+							direction="column"
+							justify="center"
+							align="center"
+							style={{marginRight: '20px'}}
+						>
+							<Status value={'ok'} size="large"/>
+							<Label
+								margin="none"
+								style={{marginTop: '5px'}}
+							>
+								(online)
+							</Label>
+						</Box>
+					:
+					<Box
+						direction="column"
+						justify="center"
+						align="center"
+						style={{marginRight: '20px'}}
+					>
+						<Status value={'critical'} size="large"/>
+						<Label
+							margin="none"
+							style={{marginTop: '5px'}}
+						>
+							(offline)
+						</Label>
+					</Box>
+				 }
+						<Headline
+							style={{marginBottom: 0, lineHeight: '100px'}}
+						>
+							{this.props.targetClass.name}
+						</Headline>
+					</Box>
+					{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) ?
+					<Anchor icon={<ShareIcon size="large" />}
+						label={'Launch'} 
+						// + this.state.selectedQuiz.name}
+						style={{lineHeight: '100px', marginLeft: "10px", width: '175px'}}
 						primary={false}
 						secondary={false}
-						accent={true}
+						accent={false}
 						critical={false}
 						plain={false} 
 						onClick={this.props.toggleQuizLauncherModalAction}
 					/>
-				}
+				: <div style={{width: '185px'}}></div> }
+				</Box>
 				<Split fixed={false}
 							 separator={false}
 							 showOnResponsive="both">
-					<Box size="xlarge">
-						Side bar for students list
-						{studentsArray.map((each) => {
+					<Box 
+						margin="medium"
+					>
+						{studentsArray
+						.sort((a, b) => {
+							if (a.isHere === b.isHere) {
+								return a.name.split(' ')[0] > b.name.split(' ')[0]
+							} else {
+								return b.isHere - a.isHere
+							}
+						})
+						.map((student) => {
+								let nextInLine = false;
+								if (this.props.targetClass && this.props.targetClass.handRaisedQueue) {
+									let handRaisedQueue = this.props.targetClass.handRaisedQueue;
+									let lowestQueueTimeId = Object.values(handRaisedQueue).sort((a, b) => a.time - b.time)[0].studentId;
+									if ( parseInt(lowestQueueTimeId) === parseInt(student.id)) nextInLine = true
+								}
 								return (
-									<Box style={{color: each.isHere ? 'black' : 'lightgrey'}}
-											align='center'>
-										{each.name}
+									<Box
+										direction="row"
+										justify="start"
+										alignContent="between"
+										// style={{width: '400px'}}
+										style={{marginRight: 'auto', marginLeft: '20px', marginBottom: '10px'}}
+									>
+										<UserImage 
+											handRaised={student.handRaised} 
+											nextInLine={nextInLine} 
+											student={student}
+											targetClass={this.props.targetClass}
+											isHere={student.isHere}
+											url={student.thumbnail}
+										/>
+										<Heading 
+											tag="h3"
+											truncate={true}
+											style={{textAlign: 'center', lineHeight: '50px', marginLeft: '20px', marginBottom: 0}}
+										>
+											{student.name}
+										</Heading>
 									</Box>
 								)
 							})}
 						<SearchInput
+								style={{width: 'auto'}}
 								placeHolder="Search For A Student"
 								suggestions={this.props.studentNames}
 								value={this.props.teachersClassView.selectedStudent.value}
@@ -226,8 +321,9 @@ class ClassView extends React.Component {
 								}}
 							/>
 					</Box>
-          <Box size="xlarge" >
-						Quiz List
+          <Box 
+						margin="medium"
+					>
 						<Accordion
 								onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}
 							>
@@ -272,23 +368,40 @@ class ClassView extends React.Component {
 			>
 				<Form>
 					<Header pad={{ vertical: "medium", horizontal: "medium" }}>
-						Launch Quiz
+						{'Launch Quiz ' + this.state.selectedQuiz.name}
 					</Header>
 					<FormFields pad={{ horizontal: "medium" }}>
-						<DateTime
-							name="quizLength"
-							placeHolder="Set Test time"
-							format='mm:ss'
-							onChange={(time)=> this.props.setQuizTime(time)}
-							value={this.props.quizTime} 
-						/>
-					<NumberInput 
-						value={this.props.quizWeight}
-						onChange={(weight)=> this.props.updateQuizWeight(weight)} 
-						min={1}
-						max={100}
-						step={1}
-					/> 
+						<Box
+							direction="column"
+							size="full"
+							margin="medium"
+						>
+							<Label size="small">
+								Set Duration
+							</Label>
+							<DateTime
+								name="quizLength"
+								format='mm:ss'
+								onChange={(time)=> this.props.setQuizTime(time)}
+								value={this.props.quizTime} 
+							/>
+						</Box>
+						<Box
+							direction="column"
+							size="full"
+							margin="medium"
+						>
+							<Label size="small">
+								Set Weight (1 - 100)
+							</Label>
+							<NumberInput 
+								value={this.props.quizWeight}
+								onChange={(weight)=> this.props.updateQuizWeight(weight)} 
+								min={1}
+								max={100}
+								step={1}
+							/> 
+						</Box>
 					</FormFields>
 					<Footer pad={{ vertical: "medium", horizontal: "medium" }}>
 						<Button 

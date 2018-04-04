@@ -26,15 +26,26 @@ class StudentLiveClassView extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.activeView.isLive) {
+		if (nextProps.studentState.targetClass && nextProps.studentState.targetClass.isLive && this.props.studentState.targetClass.activeView === undefined) {
+			console.log('Triggered')
+			this.props.fetchClassData(this.props.activeView.id, 'student')
 			fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, true)
 		}
+
+		if (!nextProps.studentState.targetClass) { //Handles updating target class when class ends
+			let thisClass = this.props.classes.find(each => each.class_id === this.props.studentState.targetClass.id)
+			thisClass.isLive = false
+			console.log('thisClass ------> ', thisClass)
+			this.props.updateStudentTargetClass(this.props.classes.find(each => each.class_id === this.props.studentState.targetClass.id))
+			fb.stopFetchClassData(this.props.activeView.id)
+		} 
 	}
 
 	componentWillUnmount() {
 		if (this.props.studentState.targetClass.isLive) { // Handles when student leaves class after class has ended
 			fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, false)
 		}
+		fb.stopFetchClassData(this.props.activeView.id)
 	}
 
 	componentWillMount() {
@@ -98,7 +109,7 @@ class StudentLiveClassView extends React.Component {
 							{this.props.studentState.targetClass.isLive &&
 							<Button 
 								icon={queueIcon} 
-								style={{position: "fixed", bottom:100, right:100}}
+								style={{position: "fixed", bottom: 100, right: 100}}
 								label={handRaiseLabel}
 								type={'submit'}
 								primary={false}
@@ -119,6 +130,7 @@ function mapStateToProps(state) {
 	return {
 		activeView: state.studentClassView.targetClass,
 		studentState: state.studentClassView,
+		classes: state.studentClassView.classes,
 		auth: state.auth
 		// targetClass: state.studen
 	}
