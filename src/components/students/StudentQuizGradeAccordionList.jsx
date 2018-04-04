@@ -66,11 +66,7 @@ class IndividualQuizGradeAccordion extends React.Component {
                 </Headline>
                     
             <div style={{width:'60%', align:'center'}} >
-                {!this.props.quizData.length ?
-                <Headline margin='medium' size='small'>
-                    No quizzes to show at this moment
-                </Headline>
-                :
+           
                 <Box full='horizontal' >
                 <Accordion openMulti={false} >
 
@@ -198,7 +194,7 @@ class IndividualQuizGradeAccordion extends React.Component {
                 
                 </Box>
                       
-                }
+                
             </div>
                     {classGrade? <Headline margin='medium' size='small'>
                         Current class grade: <Value 

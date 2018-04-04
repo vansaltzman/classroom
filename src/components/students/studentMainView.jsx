@@ -63,7 +63,6 @@ class StudentMainView extends React.Component {
       <div>
         <Tiles flush={false} selectable={true}>
           {this.props.classes.map((item, index) => {
-            console.log('ITEM', item)
             return (
               <Tile key={index}>
                 <Card

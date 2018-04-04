@@ -3,6 +3,7 @@ const { db } = require('../db/mainDb')
 const main = require('../db/mainDb')
 
 const fbClassToPgObj = function(classObj) {
+  console.log('class object in fb class to pg obj ', classObj)
   const classId = classObj.id
   const { name, quizzes, students, teacher_id, subject_id } = classObj
   return submitParticipation(classId, students)
@@ -19,7 +20,8 @@ const fbClassToPgObj = function(classObj) {
             responsesObj[student.id] = studentObj
         })
     
-      
+        console.log('responses obj in fb class to pg ', responsesObj);
+        console.log('quizzes in fb class to pg ', quizzes);
         return submitQuiz(quizzes[quizId], responsesObj, classId)
       }))
     }

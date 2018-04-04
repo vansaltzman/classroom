@@ -707,7 +707,7 @@ export function getQuizDataForStudentInClass(reqObj) {
 	return (dispatch) => {
 		axios.post('/getQuizDataForStudentInClass', reqObj)
 		.then((studentQuizData) => {
-			console.log('data from server for all quizzes', studentQuizData.data)
+			console.log('data from server for all quizzes in student quiz data', studentQuizData.data)
 			dispatch(getQuizDataForStudentAction(studentQuizData.data))
 		})
 	}
