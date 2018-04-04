@@ -50,6 +50,8 @@ import UserImage from "../UserImage.jsx"
 import classRoom from '../../../data/quizDummyData.js';
 import fb from '../../../db/liveClassroom.js'
 
+import ThumbPoll from './thumbPoll.jsx'
+
 class ClassView extends React.Component {
 	constructor() {
 		super();
@@ -62,6 +64,7 @@ class ClassView extends React.Component {
 		this.endClass = this.endClass.bind(this)
 		this.toggleClassEndConfirmation = this.toggleClassEndConfirmation.bind(this)
 		this.toggleQuizBuilderModal = this.toggleQuizBuilderModal.bind(this)
+		this.launchThumbPoll = this.launchThumbPoll.bind(this)
 	}
 
 	launchNewQuiz(){
@@ -74,6 +77,14 @@ class ClassView extends React.Component {
       subjectId: this.props.teachersClassView.targetClass.subject_id
 		})
 	}
+
+	launchThumbPoll() {
+		console.log('---launchthumb poll hit')
+		// this.props.showThumbPollAction()
+		fb.setStudentsThumbsNeutral(this.props.classId)
+		fb.setThumbPollLiveForStudents(this.props.classId, true)
+	}
+
 	componentWillMount() {
 		this.props.getAllStudents();
     this.props.getStudentsBelongToAClass({ id: this.props.classId });
@@ -171,6 +182,19 @@ class ClassView extends React.Component {
 					margin="none"
 					pad="none"
 				>
+								{this.props.targetClass.thumbPoll ?
+					<span></span> :
+						<Button icon={<DeployIcon />}
+						label= {'Launch Thumb Poll'}
+						primary={false}
+						secondary={false}
+						accent={true}
+						critical={false}
+						plain={false} 
+						onClick={this.launchThumbPoll}
+						 
+					/> 
+				}
 				<Box
 					direction="row"
 					full="true"
@@ -434,7 +458,9 @@ class ClassView extends React.Component {
 					</Footer>
 				</Form>
 			</Layer>
-      }
+			}
+			{this.props.targetClass.thumbPoll &&
+			<ThumbPoll/>}
       {this.props.teachersClassView.showQuizBuilderModal === true ?
 					<Layer closer={true}
 								 flush={true} 

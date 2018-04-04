@@ -23,7 +23,8 @@ export function teacherClassViewReducer(
 		selectedQuestion: {},
 		showAddQuestionButton: false,
 		students: [],
-		newQuiz: {questions: [], subject: {}}
+		newQuiz: {questions: [], subject: {}},
+		showThumbPoll: false
   },
   action
 ) {
@@ -95,6 +96,7 @@ export function teacherClassViewReducer(
           isHere: false,
 					email: student.email,
 					thumbnail: student.thumbnail_url,
+					thumb: -90,
           quizzes: {}
 				}
 			})
@@ -371,6 +373,8 @@ export function teacherClassViewReducer(
 						questions: newSetOfQuestions
 					}
 				}
+			case actionTypes.TOGGLE_THUMBPOLL:
+			return {...state, showThumbPoll: !state.showThumbPoll}
     default:
       return state;
   }

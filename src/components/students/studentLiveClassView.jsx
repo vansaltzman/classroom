@@ -15,6 +15,7 @@ import UserNew from "grommet/components/icons/base/UserNew.js";
 import UserExpert from "grommet/components/icons/base/UserExpert.js";
 import WorkshopIcon from 'grommet/components/icons/base/Workshop';
 import Toast from 'grommet/components/Toast';
+import ThumbVote from './thumbVote.jsx'
 
 
 
@@ -78,6 +79,8 @@ class StudentLiveClassView extends React.Component {
 			}
 			else if(this.props.studentState.targetClass && this.props.studentState.targetClass.activeView){
 				liveView = <QuizContainer/>
+			} else if (this.props.studentState.targetClass && this.props.studentState.targetClass.thumbPoll) {
+				liveView = <ThumbVote/>
 			} else if (this.props.studentState.targetClass && !this.props.studentState.targetClass.activeView) {
 					liveView = <Default live={true}/>
 			} else {

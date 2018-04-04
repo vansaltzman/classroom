@@ -73,10 +73,11 @@ const addStudentsAndClass = function() {
     return Promise.all(students.map(student => {
       return hashUser(student)
       .then(hashedStudent => {
-
         // Add students
-        db.query('INSERT INTO students (first_name, last_name, email, password, thumbnail_url) VALUES ($1, $2, $3, $4, $5)', hashedStudent)
-        return hashedStudent
+        return db.query('INSERT INTO students (first_name, last_name, email, password, thumbnail_url) VALUES ($1, $2, $3, $4, $5)', hashedStudent)
+        .then(()=> {
+          return hashedStudent
+        })
       })
       .then(hashedStudent => {
         console.log('hashedStudent ------> ', hashedStudent)
