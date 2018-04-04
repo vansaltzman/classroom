@@ -29,9 +29,9 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 	// const quiz = targetClass.quizzes[targetClass.activeView];
 	// const quizIds = Object.keys(quiz.questions);
 
-	const timeValue = 
+	// const timeValue = 
 
-	studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time
+	// studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time
 
 	const endQuiz = function() {
 		fb.updateActiveView(false, targetClass.id)
