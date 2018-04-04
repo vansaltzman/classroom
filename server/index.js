@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
 // const config = require('./config.js');
 const config = require('./config.js');
-const migrate = require('./migrationWorker.js')
+const migration = require('./migrationWorker.js')
 const { fb, startClass } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
 const dummyStudentsData = require('../db/dummyStudentsData');
@@ -32,7 +32,7 @@ app.use(bodyParser.json())
 
 // Amazon s3 config
 const s3 = new AWS.S3();
-AWS.config.update(  {
+AWS.config.update({
   accessKeyId: configAWS.AWS_ACCESS_KEY_ID,
   secretAccessKey: configAWS.AWS_SECRET_ACCESS_KEY,
   subregion: configAWS.SUBREGION,
@@ -66,8 +66,14 @@ app.post('/imageUploader', upload.single('file'), (req, res) => {
 
               fs.unlink(req.file.path, (err) => {
                 if (err) console.log(err);
-               
-              main.addProfilePictureForStudent(req.body.text, fileUrl) 
+              
+                //req.body.classPic//true for teacher view//false for student view
+                if(req.body.classPic){
+                  main.addClassPic(fileUrl)
+                } else {
+                  main.addProfilePictureForStudent(req.body.text, fileUrl)
+                }
+              //main.addProfilePictureForStudent(req.body.text, fileUrl) 
               })
             })
           }
@@ -130,7 +136,7 @@ app.post('/profile', function(req, res) {
   app.post('/startClass', (req, res) => {
     const { classId } = req.body
 
-    migrate.migrateClassToFB(classId)
+    migration.migrateClassToFB(classId)
     .then(()=> {
 
       // update redux state?
@@ -196,6 +202,7 @@ app.post('/allClasses', (req, res) => {
   //console.log('serverside /allClasses', req.body);
   main.getClassesForTeacherMainView(req.body.email)
   .then((data) => {
+    //console.log('data ------> ', data)
     res.send(data);
     //console.log('server side classes', data.rows)
   })
@@ -216,6 +223,7 @@ app.get('/getAllStudents', (req, res) => {
 })
 
 app.post('/getAllStudentsInAClass', (req, res) => {
+  //console.log('class id server side', req.body);
   main.getAllStudentsBelongToAClass(req.body.id)
   .then((data) => {
     res.send(data.rows);
