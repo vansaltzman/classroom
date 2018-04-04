@@ -4,31 +4,27 @@ import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as Actions from '../../actions/index.js';
 import fb from '../../../db/liveClassroom.js'
+import Layer from 'grommet/components/Layer';
+import Section from 'grommet/components/Section';
 
 
 
 class ThumbPoll extends React.Component {
   constructor() {
     super()
-    // this.state = {
-    
-    // }
-    // this.countStudentsHere = this.countStudentsHere.bind(this)
+    this.state = {
+      temp: -90 
+    }
+  
   }
 
-  // countStudentsHere() {
-
-  //}
-
-  // let degrees = totalStudentThumbs / count 
-
   render() {
+    let oldDegree = this.state.temp
     let degrees = -90
     let count = 0
     let totalStudentThumbs = 0
     let studentsObj = this.props.teachersClassView.targetClass.students
     for (var student in studentsObj){
-      // console.log('student',student)
       if(studentsObj[student].isHere){
         console.log(studentsObj[student].isHere)
         count++
@@ -36,53 +32,51 @@ class ThumbPoll extends React.Component {
       }
     }
     let test = totalStudentThumbs / count 
-     if(test !== undefined){
-       degrees = test
+     if(count === 0){
+      degrees = -90 
+      
      } else {
-       degrees = -90
+      degrees = test 
      }
+     
+      console.log('degresssss----',degrees)
+      console.log('show thumb poll props',this.props.showThumbPoll)
 
-
-console.log('degresssss----',degrees) 
-    //   let classId = this.props.teachersClassView.targetClass.id
-  //  // fb.setThumbTotal(classId)
-  //   //run fb function that iterates through all students and averages their total
-  //     //and sets that value in fb  
-  //   let degrees
-
-  //   let totalPresentStudents = this.countStudentsHere()
-  //   console.log('total present students', totalPresentStudents)
-  
-  //   if(totalPresentStudents > 0) {
-  //      degrees = this.props.teachersClassView.targetClass.thumbTotal / (totalPresentStudents )
-  //   } else {
-  //     degrees = this.props.teachersClassView.targetClass.thumbTotal
-  //   }
-  //   console.log('--------degreess',degrees)
+    let styleSheet = document.styleSheets[0];
+    let keyframes =
+      `@keyframes frame {
+        0%   { transform: rotate(${degrees+10}deg); }
+        25% { transform: rotate(${degrees-10}deg); }
+        50% { transform: rotate(${degrees+10}deg); }
+        75% { transform: rotate(${degrees-10}deg); }
+        100% { transform: rotate(${degrees+10}deg); }
+      }`
     
+      styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
 
     const thumbStyle={
       height: '30%',
       width: '30%',
-      transform:`rotate(${degrees}deg)`
+      transform: `translate(50% 50%) rotate(${degrees}deg)`,
+      margin: 'auto',
+      transition: 'transform 2s',
+      animation: 'frame 3s infinite',
+      filter: 'hue-rotate(90deg)'
+
     }
 
     return (
-      <div>
-        <div style={{
-          left: 0,
-          lineHeight: '200px',
-          marginTop: '-100px',
-          position: 'absolute',
-          textAlign: 'center',
-          top: '50%',
-          width: '100%'
-        }}>
-
+      <Layer 	
+          // align={'center'}
+          closer={true}
+          flush={false}
+          overlayClose={true}
+          onClose={()=> {fb.setThumbPollLiveForStudents(this.props.teachersClassView.targetClass.id, false) } }>
+        <Section>
           <img src={'https://s3.us-east-2.amazonaws.com/jaqen-app/thumb.png'} alt='' style={thumbStyle}/>       
-
-        </div>
-      </div>
+          
+        </Section>
+     </Layer>
     )
   }
 }
@@ -91,7 +85,6 @@ function mapStateToProps(state) {
 		
 		teachersClassView: state.teachersClassView,
 		auth: state.auth
-		// targetClass: state.studen
 	}
 }
 

@@ -119,13 +119,6 @@ const incrementThumbTotal = function (classId, studentId, difference) {
 			console.log('current total',currentTotal)
 			thumbTotal.set(currentTotal);
 		})
-		// .then(()=>{
-		// 	setThumbTotal()
-		// })
-		// .catch((error)=>{
-		// 	console.log(error)
-		// })
-
 	}
 
 const decrementThumbTotal = function (classId, studentId, difference) {
@@ -136,41 +129,11 @@ const decrementThumbTotal = function (classId, studentId, difference) {
 			currentTotal -= difference
 			thumbTotal.set(currentTotal);
 			console.log('currentTotal in live classroom.js students thumb call', currentTotal)
-		})
-		// .then(()=>{
-		// 	setThumbTotal()
-		// })
-		// .catch((error)=>{
-		// 	console.log(error)
-		// })
-		
+		})		
 	}
 
-// const incrementThumbTotal = function (classId, studentId, difference) {
-// 	console.log('liveclassroom fired increment', classId)
-// 	const thumbTotal= fb.ref('/classes/' + classId + '/thumbTotal');
-// 		return thumbTotal.once('value', (snap) => {
-// 			let currentTotal = snap.val();
-// 					currentTotal += difference
-// 			console.log('current total',currentTotal)
-// 			thumbTotal.set(currentTotal);
-// 		})
-
-// 	}
-
-// const decrementThumbTotal = function (classId, studentId, difference) {
-// 	console.log('liveclassroom fired decrement', classId)
-// 	const thumbTotal= fb.ref('/classes/' + classId + '/thumbTotal');
-// 		return thumbTotal.once('value', (snap) => {
-// 			let currentTotal = snap.val();
-// 			currentTotal -= difference
-// 			thumbTotal.set(currentTotal);
-// 			console.log('currentTotal in live classroom.js students thumb call', currentTotal)
-// 		})
-// 	}
-
-const getThumbTotal = function (classId) {
-	const thumbTotal= fb.ref('/classes/' + classId +'/thumbTotal');
+const getThumbTotal = function (classId, studentId) {
+	const thumbTotal= fb.ref('/classes/' + classId + '/students/' + studentId + '/thumb');
 	thumbTotal.on('value', (snap) => {
 		console.log('snap.val----', snap.val())
 		let currentTotal = snap.val();
@@ -178,38 +141,24 @@ const getThumbTotal = function (classId) {
 	})
 }
 
-const setThumbTotal = function (classId) {
+const setStudentsThumbsNeutral = function (classId) {
 	let count = -90
 	const studentsObj = fb.ref('/classes/' + classId + '/students')
-	//console.log('stuents obj', studentsObj)
-	studentsObj.on('value', (snap) => {
+	studentsObj.once('value', (snap) => {
 		let students = snap.val()
-		console.log('students',students)
+	
 		students.forEach( student => {
-			console.log('student thumb', student.thumb)
-			if(student.isHere) {
-				count += student.thumb 
-				console.log('student is here thumb',student.thumb)
-			}
-		})
-	})
-
-	// for (var student in studentsObj) {
-	// 	console.log('student', student)
-	// 	console.log('student thumb count----',studentsObj[student].thumb)
-	// 	if(studentsObj[student].isHere) {
-	// 		count += studentsObj[student].thumb 
-	// 	} else {
-	// 		count = -900
-	// 	}
-	// }
-	console.log('count in set thumb total',count)
-	const thumbTotal= fb.ref('/classes/' + classId +'/thumbTotal');
-	return thumbTotal.once('value', (snap)=> {
-		thumbTotal.set(count);
+			let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id + '/thumb');
+			studentRef.set(count)
+			})
 	})
 }
 
+const setThumbPollLiveForStudents = function (classId, bool) {
+	console.log('fb bool-------', typeof bool, bool)
+	const classRoom = fb.ref('/classes/' + classId + '/thumbPoll')
+	classRoom.set(bool)
+}
 
 module.exports = {  
   fb,
@@ -224,6 +173,8 @@ module.exports = {
 	incrementThumbTotal,
 	decrementThumbTotal,
 	getThumbTotal,
-	setThumbTotal
+	setThumbPollLiveForStudents,
+	setStudentsThumbsNeutral
+
 
 }

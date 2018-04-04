@@ -20,7 +20,8 @@ export function teacherClassViewReducer(
 		showQuizLauncherModal: false,
 		quizzes: {},
 		students: [],
-		newQuiz: {questions: [], subject: {}}
+		newQuiz: {questions: [], subject: {}},
+		showThumbPoll: false
   },
   action
 ) {
@@ -320,6 +321,8 @@ export function teacherClassViewReducer(
 			return {
 				...state, quizzes: quizzes
 			}
+			case actionTypes.TOGGLE_THUMBPOLL:
+			return {...state, showThumbPoll: !state.showThumbPoll}
     default:
       return state;
   }

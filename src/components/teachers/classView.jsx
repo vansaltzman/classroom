@@ -41,6 +41,8 @@ import CheckBox from "grommet/components/CheckBox"
 import classRoom from '../../../data/quizDummyData.js';
 import fb from '../../../db/liveClassroom.js'
 
+import ThumbPoll from './thumbPoll.jsx'
+
 class ClassView extends React.Component {
 	constructor() {
 		super();
@@ -52,6 +54,7 @@ class ClassView extends React.Component {
 		this.launchNewQuiz = this.launchNewQuiz.bind(this)
 		this.toggleClassEndConfirmation = this.toggleClassEndConfirmation.bind(this)
 		this.toggleQuizBuilderModal = this.toggleQuizBuilderModal.bind(this)
+		this.launchThumbPoll = this.launchThumbPoll.bind(this)
 	}
 
 	launchNewQuiz(){
@@ -65,6 +68,14 @@ class ClassView extends React.Component {
 	toggleQuizBuilderModal() {
 		this.props.showQuizModal()
 	}
+
+	launchThumbPoll() {
+		console.log('---launchthumb poll hit')
+		// this.props.showThumbPollAction()
+		fb.setStudentsThumbsNeutral(this.props.classId)
+		fb.setThumbPollLiveForStudents(this.props.classId, true)
+	}
+
 	componentWillMount() {
 		this.props.getAllStudents();
     this.props.getStudentsBelongToAClass({ id: this.props.classId });
@@ -148,6 +159,21 @@ class ClassView extends React.Component {
 					plain={false} 
 					onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
 				/>}
+				
+				{this.props.targetClass.thumbPoll ?
+					<span></span> :
+						<Button icon={<DeployIcon />}
+						label= {'Launch Thumb Poll'}
+						primary={false}
+						secondary={false}
+						accent={true}
+						critical={false}
+						plain={false} 
+						onClick={this.launchThumbPoll}
+						 
+					/> 
+				}
+			
 
 				{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) &&
 				<Button icon={<ShareIcon />}
@@ -239,6 +265,9 @@ class ClassView extends React.Component {
 						</Accordion>
 						{/* </Box> */}
 				</Columns>
+			
+				{this.props.targetClass.thumbPoll &&
+				<ThumbPoll/>}
 
 			{this.props.showQuizLauncherModal &&
 			<Layer

@@ -54,7 +54,9 @@ const actionTypes = {
 	CHOOSE_CORRECT_ANSWER_ACTION: 'choose_correct_answer_action',
 	ADD_NEW_QUIZZES: 'add_new_quizzes',
 	FETCH_QUIZZES: 'fetch_quizzes',
-	CLOSE_QUIZ_BUILDER_MODAL: 'close_quiz_modal_action'
+	CLOSE_QUIZ_BUILDER_MODAL: 'close_quiz_modal_action',
+
+	TOGGLE_THUMBPOLL: 'TOGGLE_THUMBPOLL',
 }
 
 export default actionTypes

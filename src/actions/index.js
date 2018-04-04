@@ -464,6 +464,11 @@ export function previousQuestion() {
 	}
 }
 
+export function showThumbPollAction(){
+	return {
+		type: actionTypes.TOGGLE_THUMBPOLL
+	}
+} 
 
 /******************************************** QUIZ/QUESTION BUILDER ***************************************/
 export function showQuizModal() {
