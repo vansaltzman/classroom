@@ -14,6 +14,8 @@ import DeployIcon from 'grommet/components/icons/base/Deploy';
 import Status from 'grommet/components/icons/Status';
 import CloudUploadIcon from 'grommet/components/icons/base/CloudUpload';
 import ShareIcon from 'grommet/components/icons/base/Share';
+import BarChartIcon from 'grommet/components/icons/base/BarChart';
+import LikeIcon from 'grommet/components/icons/base/Like';
 import SearchInput from 'grommet/components/SearchInput';
 import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
@@ -182,114 +184,135 @@ class ClassView extends React.Component {
 					margin="none"
 					pad="none"
 				>
-								{this.props.targetClass.thumbPoll ?
-					<span></span> :
-						<Button icon={<DeployIcon />}
-						label= {'Launch Thumb Poll'}
-						primary={false}
-						secondary={false}
-						accent={true}
-						critical={false}
-						plain={false} 
-						onClick={this.launchThumbPoll}
-						 
-					/> 
-				}
-				<Box
+				<Header
 					direction="row"
 					full="true"
 					justify="between"
 					alignContent="center"
 					margin="small"
+					responsive={false}
 					pad="small"
 					colorIndex="light-2"
-					style={{margin: '0', position: 'sticky', top: '112px', zIndex:'2'}}
+					fixed={true}
+					style={{margin: '0', top: '112px', zIndex:'2'}}
 				>
-					{this.props.targetClass.isLive ?
-					<Anchor icon={<CloudUploadIcon size="large" />}
-						label= {'End Class'}
-						style={{lineHeight: '100px', marginLeft: "10px", width: '175px'}}
-						primary={false}
-						secondary={false}
-						accent={false}
-						critical={false}
-						plain={false} 
-						onClick={()=> this.toggleClassEndConfirmation()}
-					/> :
-					<Anchor icon={<DeployIcon size="large" />}
-						label= {'Go Live'}
-						style={{lineHeight: '100px', marginLeft: "10px", width: '175px'}}
-						primary={false}
-						secondary={false}
-						accent={true}
-						critical={false}
-						plain={false} 
-						onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
-					/>}
 					<Box
+						style={{width: '400'}}
 						direction="row"
+						margin="none"
+						// flex="shrink"
 					>
-					{this.props.targetClass.isLive ?
+						{this.props.targetClass.isLive ?
+						<Anchor icon={<CloudUploadIcon size="medium" />}
+							label= {'End Class'}
+							style={{lineHeight: '100px', marginLeft: "10px", width: '150px'}}
+							primary={false}
+							secondary={false}
+							accent={false}
+							critical={false}
+							plain={false} 
+							onClick={()=> this.toggleClassEndConfirmation()}
+						/> :
+						<Anchor icon={<DeployIcon size="medium" />}
+							label= {'Go Live'}
+							style={{lineHeight: '100px', marginLeft: "10px", width: '150px'}}
+							primary={false}
+							secondary={false}
+							accent={true}
+							critical={false}
+							plain={false} 
+							onClick={() => this.props.classGoLive(this.props.classId, this.props.targetClass) }
+						/>}
+						<Anchor icon={<LikeIcon size="medium" />}
+							label= {'Thumbs'}
+							style={{lineHeight: '100px', marginLeft: "20px", width: '150px'}}
+							primary={false}
+							secondary={false}
+							accent={true}
+							critical={false}
+							plain={false} 
+							onClick={this.launchThumbPoll}
+						/>
+					</Box>
+					<Box
+						direction="column"
+						margin="none"
+						style={{margin: '0 50px 0 50px'}}
+						justify="center"
+						flex="grow"
+					>
+						<Headline
+							style={{marginBottom: 0, lineHeight: '75px', textAlign:'center'}}
+						>
+							{this.props.targetClass.name}
+						</Headline>
+						{this.props.targetClass.isLive ?
 						<Box
-							direction="column"
+							direction="row"
 							justify="center"
 							align="center"
+							margin="none"
 							style={{marginRight: '20px'}}
 						>
-							<Status value={'ok'} size="large"/>
+							<Status value={'ok'} size="small"/>
 							<Label
 								margin="none"
-								style={{marginTop: '5px'}}
+								style={{marginLeft: '5px'}}
 							>
-								(online)
+								online
 							</Label>
 						</Box>
 					:
 					<Box
-						direction="column"
+						direction="row"
 						justify="center"
 						align="center"
+						margin="none"
 						style={{marginRight: '20px'}}
 					>
-						<Status value={'critical'} size="large"/>
+						<Status value={'critical'} size="small"/>
 						<Label
 							margin="none"
-							style={{marginTop: '5px'}}
+							style={{marginLeft: '5px'}}
 						>
-							(offline)
+							offline
 						</Label>
 					</Box>
 				 }
-						<Headline
-							style={{marginBottom: 0, lineHeight: '100px'}}
-						>
-							{this.props.targetClass.name}
-						</Headline>
 					</Box>
-					{ (this.state.selectedQuiz !== null && this.props.targetClass.isLive) ?
-					<Anchor icon={<ShareIcon size="large" />}
-						label={'Launch'} 
-						// + this.state.selectedQuiz.name}
-						style={{lineHeight: '100px', marginLeft: "10px", width: '175px'}}
-						primary={false}
-						secondary={false}
-						accent={false}
-						critical={false}
-						plain={false} 
-						onClick={this.props.toggleQuizLauncherModalAction}
-					/>
-				: <div style={{width: '185px'}}></div> }
-				<Button icon={<DeployIcon />}
-						label= {'Statistics'}
-						primary={false}
-						secondary={false}
-						accent={true}
-						critical={false}
-						path="/statistics"
-						plain={false} 
-						onClick={() => this.props.getTakenQuizzes({id: this.props.classId}) }
-					/>
+					<Box
+						style={{width: '400px'}}
+						direction="row"
+						justify="end"
+						margin="none"
+						// flex="shrink"
+					>
+						<Anchor icon={<ShareIcon size="medium" />}
+							label={'Start Quiz'} 
+							// + this.state.selectedQuiz.name}
+							style={{lineHeight: '100px', marginLeft: "10px", width: '150px'}}
+							primary={false}
+							secondary={false}
+							accent={false}
+							critical={false}
+							disabled={!(this.state.selectedQuiz !== null && this.props.targetClass.isLive)}
+							animateIcon={(this.state.selectedQuiz !== null && this.props.targetClass.isLive)}
+							plain={false} 
+							onClick={this.props.toggleQuizLauncherModalAction}
+						/>
+						<Anchor icon={<BarChartIcon size="medium" />}
+							label= {'Stats'}
+							style={{lineHeight: '100px', marginLeft: "20px", width: '130px'}}
+							primary={false}
+							secondary={false}
+							accent={true}
+							critical={false}
+							path="/statistics"
+							plain={false} 
+							onClick={() => this.props.getTakenQuizzes({id: this.props.classId}) }
+					/> 
 				</Box>
+				</Header>
 				<Split fixed={false}
 							 separator={false}
 							 showOnResponsive="both">
@@ -314,10 +337,9 @@ class ClassView extends React.Component {
 								return (
 									<Box
 										direction="row"
-										justify="start"
-										alignContent="between"
-										// style={{width: '400px'}}
-										style={{marginRight: 'auto', marginLeft: '20px', marginBottom: '10px'}}
+										justify="between"
+										alignContent="center"
+										style={{marginLeft: '20px', marginBottom: '10px', width: '400px'}}
 									>
 										<UserImage 
 											handRaised={student.handRaised} 
@@ -329,11 +351,27 @@ class ClassView extends React.Component {
 										/>
 										<Heading 
 											tag="h3"
-											truncate={true}
-											style={{textAlign: 'center', lineHeight: '50px', marginLeft: '20px', marginBottom: 0}}
+											truncate={false}
+											style={{width: '200px', maxHeight: '100px', textAlign: 'start', lineHeight: '50px', marginLeft: '20px', marginBottom: 0, overflow:'visible'}}
 										>
 											{student.name}
 										</Heading>
+										<Box
+											pad="small"
+											alignSelf="end"
+										>
+											<LikeIcon 
+												style={{transform: `rotate(${student.thumb}deg)`}} 
+												type="status"
+												colorIndex={student.thumb >= -45 ? 'ok' : student.thumb >= -135 ? 'warning' : 'critical'}
+											/>
+										</Box>
+										<Box
+											pad="small"
+											alignSelf="end"
+										>
+											<LikeIcon />
+										</Box>
 									</Box>
 								)
 							})}

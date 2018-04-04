@@ -18,6 +18,14 @@ class ThumbPoll extends React.Component {
   
   }
 
+  findBrightness(degrees) {
+    if (degrees >= -90) {
+      return (degrees/-90 * 100)
+    } else {
+      return (((degrees + 90)/-90 - 1) * 100) * -1
+    }
+  }
+
   render() {
     let oldDegree = this.state.temp
     let degrees = -90
@@ -45,11 +53,11 @@ class ThumbPoll extends React.Component {
     let styleSheet = document.styleSheets[0];
     let keyframes =
       `@keyframes frame {
-        0%   { transform: rotate(${degrees+10}deg); }
-        25% { transform: rotate(${degrees-10}deg); }
-        50% { transform: rotate(${degrees+10}deg); }
-        75% { transform: rotate(${degrees-10}deg); }
-        100% { transform: rotate(${degrees+10}deg); }
+        0%   { transform: rotate(${degrees+4}deg); }
+        25% { transform: rotate(${degrees-4}deg); }
+        50% { transform: rotate(${degrees+4}deg); }
+        75% { transform: rotate(${degrees-4}deg); }
+        100% { transform: rotate(${degrees+4}deg); }
       }`
     
       styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
@@ -61,7 +69,7 @@ class ThumbPoll extends React.Component {
       margin: 'auto',
       transition: 'transform 2s',
       animation: 'frame 3s infinite',
-      filter: 'hue-rotate(90deg)'
+      filter: `hue-rotate(${(degrees - 90) * .85}deg) brightness(${this.findBrightness(degrees) + 100}%)`
 
     }
 
@@ -73,7 +81,7 @@ class ThumbPoll extends React.Component {
           overlayClose={true}
           onClose={()=> {fb.setThumbPollLiveForStudents(this.props.teachersClassView.targetClass.id, false) } }>
         <Section>
-          <img src={'https://s3.us-east-2.amazonaws.com/jaqen-app/thumb.png'} alt='' style={thumbStyle}/>       
+          <img src={'https://s3.us-east-2.amazonaws.com/jaqen-app/thumb.png'} alt='👍' style={thumbStyle}/>       
           
         </Section>
      </Layer>

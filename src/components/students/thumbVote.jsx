@@ -25,6 +25,14 @@ class ThumbVote extends React.Component {
   }
 
 
+  findBrightness(degrees) {
+    if (degrees >= -90) {
+      return (degrees/-90 * 100)
+    } else {
+      return (((degrees + 90)/-90 - 1) * 100) * -1
+    }
+  }
+
   do(e) {
     this.setState({degree: e.target.value})
   }
@@ -62,6 +70,7 @@ class ThumbVote extends React.Component {
   render() {
 
     let degrees = this.state.degree
+    let thumbs = this.state.thumbs
 
     let styleSheet = document.styleSheets[0];
     let keyframes =
@@ -88,6 +97,7 @@ class ThumbVote extends React.Component {
       width: '30%',
       transform:`rotate(${degrees}deg)`,
       marginBottom: '50px',
+      filter: `hue-rotate(${(thumbs - 90) * .85}deg) brightness(${this.findBrightness(thumbs) + 100}%)`
       // animation: 'frame 3s infinite'
     }
 
