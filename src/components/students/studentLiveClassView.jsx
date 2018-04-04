@@ -27,10 +27,12 @@ class StudentLiveClassView extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.activeView.isLive) {
-			fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, true)
-		}
-	}
+        if (nextProps.studentState.targetClass.isLive && this.props.studentState.targetClass.activeView === undefined) {
+            console.log('Triggered')
+            this.props.fetchClassData(this.props.activeView.id, 'student')
+            fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, true)
+        }
+    }
 
 	componentWillUnmount() {
 		if (this.props.studentState.targetClass.isLive) { // Handles when student leaves class after class has ended
@@ -65,10 +67,9 @@ class StudentLiveClassView extends React.Component {
 			}
 			else if (!this.props.studentState.targetClass.isLive) {
 				liveView = <StudentQuizGradesView
-							className = {this.props.activeView.name}
-							classId = {this.props.activeView.id}
-							studentId={this.props.auth.user.id}
-							getQuizDataForStudentInClass={this.props.getQuizDataForStudentInClass}
+								targetClass={this.props.activeView}
+								studentId={this.props.auth.user.id}
+								getQuizDataForStudentInClass={this.props.getQuizDataForStudentInClass}
 							/>
 			}
 			else if(this.props.studentState.targetClass && this.props.studentState.targetClass.activeView){

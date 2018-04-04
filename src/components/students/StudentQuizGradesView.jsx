@@ -12,50 +12,47 @@ class StudentQuizGradesView extends React.Component {
         this.state = {
 
         }
-        this.toBeInComponentWillMount = this.toBeInComponentWillMount.bind(this);
     }
-    // componentWillMount() {
- 
-    // }
-    toBeInComponentWillMount() {
+    componentDidMount() {
         this.props.getQuizDataForStudentInClass({
             studentId: this.props.studentId,
-            classId: this.props.classId
+            classId: this.props.targetClass.id
         })
     }
 
     render() {
-        let className = this.props.className;
-        let classId = this.props.classId;
+        let className = this.props.targetClass.name;
+        let classId = this.props.targetClass.id
+        if (this.props.targetClass.quizGrades) {
+            var quizData = this.props.targetClass.quizGrades
+        } else {
+            var quizData = [];
+        }
         return (
             <div>
                 <Article>
-                    <Section pad='large'
+                    <Section pad='medium'
                         justify='center'
+                        colorIndex='grey-4'
                         align='center'>
-                        <Headline margin='medium'>
+                        <Headline margin='medium' size='medium'>
                         {className}
                         </Headline>
                     </Section>
 
-                    <Section pad='large'
+                    {/* <Section pad='large'
                         justify='center'
                         align='center'
-                        colorIndex='grey-4'>
-                        <Headline margin='none'>
+                        colorIndex='grey-3'
+                        >
+                        <Headline margin='none' size='medium'>
                             Stats will go here
                         </Headline>
-                    </Section>
+                    </Section> */}
 
-                    <StudentQuizGradeAccordionList />
-
-                    <Button
-                        label="get Data"
-                        type="button"
-                        primary={true}
-                        onClick={this.toBeInComponentWillMount}
-                        />
-                    
+                    <StudentQuizGradeAccordionList 
+                        quizData={quizData}
+                    />                    
                 </Article>
             </div>
         )
