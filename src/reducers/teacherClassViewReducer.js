@@ -351,7 +351,17 @@ export function teacherClassViewReducer(
 				...state, quizzes: quizzes
 			}
 			case actionTypes.FETCH_QUESTIONS:
-				//console.log('questions FETCH_QUESTIONS', action.questions)
+				console.log('questions FETCH_QUESTIONS at reducers', action.questions)
+				for (var qIndex = 0; qIndex < action.questions.length; qIndex++) {
+					var sum = 0;
+					for (var timeIndex = 0; timeIndex < action.questions[qIndex].timeSpent.length; timeIndex++) {
+						var time = action.questions[qIndex].timeSpent[timeIndex]
+						sum += time
+					}
+					var average = Math.round(sum / action.questions[qIndex].timeSpent.length/60/60);
+					action.questions[qIndex].timeAvg = average;
+				}
+				console.log('question with Avg', action.questions)
 				return {
 					...state,
 					questions: action.questions
@@ -429,7 +439,7 @@ export function teacherClassViewReducer(
 							studentsAndPerformances[studentId].sub.push(eachStudent.scores)
 						}
 					}
-					quizAverage = quizSum / numberOfStudents;
+					quizAverage = Math.round(quizSum / numberOfStudents);
 					action.quizzes[quizIndex].average = quizAverage
 					action.quizzes[quizIndex].quizDiscrete = quizDiscrete
 					quizAverages[action.quizzes[quizIndex].id] = quizAverage

@@ -415,7 +415,7 @@ class ClassView extends React.Component {
 										return (
 											<AccordionPanel key={i} heading={question.question}>
 												<Label>
-													{question.avg_time}
+													{question.timeAvg + ' min'}
 													{this.props.teachersClassView.showAddQuestionButton ? <Button onClick={() => this.props.addRecycledQuestion(question)}>Add Question</Button> : <div></div>}
 												</Label>
 												{question.answers.map((eachAnswer) => {
