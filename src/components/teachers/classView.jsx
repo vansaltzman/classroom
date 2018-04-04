@@ -1,5 +1,5 @@
 import React from 'react';
-import * as actions from '../../actions/index.js';
+//mport * as actions from '../../actions/index.js';
 import moment from 'moment';
 import axios from 'axios'
 
@@ -279,6 +279,16 @@ class ClassView extends React.Component {
 						onClick={this.props.toggleQuizLauncherModalAction}
 					/>
 				: <div style={{width: '185px'}}></div> }
+				<Button icon={<DeployIcon />}
+						label= {'Statistics'}
+						primary={false}
+						secondary={false}
+						accent={true}
+						critical={false}
+						path="/statistics"
+						plain={false} 
+						onClick={() => this.props.getTakenQuizzes({id: this.props.classId}) }
+					/>
 				</Box>
 				<Split fixed={false}
 							 separator={false}
@@ -544,7 +554,7 @@ class ClassView extends React.Component {
 										return (
 											<AccordionPanel key={i} heading={question.question}>
 												<Label>
-													{question.avg_time}
+													{question.timeAvg + ' min'}
 													{this.props.teachersClassView.showAddQuestionButton ? <Button onClick={() => this.props.addRecycledQuestion(question)}>Add Question</Button> : <div></div>}
 												</Label>
 												{question.answers.map((eachAnswer) => {

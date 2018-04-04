@@ -25,9 +25,11 @@ import ClassViewDefault from './students/classViewDefault.jsx';
 import ClassViewContainer from './teachers/classViewContainer.jsx';
 // import StudentLiveClassView from "./students/studentLiveClassView.jsx";
 import ImageUploader from './ImageUploader.jsx';
-import ProfilePic from './students/ProfilePic.jsx'
-import ThumbPoll from './teachers/thumbPoll.jsx'
-import ThumbVote from './students/thumbVote.jsx'
+import ProfilePic from './students/ProfilePic.jsx';
+import ThumbPoll from './teachers/thumbPoll.jsx';
+import ThumbVote from './students/thumbVote.jsx';
+import Statistics from './teachers/statistics.jsx';
+
 
 
 
@@ -166,10 +168,6 @@ class NavigationBar extends React.Component {
                 </Menu>
                 </Box>
             </Header>
-                           
-                            
-
-
         
                         <Switch>
                         <Route exact path="/"  render={
@@ -195,6 +193,7 @@ class NavigationBar extends React.Component {
                             <Route path="/thumb" component={ThumbPoll}/>
                             <Route path="/thumbvote" component={ThumbVote}/>
                         
+                            <Route path="/statistics" component={Statistics}/>
                             
 
                         </Switch>

@@ -65,6 +65,8 @@ const actionTypes = {
 	ADD_RECYCLED_QUESTION: 'add_recycled_question',
 
 	TOGGLE_THUMBPOLL: 'TOGGLE_THUMBPOLL',
+	GET_TAKEN_QUIZZES_ACTION: 'get_taken_quizzes_action',
+	SELECT_GRAPH_TO_SHOW_ACTION: 'select_graph_to_show_action'
 }
 
 export default actionTypes
