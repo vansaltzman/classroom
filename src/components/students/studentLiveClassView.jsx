@@ -67,7 +67,7 @@ class StudentLiveClassView extends React.Component {
 	handleToastClose () {
 		let studentId = this.props.auth.user.id;
 		if (this.props.activeView) {
-			let classId = this.props.activeView.id;
+			var classId = this.props.activeView.id;
 		}
 		fb.updateHandRaiseAcknowledgement(classId, studentId, 'acknowledge')
 	}
@@ -108,6 +108,20 @@ class StudentLiveClassView extends React.Component {
 				var queueIcon =  <UserExpert />
 				var critical = true;
 
+			} else if (this.props.studentState.targetClass.communication && 
+				this.props.studentState.targetClass.communication.hasOwnProperty(this.props.auth.user.id)) {
+					var toast = 
+				<Toast 
+					style={{zIndex: 15}}
+					status='ok'
+					size="large"
+					onClose={this.handleToastClose}>
+					{this.props.activeView.teacher + ' is comming to help!'}
+				</Toast>
+					var handRaiseLabel = 'Raise your hand';
+					var queueIcon =  <WorkshopIcon />
+					var critical = false;
+
 			} else {
 				var handRaiseLabel = 'Raise your hand';
 				var queueIcon =  <WorkshopIcon />
@@ -118,6 +132,7 @@ class StudentLiveClassView extends React.Component {
 				return (
 					<div>
 							{liveView}
+							{toast}
 
 							{this.props.studentState.targetClass.isLive &&
 							<Button 
