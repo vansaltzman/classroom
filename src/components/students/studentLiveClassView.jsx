@@ -44,6 +44,7 @@ class StudentLiveClassView extends React.Component {
 	}
 
 	componentWillUnmount() {
+		console.log('running comp will umount ')
 		if (this.props.studentState.targetClass.isLive) { // Handles when student leaves class after class has ended
 			fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, false)
 		}
@@ -65,7 +66,9 @@ class StudentLiveClassView extends React.Component {
 
 	handleToastClose () {
 		let studentId = this.props.auth.user.id;
-		let classId = this.props.activeView.id;
+		if (this.props.activeView) {
+			let classId = this.props.activeView.id;
+		}
 		fb.updateHandRaiseAcknowledgement(classId, studentId, 'acknowledge')
 	}
 	
@@ -76,9 +79,11 @@ class StudentLiveClassView extends React.Component {
 				liveView = <div>loading</div>
 			}
 			else if (!this.props.studentState.targetClass.isLive) {
+				// liveView = <Default live={false}/>
 				liveView = <StudentQuizGradesView
 								targetClass={this.props.activeView}
 								studentId={this.props.auth.user.id}
+								quizGrades={this.props.quizGrades}
 								getQuizDataForStudentInClass={this.props.getQuizDataForStudentInClass}
 							/>
 			}
@@ -139,7 +144,8 @@ function mapStateToProps(state) {
 		activeView: state.studentClassView.targetClass,
 		studentState: state.studentClassView,
 		classes: state.studentClassView.classes,
-		auth: state.auth
+		auth: state.auth,
+		quizGrades: state.studentClassView.quizGrades
 		// targetClass: state.studen
 	}
 }

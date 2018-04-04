@@ -45,7 +45,6 @@ export function studentClassViewReducer(
 		
 			case actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW:
 			return {...state, quizGrades: action.quizData}
-
 		
     default:
       return state;
