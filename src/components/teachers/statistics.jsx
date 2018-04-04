@@ -69,50 +69,65 @@ class Statistics extends React.Component {
             >
               {Object.values(this.props.teachersClassView.takenQuizzes).map(
                 quiz => {
-									var highest = 0;
-									for (var i = 0; i < Object.values(quiz.quizDiscrete).length; i++) {
-										if (Object.values(quiz.quizDiscrete)[i] > highest) {
-											highest = Object.values(quiz.quizDiscrete)[i]
-										}
-									}
-									console.log('highest', highest)
-									var interval = [];
-									for (var j = 0; j < highest + 2; j++) {
-										var obj = {}
-										obj.index = j;
-										obj.label = j * 5;
-										interval.push(obj);
-									}
-									console.log("interval", interval)
+                  var highest = 0;
+                  for (
+                    var i = 0;
+                    i < Object.values(quiz.quizDiscrete).length;
+                    i++
+                  ) {
+                    if (Object.values(quiz.quizDiscrete)[i] > highest) {
+                      highest = Object.values(quiz.quizDiscrete)[i];
+                    }
+                  }
+                  console.log("highest", highest);
+                  var interval = [];
+                  for (var j = 0; j <= Math.ceil(highest / 5); j++) {
+                    var obj = {};
+                    obj.index = j;
+                    obj.label = j * 5;
+                    interval.push(obj);
+                  }
+                  console.log("interval", interval);
                   return (
                     <AccordionPanel heading={<Label>{quiz.name}</Label>}>
                       <Label>{"Average: " + quiz.average}</Label>
-											<Chart>
-												<Axis
-													vertical={true}
-													//count={}
-													count={interval.length}
-													labels={interval}
-													//labels={[{"index": 2, "label": "20"}, {"index": 4, "label": "40"}]}
+                      <Chart>
+											<Axis
+                          vertical={true}
+                          //count={}
+                          count={interval.length}
+                          labels={interval}
+                          //labels={[{"index": 2, "label": "20"}, {"index": 4, "label": "40"}]}
                         />
-												<Chart>
-													<Axis vertical={true} count={3} ticks={true} />
-													<Base />
-													<Layers>
-														<Bar values={Object.values(quiz.quizDiscrete).map((each) => (each))} />
-													</Layers>
+                        <Chart >
+												
+												
+                          {/* <Axis vertical={true} count={1} ticks={true} /> */}
+                          <Base width="large"/>
+                          <Layers>
+														<Grid rows={5} columns={3}/>
+                            <Bar
+															max={highest + 2}
+                              values={Object.values(quiz.quizDiscrete).map(
+                                each => each
+                              )}
+                            />
 													<Axis
-														count={Object.keys(quiz.quizDiscrete).length}
-														labels={Object.keys(quiz.quizDiscrete).map(
-															(grade, index) => {
-																return {
-																	"index": index,
-																	"label": grade
-																};
-															}
-														)}
-                        	/>
-												</Chart>
+														vertical={false}
+														ticks={true}
+                            count={Object.keys(quiz.quizDiscrete).length}
+                            labels={Object.keys(quiz.quizDiscrete).map(
+                              (grade, index) => {
+                                return {
+                                  index: index,
+                                  label: grade
+                                };
+                              }
+                            )}
+                          />
+                          </Layers>
+                        </Chart>
+												
                       </Chart>
                       {Object.values(quiz.questions).map((question, i) => {
                         return (

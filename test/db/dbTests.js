@@ -133,8 +133,8 @@ exports.verifyUser = function() {
 
 
 /******** Students *******/
+
 let Ara = ['Ara', 'Nguyen', 'pnn2104@columbia.edu', '123456'];
-let Jae = ['Jae', 'Jang', 'jj2837@columbia.edu', '123456'];
 let Adam = ['Adam', 'Mateo', 'adam@mateo.edu', '123456'];
 let Jerry = ['Jerry', 'Chen', 'jerry@chen.edu', '123456'];
 let Artem = ['Artem', 'Ipatev', 'artem@ipatev.edu', '123456'];
@@ -154,6 +154,8 @@ let Marcus = ['Marcus', 'Hausler', 'marcus@hausler.edu', '123456'];
 let Danny = ['Danny', 'Schradder', 'danny@schradder.edu', '123456'];
 let Quentin = ['Quentin', 'Quentin', 'quentin@quentin.edu', '123456'];
 let Chris = ['Chris', 'Rigoli', 'chris@rigoli.edu', '123456'];
+let Yuqing = ['Yuqing', 'Dong', 'yuqing@dong.edu', '123456'];
+let EricShum = ['Eric', 'Shum', 'eric@shum.edu', '123456'];
 
 const addStudents = function(student) {
   hashStudent = student.slice();
@@ -170,7 +172,7 @@ const addStudents = function(student) {
     }
   })
 }
-addStudents(Chris);
+addStudents(EricShum);
 
 
 //let JoeJoe = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']
