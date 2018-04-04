@@ -140,8 +140,6 @@ class IndividualQuizGradeAccordion extends React.Component {
                         return (
                         <Box direction='row' full='horizontal' alignContent='between' style={{marginBottom:'50px'}} >
                           <div style={{ width:'300px', height:'50px', align:'center'}}>
-                            {console.log('quiz where property not defined ', quiz)}
-                            {console.log('question where property not defined ', question)}
                                 { quiz.responses[question.id] && !quiz.responses[question.id].correct ? 
                                     <Status value='critical' size='medium' style={{paddingLeft:'30px'}} /> 
                                     : <Status value='ok' size='medium' style={{paddingLeft:'30px'}} />

@@ -23,8 +23,8 @@ class StudentQuizGradesView extends React.Component {
     render() {
         let className = this.props.targetClass.name;
         let classId = this.props.targetClass.id
-        if (this.props.targetClass.quizGrades) {
-            var quizData = this.props.targetClass.quizGrades
+        if (this.props.quizGrades) {
+            var quizData = this.props.quizGrades
         } else {
             var quizData = [];
         }

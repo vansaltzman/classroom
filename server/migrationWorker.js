@@ -3,7 +3,7 @@ const { db } = require('../db/mainDb')
 const main = require('../db/mainDb')
 
 const fbClassToPgObj = function(classObj) {
-  console.log('class object in fb class to pg obj ', classObj)
+  // console.log('class object in fb class to pg obj ', classObj)
   const classId = classObj.id
   const { name, quizzes, students, teacher_id, subject_id } = classObj
   return submitParticipation(classId, students)
@@ -20,8 +20,8 @@ const fbClassToPgObj = function(classObj) {
             responsesObj[student.id] = studentObj
         })
     
-        console.log('responses obj in fb class to pg ', responsesObj);
-        console.log('quizzes in fb class to pg ', quizzes);
+        // console.log('responses obj in fb class to pg ', responsesObj);
+        // console.log('quizzes in fb class to pg ', quizzes);
         return submitQuiz(quizzes[quizId], responsesObj, classId)
       }))
     }
@@ -94,6 +94,7 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
             let responseForThisQuestion = student.responses[question.previous_id]
             let studentsAnswer = answerMapper[Object.keys(responseForThisQuestion.answers).find(key => responseForThisQuestion.answers[key] === true)] || {newId: null, isCorrect: false}
             responseForThisQuestion.time = responseForThisQuestion.time || null
+            console.log('console log before this query ', question.previous_id)
             return db.query(
             `INSERT INTO students_responses (student_id, response_id, question_id, draft_question_id, time_spent, correct) 
             VALUES ($1, $2, $3, $4, $5, $6)`, [student.id, studentsAnswer.newId, question.id, question.previous_id, responseForThisQuestion.time, studentsAnswer.isCorrect])

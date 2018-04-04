@@ -3,7 +3,8 @@ import axios from "axios";
 
 export function studentClassViewReducer(
   state = {
-    classes: []
+		classes: [],
+		quizGrades: []
   },
   action
 ) {
@@ -43,9 +44,7 @@ export function studentClassViewReducer(
 			return {...state, targetClass: action.classData}
 		
 			case actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW:
-			let newTargetClass = Object.assign( {}, state.targetClass);
-			newTargetClass.quizGrades = action.quizData
-			return {...state, targetClass: newTargetClass}
+			return {...state, quizGrades: action.quizData}
 		
     default:
       return state;
