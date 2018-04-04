@@ -167,6 +167,55 @@ const updateHandRaiseAcknowledgement = function (classId, studentId, type) {
 	})
 }
 
+const incrementThumbTotal = function (classId, studentId, difference) {
+	console.log('liveclassroom fired increment', classId)
+	const thumbTotal= fb.ref('/classes/' + classId + '/students/' + studentId + '/thumb');
+		return thumbTotal.once('value', (snap) => {
+			let currentTotal = snap.val();
+					currentTotal += difference
+			console.log('current total',currentTotal)
+			thumbTotal.set(currentTotal);
+		})
+	}
+
+const decrementThumbTotal = function (classId, studentId, difference) {
+	console.log('liveclassroom fired decrement', classId)
+	const thumbTotal= fb.ref('/classes/' + classId + '/students/' + studentId + '/thumb');
+		return thumbTotal.once('value', (snap) => {
+			let currentTotal = snap.val();
+			currentTotal -= difference
+			thumbTotal.set(currentTotal);
+			console.log('currentTotal in live classroom.js students thumb call', currentTotal)
+		})		
+	}
+
+const getThumbTotal = function (classId, studentId) {
+	const thumbTotal= fb.ref('/classes/' + classId + '/students/' + studentId + '/thumb');
+	thumbTotal.on('value', (snap) => {
+		console.log('snap.val----', snap.val())
+		let currentTotal = snap.val();
+		return currentTotal
+	})
+}
+
+const setStudentsThumbsNeutral = function (classId) {
+	let count = -90
+	const studentsObj = fb.ref('/classes/' + classId + '/students')
+	studentsObj.once('value', (snap) => {
+		let students = snap.val()
+	
+		students.forEach( student => {
+			let studentRef = fb.ref('/classes/' + classId + '/students/' + student.id + '/thumb');
+			studentRef.set(count)
+			})
+	})
+}
+
+const setThumbPollLiveForStudents = function (classId, bool) {
+	console.log('fb bool-------', typeof bool, bool)
+	const classRoom = fb.ref('/classes/' + classId + '/thumbPoll')
+	classRoom.set(bool)
+}
 
 module.exports = {  
   fb,
@@ -182,5 +231,12 @@ module.exports = {
 	stopFetchingClassData,
 	toggleStudentHandRaiseStatus,
 	updateHandRaiseQueue,
-	updateHandRaiseAcknowledgement
+	updateHandRaiseAcknowledgement,
+	incrementThumbTotal,
+	decrementThumbTotal,
+	getThumbTotal,
+	setThumbPollLiveForStudents,
+	setStudentsThumbsNeutral
+
+
 }
