@@ -31,12 +31,14 @@ app.use(bodyParser.json())
 
 
 // Amazon s3 config
-const s3 = new AWS.S3();
+
 AWS.config.update(  {
   accessKeyId: configAWS.AWS_ACCESS_KEY_ID,
-  secretAccessKey: configAWS.AWS_SECRET_ACCESS_KEY
+  secretAccessKey: configAWS.AWS_SECRET_ACCESS_KEY,
+  region: configAWS.REGION 
 });
 
+const s3 = new AWS.S3();
 const upload = multer({dest: 'uploads/'});
 
 app.post('/imageUploader', upload.single('file'), (req, res) => {
