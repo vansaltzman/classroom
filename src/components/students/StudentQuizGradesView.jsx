@@ -40,19 +40,15 @@ class StudentQuizGradesView extends React.Component {
                         </Headline>
                     </Section>
 
-                    {/* <Section pad='large'
-                        justify='center'
-                        align='center'
-                        colorIndex='grey-3'
-                        >
-                        <Headline margin='none' size='medium'>
-                            Stats will go here
+                    {!quizData.length ?
+                        <Headline margin='medium' size='small'>
+                            No quizzes to show at this moment
                         </Headline>
-                    </Section> */}
-
+                        :
                     <StudentQuizGradeAccordionList 
                         quizData={quizData}
-                    />                    
+                    />          
+                    }          
                 </Article>
             </div>
         )
