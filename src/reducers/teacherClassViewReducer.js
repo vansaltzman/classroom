@@ -375,9 +375,17 @@ export function teacherClassViewReducer(
 					}
 				}
 			case actionTypes.GET_TAKEN_QUIZZES_ACTION:
+				console.log('action.quizzes taken quizzes', action.quizzes);
 				var quizAverages = {}
 				var studentsAndPerformances = {};
 				for (var quizIndex = 0; quizIndex < action.quizzes.length; quizIndex++) {
+					let quizDiscrete = {
+						A: 0,
+						B: 0,
+						C: 0,
+						D: 0,
+						F: 0
+					}
 					let quizSum = 0;
 					let quizId = action.quizzes[quizIndex].id;
 					let quizAverage;
@@ -386,6 +394,7 @@ export function teacherClassViewReducer(
 					for (var studentIndex = 0; studentIndex < numberOfStudents; studentIndex++) {	
 						let studentSum = 0;
 						const studentId = students[studentIndex].id;
+						const letterGrade = "";
 						const scores = {}
 						const eachStudent = action.quizzes[quizIndex].students[studentIndex]
 						const eachStudentResponses = Object.values(eachStudent.responses);
@@ -396,6 +405,17 @@ export function teacherClassViewReducer(
 							}
 						}
 						const studentScore = (studentSum / numberOfResponses) * 100;
+						if (studentScore >= 90 && studentScore <= 100) {
+							quizDiscrete.A += 1;
+						} else if (studentScore >= 80 && studentScore < 90) {
+							quizDiscrete.B += 1;
+						} else if (studentScore >= 70 && studentScore < 80) {
+							quizDiscrete.C += 1; 
+						} else if (studentScore >= 65 && studentScore < 70) {
+							quizDiscrete.D += 1;
+						} else if (studentScore < 65) {
+							quizDiscrete.F += 1;
+						}
 						scores[action.quizzes[quizIndex].id] = studentScore;
 						quizSum += studentScore;
 						eachStudent.scores = scores
@@ -410,6 +430,8 @@ export function teacherClassViewReducer(
 						}
 					}
 					quizAverage = quizSum / numberOfStudents;
+					action.quizzes[quizIndex].average = quizAverage
+					action.quizzes[quizIndex].quizDiscrete = quizDiscrete
 					quizAverages[action.quizzes[quizIndex].id] = quizAverage
 				}
 				var quizAveragesSub = Object.keys(quizAverages).map((eachKey) => {
@@ -432,7 +454,7 @@ export function teacherClassViewReducer(
 				}
 
 				case actionTypes.SELECT_GRAPH_TO_SHOW_ACTION:
-				console.log("action.target.suggestion.value", action.target.option)
+				//console.log("action.target.suggestion.value", action.target.option)
 					const graphs = state.selectedGraphs.slice();
 					graphs.push(action.target.option);
 				return {

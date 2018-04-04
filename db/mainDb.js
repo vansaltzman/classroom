@@ -471,7 +471,6 @@ const getTakenQuizzesAndStudentsPerformance = function(targetClassId) {
         })
       }))
       .then((data) => {
-        console.log('eachQuiz ---------', data)
         eachQuiz.students = data
         return eachQuiz
       })

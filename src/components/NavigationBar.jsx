@@ -156,10 +156,6 @@ class NavigationBar extends React.Component {
                     </Menu>
                 </Box>
             </Header>
-                           
-                            
-
-
         
                         <Switch>
                         <Route exact path="/"  render={

@@ -8,9 +8,8 @@ import Chart, {
   MarkerLabel,
   HotSpots
 } from "grommet/components/chart/Chart";
-// import Value from "grommet/components/Value";
-// import Base from "grommet/components/Value";
-// import Layer from "grommet/components/Layer";
+import Meter from "grommet/components/Meter";
+
 import { Layers, Base, Value } from "grommet";
 //import Layers from "grommet/components/chart/Layers";
 import React from "react";
@@ -25,64 +24,49 @@ class ClassPerformance extends React.Component {
       Object.values(this.props.teachersClassView.takenQuizzesAverages)
     );
     return (
-      <Chart>
+      <Chart full={true}>
         <Axis
           count={5}
           labels={[{ index: 2, label: "50" }, { index: 4, label: "100" }]}
           vertical={true}
         />
-        <Chart vertical={true}>
-          <MarkerLabel count={12} index={11} label={<Value value={50} />} />
+        <Chart vertical={true} full={true}>
           <Base height="medium" width="medium" />
           <Layers>
             <Grid rows={5} columns={3} />
-            {/* <Area
-              values={[50, 45, 30, 35, 0, 5, 10, 15, 75, 80, 90, 100]}
-              colorIndex="graph-1"
-              activeIndex={11}
-            />
-            <Bar
-              values={[45, 25, 60, 12, 35, , 10, 45, 60, 85, 70, 20]}
-              colorIndex="graph-2"
-              activeIndex={11}
-						/> */}
-						{
-							this.props.teachersClassView.selectedGraphs.map((eachGraph) => {
-								return (<Line 
-													values={eachGraph.sub.map((eachScore) => {
-														return Object.values(eachScore)[0]
-													})}
-											 />)
-							})
-						}
-            {/* <Line
-              values={Object.values(this.props.teachersClassView.takenQuizzesAverages)}
-              colorIndex="accent-1"
-              activeIndex={11}
-            />
-						 <Line
-              values={[45, 25, 60, 12, 35, , 10, 45, 60, 85, 70, 20]}
-              colorIndex="accent-1"
-              activeIndex={11}
-            /> */}
-            {/* <Marker
-              colorIndex="graph-2"
-              count={12}
-              vertical={true}
-              index={11}
-            />
+            {this.props.teachersClassView.selectedGraphs.map(eachGraph => {
+              return (
+                <Line
+                  points={true}
+                  values={eachGraph.sub.map(eachScore => {
+                    return Object.values(eachScore)[0];
+                  })}
+                />
+              );
+            })}
             <HotSpots
               count={12}
               max={100}
               activeIndex={11}
               onActive={() => {}}
-            /> */}
+            />
           </Layers>
           <Axis
             count={2}
-            labels={[{ index: 0, label: "2012" }, { index: 1, label: "2015" }]}
+            labels={this.props.teachersClassView.selectedGraphs[0].sub.map(
+              (eachQuiz, index) => {
+                return { index: index, label: "Quiz " + Number(index + 1) };
+              }
+            )}
           />
         </Chart>
+        {/* <Chart a11yTitle="Chart representing number of commits in the last three days.">
+          <Axis vertical={true} count={3} ticks={true} />
+          <Base />
+          <Layers>
+            <Bar values={[70, 10, 20, 100, 60]} />
+          </Layers>
+        </Chart> */}
       </Chart>
     );
   }

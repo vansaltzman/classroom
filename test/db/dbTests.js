@@ -143,6 +143,17 @@ let Juan = ['Juan', 'Galan', 'juan@galan.edu', '123456'];
 let AlexL = ['Alex', 'Levine', 'alex@levine.edu', '123456'];
 let AlexC = ['Alex', 'Chojnacki', 'alex@chojnacki.edu', '123456'];
 let EricSin = ['Eric', 'Sin', 'eric@sin.edu', '123456'];
+let Rory = ['Rory', 'Reagan', 'rory@reagan.edu', '123456'];
+let Brent = ['Brent', 'Hagen', 'brent@hagen.edu', '123456'];
+let Aloralyn = ['Aloralyn', 'Ayran', 'aloralyn@ayran.edu', '123456'];
+let Allegra = ['Allegra', 'Bernt', 'allegra@bernt.edu', '123456'];
+let Michael = ['Michael', 'Vasio', 'michael@vasio.edu', '123456'];
+let Xixi = ['Xixi', 'Chen', 'xixi@chen.edu', '123456'];
+let Manos = ['Manos', 'Manos', 'manos@manose.edu', '123456'];
+let Marcus = ['Marcus', 'Hausler', 'marcus@hausler.edu', '123456'];
+let Danny = ['Danny', 'Schradder', 'danny@schradder.edu', '123456'];
+let Quentin = ['Quentin', 'Quentin', 'quentin@quentin.edu', '123456'];
+let Chris = ['Chris', 'Rigoli', 'chris@rigoli.edu', '123456'];
 
 const addStudents = function(student) {
   hashStudent = student.slice();
@@ -159,7 +170,7 @@ const addStudents = function(student) {
     }
   })
 }
-addStudents(Artem);
+addStudents(Chris);
 
 
 //let JoeJoe = ['Joe', 'Joe', 'joejoe@hackreactor.edu', 'joejoe']

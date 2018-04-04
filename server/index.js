@@ -311,18 +311,7 @@ app.post('/getTakenQuizzes', (req, res) => {
   console.log('class Id server sideeeee', req.body)
   main.getTakenQuizzesAndStudentsPerformance(req.body.id)
   .then((data) => {
-    // console.log('serverside taken quiz', data)
-    // for (var quizIndex = 0; quizIndex < action.quizzes.length; quizIndex++) {
-    //   //console.log("action.quizzes[quizIndex]", action.quizzes[quizIndex])
-    //   let quizSum = 0;
-    //   for (var studentIndex = 0; studentIndex < action.quizzes[quizIndex].students.length; studentIndex++) {
-    //     const eachStudent = action.quizzes[quizIndex].students[studentIndex]
-    //     const eachStudentResponses = Object.values(eachStudent.responses);
-    //     console.log('responses', Object.values(eachStudent.responses))
-    //     for (var responseIndex = 0; responesIndex )
-    //     //console.log("action.quizzes.students.length", action.quizzes[quizIndex].students[studentIndex])
-    //   }
-    // }
+    console.log('data at server side for taken quizzes', JSON.stringify(data))
     res.send(data)
   })
 })
