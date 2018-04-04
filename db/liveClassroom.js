@@ -17,7 +17,7 @@ const fb = firebase.database();
 
 fb.ref('/').once('value')
 .then(snap=> {
-	if (snap.toJSON().classes) console.log('Classes live on app launch: ', Object.values(snap.toJSON().classes).map(each => each.name))
+	// if (snap.toJSON().classes) console.log('Classes live on app launch: ', Object.values(snap.toJSON().classes).map(each => each.name))
 })
 
 const selectClass = function(classId) {
