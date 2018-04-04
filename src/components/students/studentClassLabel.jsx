@@ -11,7 +11,6 @@ class StudentClassLabel extends React.Component {
     super()
   }
   render() {
-    console.log(this.props.item.isLive);
     return (
       <Tile>
       <Card

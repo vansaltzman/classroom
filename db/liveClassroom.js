@@ -44,6 +44,10 @@ const fetchClassData = function(classId) {
 		})
 }
 
+const stopFetchClassData = function(classId) {
+	return fb.ref('/classes/' + classId).off('value')
+}
+
 const removeClass = function(classId) {
 	return fb.ref('/classes/').child(classId).remove()
 }
@@ -171,6 +175,7 @@ module.exports = {
 	endClass,
 	removeClass,
 	fetchClassData,
+	stopFetchClassData,
 	toggleStudentLiveClassStatus,
   updateActiveView,
   insertStudentAnswers,

@@ -5,7 +5,6 @@ import Heading from 'grommet/components/Heading';
 import Button from 'grommet/components/Button';
 
 const classViewDefault = ({live}) => {
-  console.log('-----LOGGED IN classViewDefault')
   return (
     <div style={{
       left: 0,

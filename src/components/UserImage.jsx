@@ -71,7 +71,7 @@ class UserImage extends React.Component {
         <div style={{position: 'relative'}} onClick={this.toggleShowMenu} >  
           <img 
             src={url || "https://ca.slack-edge.com/T2SUXDE72-U8SAGQ1E0-8fa5cea28518-72"} 
-            style={{height: '50px', width: '50px', borderRadius: '50%', cursor:'pointer', opacity: isHere ? 1 : 0.3}}
+            style={{height: '50px', width: '50px', borderRadius: '50%', cursor:'pointer', opacity: isHere ? 1 : 0.3 || 0.3}}
             
           />
           { handRaised &&
