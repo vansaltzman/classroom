@@ -25,7 +25,7 @@ class StudentViewQuiz extends React.Component {
     this.state = {
       count: [],
       arrayOfQuestionIds: [],
-      enteredCurrentQuestionTime: null,
+      enteredCurrentQuestionTime: new Date(),
     }
     this.forwardClick = this.forwardClick.bind(this)
     this.backwardClick = this.backwardClick.bind(this);
@@ -45,11 +45,7 @@ componentDidMount() {
 
 getDuration () {
   var now = new Date();
-  const duration = now - this.state.enteredCurrentQuestionTime;
-  this.setState({
-    enteredCurrentQuestionTime: now
-  })
-  return {duration, now: now.getTime()};
+  return now.getTime();
 }
 
 
@@ -61,12 +57,16 @@ forwardClick(e) {
   }
   let quizResponseObj = this.props.quizResponseObj
   let copy = Object.assign({}, quizResponseObj)
-  let times = this.getDuration();
+  let now = this.getDuration();
   if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion]]) {
-    copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time = times.duration;
+   if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time) {
+    copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time += now - copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].entered
+   } else {
+    copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time = now - copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].entered
+   }
   }
   if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion + 1]]) {
-    copy.responses[this.state.arrayOfQuestionIds[currentQuestion + 1]].entered = times.now
+    copy.responses[this.state.arrayOfQuestionIds[currentQuestion + 1]].entered = now
   }
   copy.currentQuestion++
   if(copy.currentQuestion === this.state.arrayOfQuestionIds.length - 1) {
@@ -77,7 +77,6 @@ forwardClick(e) {
 }
 
 submitQuiz(e) {
-  console.log('this.state.count ------> ', this.state.count)
   let quizResponseObj = this.props.quizResponseObj
   let copy = Object.assign({}, quizResponseObj)
 
@@ -91,12 +90,16 @@ backwardClick(e) {
   let currentQuestion = this.props.currentQuestion
   let quizResponseObj = this.props.quizResponseObj
   let copy = Object.assign({}, quizResponseObj)
-  let times = this.getDuration();
+  let now = this.getDuration();
   if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion]]) {
-    copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time = times.duration;
+    if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time) {
+      copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time += now - copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].entered
+     } else {
+      copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time = now - copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].entered
+     }
   }
   if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion - 1]]) {
-    copy.responses[this.state.arrayOfQuestionIds[currentQuestion - 1]].entered = times.now
+    copy.responses[this.state.arrayOfQuestionIds[currentQuestion - 1]].entered = now
   }
   console.log('Copy ------> ', copy)
     copy.currentQuestion--

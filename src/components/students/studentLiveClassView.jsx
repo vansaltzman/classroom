@@ -63,7 +63,9 @@ class StudentLiveClassView extends React.Component {
 
 	handleToastClose () {
 		let studentId = this.props.auth.user.id;
-		let classId = this.props.activeView.id;
+		if (this.props.activeView) {
+			var classId = this.props.activeView.id;
+		}
 		fb.updateHandRaiseAcknowledgement(classId, studentId, 'acknowledge')
 	}
 	

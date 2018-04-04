@@ -20,6 +20,7 @@ import UserImage from '../UserImage.jsx'
 import Heading from 'grommet/components/Heading';
 import Label from 'grommet/components/Label';
 import Fade from 'grommet/components/Animate';
+import QuestionTime from './currentQuestionTime.jsx'
 
 import moment from 'moment'
 
@@ -29,9 +30,9 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 	// const quiz = targetClass.quizzes[targetClass.activeView];
 	// const quizIds = Object.keys(quiz.questions);
 
-	const timeValue = 
+	// const timeValue = 
 
-	studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time
+	// studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time
 
 	const endQuiz = function() {
 		fb.updateActiveView(false, targetClass.id)
@@ -126,7 +127,11 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 							>
 								For:
 							</Label>
-							<div style={{marginTop: '-8px'}}>
+							<QuestionTime
+								duration={studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time || 0}
+								entered={studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].entered}
+							/>
+							{/* <div style={{marginTop: '-8px'}}>
 								<Value 
 									size="medium"
 									value={studentQuiz && studentQuiz.currentQuestion >= 0 ? moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).minutes() : null}
@@ -142,7 +147,7 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 											'0' + moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds() : 
 											moment.duration(studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time).seconds()}
 									responsive={false} />
-							</div>
+							</div> */}
 						</div>
 						}
 					</Box>
