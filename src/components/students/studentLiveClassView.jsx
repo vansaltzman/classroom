@@ -38,7 +38,7 @@ class StudentLiveClassView extends React.Component {
 			console.log('thisClass ------> ', thisClass)
 			this.props.updateStudentTargetClass(this.props.classes.find(each => each.class_id === this.props.studentState.targetClass.id))
 			fb.stopFetchClassData(this.props.activeView.id)
-		}
+		} 
 	}
 
 	componentWillUnmount() {

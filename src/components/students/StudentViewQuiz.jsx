@@ -49,7 +49,7 @@ getDuration () {
   this.setState({
     enteredCurrentQuestionTime: now
   })
-  return duration;
+  return {duration, now: now.getTime()};
 }
 
 
@@ -61,9 +61,12 @@ forwardClick(e) {
   }
   let quizResponseObj = this.props.quizResponseObj
   let copy = Object.assign({}, quizResponseObj)
-  let duration = this.getDuration();
+  let times = this.getDuration();
   if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion]]) {
-    copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time = duration;
+    copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time = times.duration;
+  }
+  if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion + 1]]) {
+    copy.responses[this.state.arrayOfQuestionIds[currentQuestion + 1]].entered = times.now
   }
   copy.currentQuestion++
   if(copy.currentQuestion === this.state.arrayOfQuestionIds.length - 1) {
@@ -88,10 +91,14 @@ backwardClick(e) {
   let currentQuestion = this.props.currentQuestion
   let quizResponseObj = this.props.quizResponseObj
   let copy = Object.assign({}, quizResponseObj)
-  let duration = this.getDuration();
+  let times = this.getDuration();
   if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion]]) {
-    copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time = duration;
+    copy.responses[this.state.arrayOfQuestionIds[currentQuestion]].time = times.duration;
   }
+  if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion - 1]]) {
+    copy.responses[this.state.arrayOfQuestionIds[currentQuestion - 1]].entered = times.now
+  }
+  console.log('Copy ------> ', copy)
     copy.currentQuestion--
     this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
 }

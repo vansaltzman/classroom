@@ -80,7 +80,7 @@ class NavigationBar extends React.Component {
             var menuLabel = 'Start';
             var navBarBackground = 'lightGreen'
             var dropAnchors = 
-                <div>
+                <div style={{marginTop: '38px'}}>
                     <Anchor path="/login">
                         Login 
                     </Anchor>
@@ -93,7 +93,7 @@ class NavigationBar extends React.Component {
                 var menuLabel = this.props.auth.user.email;
                 var navBarBackground = 'lightCoral'
                 var dropAnchors = 
-                <div >
+                <div style={{marginTop: '38px'}}>
 
                     <Anchor path='/classViewContainer'>
                         Quiz View
