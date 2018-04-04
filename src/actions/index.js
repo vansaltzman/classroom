@@ -422,7 +422,7 @@ export function toggleStudentLiveClassStatus (classId, studentId) {
 		})
 	}
 }
-function toggleStudentLiveClassStatusAction () {
+function toggleStudentLiveClassStatusAction (classId, studentId, targetClass) {
 		return {
 			type: actionTypes.TOGGLE_STUDENT_LIVE_STATUS
 		}
@@ -672,6 +672,7 @@ export function fetchQuestions(reqObj) {
 	return (dispatch) => {
 		axios.post('/fetchQuestions', reqObj)
 		.then((res) => {
+			console.log('fetched questions', res.data)
 			dispatch(fetchQuestionsAction(res.data))
 		}) 
 	}
@@ -722,5 +723,33 @@ function getQuizDataForStudentAction(studentQuizData) {
 	return {
 		type: actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW,
 		quizData: studentQuizData
+	}
+}
+
+export function getTakenQuizzes(classIdObj) {
+	return (dispatch) => {
+		axios.post('/getTakenQuizzes', classIdObj)
+		.then((res) => {
+			console.log('taken quizzes at action', res.data)
+			return dispatch(getTakenQuizzesAction(res.data))
+		})
+	}
+}
+function getTakenQuizzesAction(quizzes) {
+	return {
+		type: actionTypes.GET_TAKEN_QUIZZES_ACTION,
+		quizzes
+	}
+}
+
+export function selectGraphToShow(target) {
+	return (dispatch) => {
+		dispatch(selectGraphToShowAction(target))
+	}
+}
+function selectGraphToShowAction(target) {
+	return {
+		type: actionTypes.SELECT_GRAPH_TO_SHOW_ACTION,
+		target
 	}
 }

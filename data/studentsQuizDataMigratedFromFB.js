@@ -270,12 +270,18 @@ const migrated = {
  }
  
 const calculateAverageTimeForQuestions = function(classFromFB) {
-  const studentsAndTheirResponses = classFromFB[1].students.slice(1);
-  console.log(studentsAndTheirResponses);
-  for (var i = 0; i < studentsAndTheirResponses.length; i++) {
-    const eachStudentQuiz = Object.values(studentsAndTheirResponses[i].quizzes)[0];
-    const questionsFromEachQuiz = eachStudentQuiz.questions.slice(1) //array of question objs...each question has
-  }
+  //console.log()
+  const takenQuiz = Object.values(classFromFB.classes[1].quizzes)[0];
+  console.log('takenQuiz', takenQuiz.id);
+  const takenQuizQuestions = takenQuiz.questions;
+  //console.log('questions', questions.slice(1))
+  const studentsAndTheirResponses = classFromFB.classes[1].students.slice(1);
+  //console.log(studentsAndTheirResponses);
+  // for (var i = 0; i < studentsAndTheirResponses.length; i++) {
+  //   const eachStudentQuiz = Object.values(studentsAndTheirResponses[i].quizzes)[0];
+  //   console.log('student name: ', studentsAndTheirResponses[i].name, 'student quiz', eachStudentQuiz);
+  //   //const questionsFromEachQuiz = eachStudentQuiz.questions.slice(1) //array of question objs...each question has
+  // }
 }
 
 calculateAverageTimeForQuestions(migrated)

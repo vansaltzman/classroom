@@ -1,3 +1,4 @@
+
 const fb = require('../db/liveClassroom')
 const { db } = require('../db/mainDb')
 const main = require('../db/mainDb')
@@ -10,18 +11,14 @@ const fbClassToPgObj = function(classObj) {
   .then(()=> {
     if (quizzes) {
       return Promise.all(Object.keys(quizzes).map(quizId => {
-    
-        responsesObj = {}
-        
+        console.log ('is it event here???')
+        responsesObj = {}    
         Object.values(students).forEach(student => {
             studentObj = {}
             studentObj.id = student.id   
             studentObj.responses = student.quizzes[quizId].responses
             responsesObj[student.id] = studentObj
         })
-    
-        // console.log('responses obj in fb class to pg ', responsesObj);
-        // console.log('quizzes in fb class to pg ', quizzes);
         return submitQuiz(quizzes[quizId], responsesObj, classId)
       }))
     }
@@ -33,6 +30,7 @@ const fbClassToPgObj = function(classObj) {
 
 const submitParticipation = function(classId, students) {
   return Promise.all(Object.values(students).map(student=> {
+    console.log('participation student', student)
     let newParticipation = student.participation || 0
     return db.query(
       `UPDATE classes_students SET participation = participation + $1 WHERE class_id = $2 AND student_id = $3 RETURNING participation`, 
@@ -45,18 +43,23 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
   console.log('Submit Quiz for: ', quizObj.name)
 
   const prevQuizId = quizObj.id;
+  console.log('previousgdaad', prevQuizId)
   const quizName = quizObj.name;
+  console.log('quizName', quizName)
   const questions = quizObj.questions;
   const quizDuration = quizObj.quizDuration
   const quizSubject = quizObj.subject
   const quizTime = quizObj.time
   const quizWeight = quizObj.weight;
   
-  let subjectId
+  let subjectId 
   let submittedQuizId
+  console.log('quizObj',quizObj)
+  console.log('quizName, subjectId, quizWeight, prevQuizId, classId, quizDuration, quizTime',quizName, subjectId, quizWeight, prevQuizId, classId, quizDuration, quizTime)
 
   return db.query(`SELECT id FROM subjects WHERE name=$1`, [quizObj.subject])
   .then((subjectData)=> {
+    console.log("subjectData", subjectData)
     subjectId = subjectData.rows[0].id
     return db.query(
       `INSERT INTO submitted_quizzes (name, subject_id, weight, previous_id, class_id, duration, time) 
@@ -91,10 +94,11 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
           })
 
           return Promise.all(Object.values(studentResponses).map(student => {
+            console.log("question", question);
             let responseForThisQuestion = student.responses[question.previous_id]
+            console.log("responseForThisQuestion",responseForThisQuestion)
             let studentsAnswer = answerMapper[Object.keys(responseForThisQuestion.answers).find(key => responseForThisQuestion.answers[key] === true)] || {newId: null, isCorrect: false}
-            responseForThisQuestion.time = responseForThisQuestion.time || null
-            console.log('console log before this query ', question.previous_id)
+            responseForThisQuestion.time = responseForThisQuestion.time || null;
             return db.query(
             `INSERT INTO students_responses (student_id, response_id, question_id, draft_question_id, time_spent, correct) 
             VALUES ($1, $2, $3, $4, $5, $6)`, [student.id, studentsAnswer.newId, question.id, question.previous_id, responseForThisQuestion.time, studentsAnswer.isCorrect])
@@ -159,7 +163,31 @@ const migrateClassToFB = function(classId){
   .catch((err)=> console.log('Issue starting class' + err))
 }
 
+// const averagetimeForSubmittedQuestions = function(classObj) {
+//   const classId = classObj.id;
+//   const takenQuiz = Object.values(classObj.quizzes)[0];
+//   const takenQuizId = takenQuiz.id;
+//   const quizQuetions = {};
+//   const studentsInClass = classObj.students
+//   for (var questionId in takenQuiz.questions) {
+//     quizQuestions[questionId] = {
+//       sum: 0,
+//       counter: 0
+//     }
+//     for (var studentId in studentsInClass) {
+//       //each student respnse time for each question
+//       const responseTime = studentsInClass[studentId].quizzes.takenQuizId.responses.questionId.time;
+//       quizQuestions[questionId].sum += responseTime;
+//       quizQuestions[questionId].counter += 1;
+//     }
+//   }
+//   return Promise.all(quizQuestions.map((eachQuestion, key) => {
+//     const avg_time = eachQuestion.sum / eachQuestion.counter
+//     return db.query(`INSERT INTO draft_questions avg_time VALUES '${avg_time}' WHERE id='${key}'`)
+//   }))
+// }
+
 module.exports = {
   migrateClassToFB, 
-  fbClassToPgObj,
+  fbClassToPgObj
 }
