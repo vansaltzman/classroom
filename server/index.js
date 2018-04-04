@@ -34,8 +34,7 @@ app.use(bodyParser.json())
 const s3 = new AWS.S3();
 AWS.config.update(  {
   accessKeyId: configAWS.AWS_ACCESS_KEY_ID,
-  secretAccessKey: configAWS.AWS_SECRET_ACCESS_KEY,
-  subregion: configAWS.SUBREGION,
+  secretAccessKey: configAWS.AWS_SECRET_ACCESS_KEY
 });
 
 const upload = multer({dest: 'uploads/'});
