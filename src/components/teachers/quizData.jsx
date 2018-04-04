@@ -29,10 +29,13 @@ const QuizData = ({ targetClass, student, quiz, quizIds, studentQuiz, nextInLine
 	// const quiz = targetClass.quizzes[targetClass.activeView];
 	// const quizIds = Object.keys(quiz.questions);
 
+<<<<<<< HEAD
 	// const timeValue = 
 
 	// studentQuiz.responses[quizIds[studentQuiz.currentQuestion]].time
 
+=======
+>>>>>>> fix live view chanrendering student view
 	const endQuiz = function() {
 		fb.updateActiveView(false, targetClass.id)
 	}
