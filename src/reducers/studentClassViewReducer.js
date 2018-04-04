@@ -3,7 +3,8 @@ import axios from "axios";
 
 export function studentClassViewReducer(
   state = {
-    classes: []
+		classes: [],
+		quizGrades: []
   },
   action
 ) {
@@ -21,8 +22,7 @@ export function studentClassViewReducer(
 			if (!targetClass.students) {
 				targetClass.students = {}
 			}
-			targetClass.id = targetClass.class_id
-			console.log('targetClass ------> ', targetClass)
+			targetClass.id = targetClass.class_id;
 			return { ...state, targetClass: targetClass };
 		case actionTypes.WATCH_CLASS_GO_LIVE_ACTION:
 
@@ -30,17 +30,21 @@ export function studentClassViewReducer(
 			const updatedClasses = state.classes.slice()
 
 			updatedClasses.forEach(eachClass => {
-				if (classesFromAction && classesFromAction.hasOwnProperty(eachClass.class_id)) {
-					eachClass.isLive = true
-				} else {
-					eachClass.isLive = false
-				}
+					if (classesFromAction && classesFromAction.hasOwnProperty(eachClass.class_id)) {
+							eachClass.isLive = true
+					} else {
+							eachClass.isLive = false
+					}
 			})
 			return {...state, classes: updatedClasses}
+
 		case actionTypes.TOGGLE_STUDENT_LIVE_STATUS:
 			return {...state}
 		case actionTypes.UPDATE_CLASS_DATA_STUDENT:
 			return {...state, targetClass: action.classData}
+		
+			case actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW:
+			return {...state, quizGrades: action.quizData}
 		
     default:
       return state;

@@ -68,7 +68,7 @@ const addStudentsAndClass = function() {
       ['Carlos', 'Ramon', 'cramo@magic.bus', 'cr', 'http://i0.kym-cdn.com/entries/icons/facebook/000/012/528/Naamloos-2.jpg'],
       ['Dorothy', 'Rourke', 'drour@magic.bus', 'dr', 'https://vignette.wikia.nocookie.net/magicschoolbus/images/7/7e/Da_pickle01.jpg/revision/latest?cb=20140604124745'],
       ['Keesha', 'Franklin', 'kfrank@magic.bus', 'kf', 'https://vignette.wikia.nocookie.net/magicschoolbus/images/a/a6/MSB_S1_E4_072.jpg/revision/latest?cb=20170703233927']
-    ]
+    ] 
 
     return Promise.all(students.map(student => {
       return hashUser(student)

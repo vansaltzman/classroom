@@ -37,6 +37,7 @@ import Card from "grommet/components/Card";
 class StudentMainView extends React.Component {
   constructor() {
     super();
+    this.enterClass = this.enterClass.bind(this);
   }
 
   componentWillMount() {
@@ -62,7 +63,6 @@ class StudentMainView extends React.Component {
       <div>
         <Tiles flush={false} selectable={true}>
           {this.props.classes.map((item, index) => {
-            console.log('ITEM', item)
             return (
               <Tile key={index}>
                 <Card

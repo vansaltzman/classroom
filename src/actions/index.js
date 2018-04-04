@@ -706,3 +706,21 @@ function addRecycledQuestionAction(question) {
 		question
 	}
 }
+
+/*********************** Student Quiz Grades view ***************************************/
+
+export function getQuizDataForStudentInClass(reqObj) {
+	return (dispatch) => {
+		axios.post('/getQuizDataForStudentInClass', reqObj)
+		.then((studentQuizData) => {
+			console.log('data from server for all quizzes in student quiz data', studentQuizData.data)
+			dispatch(getQuizDataForStudentAction(studentQuizData.data))
+		})
+	}
+}
+function getQuizDataForStudentAction(studentQuizData) {
+	return {
+		type: actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW,
+		quizData: studentQuizData
+	}
+}

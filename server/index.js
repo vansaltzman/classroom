@@ -238,7 +238,6 @@ app.get('/getAllStudents', (req, res) => {
 app.post('/getAllStudentsInAClass', (req, res) => {
   main.getAllStudentsBelongToAClass(req.body.id)
   .then((data) => {
-    console.log('server side data with thumbnails', data.rows);
     res.send(data.rows);
     
   })
@@ -304,6 +303,16 @@ app.post('/fetchQuestions', (req,res) => {
     res.send(data)
   })
 })
+
+app.post('/getQuizDataForStudentInClass', (req,res) => {
+  main.getQuizDataForStudentInClass(req.body.studentId, req.body.classId)
+  .then((studentQuizzesData) => {
+    // console.log('student quizzes data ', studentQuizzesData);
+    res.send(studentQuizzesData)
+  })
+  
+})
+
 const port = 3000
 app.listen(port, function() {
 console.log('Listening on ' + port)
