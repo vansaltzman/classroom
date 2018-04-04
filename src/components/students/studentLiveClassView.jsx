@@ -96,6 +96,19 @@ class StudentLiveClassView extends React.Component {
 				var queueIcon =  <UserExpert />
 				var critical = true;
 
+			} else if (this.props.studentState.targetClass.communication && 
+				this.props.studentState.targetClass.communication.hasOwnProperty(this.props.auth.user.id)) {
+					var toast = 
+				<Toast 
+					status='ok'
+					size="large"
+					onClose={this.handleToastClose}>
+					{this.props.activeView.teacher + ' is comming to help!'}
+				</Toast>
+					var handRaiseLabel = 'Raise your hand';
+					var queueIcon =  <WorkshopIcon />
+					var critical = false;
+
 			} else {
 				var handRaiseLabel = 'Raise your hand';
 				var queueIcon =  <WorkshopIcon />

@@ -60,7 +60,7 @@ const QuizView = ({ props }) => {
 				margin="small"
 				pad="small"
 				colorIndex="light-2"
-				style={{margin: '0', position: 'sticky', top: '112px', zIndex: '9999'}}
+				style={{margin: '0', position: 'sticky', top: '112px', zIndex: '2'}}
 			>
 				<Anchor 
 					icon={<SubtractCircle size="large" />}

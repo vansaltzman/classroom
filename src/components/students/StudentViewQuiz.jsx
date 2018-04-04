@@ -202,7 +202,7 @@ if (currentQuestion >= 0 && currentQuestion < this.state.arrayOfQuestionIds.leng
               margin="small"
               pad="small"
               colorIndex="light-2"
-              style={{margin: '0', position: 'sticky', top: '112px', zIndex: '9999'}}
+              style={{margin: '0', position: 'sticky', top: '112px', zIndex: '2'}}
             >
               {this.props.currentQuestion < 0 ? 
               <Anchor 
