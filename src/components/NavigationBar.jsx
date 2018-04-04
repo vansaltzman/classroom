@@ -83,7 +83,7 @@ class NavigationBar extends React.Component {
             var menuLabel = 'Start';
             var navBarBackground = 'lightGreen'
             var dropAnchors = 
-                <div style={{marginTop: '38px'}}>
+                <div style={{marginTop: '38px', zIndex:'9999'}}>
                     <Anchor path="/login">
                         Login 
                     </Anchor>
@@ -96,7 +96,7 @@ class NavigationBar extends React.Component {
                 var menuLabel = this.props.auth.user.email;
                 var navBarBackground = 'lightCoral'
                 var dropAnchors = 
-                <div style={{marginTop: '38px'}}>
+                <div style={{marginTop: '38px', zIndex:'9999'}}>
 
                     <Anchor path='/classViewContainer'>
                     Quiz View
@@ -116,7 +116,7 @@ class NavigationBar extends React.Component {
                 var navBarBackground = 'lightBlue'
             var pic = <ProfilePic userId={this.props.auth.user.id}/>
                 var dropAnchors = 
-                <div style={{marginTop: '38px'}}>
+                <div style={{marginTop: '38px', zIndex:'10'}}>
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
                     </Anchor>

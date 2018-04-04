@@ -179,9 +179,6 @@ app.post('/endClass', (req, res)=> {
   const { classObj } = req.body
 
   migrate.fbClassToPgObj(classObj)
-    .then(() => {
-      migrate.averagetimeForSubmittedQuestions(classObj)
-    })
     .catch(err => {
       console.log('Failed to migrate to MainDB ------> ', err)
       res.sendStatus(500)
