@@ -48,23 +48,17 @@ class ClassPerformance extends React.Component {
               activeIndex={11}
               onActive={() => {}}
             />
+						
           </Layers>
           <Axis
-            count={2}
+            count={this.props.teachersClassView.selectedGraphs[0].sub.length}
             labels={this.props.teachersClassView.selectedGraphs[0].sub.map(
               (eachQuiz, index) => {
                 return { index: index, label: "Quiz " + Number(index + 1) };
               }
             )}
-          />
+          	/>
         </Chart>
-        {/* <Chart a11yTitle="Chart representing number of commits in the last three days.">
-          <Axis vertical={true} count={3} ticks={true} />
-          <Base />
-          <Layers>
-            <Bar values={[70, 10, 20, 100, 60]} />
-          </Layers>
-        </Chart> */}
       </Chart>
     );
   }
