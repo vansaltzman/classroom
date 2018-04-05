@@ -104,7 +104,7 @@ class ThumbVote extends React.Component {
     }
 
     const outDiv = {
-      animation: 'frame 2s infinite'
+      animation: 'frame 3s infinite'
     }
 
       console.log('--degrees', degrees)

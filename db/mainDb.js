@@ -307,7 +307,6 @@ const getQuizzes = function(teacherId, subjectId) {
           eachQuiz.questions = {}
 
           questions.rows.forEach(question=> {
-            console.log("------------- eachQuestion", question)
             let formattedQuestion = {}
             formattedQuestion.id = question.draft_question_id
             formattedQuestion.text = question.question
@@ -520,7 +519,6 @@ const getTakenQuizzesAndStudentsPerformance = function(targetClassId) {
     }))
   })
   .then((data) => {
-    console.log('dataaaaaaaaaaaaaaaa', data)
     return Promise.all(data.map((eachQuiz) => {
       return Promise.all(Object.keys(eachQuiz.questions).map((eachQuestionId) => {
         let eachQuestion = eachQuiz.questions[eachQuestionId]

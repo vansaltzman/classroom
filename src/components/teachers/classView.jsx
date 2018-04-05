@@ -136,6 +136,7 @@ class ClassView extends React.Component {
 			classObj = classObj || this.props.targetClass
 			return axios.post('/endClass', {classObj})
 			.then(()=> {
+				console.log('OK from server')
 				return classObj
 			})
 		})
@@ -185,16 +186,9 @@ class ClassView extends React.Component {
          return (
            <code
             style={{
-              fontFamily: 'Monaco,Menlo,Consolas,"Courier New",monospace!important',
-              fontSize: '1rem',
-              whiteSpace: 'normal',
-              color: '#7026d2',
-              padding: '2px 3px 1px',
-              tabSize: '4',
-              backgroundColor: '#f7f7f9',
-              border: '1px solid #e1e1e8',
-              borderRadius: '3px',
-              lineHeight: '2'
+              fontFamily: 'Monaco,Menlo,Consolas,"Courier New",monospace!important', fontSize: '1rem', whiteSpace: 'normal',
+							color: '#7026d2',padding: '2px 3px 1px',tabSize: '4',backgroundColor: '#f7f7f9', 
+							border: '1px solid #e1e1e8',  borderRadius: '3px',lineHeight: '2'
             }}
           >
             {'\n' + item + '\n'} 
@@ -408,7 +402,6 @@ class ClassView extends React.Component {
 											pad="small"
 											alignSelf="end"
 										>
-											<LikeIcon />
 										</Box>
 									</Box>
 								)

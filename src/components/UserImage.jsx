@@ -67,6 +67,7 @@ class UserImage extends React.Component {
     const nextInLine = this.props.nextInLine;
     const isHere = this.props.isHere;
     const clickHandler = this.props.clickHandler;
+
     let studentImage = 
         <div style={{position: 'relative'}} onClick={handRaised ? this.acknowledgeStudent : null} >  
           <img 
@@ -76,6 +77,7 @@ class UserImage extends React.Component {
           />
           { handRaised &&
           <div 
+          className="hand-raise"
           style={
             nextInLine ? style :
             {
@@ -95,7 +97,14 @@ class UserImage extends React.Component {
       // <div>
       //   { handRaised ? 
       //   <FloatingMenu slideSpeed={500} direction="right" style={{zIndex: '999', position: 'relative', top: '-15px'}}>
-          studentImage
+        <div>
+          {studentImage}
+          {handRaised &&
+          <Tip target='hand-raise'>
+            Click to acknowledge student
+          </Tip>
+          }
+        </div>
     //       <MainButton
     //         iconResting={MdAdd}
     //         iconActive={MdClose}
