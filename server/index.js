@@ -31,13 +31,14 @@ app.use(bodyParser.json())
 
 
 // Amazon s3 config
-const s3 = new AWS.S3();
-AWS.config.update({
+
+AWS.config.update(  {
   accessKeyId: configAWS.AWS_ACCESS_KEY_ID,
   secretAccessKey: configAWS.AWS_SECRET_ACCESS_KEY,
-  subregion: configAWS.SUBREGION,
+  region: configAWS.REGION 
 });
 
+const s3 = new AWS.S3();
 const upload = multer({dest: 'uploads/'});
 
 app.post('/imageUploader', upload.single('file'), (req, res) => {
@@ -68,10 +69,15 @@ app.post('/imageUploader', upload.single('file'), (req, res) => {
                 if (err) console.log(err);
               
                 //req.body.classPic//true for teacher view//false for student view
-                if(req.body.classPic){
-                  main.addClassPic(fileUrl)
-                } else {
+                if(req.body.classPic === false){
+                  console.log('req.body.classPic', req.body.classPic)
+                  // main.addClassPic(fileUrl)
+                  console.log('------class pic -----',fileUrl)
+                  // ('---this should only run from teacher uploading class pic---')
+                } 
+                else {
                   main.addProfilePictureForStudent(req.body.text, fileUrl)
+                  
                 }
               //main.addProfilePictureForStudent(req.body.text, fileUrl) 
               })
@@ -176,7 +182,7 @@ app.post('/endClass', (req, res)=> {
 })
   
 app.post('/addClass', (req, res) => {
-  //console.log('server side data for add class',  req.body);
+  console.log('server side data for add class',  req.body);
   main.addNewClass(req.body)
   .then((data) => {
     console.log('Class is added', data)

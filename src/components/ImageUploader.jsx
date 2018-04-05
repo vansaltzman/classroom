@@ -18,6 +18,12 @@ import Title from 'grommet/components/Title';
 import Paragraph from 'grommet/components/Paragraph';
 import Add from 'grommet/components/icons/base/add';
 import DocumentImage from 'grommet/components/icons/base/documentimage'
+import Split from 'grommet/components/Split';
+import Anchor from 'grommet/components/Anchor';
+import Pulse from 'grommet/components/icons/Pulse';
+
+
+
 
 class ImageUploader extends React.Component {
   constructor() {
@@ -33,26 +39,18 @@ class ImageUploader extends React.Component {
     let data = new FormData()
     data.append('file', files[0]);
     data.append('text', this.props.auth.user.id)
+    data.append('classPic', false)
 
-    axios.post('/imageUploader', data)
-      .then((response) => {
-        this.setState({image: response.data})
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    this.props.getLinkFroms3( data )    
+
   }
 
 
   render() {
     const dpStyle={
     margin: 'auto',
-    // width: '100%',
-    // maxHeight: '100%',
-    // maxHeight: '100%',
     height: '75px',
     width:'150px',
-    // border: '3px dashed grey',
     padding: '10px',
     textAlign: 'center',
     margin:'auto',
@@ -69,40 +67,50 @@ class ImageUploader extends React.Component {
     const title={margin:'auto', textAlign: 'center', padding: '30px'}
 
     const imgStyle={ 
-      // position: 'relative',
-      // margin: 'auto',
+      marginTop: '100px',
       borderRadius: '50%',
-      // maxHeight: '100px',
-      // maxHeight: '100px',
       textAlign: 'center',
-      // display:'block'
+
       
     }
-    console.log('this.props.auth', this.props.auth)
+
+    const mainDiv={
+      marginRight: '100px', 
+      marginLeft: '100px'
+    }
     return(
-<Section>
+<div style={mainDiv}>
+<Split separator={false}>
 
-
-
-<Paragraph size='xlarge' style={title}>
-Click or Drag and Drop an Image Here!
-</Paragraph>
-  <Box direction='row' justify='start' align='center' wrap={true} pad='medium' margin='small'>
-    <Dropzone onDrop={this.onDrop} size={100} style={dpStyle}>
-      <DocumentImage size="xlarge" >
-      </DocumentImage>
-    </Dropzone>
+  <Box colorIndex='light-1' justify='center' align='center' pad='medium'>
+    <Section>
+      <Paragraph size='xlarge' style={title}>
+        Click or Drag and Drop an Image Here!
+      </Paragraph>
+      <Box direction='row' justify='start' align='center' wrap={true} pad='medium' margin='small'>
+        <Dropzone onDrop={this.onDrop} size={100} style={dpStyle}>
+          <Anchor icon={<DocumentImage size="xlarge"/>}
+          />
+        </Dropzone>
+      </Box>
+    </Section>
   </Box>
 
-  <Section>
-    <Box direction='row' justify='start' align='center' wrap={true} pad='medium' margin='small' style={preview}>
-      <Image src={this.state.image} full={false} style={imgStyle} alt={''} fit='contain'/>
-        <Paragraph size='medium' style={title}>
-          Profile Preview
-        </Paragraph>
-    </Box>
-  </Section>
-</Section>
+
+
+  <Box colorIndex='light-1' justify='center' align='center' pad='medium'>
+    <Section>
+    <Paragraph size='xlarge' style={title}>
+      Profile Preview
+      </Paragraph>
+      <Box direction='row' justify='start' align='center' wrap={true} pad='medium' margin='small' style={preview}>
+        <Image src={this.props.auth.user.pic.length> 0 ? this.props.auth.user.pic : 'https://s3.us-east-2.amazonaws.com/jaqen-app/default-profile.png'} full={false} style={imgStyle}
+          alt={''} fit='contain'/>
+      </Box>
+    </Section>
+  </Box>
+</Split>
+</div>
     )
   }
 }

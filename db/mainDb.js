@@ -346,6 +346,7 @@ const getQuizzes = function(teacherId, subjectId) {
   })
 }
 const addProfilePictureForStudent = function (studentId, url) {
+  console.log('------------add profile pic for student in mainDB')
   const queryString = `UPDATE students SET thumbnail_url = '${url}' WHERE id=${studentId}`
   return db.query(queryString)
 }

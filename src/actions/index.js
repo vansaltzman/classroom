@@ -44,7 +44,27 @@ export function logoutUser () {
 		dispatch(setCurrentUser({}));
 	}
 }
- 
+
+export function getLinkFroms3( data ) {
+	return (dispatch) => {
+		axios.post('/imageUploader', data)
+		.then((response) => {
+			console.log('at action creator response.data', response.data, typeof response.data)
+			dispatch(updateProfilePicAction( response.data ))
+		})
+		.catch((error) => {
+			console.log(error)
+		})
+	}
+}
+
+function updateProfilePicAction( pic ) {
+	console.log('2cd action----', pic)
+	return {
+		type: actionTypes.PROFILE_PIC,
+		pic
+	}
+}
 
 /********************************** GET CLASSES TO DISPLAY ON TEACHERS MAIN VIEW ***********************************/
 function getTeacherEmail(state) {
@@ -167,6 +187,23 @@ function updateNewClassYearAction(year) {
 	return {
 		type: actionTypes.UPDATE_NEW_CLASS_YEAR_ACTION,
 		year
+	}
+}
+
+//here for class image
+export function addClassImage(data) {
+	return (dispatch) => {
+		axios.post('/imageUploader', data)
+		.then((response) => {
+			console.log('image at action', response.data)
+			dispatch(addClassImageAction(response.data))
+		})
+	}
+}
+function addClassImageAction(imageUrl) {
+	return {
+		type: actionTypes.ADD_CLASS_IMAGE_ACTION,
+		imageUrl
 	}
 }
 
