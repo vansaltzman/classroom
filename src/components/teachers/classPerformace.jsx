@@ -57,8 +57,8 @@ class ClassPerformance extends React.Component {
             />
 						
           </Layers>
-          <Box responsive={true} align="end" direction="column">
-            {this.props.teachersClassView.selectedGraphs.slice(1).map(eachGraph => {
+          <Box responsive={true} align="end" direction="row" padding="small">
+            {this.props.teachersClassView.selectedGraphs.slice(1).map((eachGraph, i) => {
               let average = Object.values(eachGraph.sub).reduce((sum, each) => {
                 return sum += Object.values(each)[0]
               }, 0) / Object.values(eachGraph.sub).length
@@ -74,7 +74,7 @@ class ClassPerformance extends React.Component {
                 return {"label": "Quiz " + index + ": ", "value": Math.round(Object.values(eachScore)[0])}
               }) 
               return (
-                <div>
+                <div key={i} onClick={() => this.props.reverseGraphSelection(i)}>
                 <Label style={{color: colorForName}} size="medium">{eachGraph.value}</Label>
                 <img 
                   src={eachGraph.thumbnail || "https://ca.slack-edge.com/T2SUXDE72-U8SAGQ1E0-8fa5cea28518-72"} 
@@ -83,7 +83,6 @@ class ClassPerformance extends React.Component {
                                   type='bar'
                                   max={150}
                                   units="%"
-                                  //series={[{"label": "First", "value": 20, "colorIndex": "graph-1"}, {"label": "Second", "value": 50, "colorIndex": "graph-2"}]} 
                                   series={data}/>
                 </div>
               );

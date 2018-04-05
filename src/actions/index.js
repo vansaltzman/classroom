@@ -753,3 +753,15 @@ function selectGraphToShowAction(target) {
 		target
 	}
 }
+
+export function reverseGraphSelection(index) {
+	return (dispatch) => {
+		dispatch(reverseGraphSelectionAction(index))
+	}
+}
+function reverseGraphSelectionAction(index) {
+	return {
+		type: actionTypes.REVERSE_GRAPH_SELECTION_ACTION,
+		index
+	}
+}
