@@ -68,10 +68,10 @@ class UserImage extends React.Component {
     const isHere = this.props.isHere;
     const clickHandler = this.props.clickHandler;
     let studentImage = 
-        <div style={{position: 'relative'}} onClick={this.toggleShowMenu} >  
+        <div style={{position: 'relative'}} onClick={handRaised ? this.acknowledgeStudent : null} >  
           <img 
             src={url || "https://ca.slack-edge.com/T2SUXDE72-U8SAGQ1E0-8fa5cea28518-72"} 
-            style={{height: '50px', width: '50px', borderRadius: '50%', cursor:'pointer', opacity: isHere ? 1 : 0.3 || 0.3}}
+            style={{height: '50px', width: '50px', borderRadius: '50%', cursor: handRaised ? 'pointer' : 'default', opacity: isHere ? 1 : 0.3 || 0.3}}
             
           />
           { handRaised &&
@@ -92,35 +92,35 @@ class UserImage extends React.Component {
         </div> 
         // const userIcon = <FaUser />
     return (
-      <div>
-        { handRaised ? 
-        <FloatingMenu slideSpeed={500} direction="right" style={{zIndex: '999', position: 'relative', top: '-15px'}}>
-          {studentImage}
-          <MainButton
-            iconResting={MdAdd}
-            iconActive={MdClose}
-            style={{opacity:'0'}}
-            buttonSize="1"
-          />
-          <ChildButton
-            iconButton={FaUser}
-            iconColor="black"
-            order={1}
-            backgroundColor="#ffd602"
-            buttonSize="56"
-            onClick={this.acknowledgeStudent}
-          />
-          <ChildButton
-            iconButton={IoIosChatboxes}
-            iconColor="black"
-            order={2}
-            backgroundColor="#ffd602"
-            buttonSize="56"
-            onClick={this.startChat}
-          />
-        </FloatingMenu>  : studentImage
-    }
-      </div>
+      // <div>
+      //   { handRaised ? 
+      //   <FloatingMenu slideSpeed={500} direction="right" style={{zIndex: '999', position: 'relative', top: '-15px'}}>
+          studentImage
+    //       <MainButton
+    //         iconResting={MdAdd}
+    //         iconActive={MdClose}
+    //         style={{opacity:'0'}}
+    //         buttonSize="1"
+    //       />
+    //       <ChildButton
+    //         iconButton={FaUser}
+    //         iconColor="black"
+    //         order={1}
+    //         backgroundColor="#ffd602"
+    //         buttonSize="56"
+    //         onClick={this.acknowledgeStudent}
+    //       />
+    //       <ChildButton
+    //         iconButton={IoIosChatboxes}
+    //         iconColor="black"
+    //         order={2}
+    //         backgroundColor="#ffd602"
+    //         buttonSize="56"
+    //         onClick={this.startChat}
+    //       />
+    //     </FloatingMenu>  : studentImage
+    // }
+    //   </div>
     )
   }
 }

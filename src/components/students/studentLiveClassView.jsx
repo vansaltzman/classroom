@@ -78,21 +78,23 @@ class StudentLiveClassView extends React.Component {
 			if (!this.props.studentState.targetClass) {
 				liveView = <div>loading</div>
 			}
-			else if (!this.props.studentState.targetClass.isLive) {
-				// liveView = <Default live={false}/>
-				liveView = <StudentQuizGradesView
-								targetClass={this.props.activeView}
-								studentId={this.props.auth.user.id}
-								quizGrades={this.props.quizGrades}
-								getQuizDataForStudentInClass={this.props.getQuizDataForStudentInClass}
-							/>
-			}
+					else if (this.props.studentState.showGrades || !this.props.studentState.targetClass.isLive) {
+						// liveView = <Default live={false}/>
+						liveView = <StudentQuizGradesView
+										targetClass={this.props.activeView}
+										studentId={this.props.auth.user.id}
+										quizGrades={this.props.quizGrades}
+										getQuizDataForStudentInClass={this.props.getQuizDataForStudentInClass}
+										toggleGrades={this.props.toggleGrades}
+									/>
+					} 
 			else if(this.props.studentState.targetClass && this.props.studentState.targetClass.activeView){
 				liveView = <QuizContainer/>
 			} else if (this.props.studentState.targetClass && this.props.studentState.targetClass.thumbPoll) {
 				liveView = <ThumbVote/>
-			} else if (this.props.studentState.targetClass && !this.props.studentState.targetClass.activeView) {
-					liveView = <Default live={true}/>
+			} 
+			else if (this.props.studentState.targetClass && !this.props.studentState.targetClass.activeView) {
+					liveView = <Default live={true} toggleGrades={this.props.toggleGrades}/>
 			} else {
 					liveView = <div></div>
 			}

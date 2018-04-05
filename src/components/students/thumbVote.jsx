@@ -77,11 +77,11 @@ class ThumbVote extends React.Component {
     let styleSheet = document.styleSheets[0];
     let keyframes =
       `@keyframes frame {
-        0%   { transform: rotate(${10}deg); }
-        25% { transform: rotate(${-10}deg); }
-        50% { transform: rotate(${10}deg); }
-        75% { transform: rotate(${-10}deg); }
-        100% { transform: rotate(${10}deg); }
+        0%   { transform: rotate(${6}deg); }
+        25% { transform: rotate(${-6}deg); }
+        50% { transform: rotate(${6}deg); }
+        75% { transform: rotate(${-6}deg); }
+        100% { transform: rotate(${6}deg); }
       }`
     
       styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
@@ -104,7 +104,7 @@ class ThumbVote extends React.Component {
     }
 
     const outDiv = {
-      animation: 'frame 3s infinite'
+      animation: 'frame 2s infinite'
     }
 
       console.log('--degrees', degrees)

@@ -172,18 +172,54 @@ class ClassView extends React.Component {
 		})
 	}
 
+	code = function(text) {
+    return text.split('~~~').map((item, i)=> {
+      if (i % 2 === 0) {
+        return item
+      } else {
+        // return (
+        // <SyntaxHighlighter language='javascript' style={syntaxStyle} >
+        //   {'\n' + text  + '\n'}
+        // </SyntaxHighlighter>
+        // )
+         return (
+           <code
+            style={{
+              fontFamily: 'Monaco,Menlo,Consolas,"Courier New",monospace!important',
+              fontSize: '1rem',
+              whiteSpace: 'normal',
+              color: '#7026d2',
+              padding: '2px 3px 1px',
+              tabSize: '4',
+              backgroundColor: '#f7f7f9',
+              border: '1px solid #e1e1e8',
+              borderRadius: '3px',
+              lineHeight: '2'
+            }}
+          >
+            {'\n' + item + '\n'} 
+          </code>
+         )
+      }
+    }) 
+  }
+
   render() {
 		const { studentsInClass } = this.props;
 		const studentsArray = [];
 		for (var key in studentsInClass) {
 			studentsArray.push(studentsInClass[key]);
 		}
+
 			return(
 			<div>
 				<Section
 					margin="none"
 					pad="none"
 				>
+				{/* <div>
+					{formatCode('This is a forumla')}
+				</div> */}
 				<Header
 					direction="row"
 					full="true"
@@ -409,14 +445,14 @@ class ClassView extends React.Component {
 									{Object.values(quiz.questions).map((question,i) => {
 										return <Box key={i}>
 											<Heading tag="h3">
-												{question.text}
+												{this.code(question.text)}
 											</Heading>
 											<Label>
 												{moment.duration(question.time).humanize()}
 											</Label>
 											{Object.values(question.answers).map(answer=> {
 												return <Notification
-													message={answer.text}
+													message={this.code(answer.text)}
 													size='small'
 													status={answer.isCorrect ? 'ok' : 'critical'}
 												/>
@@ -544,10 +580,13 @@ class ClassView extends React.Component {
 															return (
 																<Section>
 																	<Label>{'Question' + ' ' + Number(index + 1)}</Label>
-																	<TextInput placeHolder="Question..."
-																						 //style={{color: each.question ? 'pink' : 'black'}}
-																						 value={each.id ? each.question : each.text}
-																						 onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+																	<textarea 
+																		style={{resize: 'none'}}
+																		placeHolder="Question..."
+																		//style={{color: each.question ? 'pink' : 'black'}}
+																		value={each.id ? each.question : each.text}
+																		onChange={(event) => {this.props.addQuestionText(event, index)}}
+																	/>
 																	<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteQuestion(index)}/>} />
 																	{each.answers.map((eachAnswer, answerIndex) => {
 																		return (
@@ -592,7 +631,7 @@ class ClassView extends React.Component {
 													 onActive={(index) => this.props.selectedQuestion(this.props.teachersClassView.questions[index])}>
 									{this.props.teachersClassView.questions.map((question, i) => {
 										return (
-											<AccordionPanel key={i} heading={question.question}>
+											<AccordionPanel key={i} heading={<Box pad="none" margin="none" direciton="row">{this.code(question.question)}</Box>}>
 												<Label>
 													{question.timeAvg + ' min'}
 													{this.props.teachersClassView.showAddQuestionButton ? <Button onClick={() => this.props.addRecycledQuestion(question)}>Add Question</Button> : <div></div>}

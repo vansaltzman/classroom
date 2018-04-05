@@ -54,6 +54,7 @@ class QuizContainer extends React.Component {
           questionId={questionId}
           quizEndTime={quizEndTime}
           quizDuration={quizDuration}
+          toggleGrades={this.props.toggleGrades}
         />
       </div>
     )

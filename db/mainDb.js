@@ -237,14 +237,15 @@ const addQuiz = function(quizObj) {
   })
   .then((data) => {
     return Promise.all(questions.map((each, index) => {
+      console.log('each ------> ', each)
       if (each.id) {
-        return db.query(`UPDATE draft_questions SET question='${each.question}' WHERE id='${each.id}' RETURNING *;`)
+        return db.query(`UPDATE draft_questions SET question=$1 WHERE id='${each.id}' RETURNING *;`, [each.text])
         .then((data) => {
           each.id = data.rows[0].id
           return each
         })
       } else {
-        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.text}', '${teacherId}', '${subjectId}') RETURNING *;`)
+        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ($1, '${teacherId}', '${subjectId}') RETURNING *;`, [each.text])
         .then((data) => {
           each.id = data.rows[0].id
           return each
@@ -268,10 +269,10 @@ const addQuiz = function(quizObj) {
     return Promise.all((data.map((q, i) => {
       return Promise.all(q.answers.map((answer, j) => {
         if (answer.id) {
-          return db.query(`UPDATE draft_answers SET answer='${answer.answer}', correct='${answer.correct}' WHERE id='${answer.id}' AND question_id='${answer.question_id}'`)
+          return db.query(`UPDATE draft_answers SET answer=$1, correct='${answer.correct}' WHERE id='${answer.id}' AND question_id='${answer.question_id}'`, [answer.answer])
         } else {
           return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
-                ('${answer.text}', '${q.id}', '${answer.isCorrect}');`) 
+                ($1, '${q.id}', '${answer.isCorrect}');`, [answer.text]) 
         }
       }))
     })))
