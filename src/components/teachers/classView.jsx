@@ -288,7 +288,7 @@ class ClassView extends React.Component {
 						path="/statistics"
 						plain={false} 
 						onClick={() => this.props.getTakenQuizzes({id: this.props.classId}) }
-					/>
+					/>}
 				</Box>
 				<Split fixed={false}
 							 separator={false}

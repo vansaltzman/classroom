@@ -15,6 +15,9 @@ import Notification from "grommet/components/Notification";
 import Select from "grommet/components/Select";
 import Section from "grommet/components/Section";
 import config from "../../../server/config.js";
+import Status from 'grommet/components/icons/Status';
+import ListItem from 'grommet/components/ListItem';
+import List from 'grommet/components/List';
 import Chart, {
   Axis,
   Grid,
@@ -36,7 +39,7 @@ class Statistics extends React.Component {
   render() {
     return (
       <Section>
-        <Section>
+        {/* <Section> */}
           <Select
             placeHolder="None"
             multiple={true}
@@ -56,101 +59,145 @@ class Statistics extends React.Component {
               this.props.selectGraphToShow(target);
             }}
           />
-        </Section>
+        {/* </Section> */}
         {this.props.teachersClassView.takenQuizzesAverages ? (
           <ClassPerformance />
         ) : (
           <div />
         )}
-        <Section>
-          <Box>
-            <Accordion
-            // onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}
-            >
-              {Object.values(this.props.teachersClassView.takenQuizzes).map(
-                quiz => {
-                  var highest = 0;
-                  for (
-                    var i = 0;
-                    i < Object.values(quiz.quizDiscrete).length;
-                    i++
-                  ) {
-                    if (Object.values(quiz.quizDiscrete)[i] > highest) {
-                      highest = Object.values(quiz.quizDiscrete)[i];
+        <Section pad='small' justify='center' align='center'>
+          <div style={{width:'60%', align:'center'}}>
+            <Box>
+              <Accordion
+              // onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}
+              >
+                {Object.values(this.props.teachersClassView.takenQuizzes).map(
+                  (quiz, i) => {
+                    var highest = 0;
+                    for (
+                      var i = 0;
+                      i < Object.values(quiz.quizDiscrete).length;
+                      i++
+                    ) {
+                      if (Object.values(quiz.quizDiscrete)[i] > highest) {
+                        highest = Object.values(quiz.quizDiscrete)[i];
+                      }
                     }
-                  }
-                  console.log("highest", highest);
-                  var interval = [];
-                  for (var j = 0; j <= Math.ceil(highest / 5); j++) {
-                    var obj = {};
-                    obj.index = j;
-                    obj.label = j * 5;
-                    interval.push(obj);
-                  }
-                  console.log("interval", interval);
-                  return (
-                    <AccordionPanel heading={<Label>{quiz.name}</Label>}>
-                      <Label>{"Average: " + quiz.average}</Label>
-                      <Chart>
-											<Axis
-                          vertical={true}
-                          //count={}
-                          count={interval.length}
-                          labels={interval}
-                          //labels={[{"index": 2, "label": "20"}, {"index": 4, "label": "40"}]}
-                        />
-                        <Chart >
-												
-												
-                          {/* <Axis vertical={true} count={1} ticks={true} /> */}
-                          <Base width="large"/>
-                          <Layers>
-														<Grid rows={5} columns={3}/>
-                            <Bar
-															max={highest + 2}
-                              values={Object.values(quiz.quizDiscrete).map(
-                                each => each
-                              )}
-                            />
-													<Axis
-														vertical={false}
-														ticks={true}
-                            count={Object.keys(quiz.quizDiscrete).length}
-                            labels={Object.keys(quiz.quizDiscrete).map(
-                              (grade, index) => {
-                                return {
-                                  index: index,
-                                  label: grade
-                                };
-                              }
-                            )}
-                          />
-                          </Layers>
-                        </Chart>
-												
-                      </Chart>
-                      {Object.values(quiz.questions).map((question, i) => {
-                        return (
-                          <Box key={i}>
-                            <Heading tag="h3">{question.text}</Heading>
-                            {Object.values(question.answers).map(answer => {
-                              return (
-                                <Notification
-                                  message={answer.text}
-                                  size="small"
-                                  status={answer.isCorrect ? "ok" : "critical"}
-                                />
-                              );
-                            })}
+                    var interval = [];
+                    for (var j = 0; j <= Math.ceil(highest / 5); j++) {
+                      var obj = {};
+                      obj.index = j;
+                      obj.label = j * 5;
+                      interval.push(obj);
+                    }
+                    let quizAverageColorIndex;
+                    if (quiz.average <= 65) {
+                      quizAverageColorIndex = 'accent-1';
+                    } else if (quiz.average > 65 && quiz.average <=75) {
+                      quizAverageColorIndex = 'accent-2';
+                    } else {
+                      quizAverageColorIndex='neutral-1';
+                    }
+                    let quizAverageComponent = <Value value={quiz.average} colorIndex={quizAverageColorIndex} units='%'/>
+                    return (
+                      <AccordionPanel heading={
+                        <Box direction='row' full='horizontal' margin='small' alignContent='stretch' justify='between'>
+                          <Box direction='column' justify='start' alignContent='between' style={{width: '400px', maxWidth: '720px'}} style={{marginRight: 'auto'}}>
+                            <Heading tag='h3'>
+                              {quiz.name}
+                            </Heading>
                           </Box>
-                        );
-                      })}
-                    </AccordionPanel>
-                  );
-                }
-              )}
-            </Accordion>
-          </Box>
+                          <Box direction='column' justify='center' style={{width: '298px'}} style={{margin: '0 50px 0 50px'}}>
+                            <Heading tag='h3'>
+                              Weight:  {quiz.weight}%
+                            </Heading>
+                          </Box>
+                          <Box direction='column' justify='end' alignContent='center' style={{width: '298px'}} style={{marginRight: '30px'}}>
+                            <Heading tag='h3'>
+                              Average: {quizAverageComponent}
+                            </Heading>
+                          </Box>
+                        </Box>
+                      }>
+                        {/* <Label>{"Average: " + quiz.average}</Label> */}
+                        <Section pad='small' justify='center' align='center'>
+                          <Chart>
+                            <Axis
+                              vertical={true}
+                              count={interval.length}
+                              labels={interval}
+                            />
+                            <Chart >
+                              <Base width="large"/>
+                              <Layers>
+                                <Grid rows={5} columns={3}/>
+                                <Bar
+                                  max={highest + 2}
+                                  values={Object.values(quiz.quizDiscrete).map(
+                                    each => each
+                                  )}
+                                />
+                              <Axis
+                                vertical={false}
+                                ticks={true}
+                                count={Object.keys(quiz.quizDiscrete).length}
+                                labels={Object.keys(quiz.quizDiscrete).map(
+                                  (grade, index) => {
+                                    return {
+                                      index: index,
+                                      label: grade
+                                    };
+                                  }
+                                )}
+                              />
+                              </Layers>
+                            </Chart>  
+                          </Chart>
+                        </Section>
+                        <Section pad='small' justify='center' align='center'>
+                          {Object.values(quiz.questions).map((question, i) => {
+                            return (
+                              <Box direction='row'
+                                  full='horizontal'
+                                  alignContent='between'
+                                  style={{marginBottom:'50px'}}>
+                                <Box key={i}
+                                    direction='column'
+                                    full='horizontal'
+                                    alignContent='between'
+                                    style={{marginBottom:'50px'}}>
+                                  <Heading tag="h3">
+                                    {question.text}
+                                  </Heading>
+                                  <List>
+                                    {Object.values(question.answers).map((answer, i) => {
+                                      let isCorrect = answer.isCorrect;
+                                      var marker;
+                                      if (answer.isCorrect === true) {
+                                        marker = <Status value='ok' style={{marginRight:'10px'}} />
+                                      } else if (answer.isCorrect === false) {
+                                        marker = <Status value='critical' style={{marginRight:'10px'}} />
+                                      }
+
+                                      return (
+                                        <ListItem key={i} separator='horizontal'>
+                                          {marker}    {i+1}) {answer.text}
+                                        </ListItem>
+                                      );
+                                    })}
+                                  </List>
+                                </Box>
+                              </Box>
+                            );
+                          })}
+                        </Section>
+                      </AccordionPanel>
+                    );
+                  }
+                )}
+              </Accordion>
+            </Box>
+          </div>
         </Section>
       </Section>
     );

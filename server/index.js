@@ -127,10 +127,6 @@ app.post('/profile', function(req, res) {
     })
   })
 
-
-  // Teacher
-
-  // Start class
   app.post('/startClass', (req, res) => {
     const { classId } = req.body
 
@@ -155,19 +151,7 @@ app.post('/profile', function(req, res) {
     var quizId = 12;
     var classId = 3;
     updateQuizResponses(dummyAnswerData, studentId, quizId, classId)
-    // .then(()=> {
-    //   res.sendStatus(200)
-    // })
-    // .catch((err)=> {
-    //   console.log('err in updating quiz response ', err)
-    // })
-    //console.log('dummy data ', dummyAnswerData)
   })
-
-  // app.post('/answer', (req, res) => {
-  //   let answer = req.body.answer
-  //   console.log('answer submitted', answer)
-  // })
 
   app.post('/answer', (req, res) => {
     let answer = req.body.answer
