@@ -1,17 +1,11 @@
 const firebase = require('firebase');
-// const config = require('../server/config.js');
 // Uncomment fbConfig to run on your personal fb Database
-const {fbConfig} = require('../server/config.js');
+// const {fbConfig} = require('../server/config.js');
 const dummyStudentData=require('../db/dummyStudentsData');
 const studentQuizObjConverter = require('../src/utils/studentQuizObjConverter.js');
 const moment = require('moment');
 const fs = require('fs');
 // const migrate = require('../server/migrationWorker.js')
-const dotenv = require('dotenv');
-const {error} = dotenv.config();
-if (error) {
-  console.log('error in dotenv ', error)
-}
 
 const prodConfig = {
 	apiKey: "AIzaSyAQGYQVxqkSiWa5NbD7LNftogLvBSrmvV8",
@@ -19,7 +13,7 @@ const prodConfig = {
 	databaseURL: "https://jaqen-d9c2e.firebaseio.com/"
 }
 
-const fbCredentials = fbConfig || prodConfig
+let fbCredentials = prodConfig
 
 firebase.initializeApp(fbCredentials);
 
@@ -251,6 +245,15 @@ const clearThumbFields = function (classId) {
 	fb.ref('/classes/' + classId + '/thumbHigh').remove()
 	fb.ref('/classes/' + classId + '/thumbName').remove()
 }
+const incrementParticipation = function (classId, studentId) {
+	const studentParticipation = fb.ref('/classes/' + classId + '/students/'+studentId +'/participation');
+	return studentParticipation.once('value', (snap) => {
+		let currentParticipation = snap.val();
+		studentParticipation.set(currentParticipation + 1);
+
+	}) 
+}
+
 module.exports = {  
   fb,
   startClass,
@@ -274,5 +277,6 @@ module.exports = {
 	updateThumbName,
 	updateThumbHigh,
 	updateThumbLow,
-	clearThumbFields
+	clearThumbFields,
+	incrementParticipation
 }
