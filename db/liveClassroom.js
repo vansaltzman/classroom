@@ -217,6 +217,15 @@ const setThumbPollLiveForStudents = function (classId, bool) {
 	classRoom.set(bool)
 }
 
+const incrementParticipation = function (classId, studentId) {
+	const studentParticipation = fb.ref('/classes/' + classId + '/students/'+studentId +'/participation');
+	return studentParticipation.once('value', (snap) => {
+		let currentParticipation = snap.val();
+		studentParticipation.set(currentParticipation + 1);
+
+	}) 
+}
+
 module.exports = {  
   fb,
   startClass,
@@ -236,7 +245,6 @@ module.exports = {
 	decrementThumbTotal,
 	getThumbTotal,
 	setThumbPollLiveForStudents,
-	setStudentsThumbsNeutral
-
-
+	setStudentsThumbsNeutral,
+	incrementParticipation
 }

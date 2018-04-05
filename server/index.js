@@ -41,7 +41,7 @@ AWS.config.update(  {
 const upload = multer({dest: 'uploads/'});
 
 app.post('/imageUploader', upload.single('file'), (req, res) => {
-  var myBucket = 'jaqen-app';
+  var myBucket = 'jaqenbucket';
   var myKey = req.file.originalname;
 
   fs.readFile(req.file.path, function (err, data) {
@@ -299,7 +299,6 @@ app.post('/getQuizzes', (req, res) => {
 app.post('/fetchQuestions', (req,res) => {
   main.GetAllQuestionsBelongToTeacher(req.body.teacherId, req.body.subjectId)
   .then((data) => {
-    //console.log('serverside questions data', data)
     res.send(data)
   })
 })
@@ -307,10 +306,15 @@ app.post('/fetchQuestions', (req,res) => {
 app.post('/getQuizDataForStudentInClass', (req,res) => {
   main.getQuizDataForStudentInClass(req.body.studentId, req.body.classId)
   .then((studentQuizzesData) => {
-    // console.log('student quizzes data ', studentQuizzesData);
     res.send(studentQuizzesData)
   })
-  
+})
+
+app.post('/getParticipationData', (req,res) => {
+  main.getParticipationDataForClass(req.body.classId)
+  .then((classParticipationData)=> {
+    res.send(classParticipationData)
+  })
 })
 
 const port = 3000

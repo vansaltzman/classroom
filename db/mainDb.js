@@ -423,7 +423,6 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
         let eachQuestion = eachQuiz.questions[eachQuestionId]
         return db.query(`SELECT * FROM submitted_answers WHERE question_id = '${eachQuestion.id}'`)
         .then((answers) => {
-          // console.log('question id ',eachQuestion.id  ,'answers  ', answers.rows);
           eachQuestion.answers = {}
           answers.rows.forEach(answer=> {
             let formattedAnswer = {}
@@ -447,7 +446,6 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
         .then((submittedQuestions) => {
           eachQuiz.responses = {};
           submittedQuestions.rows.forEach((eachSubmittedQuestion) => {
-            // console.log('each submitted question ', eachSubmittedQuestion);
             // iterate through all students submitted answers
             eachQuiz.questions.forEach((quizQuestion) => {
               //then iterate through all of our questions
@@ -478,6 +476,12 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
   })
 }
 
+const getParticipationDataForClass = function (classId) {
+  return db.query(`SELECT student_id, participation FROM classes_students WHERE class_id='${classId}'`)
+  .then((classParticipationData)=> {
+    return classParticipationData.rows
+  })
+}
 
 module.exports = {
   addUser,
@@ -498,6 +502,7 @@ module.exports = {
   // calculateAverageTimeForQuestions
   addProfilePictureForStudent,
   getProfilePic,
-  getQuizDataForStudentInClass
+  getQuizDataForStudentInClass,
+  getParticipationDataForClass
 }
 

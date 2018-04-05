@@ -9,13 +9,9 @@ import studentQuizObjConverter from '../utils/studentQuizObjConverter.js';
 import dummyStudentsData from '../../db/dummyStudentsData';
 
 
-
-const serverURL = 'http://localhost:3000';
-
-
 export function loginUser({ email, password }) {  
     return function(dispatch) {
-      axios.post(`${serverURL}/auth/login`, { email, password })
+      axios.post(`/auth/login`, { email, password })
       .then((res) => {
 		const token = res.data.token
 		localStorage.setItem('jwtToken', token);
@@ -265,6 +261,7 @@ export function classGoLive(classId, classObj) {
 	classObj.thumbTotal = -90
 	for (var studentId in classObj.students) {
 		classObj.students[studentId].handRaised = false;
+		classObj.students[studentId].participation = 0;
 	}
 	return (dispatch) => {
 		const classes = fb.ref('/classes');
@@ -302,7 +299,6 @@ export function watchClassGoLive(shouldStop) {
 	}
 }
 function watchClassGoLiveAction(classes) {
-	console.log('classes ------> ', classes)
 	return {
 		type: actionTypes.WATCH_CLASS_GO_LIVE_ACTION,
 		classes
@@ -374,7 +370,6 @@ export function getClassesBelongToAStudent(studentIdObj) {
 	return (dispatch) => {
 		return axios.post('/getStudentsClasses', studentIdObj)
 		.then((res) => {
-			//console.log('students classes', res.data)
 			return dispatch(getClassesBelongToAStudentAction(res.data))
 		})
 	}
@@ -639,7 +634,6 @@ export function addNewQuiz(teacherId, quizObj) {
 	return (dispatch) => {
 		axios.post('/addQuiz', teacherId, quizObj)
 		.then((res) => {
-			//console.log('refetched quizzes at action', res.data)
 			dispatch(addNewQuizzesAction(res.data))
 		})
 	}
@@ -713,7 +707,6 @@ export function getQuizDataForStudentInClass(reqObj) {
 	return (dispatch) => {
 		axios.post('/getQuizDataForStudentInClass', reqObj)
 		.then((studentQuizData) => {
-			console.log('data from server for all quizzes in student quiz data', studentQuizData.data)
 			dispatch(getQuizDataForStudentAction(studentQuizData.data))
 		})
 	}
@@ -722,5 +715,20 @@ function getQuizDataForStudentAction(studentQuizData) {
 	return {
 		type: actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW,
 		quizData: studentQuizData
+	}
+}
+
+export function getParticipationData(reqObj) {
+	return (dispatch) => {
+		axios.post('/getParticipationData', reqObj)
+		.then((classParticipationData)=> {
+			dispatch(getParticipationDataAction(classParticipationData.data))
+		})
+	}
+}
+function getParticipationDataAction(classParticipationData) {
+	return {
+		type: actionTypes.ADD_STUDENT_PARTICIPATION_DATA,
+		participationData: classParticipationData
 	}
 }

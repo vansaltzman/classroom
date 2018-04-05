@@ -44,7 +44,6 @@ class StudentLiveClassView extends React.Component {
 	}
 
 	componentWillUnmount() {
-		console.log('running comp will umount ')
 		if (this.props.studentState.targetClass.isLive) { // Handles when student leaves class after class has ended
 			fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, false)
 		}
@@ -57,9 +56,12 @@ class StudentLiveClassView extends React.Component {
 		}
 	}
 
-	handleRaiseHand(e) {
+	handleRaiseHand(e, incrementParticipation) {
 		let studentId = this.props.auth.user.id;
 		let classId = this.props.activeView.id;
+		if (incrementParticipation) {
+			fb.incrementParticipation(classId, studentId);
+		}
 		fb.toggleStudentHandRaiseStatus(classId, studentId);
 		fb.updateHandRaiseQueue(classId, studentId);
 	}
@@ -79,12 +81,13 @@ class StudentLiveClassView extends React.Component {
 				liveView = <div>loading</div>
 			}
 			else if (!this.props.studentState.targetClass.isLive) {
-				// liveView = <Default live={false}/>
 				liveView = <StudentQuizGradesView
 								targetClass={this.props.activeView}
 								studentId={this.props.auth.user.id}
 								quizGrades={this.props.quizGrades}
 								getQuizDataForStudentInClass={this.props.getQuizDataForStudentInClass}
+								participationData={this.props.participationData}
+								getParticipationData={this.props.getParticipationData}
 							/>
 			}
 			else if(this.props.studentState.targetClass && this.props.studentState.targetClass.activeView){
@@ -107,12 +110,14 @@ class StudentLiveClassView extends React.Component {
 				 }
 				var queueIcon =  <UserExpert />
 				var critical = true;
+				var incrementParticipation = false;
 
 			} else {
 				var handRaiseLabel = 'Raise your hand';
 				var queueIcon =  <WorkshopIcon />
 				var critical = false;
-				var toast = <div></div>
+				var toast = <div></div>;
+				var incrementParticipation = true;
 			}
 
 				return (
@@ -130,7 +135,7 @@ class StudentLiveClassView extends React.Component {
 								accent={false}
 								critical={critical}
 								plain={false} 
-								onClick={(e) => this.handleRaiseHand(e)} 
+								onClick={(e) => {this.handleRaiseHand(e, incrementParticipation)}} 
 							/>}
 
 						</div>
@@ -145,7 +150,8 @@ function mapStateToProps(state) {
 		studentState: state.studentClassView,
 		classes: state.studentClassView.classes,
 		auth: state.auth,
-		quizGrades: state.studentClassView.quizGrades
+		quizGrades: state.studentClassView.quizGrades,
+		participationData: state.studentClassView.participationData
 		// targetClass: state.studen
 	}
 }
