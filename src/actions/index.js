@@ -756,7 +756,6 @@ function getQuizDataForStudentAction(studentQuizData) {
 	}
 }
 
-<<<<<<< HEAD
 export function getTakenQuizzes(classIdObj) {
 	return (dispatch) => {
 		axios.post('/getTakenQuizzes', classIdObj)
@@ -794,7 +793,8 @@ function reverseGraphSelectionAction(index) {
 	return {
 		type: actionTypes.REVERSE_GRAPH_SELECTION_ACTION,
 		index
-=======
+	}
+}
 export function getParticipationData(reqObj) {
 	return (dispatch) => {
 		axios.post('/getParticipationData', reqObj)
@@ -807,6 +807,5 @@ function getParticipationDataAction(classParticipationData) {
 	return {
 		type: actionTypes.ADD_STUDENT_PARTICIPATION_DATA,
 		participationData: classParticipationData
->>>>>>> new-code-integration
 	}
 }
