@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
 // const config = require('./config.js');
 const config = require('./config.js');
-const migration = require('./migrationWorker.js')
+const migrate = require('./migrationWorker.js')
 const { fb, startClass } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
 const dummyStudentsData = require('../db/dummyStudentsData');
@@ -21,9 +21,12 @@ if (error) {
 const multer = require('multer');
 const AWS = require('aws-sdk');
 var fs =  require('fs');
-const configAWS = require('./configAWS.js')
+const configAWS = {
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    SUBREGION: process.env.SUBREGION
+    } || require('./configAWS.js');
 
-  
 const app = express()
 
 app.use(express.static(__dirname + '/../dist'))
@@ -31,7 +34,6 @@ app.use(bodyParser.json())
 
 
 // Amazon s3 config
-
 AWS.config.update(  {
   accessKeyId: configAWS.AWS_ACCESS_KEY_ID,
   secretAccessKey: configAWS.AWS_SECRET_ACCESS_KEY,
@@ -125,7 +127,8 @@ app.post('/profile', function(req, res) {
     .then( (check)=> {
       // this adds the email to our object that we will then add to our store with user info
       check.email = email;
-      const newToken = jwt.sign(check, config.jwtSecret);
+      const jwtSecret = process.env.jwtSecret || require('./config.js').jwtSecret
+      const newToken = jwt.sign(check, jwtSecret);
       if (check) {
         check.token = newToken;
       }
@@ -142,7 +145,7 @@ app.post('/profile', function(req, res) {
   app.post('/startClass', (req, res) => {
     const { classId } = req.body
 
-    migration.migrateClassToFB(classId)
+    migrate.migrateClassToFB(classId)
     .then(()=> {
 
       // update redux state?
@@ -313,13 +316,18 @@ app.post('/getTakenQuizzes', (req, res) => {
 app.post('/getQuizDataForStudentInClass', (req,res) => {
   main.getQuizDataForStudentInClass(req.body.studentId, req.body.classId)
   .then((studentQuizzesData) => {
-    // console.log('student quizzes data ', studentQuizzesData);
     res.send(studentQuizzesData)
   })
-  
 })
 
-const port = 3000
+app.post('/getParticipationData', (req,res) => {
+  main.getParticipationDataForClass(req.body.classId)
+  .then((classParticipationData)=> {
+    res.send(classParticipationData)
+  })
+})
+
+const port = 8080
 app.listen(port, function() {
 console.log('Listening on ' + port)
 })

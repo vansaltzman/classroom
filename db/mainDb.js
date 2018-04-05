@@ -1,16 +1,28 @@
-const { Pool } = require('pg')
+const { Pool, Client } = require('pg');
+const pg = require('pg');
 const schema = require('./classroom.js')
 const bcrypt = require('bcrypt')
+const dotenv = require('dotenv');
+const {error} = dotenv.config();
 //const migrate = require('../data/studentsQuizDataMigratedFromFB.js')
 
-const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
+// const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
+// console.log('process db ',process.env.PG_USER)
+// const db = new Pool({
+  //   // user: process.env.PG_USER,
+  //   database: process.env.PG_DB,
+  //   host: 'localhost',
+  //   password: null,
+  //   port: 5432,
+  // })
+// const connectionString = 'jaqen-rds-postgres.cw0klusijyxh.us-east-2.rds.amazonaws.com';
 
 const db = new Pool({
   user: process.env.PG_USER,
-  database: 'classroom',
-  host: 'localhost',
-  password: null,
-  port: 5432,
+  database: process.env.database,
+  host: process.env.host,
+  password: process.env.password,
+  port: process.env.port,
 })
 
 db.on('error', (err, client) => {
@@ -21,15 +33,17 @@ db.connect().then((client)=> {
   return client.query(schema)
   .then(res => {
     client.release()
-    console.log('created classroom database')
+    console.log('created classroom tables')
   })
   .catch(err => {
     client.release()
     console.log('oops!', err.stack)
   })
 })
+.catch((error)=> {
+  console.log('error connecting to db ', error)
+})
 
-// Database helpers
 
 const addUser = function(firstName, lastName, email, password, userClass) {
   let userclass = userClass === 'teacher' ? 'teachers' : 'students'
@@ -424,7 +438,6 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
         let eachQuestion = eachQuiz.questions[eachQuestionId]
         return db.query(`SELECT * FROM submitted_answers WHERE question_id = '${eachQuestion.id}'`)
         .then((answers) => {
-          // console.log('question id ',eachQuestion.id  ,'answers  ', answers.rows);
           eachQuestion.answers = {}
           answers.rows.forEach(answer=> {
             let formattedAnswer = {}
@@ -448,7 +461,6 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
         .then((submittedQuestions) => {
           eachQuiz.responses = {};
           submittedQuestions.rows.forEach((eachSubmittedQuestion) => {
-            // console.log('each submitted question ', eachSubmittedQuestion);
             // iterate through all students submitted answers
             eachQuiz.questions.forEach((quizQuestion) => {
               //then iterate through all of our questions
@@ -479,6 +491,12 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
   })
 }
 
+const getParticipationDataForClass = function (classId) {
+  return db.query(`SELECT student_id, participation FROM classes_students WHERE class_id='${classId}'`)
+  .then((classParticipationData)=> {
+    return classParticipationData.rows
+  })
+}
 
 const getTakenQuizzesAndStudentsPerformance = function(targetClassId) {
   console.log('targetClassId', targetClassId)
@@ -599,6 +617,7 @@ module.exports = {
   addProfilePictureForStudent,
   getProfilePic,
   getQuizDataForStudentInClass,
-  getTakenQuizzesAndStudentsPerformance
+  getTakenQuizzesAndStudentsPerformance,
+  getParticipationDataForClass
 }
 
