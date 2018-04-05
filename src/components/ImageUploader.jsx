@@ -43,14 +43,6 @@ class ImageUploader extends React.Component {
 
     this.props.getLinkFroms3( data )    
 
-    // axios.post('/imageUploader', data)
-    //   .then((response) => {
-    //     this.setState({image: response.data})
-    //     this.props.updateProfilePic( response.data )
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
   }
 
 
