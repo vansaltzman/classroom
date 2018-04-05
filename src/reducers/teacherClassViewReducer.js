@@ -333,12 +333,6 @@ export function teacherClassViewReducer(
 				for (var key in eachQuiz.questions) {
 					var answerArray = eachQuiz.questions[key].answers
 					eachQuiz.questions[key].answers = eachQuiz.questions[key].answers
-					// .reduce((accumulator, each) => {
-					// 	let answerId = each.id
-					// 	accumulator[answerId] = each
-					// 	return accumulator
-					// }, {})
-					//console.log('answers arrat', eachQuiz.questions[key].answers)
 				}
 				return eachQuiz
 			})
@@ -477,6 +471,16 @@ export function teacherClassViewReducer(
 					...state,
 					selectedGraphs: graphs
 				}
+
+				case actionTypes.REVERSE_GRAPH_SELECTION_ACTION:
+				console.log("action.index", action.index)
+				const updateSelectedGraphs = state.selectedGraphs.slice()
+				for (var gIndex = 0 ; gIndex < updateSelectedGraphs.length; gIndex++) {
+					if (gIndex === action.index + 1) {
+						updateSelectedGraphs.splice(action.index + 1, 1)
+					}
+				}
+				return {...state, selectedGraphs: updateSelectedGraphs}
     default:
       return state;
   }
