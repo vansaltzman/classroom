@@ -92,6 +92,12 @@ export function toggleModalAction() {
 	}
 }
 
+export function toggleGrades() {
+	return {
+		type: actionTypes.TOGGLE_GRADES_VIEW
+	}
+}
+
 export function toggleQuizLauncherModalAction() {
 	return {
 		type: actionTypes.TOGGLE_QUIZ_LAUNCHER

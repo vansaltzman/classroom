@@ -138,6 +138,7 @@ class ClassView extends React.Component {
 			classObj = classObj || this.props.targetClass
 			return axios.post('/endClass', {classObj})
 			.then(()=> {
+				console.log('OK from server')
 				return classObj
 			})
 		})
@@ -174,18 +175,47 @@ class ClassView extends React.Component {
 		})
 	}
 
+	code = function(text) {
+    return text.split('~~~').map((item, i)=> {
+      if (i % 2 === 0) {
+        return item
+      } else {
+        // return (
+        // <SyntaxHighlighter language='javascript' style={syntaxStyle} >
+        //   {'\n' + text  + '\n'}
+        // </SyntaxHighlighter>
+        // )
+         return (
+           <code
+            style={{
+              fontFamily: 'Monaco,Menlo,Consolas,"Courier New",monospace!important', fontSize: '1rem', whiteSpace: 'normal',
+							color: '#7026d2',padding: '2px 3px 1px',tabSize: '4',backgroundColor: '#f7f7f9', 
+							border: '1px solid #e1e1e8',  borderRadius: '3px',lineHeight: '2'
+            }}
+          >
+            {'\n' + item + '\n'} 
+          </code>
+         )
+      }
+    }) 
+  }
+
   render() {
 		const { studentsInClass } = this.props;
 		const studentsArray = [];
 		for (var key in studentsInClass) {
 			studentsArray.push(studentsInClass[key]);
 		}
+
 			return(
 			<div>
 				<Section
 					margin="none"
 					pad="none"
 				>
+				{/* <div>
+					{formatCode('This is a forumla')}
+				</div> */}
 				<Header
 					direction="row"
 					full="true"
@@ -374,7 +404,6 @@ class ClassView extends React.Component {
 											pad="small"
 											alignSelf="end"
 										>
-											<LikeIcon />
 										</Box>
 									</Box>
 								)
@@ -423,7 +452,7 @@ class ClassView extends React.Component {
 																	alignContent='between'
 																	style={{marginBottom:'50px'}}>
 																<Heading tag="h3">
-																	{question.text}
+																	{this.code(question.text)}
 																</Heading>
 																<List>
 																	{Object.values(question.answers).map((answer, i) => {
@@ -437,7 +466,7 @@ class ClassView extends React.Component {
 
 																		return (
 																			<ListItem key={i} separator='horizontal'>
-																				{marker}    {i+1}) {answer.text}
+																				{marker}    {i+1}) {this.code(answer.text)}
 																			</ListItem>
 																		);
 																	})}
@@ -566,10 +595,13 @@ class ClassView extends React.Component {
 															return (
 																<Section>
 																	<Label>{'Question' + ' ' + Number(index + 1)}</Label>
-																	<TextInput placeHolder="Question..."
-																						 //style={{color: each.question ? 'pink' : 'black'}}
-																						 value={each.id ? each.question : each.text}
-																						 onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+																	<textarea 
+																		style={{resize: 'none'}}
+																		placeHolder="Question..."
+																		//style={{color: each.question ? 'pink' : 'black'}}
+																		value={each.id ? each.question : each.text}
+																		onChange={(event) => {this.props.addQuestionText(event, index)}}
+																	/>
 																	<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteQuestion(index)}/>} />
 																	{each.answers.map((eachAnswer, answerIndex) => {
 																		return (
@@ -619,7 +651,7 @@ class ClassView extends React.Component {
 												<Box direction='row' full='horizontal' margin='small' alignContent='stretch' justify='between'>
 													<Box direction='column' justify='start' alignContent='between' style={{width: '400px', maxWidth: '720px'}} style={{marginRight: 'auto'}}>
 														<Heading tag='h3'>
-															{question.question}
+															{this.code(question.question)}
 														</Heading>
 													</Box>
 													{this.props.teachersClassView.showAddQuestionButton ? 

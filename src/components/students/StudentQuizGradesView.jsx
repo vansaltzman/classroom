@@ -5,9 +5,10 @@ import Section from 'grommet/components/Section';
 import Headline from 'grommet/components/Headline';
 import Button from "grommet/components/Button";
 import Value from 'grommet/components/Value';
-import Box from 'grommet/components/Box';
 import LikeIcon from 'grommet/components/icons/base/Like';
-
+import Anchor from "grommet/components/Anchor";
+import Box from "grommet/components/Box";
+import LinkPreviousIcon from 'grommet/components/icons/base/LinkPrevious';
 
 class StudentQuizGradesView extends React.Component {
     constructor(props) {
@@ -84,16 +85,37 @@ class StudentQuizGradesView extends React.Component {
         return (
             <div>
                 <Article>
-                    <Section pad='medium'justify='center'align='center'>
+                    <Section 
+                        pad='small'
+                        justify='between'
+                        colorIndex='grey-4'
+                        align='center'
+                        direction="row"
+                    >
 
+                        {this.props.targetClass.isLive ?
+                        <Anchor 
+                            icon={<LinkPreviousIcon size="large" />}
+                            label='Go Back'
+                            primary={false}
+                            style={{lineHeight: '100px', marginLeft: "10px"}}
+                            onClick={this.props.toggleGrades}
+                        /> : 
+                        <div style={{width: '100px'}}>
+                            {' '}
+                        </div>
+                        }
                         <Headline margin='medium' size='medium'>
                             {className}
                         </Headline>
+                        <div style={{width: '100px'}}>
+                            {' '}
+                        </div>
 
                     </Section>
 
                     <Section pad='small' justify='center' colorIndex='grey-4' align='center'>
-                        {classGrade? 
+                        {classGrade ? 
                         <div> <Box direction='row' align='baseline'>
 
                             <Headline margin='medium' size='small'>

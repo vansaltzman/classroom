@@ -11,7 +11,6 @@ const fbClassToPgObj = function(classObj) {
   .then(()=> {
     if (quizzes) {
       return Promise.all(Object.keys(quizzes).map(quizId => {
-        console.log ('is it event here???')
         responsesObj = {}    
         Object.values(students).forEach(student => {
             studentObj = {}
@@ -30,12 +29,14 @@ const fbClassToPgObj = function(classObj) {
 
 const submitParticipation = function(classId, students) {
   return Promise.all(Object.values(students).map(student=> {
-    console.log('participation student', student)
     let newParticipation = student.participation || 0
     return db.query(
       `UPDATE classes_students SET participation = participation + $1 WHERE class_id = $2 AND student_id = $3 RETURNING participation`, 
       [newParticipation, classId, student.id])
   }))
+  .catch(err => {
+    console.error('FAILURE with submitting participation: ', err)
+  })
 }
 
 
@@ -43,9 +44,7 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
   console.log('Submit Quiz for: ', quizObj.name)
 
   const prevQuizId = quizObj.id;
-  console.log('previousgdaad', prevQuizId)
   const quizName = quizObj.name;
-  console.log('quizName', quizName)
   const questions = quizObj.questions;
   const quizDuration = quizObj.quizDuration
   const quizSubject = quizObj.subject
@@ -54,12 +53,9 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
   
   let subjectId 
   let submittedQuizId
-  console.log('quizObj',quizObj)
-  console.log('quizName, subjectId, quizWeight, prevQuizId, classId, quizDuration, quizTime',quizName, subjectId, quizWeight, prevQuizId, classId, quizDuration, quizTime)
 
   return db.query(`SELECT id FROM subjects WHERE name=$1`, [quizObj.subject])
   .then((subjectData)=> {
-    console.log("subjectData", subjectData)
     subjectId = subjectData.rows[0].id
     return db.query(
       `INSERT INTO submitted_quizzes (name, subject_id, weight, previous_id, class_id, duration, time) 
@@ -67,7 +63,6 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
     .then((submittedQuiz) => {
       submittedQuizId = submittedQuiz.rows[0].id
       return Promise.all(Object.values(questions).map((each, index) => {
-        console.log('each ------> ', each)
         return db.query(
           `INSERT INTO submitted_questions (question, previous_id, subject_id, quiz_id, position) 
           VALUES ('${each.text}', '${each.id}', '${subjectId}', '${submittedQuizId}', '${each.position}') RETURNING id, previous_id;`)
@@ -94,11 +89,10 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
           })
 
           return Promise.all(Object.values(studentResponses).map(student => {
-            console.log("question", question);
             let responseForThisQuestion = student.responses[question.previous_id]
-            console.log("responseForThisQuestion",responseForThisQuestion)
             let studentsAnswer = answerMapper[Object.keys(responseForThisQuestion.answers).find(key => responseForThisQuestion.answers[key] === true)] || {newId: null, isCorrect: false}
             responseForThisQuestion.time = responseForThisQuestion.time || null;
+            
             return db.query(
             `INSERT INTO students_responses (student_id, response_id, question_id, draft_question_id, time_spent, correct) 
             VALUES ($1, $2, $3, $4, $5, $6)`, [student.id, studentsAnswer.newId, question.id, question.previous_id, responseForThisQuestion.time, studentsAnswer.isCorrect])
@@ -106,6 +100,9 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
         })
       }))
     })
+  })
+  .catch(err => {
+    console.log('ISSUE WITH MIGRATION', err)
   })
 }
 

@@ -47,6 +47,7 @@ const actionTypes = {
 	/******************* Quiz Grades views*********************/
 	ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW: 'add_student_quiz_grades_studentview',
 	ADD_STUDENT_PARTICIPATION_DATA: 'add_student_participation_data',
+	TOGGLE_GRADES_VIEW: 'TOGGLE_GRADES_VIEW',
 
 	/******************* Quiz/Question Builder*********************/
 	SHOW_QUIZ_MODAL_ACTION: 'show_quiz_modal_action',

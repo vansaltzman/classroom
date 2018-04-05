@@ -202,7 +202,7 @@ if (currentQuestion >= 0 && currentQuestion < this.state.arrayOfQuestionIds.leng
               margin="small"
               pad="small"
               colorIndex="light-2"
-              style={{margin: '0', position: 'sticky', top: '112px', zIndex: '2'}}
+              style={{margin: '0', top: '112px', zIndex: '2'}}
             >
               {this.props.currentQuestion < 0 ? 
               <Anchor 
@@ -246,14 +246,15 @@ if (currentQuestion >= 0 && currentQuestion < this.state.arrayOfQuestionIds.leng
           }}>
             <Heading align="center">
         
-             You have already submitted your quiz.
+             Thanks for submitting your quiz! 😄
         
             </Heading>
       
             {/* Button should link to prev student quiz data */}
             <Button label='View Quizzes'
-              href='#'
-              accent={true} />
+              onClick={this.props.toggleGrades}
+              accent={true} 
+            />
           </div>
           : quizView}
         </div>
