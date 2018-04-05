@@ -97,10 +97,7 @@ class ImageUploader extends React.Component {
       </Paragraph>
       <Box direction='row' justify='start' align='center' wrap={true} pad='medium' margin='small'>
         <Dropzone onDrop={this.onDrop} size={100} style={dpStyle}>
-          <Anchor icon={<DocumentImage size="xlarge" colorIndex='warning'/>}
-            animateIcon={true}
-            colorIndex='warning'
-             href='#'
+          <Anchor icon={<DocumentImage size="xlarge"/>}
           />
         </Dropzone>
       </Box>
