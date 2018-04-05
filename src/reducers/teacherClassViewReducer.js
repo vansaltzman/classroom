@@ -11,7 +11,8 @@ export function teacherClassViewReducer(
     newClassName: "",
     newClassSubject: "",
     newClassQuarter: "",
-    newClassYear: "",
+		newClassYear: "",
+		newClassImage: "",
     subjects: [],
     allStudents: [],
     targetClass: {},
@@ -51,6 +52,10 @@ export function teacherClassViewReducer(
     case actionTypes.UPDATE_NEW_CLASS_YEAR_ACTION:
       //console.log('reducer action.year', action.year.option)
 			return { ...state, newClassYear: action.year.option };
+		case actionTypes.ADD_CLASS_IMAGE_ACTION:
+			console.log('imageeeee', action.imageUrl)
+			return { ...state, newClassImage: action.imageUrl }
+		//another case for picture
 		case actionTypes.ADD_NEW_CLASS_ACTION:
 			console.log('reducer add class', action.classes)
 			return { ...state, classes: action.classes, targetClass: action.classes[action.classes.length - 1]}

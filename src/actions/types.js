@@ -1,4 +1,5 @@
 const actionTypes = { 
+	PROFILE_PIC: 'PROFILE_PIC',
   AUTH_USER: 'auth_user',  
 	UNAUTH_USER:'unauth_user',
 	AUTH_ERROR:'auth_error',
@@ -11,6 +12,7 @@ const actionTypes = {
 	UPDATE_NEW_CLASS_YEAR_ACTION: 'update_new_class_year_action',
 	UPDATE_NEW_CLASS_NAME_ACTION: 'update_new_class_name_action',
 	UPDATE_NEW_CLASS_SUBJECT_ACTION: 'update_new_class_subject_action',
+	ADD_CLASS_IMAGE_ACTION: 'add_class_image_action',
 	SELECT_EXISTING_SUBJECT_ACTION: 'select_existing_subject_action',
 	UPDATE_NEW_CLASS_QUARTER_ACTION: 'update_new_class_quarter_action',
 	GET_ALL_STUDENTS_ACTION: 'get_all_students_action',

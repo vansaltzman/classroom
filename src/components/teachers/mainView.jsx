@@ -97,8 +97,7 @@ class TeacherMainView extends React.Component {
       subject: this.props.newClassSubject,
       year: this.props.newClassYear,
       quarter: this.props.newClassQuarter,
-      thumbnail:
-        "https://regmedia.co.uk/2016/10/17/javascript_photo_via_shutterstock.jpg?x=442&y=293&crop=1"
+      thumbnail: this.props.newClassImage
     })
   }
 
@@ -211,7 +210,8 @@ function mapStateToProps(state) {
     newClassSubject: state.teachersClassView.newClassSubject,
     newClassQuarter: state.teachersClassView.newClassQuarter,
     newClassYear: state.teachersClassView.newClassYear,
-		newClass: state.teachersClassView.newClass,
+    newClass: state.teachersClassView.newClass,
+    newClassImage: state.teachersClassView.newClassImage,
 		subjects: state.teachersClassView.subjects,
     auth: state.auth
   };

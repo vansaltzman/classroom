@@ -69,10 +69,15 @@ app.post('/imageUploader', upload.single('file'), (req, res) => {
                 if (err) console.log(err);
               
                 //req.body.classPic//true for teacher view//false for student view
-                if(req.body.classPic){
-                  main.addClassPic(fileUrl)
-                } else {
+                if(req.body.classPic === false){
+                  console.log('req.body.classPic', req.body.classPic)
+                  // main.addClassPic(fileUrl)
+                  console.log('------class pic -----',fileUrl)
+                  // ('---this should only run from teacher uploading class pic---')
+                } 
+                else {
                   main.addProfilePictureForStudent(req.body.text, fileUrl)
+                  
                 }
               //main.addProfilePictureForStudent(req.body.text, fileUrl) 
               })
@@ -184,7 +189,7 @@ app.post('/profile', function(req, res) {
   // Complete Quiz
   
 app.post('/addClass', (req, res) => {
-  //console.log('server side data for add class',  req.body);
+  console.log('server side data for add class',  req.body);
   main.addNewClass(req.body)
   .then((data) => {
     console.log('Class is added', data)

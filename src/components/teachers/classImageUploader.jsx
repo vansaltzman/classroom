@@ -37,13 +37,7 @@ class ClassImageUploader extends React.Component {
     data.append('text', this.props.auth.user.id)
     data.append('classPic', true)
 
-    axios.post('/imageUploader', data)
-      .then((response) => {
-        this.setState({image: response.data})
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    this.props.addClassImage(data)
   }
 
 render() {
@@ -85,7 +79,7 @@ render() {
       <Dropzone onDrop={this.onDrop} style={dpStyle}>
       <Label style={labelStyle}>Click or Drag and Drop an Image Here!
         
-          <img src={this.state.image} style={imgStyle} alt={''}/>
+          <img src={this.props.image} style={imgStyle} alt={''}/>
             <DocumentImage size="small"  style={iconStyle}>
             </DocumentImage>
     
@@ -98,7 +92,8 @@ render() {
 
 function mapStateToProps(state) {
   return {
-    auth: state.auth
+    auth: state.auth,
+    image: state.teachersClassView.newClassImage
   };
 }
 

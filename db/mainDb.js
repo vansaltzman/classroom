@@ -348,6 +348,7 @@ const getQuizzes = function(teacherId, subjectId) {
   })
 }
 const addProfilePictureForStudent = function (studentId, url) {
+  console.log('------------add profile pic for student in mainDB')
   const queryString = `UPDATE students SET thumbnail_url = '${url}' WHERE id=${studentId}`
   return db.query(queryString)
 }
@@ -369,6 +370,11 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
     }))
   })
 }
+
+const addClassPic = function(fileUrl) {
+
+}
+
 // const calculateAverageTimeForQuestions = function(classFromFB) {
 //   const studentsAndTheirResponses = classFromFB[1].students.slice(1);
 //   for (var i = 0; i < studentsAndTheirResponses.length; i++) {
