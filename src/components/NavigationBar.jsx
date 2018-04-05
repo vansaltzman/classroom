@@ -102,10 +102,6 @@ class NavigationBar extends React.Component {
                     Quiz View
                     </Anchor>
                   
-                  <Anchor path='/thumb'>
-                        Thumb Poll
-                    </Anchor>
-
                     <Anchor path='/login' onClick={this.logout}>
                         Logout
                     </Anchor>
@@ -127,11 +123,7 @@ class NavigationBar extends React.Component {
                     </Anchor> */}
 
                     <Anchor path='/profileSettings'>
-                            Profile Settings
-                    </Anchor>
-
-                        <Anchor path='/thumbvote'>
-                        Thumb Vote
+                            Profile Pic
                     </Anchor>
 
                 </div>
@@ -190,8 +182,8 @@ class NavigationBar extends React.Component {
                             <Route path="/signUp" component={SignUp}/>
                             <Route path="/default" component={ClassViewDefault}/>
                             <Route path="/profileSettings" component={ImageUploader}/>
-                            <Route path="/thumb" component={ThumbPoll}/>
-                            <Route path="/thumbvote" component={ThumbVote}/>
+                            {/* <Route path="/thumb" component={ThumbPoll}/> */}
+                            {/* <Route path="/thumbvote" component={ThumbVote}/> */}
                         
                             <Route path="/statistics" component={Statistics}/>
                             

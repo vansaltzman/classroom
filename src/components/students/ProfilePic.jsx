@@ -14,39 +14,21 @@ class ProfilePic extends React.Component {
     }
   }
 
-  componentDidMount() {
-    console.log('----')
-    this.setState({user: this.props.userId}, function(){
-      axios.post('/profile', {user: this.state.user})
-      .then((response)=> {
-        if(response.data.rows[0].thumbnail_url === null){
-          this.setState({pic: 'https://s3.us-east-2.amazonaws.com/jaqen-app/default-profile.png'})
-        } else {
-            this.setState({pic: response.data.rows[0].thumbnail_url})
-            console.log('profile pic mounted--', response.data.rows[0].thumbnail_url)
-        }
-    })
-      .catch((error)=>{
-        console.log('error in ProfilePic.jsx', error)
-      })
-    })
-  }
-
   render() {
 
-const profile ={
-  margin: 'auto', 
-  borderRadius: '50%',
-  height: '40px',
-  width: '40px',
-}
+    const profile ={
+      margin: 'auto', 
+      borderRadius: '50%',
+      height: '40px',
+      width: '40px',
+    }
 
-// let defaultPic = 'https://s3.us-east-2.amazonaws.com/jaqen-app/default-profile.png'
     return (
       <div>
-        {/* {this.state.pic === '' ? <img src={'https://s3.us-east-2.amazonaws.com/jaqen-app/default-profile.png'} alt={''} style={profile}/> : <img src={this.state.pic} alt={''} style={profile}/>}  */}
-        <img src={this.state.pic} alt={''} style={profile}/>
-        
+        <img src={this.props.auth.user.pic.length > 0 ? 
+          this.props.auth.user.pic : 'https://s3.us-east-2.amazonaws.com/jaqen-app/default-profile.png'} 
+            alt={''} 
+            style={profile}/>
       </div>
     )
   }
@@ -54,7 +36,6 @@ const profile ={
 
 function mapStateToProps(state) {
   return {
-    // class: state.studentClassView.targetClass,
     auth: state.auth
   }
 }
