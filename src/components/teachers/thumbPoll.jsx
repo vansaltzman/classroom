@@ -6,6 +6,10 @@ import * as Actions from '../../actions/index.js';
 import fb from '../../../db/liveClassroom.js'
 import Layer from 'grommet/components/Layer';
 import Section from 'grommet/components/Section';
+import Box from 'grommet/components/Box';
+import Label from 'grommet/components/Label';
+import Headline from 'grommet/components/Headline';
+import TextInput from 'grommet/components/TextInput';
 
 
 
@@ -47,8 +51,6 @@ class ThumbPoll extends React.Component {
       degrees = test 
      }
      
-      console.log('degresssss----',degrees)
-      console.log('show thumb poll props',this.props.showThumbPoll)
 
     let styleSheet = document.styleSheets[0];
     let keyframes =
@@ -74,17 +76,102 @@ class ThumbPoll extends React.Component {
     }
 
     return (
-      <Layer 	
-          // align={'center'}
-          closer={true}
-          flush={false}
-          overlayClose={true}
-          onClose={()=> {fb.setThumbPollLiveForStudents(this.props.teachersClassView.targetClass.id, false) } }>
-        <Section>
-          <img src={'https://s3.us-east-2.amazonaws.com/jaqen-app/thumb.png'} alt='👍' style={thumbStyle}/>       
+    //   <Layer 	
+    //       // align={'center'}
+    //       closer={true}
+    //       flush={false}
+    //       overlayClose={true}
+    //       onClose={()=> {fb.setThumbPollLiveForStudents(this.props.teachersClassView.targetClass.id, false) } }>
+    //     <Section
+    //       style={{height: '800px', width: '800px'}}
+    //     >
+    //       <img src={'https://s3.us-east-2.amazonaws.com/jaqen-app/thumb.png'} alt='👍' style={thumbStyle}/>       
           
-        </Section>
-     </Layer>
+    //     </Section>
+    //  </Layer>
+
+
+<Layer 	
+  // align={'center'}
+  closer={true}
+  flush={false}
+  overlayClose={true}
+  onClose={()=> {
+    fb.setThumbPollLiveForStudents(this.props.teachersClassView.targetClass.id, false) 
+    fb.clearThumbFields(this.props.teachersClassView.targetClass.id)
+  } }>
+<Box
+  style={{height: '800px', width: '800px'}}
+  direction="column"
+  justify="between"
+  align="center"
+>
+  <Box
+    margin="none"
+    pad="small"
+  >
+    <textarea
+      style={{fontSize: '48px', textAlign: 'center', resize: 'none', border:0}}
+      placeholder="Thumb Poll"
+      data-gramm_editor="false"
+      rows="2"
+      value={this.props.teachersClassView.targetClass.thumbName}
+      onChange={ (name)=> fb.updateThumbName(name.target.value, this.props.teachersClassView.targetClass.id) } 
+    />
+  </Box>
+  {/* <Headline
+    style={{marginTop: '30px'}}
+  >
+      {this.props.teachersClassView.targetClass.thumbName || 'Thumb Poll'}
+  </Headline> */}
+
+  <div style={{
+    // margin: 'auto',
+    textAlign: 'center',
+    // marginTop: '100px',
+  }}>
+  <img src={'https://s3.us-east-2.amazonaws.com/jaqen-app/thumb.png'} alt='👍' style={thumbStyle}/>      
+  </div>
+  <Box
+    direction="row"
+    justify="center"
+    pad="medium"
+    size="full"
+    full="horizontal"
+  >
+    {/* <Label
+      margin="none"
+      style={{marginRight: '15px', lineHeight: '40px'}}
+    >
+      {this.props.teachersClassView.targetClass.thumbLow || 'Low'}
+    </Label> */}
+
+    <TextInput
+      style={{fontSize: '28px'}}
+      placeHolder="Low"
+      value={this.props.teachersClassView.targetClass.thumbLow}
+      onDOMChange={ (text)=> fb.updateThumbLow(text.target.value, this.props.teachersClassView.targetClass.id) }
+    />
+
+    {/* <span style={{width: '600px', height: '40px', marginBottom: '30px', backgroundColor:'lightgrey'}}></span> */}
+
+    <TextInput
+      style={{fontSize: '28px'}}
+      placeHolder="High"
+      value={this.props.teachersClassView.targetClass.thumbHigh}
+      onDOMChange={ (text)=> fb.updateThumbHigh(text.target.value, this.props.teachersClassView.targetClass.id) }
+    />
+
+    {/* <Label
+      margin="none"
+      style={{marginLeft: '15px', lineHeight: '40px'}}
+    >
+      {this.props.teachersClassView.targetClass.thumbHigh || 'High'}
+    </Label> */}
+  </Box>  
+</Box>
+</Layer>
+
     )
   }
 }

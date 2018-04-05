@@ -8,6 +8,9 @@ import fb from '../../../db/liveClassroom.js'
 import debounce from 'lodash/debounce';
 // import NumberInput from 'grommet/components/NumberInput';
 import Layer from 'grommet/components/Layer';
+import Label from 'grommet/components/Label';
+import Box from 'grommet/components/Box';
+import Headline from 'grommet/components/Headline';
 
 
 
@@ -48,8 +51,7 @@ class ThumbVote extends React.Component {
     let studentId = this.props.auth.user.id
     let difference;
     let newVal = parseInt(this.state.degree)
-    console.log('---newVal----', newVal)
-    console.log('THIS USERS ID IS ', studentId)
+
     this.setState({
       thumbs: newVal
       // thumbs: 1
@@ -113,25 +115,51 @@ class ThumbVote extends React.Component {
       flush={false}
       overlayClose={true}
       >
-      <div>
+      <Box
+        style={{height: '800px', width: '800px'}}
+        direction="column"
+        justify="between"
+        align="center"
+      >
+        <Headline
+          style={{marginTop: '30px', textAlign: 'center'}}
+        >
+            {this.props.activeView.thumbName || 'Thumb Poll'}
+        </Headline>
         <div style={{
-          margin: 'auto',
+          // margin: 'auto',
           textAlign: 'center',
-          marginTop: '100px',
+          // marginTop: '100px',
         }}>
         <div style={outDiv}>
           <img src={'https://s3.us-east-2.amazonaws.com/jaqen-app/thumb.png'} alt='' style={thumbStyleAnimate}/>       
         </div>
-            <div>
-              <input type="range" name="thumbs" min="-180" max="0" step="0" value={this.state.degree} 
-              onChange={(e) => {this.do(e), this.handleChange(e.persist())}} 
-              // onMouseDown={this.handleAnimate} onMouseUp={this.handleAnimate}
-              />
-            </div>  
-
         </div>
-        
-      </div>
+        <Box
+          direction="row"
+          justify="center"
+          pad="medium"
+          size="full"
+          full="horizontal"
+        >
+          <Label
+            margin="none"
+            style={{marginRight: '15px', lineHeight: '40px', textAlign: 'center'}}
+          >
+            {this.props.activeView.thumbLow || 'Low'}
+          </Label>
+          <input style={{width: '600px', height: '40px', marginBottom: '30px'}} type="range" name="thumbs" min="-180" max="0" step="0" value={this.state.degree} 
+          onChange={(e) => {this.do(e), this.handleChange(e.persist())}} 
+          // onMouseDown={this.handleAnimate} onMouseUp={this.handleAnimate}
+          />
+          <Label
+            margin="none"
+            style={{marginLeft: '15px', lineHeight: '40px', textAlign: 'center'}}
+          >
+            {this.props.activeView.thumbHigh || 'High'}
+          </Label>
+        </Box>  
+      </Box>
       </Layer>
     )
   }
