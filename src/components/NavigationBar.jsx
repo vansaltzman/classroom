@@ -143,9 +143,9 @@ class NavigationBar extends React.Component {
                 <nav className="navbar navbar-default"> 
 
             <Header
-                fixed={true}
+                fixed={false}
                 style={{background: navBarBackground}}
-                size='medium'>
+                size='small'>
                 <Headline 
                   margin='medium'
                   style={titleStyle} 
@@ -209,7 +209,8 @@ function mapStateToProps(state) {
     // subject to change
     auth: state.auth,
     activeView: state.teachersClassView.targetClass.activeView,
-    studentClassView: state.studentClassView
+    studentClassView: state.studentClassView,
+    teachersClassView: state.teachersClassView
   };
 }
 
