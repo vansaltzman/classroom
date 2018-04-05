@@ -217,6 +217,30 @@ const setThumbPollLiveForStudents = function (classId, bool) {
 	classRoom.set(bool)
 }
 
+
+const updateThumbName = function (name, classId) {
+	if (name.length < 41) {
+		fb.ref('/classes/' + classId + '/thumbName').set(name)
+	}
+}
+
+const updateThumbHigh = function (high, classId) {
+	if (high.length < 31) {
+		fb.ref('/classes/' + classId + '/thumbHigh').set(high)
+	}	
+}
+
+const updateThumbLow = function (low, classId) {
+	if (low.length < 31) {
+		fb.ref('/classes/' + classId + '/thumbLow').set(low)
+	}
+}
+
+const clearThumbFields = function (classId) {
+	fb.ref('/classes/' + classId + '/thumbLow').remove()
+	fb.ref('/classes/' + classId + '/thumbHigh').remove()
+	fb.ref('/classes/' + classId + '/thumbName').remove()
+}
 module.exports = {  
   fb,
   startClass,
@@ -236,7 +260,9 @@ module.exports = {
 	decrementThumbTotal,
 	getThumbTotal,
 	setThumbPollLiveForStudents,
-	setStudentsThumbsNeutral
-
-
+	setStudentsThumbsNeutral,
+	updateThumbName,
+	updateThumbHigh,
+	updateThumbLow,
+	clearThumbFields
 }

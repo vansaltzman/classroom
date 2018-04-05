@@ -193,7 +193,7 @@ class ClassView extends React.Component {
 					responsive={false}
 					pad="small"
 					colorIndex="light-2"
-					fixed={true}
+					fixed={false}
 					style={{margin: '0', top: '112px', zIndex:'2'}}
 				>
 					<Box
@@ -230,6 +230,8 @@ class ClassView extends React.Component {
 							secondary={false}
 							accent={true}
 							critical={false}
+							disabled={!this.props.targetClass.isLive}
+							animateIcon={this.props.targetClass.isLive}
 							plain={false} 
 							onClick={this.launchThumbPoll}
 						/>
