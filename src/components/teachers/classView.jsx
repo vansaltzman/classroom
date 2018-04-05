@@ -5,6 +5,8 @@ import axios from 'axios'
 
 import "grommet/scss/hpinc/index.scss";
 import Columns from 'grommet/components/Columns';
+import List from 'grommet/components/List';
+import ListItem from 'grommet/components/ListItem';
 import Box from 'grommet/components/Box';
 import Button from 'grommet/components/Button';
 import Anchor from 'grommet/components/Anchor';
@@ -355,41 +357,61 @@ class ClassView extends React.Component {
 								}}
 							/>
 					</Box>
-          <Box 
-						margin="medium"
-					>
-						<Accordion
-								onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}
-							>
-								{Object.values(this.props.teachersClassView.quizzes).map(quiz => {
-								return <AccordionPanel heading={
-									<div>
-										{quiz.name}
-									</div>}> 
-									{Object.values(quiz.questions).map((question,i) => {
-										return <Box key={i}>
-											<Heading tag="h3">
-												{question.text}
-											</Heading>
-											<Label>
-												{moment.duration(question.time).humanize()}
-											</Label>
-											{Object.values(question.answers).map(answer=> {
-												return <Notification
-													message={answer.text}
-													size='small'
-													status={answer.isCorrect ? 'ok' : 'critical'}
-												/>
-											})}
-										</Box>
-									})}
-								</AccordionPanel>
+          <Box margin="medium">
+						<Accordion onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}>
+								{Object.values(this.props.teachersClassView.quizzes).map((quiz, index) => {
+									return (
+										<AccordionPanel heading={
+											<Box direction='row' margin='small' alignContent='stretch' justify='between'>
+												<Box direction='column' justify='start' alignContent='between' style={{width: '400px', maxWidth: '400px'}} style={{marginRight: 'auto'}}>
+													<Heading tag='h3'>
+                            {quiz.name}
+                          </Heading>
+                        </Box>
+											</Box>
+										}>
+											<Section pad='small' justify='center' align='center'>
+												{Object.values(quiz.questions).map((question, i) => {
+                          return (
+														<Box direction='row'
+																full='horizontal'
+																alignContent='between'
+																style={{marginBottom:'50px'}}>
+															<Box key={i}
+																	direction='column'
+																	full='horizontal'
+																	alignContent='between'
+																	style={{marginBottom:'50px'}}>
+																<Heading tag="h3">
+																	{question.text}
+																</Heading>
+																<List>
+																	{Object.values(question.answers).map((answer, i) => {
+																		let isCorrect = answer.isCorrect;
+																		var marker;
+																		if (answer.isCorrect === true) {
+																			marker = <Status value='ok' style={{marginRight:'10px'}} />
+																		} else if (answer.isCorrect === false) {
+																			marker = <Status value='critical' style={{marginRight:'10px'}} />
+																		}
+
+																		return (
+																			<ListItem key={i} separator='horizontal'>
+																				{marker}    {i+1}) {answer.text}
+																			</ListItem>
+																		);
+																	})}
+																</List>
+															</Box>
+														</Box>
+													);
+												})}  
+											</Section>
+										</AccordionPanel>
+									)
 								})}
-							</Accordion>
-							<Button 
-								
-								label="Create New Quiz"
-								onClick={this.toggleQuizBuilderModal}/>
+						</Accordion>
+							<Button label="Create New Quiz" onClick={this.toggleQuizBuilderModal}/>
 					</Box>
 				</Split>
 
@@ -552,13 +574,44 @@ class ClassView extends React.Component {
 													 onActive={(index) => this.props.selectedQuestion(this.props.teachersClassView.questions[index])}>
 									{this.props.teachersClassView.questions.map((question, i) => {
 										return (
-											<AccordionPanel key={i} heading={question.question}>
-												<Label>
+											// <AccordionPanel key={i} heading={question.question}>
+											<AccordionPanel key={i} heading={
+												<Box direction='row' full='horizontal' margin='small' alignContent='stretch' justify='between'>
+													<Box direction='column' justify='start' alignContent='between' style={{width: '400px', maxWidth: '720px'}} style={{marginRight: 'auto'}}>
+														<Heading tag='h3'>
+															{question.question}
+														</Heading>
+													</Box>
+													{this.props.teachersClassView.showAddQuestionButton ? 
+														<Box direction='column' justify='end' alignContent='center' style={{width: '298px'}} style={{marginRight: '30px'}}>
+															<Heading tag='h3'>
+																<Button onClick={() => this.props.addRecycledQuestion(question)}>Add Question</Button>
+															</Heading>
+                          	</Box> 
+													: <Box></Box>}
+													<Box direction='column' justify='end' alignContent='center' style={{width: '298px'}} style={{marginRight: '30px'}}>
+                            <Heading tag='h5'>
+                              Average Time: {question.timeAvg ? question.timeAvg + ' min' : 'TBD'}
+                            </Heading>
+                          </Box>
+												</Box>
+											}>
+												{/* <Label>
 													{question.timeAvg + ' min'}
 													{this.props.teachersClassView.showAddQuestionButton ? <Button onClick={() => this.props.addRecycledQuestion(question)}>Add Question</Button> : <div></div>}
-												</Label>
+												</Label> */}
 												{question.answers.map((eachAnswer) => {
+													let isCorrect = eachAnswer.correct;
+													var marker;
+													if (eachAnswer.correct === true) {
+														marker = <Status value='ok' style={{marginRight:'10px'}} />
+													} else if (eachAnswer.correct === false) {
+														marker = <Status value='critical' style={{marginRight:'10px'}} />
+													}
 													return (
+														// <List key={i} separator='horizontal'>
+                            //   {marker}    {i+1}) {eachAnswer.answer}
+                            // </List>
 														<Notification
 															message={eachAnswer.answer}
 															size='small'

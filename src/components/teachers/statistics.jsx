@@ -60,12 +60,14 @@ class Statistics extends React.Component {
             }}
           />
         {/* </Section> */}
+        <Box responsive={true}>
         {this.props.teachersClassView.takenQuizzesAverages ? (
           <ClassPerformance />
         ) : (
           <div />
         )}
-        <Section pad='small' justify='center' align='center'>
+        </Box>
+        <Section pad='small' justify='center' align='center' responsive={true}>
           <div style={{width:'60%', align:'center'}}>
             <Box>
               <Accordion

@@ -22,24 +22,32 @@ import { bindActionCreators } from "redux";
 import * as Actions from "../../actions/index.js";
 
 class ClassPerformance extends React.Component {
+  // constructor() {
+  //   super()
+  //   this.state = {
+  //     activeIndex: 0
+  //   }
+  // }
   render() {
     return (
-      <Section pad='small' justify='center' align='center'>
+      <Section pad='small' justify='center' align='center' >
       <div style={{width:'80%', align:'center'}}>
-      <Box>
+      <Box responsive={true}>
       <Chart full={true}>
         <Axis
           count={5}
           labels={[{ index: 2, label: "50" }, { index: 4, label: "100" }]}
           vertical={true}
+          ticks={true}
         />
         <Chart vertical={true} full={true}>
           <Base height="medium" width="full" />
           <Layers>
-            {/* <Grid rows={5} columns={this.props.teachersClassView.selectedGraphs > 5? this.props.teachersClassView.selectedGraphs.length : 5} /> */}
-            {this.props.teachersClassView.selectedGraphs.map(eachGraph => {
+            <Grid rows={1} columns={2} />
+            {this.props.teachersClassView.selectedGraphs.map((eachGraph, index) => {
               return (
                 <Line
+                  key={index}
 									colorIndex={eachGraph.color || 'graph-1'}
                   points={true}
                   values={eachGraph.sub.map(eachScore => {
@@ -48,15 +56,29 @@ class ClassPerformance extends React.Component {
                 />
               );
             })}
-            
+            {/* <Marker colorIndex='graph-2'
+                    count={this.props.teachersClassView.selectedGraphs[0].sub.length}
+                    vertical={true}
+                    index={1} />
             <HotSpots
               count={12}
               max={100}
               activeIndex={11}
-              onActive={() => {}}
-            />
+              onActive={() => this.setState({
+                activeIndex: (undefined === index ? (this.props.teachersClassView.selectedGraphs[0].sub.length - 1) : index)
+              })}
+            /> */}
 						
           </Layers>
+          <Axis
+            ticks={true}
+            count={this.props.teachersClassView.selectedGraphs[0].sub.length}
+            labels={this.props.teachersClassView.selectedGraphs[0].sub.map(
+              (eachQuiz, index) => {
+                return { index: index, label: "Quiz " + Number(index + 1) };
+              }
+            )}
+          	/>
           <Box responsive={true} align="end" direction="row" padding="small">
             {this.props.teachersClassView.selectedGraphs.slice(1).map((eachGraph, i) => {
               let average = Object.values(eachGraph.sub).reduce((sum, each) => {
@@ -71,32 +93,23 @@ class ClassPerformance extends React.Component {
                 colorForName='#80cc6e';
               }  
               let data = Object.values(eachGraph.sub).map((eachScore, index) => {
-                return {"label": "Quiz " + index + ": ", "value": Math.round(Object.values(eachScore)[0])}
+                return {"label": "Quiz " + Number(index + 1) + ": ", "value": Math.round(Object.values(eachScore)[0])}
               }) 
               return (
-                <div key={i} onClick={() => this.props.reverseGraphSelection(i)}>
+                <Box key={i} onClick={() => this.props.reverseGraphSelection(i)} responsive={true}>
                 <Label style={{color: colorForName}} size="medium">{eachGraph.value}</Label>
                 <img 
                   src={eachGraph.thumbnail || "https://ca.slack-edge.com/T2SUXDE72-U8SAGQ1E0-8fa5cea28518-72"} 
                   style={{height: '50px', width: '50px', borderRadius: '50%', cursor:'pointer', opacity: 1 }}/>
-                 <AnnotatedMeter legend={true}
-                                  type='bar'
-                                  max={150}
-                                  units="%"
-                                  series={data}/>
-                </div>
+                <AnnotatedMeter legend={true}
+                                type='bar'
+                                max={150}
+                                units="%"
+                                series={data}/>
+                </Box>
               );
             })}
           </Box>
-          
-          <Axis
-            count={this.props.teachersClassView.selectedGraphs[0].sub.length}
-            labels={this.props.teachersClassView.selectedGraphs[0].sub.map(
-              (eachQuiz, index) => {
-                return { index: index, label: "Quiz " + Number(index + 1) };
-              }
-            )}
-          	/>
         </Chart>
       </Chart>
       </Box>
