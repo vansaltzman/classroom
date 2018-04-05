@@ -4,8 +4,6 @@ const bodyParser = require('body-parser')
 const main = require('../db/mainDb.js');
 const jwt = require('jsonwebtoken');
 const dbMethods = require('../db/mainDb.js');
-// const config = require('./config.js');
-const config = require('./config.js');
 const migrate = require('./migrationWorker.js')
 const { fb, startClass } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
@@ -21,9 +19,12 @@ if (error) {
 const multer = require('multer');
 const AWS = require('aws-sdk');
 var fs =  require('fs');
-const configAWS = require('./configAWS.js')
+const configAWS = {
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    SUBREGION: process.env.SUBREGION
+    } || require('./configAWS.js');
 
-  
 const app = express()
 
 app.use(express.static(__dirname + '/../dist'))
@@ -31,17 +32,17 @@ app.use(bodyParser.json())
 
 
 // Amazon s3 config
-const s3 = new AWS.S3();
 AWS.config.update(  {
   accessKeyId: configAWS.AWS_ACCESS_KEY_ID,
   secretAccessKey: configAWS.AWS_SECRET_ACCESS_KEY,
   subregion: configAWS.SUBREGION,
 });
 
+const s3 = new AWS.S3();
 const upload = multer({dest: 'uploads/'});
 
 app.post('/imageUploader', upload.single('file'), (req, res) => {
-  var myBucket = 'jaqenbucket';
+  var myBucket = 'jaqen-app';
   var myKey = req.file.originalname;
 
   fs.readFile(req.file.path, function (err, data) {
@@ -113,7 +114,8 @@ app.post('/profile', function(req, res) {
     .then( (check)=> {
       // this adds the email to our object that we will then add to our store with user info
       check.email = email;
-      const newToken = jwt.sign(check, config.jwtSecret);
+      const jwtSecret = process.env.jwtSecret || require('./config.js').jwtSecret
+      const newToken = jwt.sign(check, jwtSecret);
       if (check) {
         check.token = newToken;
       }
@@ -317,7 +319,7 @@ app.post('/getParticipationData', (req,res) => {
   })
 })
 
-const port = 3000
+const port = 8080
 app.listen(port, function() {
 console.log('Listening on ' + port)
 })

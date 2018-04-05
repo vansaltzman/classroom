@@ -1,17 +1,21 @@
 const firebase = require('firebase');
-const config = require('../server/config.js');
+// Uncomment fbConfig to run on your personal fb Database
+// const {fbConfig} = require('../server/config.js');
 const dummyStudentData=require('../db/dummyStudentsData');
 const studentQuizObjConverter = require('../src/utils/studentQuizObjConverter.js');
 const moment = require('moment');
 const fs = require('fs');
 // const migrate = require('../server/migrationWorker.js')
-const dotenv = require('dotenv');
-const {error} = dotenv.config();
-if (error) {
-  console.log('error in dotenv ', error)
+
+const prodConfig = {
+	apiKey: "AIzaSyAQGYQVxqkSiWa5NbD7LNftogLvBSrmvV8",
+	authDomain: "jaqen-d9c2e.firebaseapp.com",
+	databaseURL: "https://jaqen-d9c2e.firebaseio.com/"
 }
 
-firebase.initializeApp(config.fbConfig);
+let fbCredentials = prodConfig
+
+firebase.initializeApp(fbCredentials);
 
 const fb = firebase.database();
 
