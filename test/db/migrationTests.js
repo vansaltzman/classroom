@@ -11,10 +11,9 @@ const hashUser = function(user) {
   return bcrypt.hash(hashedUser[3], 10)
     .then(hash => {
       hashedUser[3] = hash
-      console.log(hashedUser)
+      return hashedUser
     })
 }
-console.log('hash ian ', hashUser(Ian));
 
 const addFrizzle = function(){
   return db.query(`SELECT * FROM teachers WHERE email=$1`, [testTeacher[2]])
@@ -49,29 +48,51 @@ const addMagicSubj = function() {
 
 const addStudentsAndClass = function() {
   // create frizzle
-  return addFrizzle()
-  .then(()=> {
-    // create subj
-    console.log('create subj')
-    return addMagicSubj()
-  })
-  .then(()=> {
-    // create class
-   console.log('create class')
-   return db.query(
-      `INSERT INTO classes (name, teacher_id, subject_id, year, quarter, thunmbnail) 
-      VALUES ('Magic Class', (SELECT id FROM teachers WHERE email='mfrizz@magic.bus'), 
-      (SELECT id FROM subjects WHERE name='Magic'), '2018', 'Second', 'https://pbs.twimg.com/media/Bp94a-sCYAAkzD2.jpg');`
-    )
-  })
-  .then(()=> {
-    console.log('create students')
+  // return addFrizzle()
+  // .then(()=> {
+  //   // create subj
+  //   console.log('create subj')
+  //   return addMagicSubj()
+  // })
+  // .then(()=> {
+  //   // create class
+  //  console.log('create class')
+  //  return db.query(
+  //     `INSERT INTO classes (name, teacher_id, subject_id, year, quarter, thunmbnail) 
+  //     VALUES ('Magic Class', (SELECT id FROM teachers WHERE email='mfrizz@magic.bus'), 
+  //     (SELECT id FROM subjects WHERE name='Magic'), '2018', 'Second', 'https://pbs.twimg.com/media/Bp94a-sCYAAkzD2.jpg');`
+  //   )
+  // })
+  // .then(()=> {
+  //   console.log('create students')
     let students = [
-      ['Arnold', 'Perlstein', 'aperl@magic.bus', 'ap', 'https://vignette.wikia.nocookie.net/magicschoolbus/images/7/70/MSB_S1_E9_021.jpg/revision/latest/scale-to-width-down/260?cb=20170603223817'],
-      ['Carlos', 'Ramon', 'cramo@magic.bus', 'cr', 'http://i0.kym-cdn.com/entries/icons/facebook/000/012/528/Naamloos-2.jpg'],
-      ['Dorothy', 'Rourke', 'drour@magic.bus', 'dr', 'https://vignette.wikia.nocookie.net/magicschoolbus/images/7/7e/Da_pickle01.jpg/revision/latest?cb=20140604124745'],
-      ['Keesha', 'Franklin', 'kfrank@magic.bus', 'kf', 'https://vignette.wikia.nocookie.net/magicschoolbus/images/a/a6/MSB_S1_E4_072.jpg/revision/latest?cb=20170703233927']
-    ] 
+      ['Alex', 'Chojnacki', 'alex@chojnacki.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8T2T768J-ff19ab38e761-1024'],
+  ['Adam', 'Mateo', 'adam@mateo.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8RQ7MGE5-70a1dd9355d4-72'],
+  ['Ara', 'Nguyen', 'pnn2104@columbia.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8S8BEYRH-6e758aec7185-1024'],
+  ['Alex', 'Levine', 'alex@levine.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8U95JANT-d3bca22851de-1024'],
+  ['Allegra', 'Bernt', 'allegra@bernt.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8TARMP46-84a181a93cb8-1024'],
+  ['Aloralyn', 'Ayran', 'aloralyn@ayran.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8S8P4G0L-76e0fd21e9af-1024'],
+  ['Artem', 'Ipatev', 'artem@ipatev.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8SASLVU2-34e6dd2047b0-1024'],
+  ['Brent', 'Hagen', 'brent@hagen.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8S7EJTS5-51d2b1ca9e9c-1024'],
+  ['Chris', 'Rigoli', 'chris@rigoli.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8S8LAG3E-08b422a398bb-1024'],
+  ['Danny', 'Schradder', 'danny@schradder.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8TJ3S17H-263246e479e9-1024'],
+  ['Eric', 'Shum', 'eric@shum.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8SDYCA4V-g2eb5d2954d3-1024'],
+  ['Eric', 'Sin', 'eric@sin.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8SHLSSDA-fda524858669-72'],
+  ['Jason', 'McCutchan', 'jason@mccutchan.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U80PX1BP0-be4c7667aeac-1024'],
+  ['Jerry', 'Chen', 'jerry@chen.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8T4BBVNX-9253ca8523c7-1024'],
+  ['Jessica', 'Wolvington', 'jessica@wolvington.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U7YJFP31S-af78cf4945e0-1024'],
+  ['Jonathan', 'Yuen', 'jonathan@yuen.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U6NJ6NK4N-b49a2c03419b-1024'],
+  ['Joseph', 'Martin', 'joseph@martin.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U2T3QALT0-3821c198d16d-1024'],
+  ['Juan', 'Galan', 'juan@galan.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8SAGQ1E0-8fa5cea28518-1024'],
+  ['Manos', 'Kourkoulakos', 'manos@kourkoulakos.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8THWNSK0-21544b6b1142-1024'],
+  ['Marcus', 'Hausler', 'marcus@hausler.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8TB3KFU7-9e84b983487b-48'],
+  ['Michael', 'Vasio', 'michael@vasio.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8SE70G03-7663474c7ceb-1024'],
+  ['Quentin', 'Vidal', 'quentin@vidal.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8T1LQLJ1-1285c5e1534d-1024'],
+  ['Riley', 'Alsman', 'riley@alsman.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8SDC58Q5-f208966f2b35-1024'],
+  ['Rory', 'Reagan', 'rory@reagan.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8SLG0FJ5-3006f612815c-1024'],
+  ['Xixi', 'Chen', 'xixi@chen.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8T793GBC-fac7de6ce4d0-1024'],
+  ['Yu Qing', 'Dong', 'yuqing@dong.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8RNB3CGY-f5099ef9c3ed-1024']
+]
 
     return Promise.all(students.map(student => {
       return hashUser(student)
@@ -81,6 +102,7 @@ const addStudentsAndClass = function() {
         .then(()=> {
           return hashedStudent
         })
+        .catch(err => console.log(err))
       })
       .then(hashedStudent => {
         console.log('hashedStudent ------> ', hashedStudent)
@@ -91,7 +113,6 @@ const addStudentsAndClass = function() {
           [hashedStudent[2]])
       })
     }))
-  })
 }
 
 
@@ -195,6 +216,7 @@ exports.classMigration = function() {
   })
 }
 
+exports.students = addStudentsAndClass
 exports.addDummyData = addStudentsAndClass;
 exports.addQuestions = addQuestions;
 exports.addQuiz = addQuiz;

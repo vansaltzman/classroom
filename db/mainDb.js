@@ -6,26 +6,26 @@ const dotenv = require('dotenv');
 const {error} = dotenv.config();
 //const migrate = require('../data/studentsQuizDataMigratedFromFB.js')
 
-const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
+// const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
 // console.log('process db ',process.env.PG_USER)
-const db = new Pool({
-  user: process.env.PG_USER,
-  database: 'classroom',
-  host: 'localhost',
-  password: null,
-  port: 5432,
-  })
+// const db = new Pool({
+//   user: process.env.PG_USER,
+//   database: 'classroom',
+//   host: 'localhost',
+//   password: null,
+//   port: 5432,
+//   })
 // const connectionString = 'jaqen-rds-postgres.cw0klusijyxh.us-east-2.rds.amazonaws.com';
 
 // !!! Uncomment for production code
 
-// const db = new Pool({
-//   user: process.env.PG_USER,
-//   database: process.env.database,
-//   host: process.env.host,
-//   password: process.env.password,
-//   port: process.env.port,
-// })
+const db = new Pool({
+  user: process.env.PG_USER,
+  database: process.env.database,
+  host: process.env.host,
+  password: process.env.password,
+  port: process.env.port,
+})
 
 db.on('error', (err, client) => {
   console.error('Unexpected error on idle client', err)
