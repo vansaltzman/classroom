@@ -142,6 +142,22 @@ class Statistics extends React.Component {
                       obj.label = j * 5;
                       interval.push(obj);
                     }
+
+                    var histogramHighest = 0;
+                    for (var k = 0; k < Object.values(quiz.studentScoreHistogram).length; k++) {
+                      if (Object.values(quiz.studentScoreHistogram)[k] > histogramHighest) {
+                        histogramHighest = Object.values(quiz.studentScoreHistogram)[k];
+                      }
+                    }
+
+                    var histogramInterval = [];
+                    for (var l = 0; l <= Math.ceil(histogramHighest / 2); l++) {
+                      var obj = {};
+                      obj.index = l;
+                      obj.label = l * 2;
+                      histogramInterval.push(obj);
+                    }
+                    //console.log('hisogram highest', histogramHighest)
                     let quizAverageColorIndex;
                     let graphColorIndex;
                     if (quiz.average <= 65) {
@@ -155,6 +171,8 @@ class Statistics extends React.Component {
                       graphColorIndex = 'graph-2'
                     }
                     let quizAverageComponent = <Value value={quiz.average} colorIndex={quizAverageColorIndex} units='%'/>
+                    console.log('Object.values(quiz.studentScoreHistogram', Object.values(quiz.studentScoreHistogram))
+                    console.log("Object.values(quiz.quizDiscrete)", Object.values(quiz.quizDiscrete))
                     return (
                       <AccordionPanel heading={
                         <Box direction='row' full='horizontal' margin='small' alignContent='stretch' justify='between'>
@@ -175,8 +193,48 @@ class Statistics extends React.Component {
                           </Box>
                         </Box>
                       }>
-                        {/* <Label>{"Average: " + quiz.average}</Label> */}
-                        <Section pad='small' justify='center' align='center'>
+                          <Button label="Show Distribution" onClick={() => this.props.showDistribution()}></Button>
+                          {this.props.teachersClassView.showDistribution ? 
+                          <Section pad='none' justify='center' align='center'> 
+                            <Chart vertical={false}>
+                            <Axis
+                              vertical={true}
+                              count={histogramInterval.length}
+                              labels={histogramInterval}
+                            />
+                              <Chart>
+                                <Base width="large"/>
+                                  <Layers>
+                                  <Grid rows={5} columns={3}/>
+                                    <Bar
+                                      style={{strokeWidth: "92px"}}
+                                      colorIndex = {graphColorIndex}
+                                      // vertical={true}
+                                      // reverse={true}
+                                      max={histogramHighest + 2}
+                                      values={Object.values(quiz.studentScoreHistogram).map(
+                                        each => each
+                                      )}  
+                                    />
+                                  
+                                  <Axis count={Object.keys(quiz.studentScoreHistogram).length}
+                                    vertical={false}
+                                    tickAlign = "start"
+                                    labels={Object.keys(quiz.studentScoreHistogram).map(
+                                      (range, index) => {
+                                        return {
+                                          index: index,
+                                          label: range
+                                        };
+                                      }
+                                    )}/>
+                                  </Layers> 
+                            
+                                </Chart> 
+                              {/* </Base> */}
+                            </Chart>
+                          </Section> 
+                        : <Section>
                           <Chart vertical={true}>
                             <Axis
                               // vertical={true}
@@ -211,11 +269,10 @@ class Statistics extends React.Component {
                                     each => each
                                   )}
                                 />
-                              
                               </Layers>
                             </Chart>  
-                          </Chart>
-                        </Section>
+                          </Chart> 
+                        </Section>}
                         <Section pad='small' justify='center' align='center'>
                           {Object.values(quiz.questions).map((question, i) => {
                             return (

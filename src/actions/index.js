@@ -815,3 +815,14 @@ function getParticipationDataAction(classParticipationData) {
 		participationData: classParticipationData
 	}
 }
+
+export function showDistribution() {
+	return (dispatch) => {
+		dispatch(showDistributionAction())
+	}
+}
+function showDistributionAction() {
+	return {
+		type: actionTypes.SHOW_DISTRIBUTION_ACTION,
+	}
+}

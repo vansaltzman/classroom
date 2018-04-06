@@ -27,7 +27,8 @@ export function teacherClassViewReducer(
 		newQuiz: {questions: [], subject: {}},
 		showThumbPoll: false,
 		takenQuizzes: [],
-		selectedGraphs: []
+		selectedGraphs: [],
+		showDistribution: false
   },
   action
 ) {
@@ -398,6 +399,18 @@ export function teacherClassViewReducer(
 						D: 0,
 						F: 0
 					}
+					const studentScoreHistogram = {
+						"0 - ": 0,
+						"10 - ": 0,
+						"20 - ": 0,
+						"30 - ": 0,
+						"40 - ": 0,
+						"50 - ": 0,
+						"60 - ": 0,
+						"70 - ": 0,
+						"80 - ": 0,
+						"90 - 100": 0
+					}
 					let quizSum = 0;
 					let quizId = action.quizzes[quizIndex].id;
 					let quizAverage;
@@ -428,6 +441,29 @@ export function teacherClassViewReducer(
 						} else if (studentScore < 65) {
 							quizDiscrete.F += 1;
 						}
+
+						if (studentScore > 0 && studentScore <= 10) {
+							studentScoreHistogram["0 - "] += 1;
+						} else if (studentScore > 10 && studentScore <= 20) {
+							studentScoreHistogram["10 - "] += 1;
+						} else if (studentScore > 20 && studentScore <= 30) {
+							studentScoreHistogram["20 - "] += 1;
+						} else if (studentScore > 30 && studentScore <= 40) {
+							studentScoreHistogram["30 - "] += 1;
+						} else if (studentScore > 40 && studentScore <= 50) {
+							studentScoreHistogram["40 - "] += 1;
+						} else if (studentScore > 50 && studentScore <= 60) {
+							studentScoreHistogram["50 - "] += 1;
+						} else if (studentScore > 60 && studentScore <= 70) {
+							studentScoreHistogram["60 - "] += 1;
+						} else if (studentScore > 70 && studentScore <= 80) {
+							studentScoreHistogram["70 - "] += 1;
+						} else if (studentScore > 80 && studentScore <= 90) {
+							studentScoreHistogram["80 - "] += 1;
+						} else if (studentScore > 90 && studentScore <= 100) {
+							studentScoreHistogram["90 - 100"] += 1;
+						}
+						
 						scores[action.quizzes[quizIndex].id] = studentScore;
 						quizSum += studentScore;
 						eachStudent.scores = scores
@@ -443,7 +479,8 @@ export function teacherClassViewReducer(
 					}
 					quizAverage = Math.round(quizSum / numberOfStudents);
 					action.quizzes[quizIndex].average = quizAverage
-					action.quizzes[quizIndex].quizDiscrete = quizDiscrete
+					action.quizzes[quizIndex].quizDiscrete = quizDiscrete;
+					action.quizzes[quizIndex].studentScoreHistogram = studentScoreHistogram;
 					quizAverages[action.quizzes[quizIndex].id] = quizAverage
 				}
 				var quizAveragesSub = Object.keys(quizAverages).map((eachKey) => {
@@ -488,6 +525,9 @@ export function teacherClassViewReducer(
 					}
 				}
 				return {...state, selectedGraphs: updateSelectedGraphs}
+
+				case actionTypes.SHOW_DISTRIBUTION_ACTION:
+				return {...state, showDistribution: !state.showDistribution}
     default:
       return state;
   }
