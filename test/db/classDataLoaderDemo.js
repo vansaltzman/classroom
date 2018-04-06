@@ -1017,17 +1017,108 @@ const classObj = {
       // }
 }
 
-
-
 const randomAssignment = function(classObj) {
-    const quiz = classObj.quizzes;
-    const questions = Object.values(quiz)[0].questions;
-    const numberOfQuestions = Object.values(questions).length
-    const multiples = 100 / numberOfQuestions;
-    const possibleScores = [0];
-    var x = multiples;
-   
-    console.log("possibleScores", possibleScores)
+	console.log('initial classObj', classObj);
+	const quiz = classObj.quizzes;
+	const quizId = Object.keys(quiz)[0];
+	//console.log('QUIZZZZ IDDDDDD', quizId)
+	const questions = Object.values(quiz)[0].questions;
+	const arrayOfQuestions = Object.values(questions);
+	//console.log("questions", arrayOfQuestions)
+	//key : value , id of question : id of correct answer
+	const questionAndCorrectAnswer = {}
+
+	for (var questionIndex = 0; questionIndex < arrayOfQuestions.length; questionIndex++) {
+		var questionId = arrayOfQuestions[questionIndex].id;
+		questionAndCorrectAnswer[questionId] = {inCorrect: []}
+		var answers = Object.values(arrayOfQuestions[questionIndex].answers)
+		for (var answerIndex = 0; answerIndex < answers.length; answerIndex++) {
+			if (answers[answerIndex].isCorrect === true) {
+				questionAndCorrectAnswer[questionId].correct = answers[answerIndex].id
+			} else if (answers[answerIndex].isCorrect === false) {
+				questionAndCorrectAnswer[questionId].inCorrect.push(answers[answerIndex].id)
+			}
+		}
+	}
+	console.log("questionAndCorrectAnswer", questionAndCorrectAnswer)
+
+	const numberOfQuestions = Object.values(questions).length
+	const multiples = 100 / numberOfQuestions;
+	const possibleScores = [0];
+	const students = Object.values(classObj.students);
+	console.log('students', students);
+	const studentId = Object.keys(classObj.students)
+	
+
+	var x = multiples;
+	var i = 1;
+	while (x <= 100) {
+		var score = Math.round(multiples * i);
+		x = score
+		if (score <= 100) {
+			possibleScores.push(score);
+		}
+		i++;
+	}
+	
+	var numberOfCorrectQuestionsBasedOnScore = {}
+	possibleScores.map((each) => {
+		numberOfCorrectQuestionsBasedOnScore[each] = Math.round(numberOfQuestions * each / 100);
+	})
+
+	for (var j = 0; j < students.length; j++) {
+		console.log('each student', students[j])
+		var eachStudentId = students[j].id
+		var studentQuiz = Object.values(students[j].quizzes)[0];
+		//console.log('quiz', studentQuiz)
+		var studentResponses = studentQuiz.responses;
+		console.log('each student response before reassignment', studentResponses)
+		var randomScore = possibleScores[Math.floor(Math.random()*possibleScores.length)]
+		console.log("randomScore", randomScore);
+		//how many questions student got correct based on scoore
+		var correctQuestionNumber = numberOfCorrectQuestionsBasedOnScore[randomScore];
+		if (correctQuestionNumber === 0) {
+			for (var key in studentResponses) {
+				//console.log('key', key)
+				//get incorrect ansswer id from questionAndCorrectAnswer
+				//array of in correct answers id for a question
+				var incorrectAnswer = questionAndCorrectAnswer[key].inCorrect;
+				//console.log("incorrectAnswer", incorrectAnswer)
+				//id of an inccorect answer
+				var randomIncorrectChoice = incorrectAnswer[Math.floor(Math.random()*incorrectAnswer.length)]
+				//console.log("randomIncorrectChoice", randomIncorrectChoice)
+				studentResponses[key].answers[randomIncorrectChoice] = true
+			}
+		} else if (correctQuestionNumber > 0) {
+			//question ids array
+			var questionIdsArray = Object.keys(studentResponses)
+			var correctQuestionsArray = [];
+			//pick a random questions to put it in the correct arrau
+			while (correctQuestionsArray.length < correctQuestionNumber) {
+				var randomq = questionIdsArray[Math.floor(Math.random()*questionIdsArray.length)]
+				if (correctQuestionsArray.indexOf(randomq) === -1) {
+					correctQuestionsArray.push(randomq);
+				}
+			}
+			//console.log("questionIdsArray", questionIdsArray)
+			//console.log("correctQuestionsArray", correctQuestionsArray)
+			for (var correctQuestionIndex = 0; correctQuestionIndex < correctQuestionsArray.length; correctQuestionIndex++) {
+				//get the correct answer id for the question
+				var correcQuestionId = correctQuestionsArray[correctQuestionIndex];
+				var correctAnswerId = questionAndCorrectAnswer[correcQuestionId].correct;
+				studentResponses[correcQuestionId].answers[correctAnswerId] = true
+			}
+			classObj.students[eachStudentId].quizzes[quizId].responses = studentResponses
+			console.log('after reassignment', studentResponses)
+		}  
+		Object.values(classObj.students).forEach((each) => {
+				console.log('after MODIFIED', Object.values(each.quizzes)[0].responses)
+		})
+	
+		return classObj;
+	}
 }
 
-randomAssignment(classObj);
+//randomAssignment(classObj);
+
+randomAssignment(classObjTest);
