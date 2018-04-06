@@ -4,7 +4,7 @@ import React from 'react'
 import Heading from 'grommet/components/Heading';
 import Button from 'grommet/components/Button';
 
-const classViewDefault = ({live}) => {
+const classViewDefault = ({live, toggleGrades}) => {
   return (
     <div style={{
       left: 0,
@@ -23,8 +23,9 @@ const classViewDefault = ({live}) => {
 
       {/* Button should link to prev student quiz data */}
       <Button label='View Previous Quizzes'
-        href='#'
-        accent={true} />
+        accent={true} 
+        onClick={toggleGrades}  
+      />
     </div>
   )
 }

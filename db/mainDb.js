@@ -6,24 +6,26 @@ const dotenv = require('dotenv');
 const {error} = dotenv.config();
 //const migrate = require('../data/studentsQuizDataMigratedFromFB.js')
 
-// const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
+const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
 // console.log('process db ',process.env.PG_USER)
-// const db = new Pool({
-  //   // user: process.env.PG_USER,
-  //   database: process.env.PG_DB,
-  //   host: 'localhost',
-  //   password: null,
-  //   port: 5432,
-  // })
-// const connectionString = 'jaqen-rds-postgres.cw0klusijyxh.us-east-2.rds.amazonaws.com';
-
 const db = new Pool({
   user: process.env.PG_USER,
-  database: process.env.database,
-  host: process.env.host,
-  password: process.env.password,
-  port: process.env.port,
-})
+  database: 'classroom',
+  host: 'localhost',
+  password: null,
+  port: 5432,
+  })
+// const connectionString = 'jaqen-rds-postgres.cw0klusijyxh.us-east-2.rds.amazonaws.com';
+
+// !!! Uncomment for production code
+
+// const db = new Pool({
+//   user: process.env.PG_USER,
+//   database: process.env.database,
+//   host: process.env.host,
+//   password: process.env.password,
+//   port: process.env.port,
+// })
 
 db.on('error', (err, client) => {
   console.error('Unexpected error on idle client', err)
@@ -251,14 +253,15 @@ const addQuiz = function(quizObj) {
   })
   .then((data) => {
     return Promise.all(questions.map((each, index) => {
+      console.log('each ------> ', each)
       if (each.id) {
-        return db.query(`UPDATE draft_questions SET question='${each.question}' WHERE id='${each.id}' RETURNING *;`)
+        return db.query(`UPDATE draft_questions SET question=$1 WHERE id='${each.id}' RETURNING *;`, [each.text])
         .then((data) => {
           each.id = data.rows[0].id
           return each
         })
       } else {
-        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ('${each.text}', '${teacherId}', '${subjectId}') RETURNING *;`)
+        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ($1, '${teacherId}', '${subjectId}') RETURNING *;`, [each.text])
         .then((data) => {
           each.id = data.rows[0].id
           return each
@@ -282,10 +285,10 @@ const addQuiz = function(quizObj) {
     return Promise.all((data.map((q, i) => {
       return Promise.all(q.answers.map((answer, j) => {
         if (answer.id) {
-          return db.query(`UPDATE draft_answers SET answer='${answer.answer}', correct='${answer.correct}' WHERE id='${answer.id}' AND question_id='${answer.question_id}'`)
+          return db.query(`UPDATE draft_answers SET answer=$1, correct='${answer.correct}' WHERE id='${answer.id}' AND question_id='${answer.question_id}'`, [answer.answer])
         } else {
           return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
-                ('${answer.text}', '${q.id}', '${answer.isCorrect}');`) 
+                ($1, '${q.id}', '${answer.isCorrect}');`, [answer.text]) 
         }
       }))
     })))
@@ -320,7 +323,6 @@ const getQuizzes = function(teacherId, subjectId) {
           eachQuiz.questions = {}
 
           questions.rows.forEach(question=> {
-            console.log("------------- eachQuestion", question)
             let formattedQuestion = {}
             formattedQuestion.id = question.draft_question_id
             formattedQuestion.text = question.question
@@ -538,7 +540,6 @@ const getTakenQuizzesAndStudentsPerformance = function(targetClassId) {
     }))
   })
   .then((data) => {
-    console.log('dataaaaaaaaaaaaaaaa', data)
     return Promise.all(data.map((eachQuiz) => {
       return Promise.all(Object.keys(eachQuiz.questions).map((eachQuestionId) => {
         let eachQuestion = eachQuiz.questions[eachQuestionId]

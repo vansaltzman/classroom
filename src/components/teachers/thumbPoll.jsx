@@ -70,7 +70,7 @@ class ThumbPoll extends React.Component {
       transform: `translate(50% 50%) rotate(${degrees}deg)`,
       margin: 'auto',
       transition: 'transform 2s',
-      animation: 'frame 3s infinite',
+      animation: 'frame 2s infinite',
       filter: `hue-rotate(${(degrees - 90) * .85}deg) brightness(${this.findBrightness(degrees) + 100}%)`
 
     }

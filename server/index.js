@@ -178,6 +178,10 @@ app.post('/endClass', (req, res)=> {
   const { classObj } = req.body
 
   migrate.fbClassToPgObj(classObj)
+    .then(()=> {
+      console.log('Migrated ' + classObj.name + ' MainDB')
+      res.sendStatus(200)
+    })
     .catch(err => {
       console.log('Failed to migrate to MainDB ------> ', err)
       res.sendStatus(500)

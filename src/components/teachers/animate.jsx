@@ -30,6 +30,38 @@ class Animate extends React.Component {
     }
   }
 
+  code = function(text) {
+    return text.split('~~~').map((item, i)=> {
+      if (i % 2 === 0) {
+        return item
+      } else {
+        // return (
+        // <SyntaxHighlighter language='javascript' style={syntaxStyle} >
+        //   {'\n' + text  + '\n'}
+        // </SyntaxHighlighter>
+        // )
+         return (
+           <code
+            style={{
+              fontFamily: 'Monaco,Menlo,Consolas,"Courier New",monospace!important',
+              fontSize: '0.9rem',
+              whiteSpace: 'normal',
+              color: '#7026d2',
+              padding: '2px 3px 1px',
+              tabSize: '4',
+              backgroundColor: '#f7f7f9',
+              border: '1px solid #e1e1e8',
+              borderRadius: '3px',
+              lineHeight: '23px'
+            }}
+          >
+            {'\n' + item + '\n'} 
+          </code>
+         )
+      }
+    }) 
+  }
+
   render() { 
 
     // add a styled "is done" or "not started" 
@@ -48,8 +80,9 @@ class Animate extends React.Component {
               backgroundColor: 'white',
               textOverflow: 'ellipsis', 
               height: '23px',
-              width: '500px', 
-              position: 'absolute',
+              width: '500px',
+              minWidth: '500px',
+              position: 'relative',
               display: 'inline-block',
               lineHeight: '23px',
               zIndex: '999',
@@ -68,7 +101,7 @@ class Animate extends React.Component {
             onMouseEnter ={()=> this.setState({showFull: true})}
             onMouseLeave ={()=> this.setState({showFull: false})}
           >
-            {this.state.currentQuestion}
+            {this.code(this.state.currentQuestion)}
           </Heading>
         </Fade>
      )

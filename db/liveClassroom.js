@@ -189,14 +189,12 @@ const decrementThumbTotal = function (classId, studentId, difference) {
 			let currentTotal = snap.val();
 			currentTotal -= difference
 			thumbTotal.set(currentTotal);
-			console.log('currentTotal in live classroom.js students thumb call', currentTotal)
 		})		
 	}
 
 const getThumbTotal = function (classId, studentId) {
 	const thumbTotal= fb.ref('/classes/' + classId + '/students/' + studentId + '/thumb');
 	thumbTotal.on('value', (snap) => {
-		console.log('snap.val----', snap.val())
 		let currentTotal = snap.val();
 		return currentTotal
 	})
@@ -216,7 +214,6 @@ const setStudentsThumbsNeutral = function (classId) {
 }
 
 const setThumbPollLiveForStudents = function (classId, bool) {
-	console.log('fb bool-------', typeof bool, bool)
 	const classRoom = fb.ref('/classes/' + classId + '/thumbPoll')
 	classRoom.set(bool)
 }

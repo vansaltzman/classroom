@@ -4,7 +4,8 @@ import axios from "axios";
 export function studentClassViewReducer(
   state = {
 		classes: [],
-		quizGrades: []
+		quizGrades: [],
+		showGrades: false,
   },
   action
 ) {
@@ -43,7 +44,10 @@ export function studentClassViewReducer(
 		case actionTypes.UPDATE_CLASS_DATA_STUDENT:
 			return {...state, targetClass: action.classData}
 		
-		case actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW:
+		case actionTypes.TOGGLE_GRADES_VIEW:
+			return {...state, showGrades: !state.showGrades}
+		
+			case actionTypes.ADD_STUDENT_QUIZ_GRADES_STUDENTVIEW:
 			return {...state, quizGrades: action.quizData}
 		
 		case actionTypes.ADD_STUDENT_PARTICIPATION_DATA:
