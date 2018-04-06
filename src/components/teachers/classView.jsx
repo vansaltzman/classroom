@@ -318,12 +318,15 @@ class ClassView extends React.Component {
 					/> 
 				</Box>
 				</Header>
-				<Split fixed={false}
+				{/* <Split fixed={false}
 							 separator={false}
-							 showOnResponsive="both">
+							 showOnResponsive="both"> */}
 					<Box 
+						justify="center"
 						margin="medium"
+						direction='row'
 					>
+						<Box pad="medium">
 						{studentsArray
 						.sort((a, b) => {
 							if (a.isHere === b.isHere) {
@@ -344,23 +347,25 @@ class ClassView extends React.Component {
 										direction="row"
 										justify="between"
 										alignContent="center"
-										style={{marginLeft: '20px', marginBottom: '10px', width: '400px'}}
+										style={{marginLeft: '20px', marginBottom: '10px', width: '500px'}}
 									>
-										<UserImage 
-											handRaised={student.handRaised} 
-											nextInLine={nextInLine} 
-											student={student}
-											targetClass={this.props.targetClass}
-											isHere={student.isHere}
-											url={student.thumbnail}
-										/>
-										<Heading 
-											tag="h3"
-											truncate={false}
-											style={{width: '200px', maxHeight: '100px', textAlign: 'start', lineHeight: '50px', marginLeft: '20px', marginBottom: 0, overflow:'visible'}}
-										>
-											{student.name}
-										</Heading>
+										<Box direction='row' pad='none' margin='none'>
+											<UserImage 
+												handRaised={student.handRaised} 
+												nextInLine={nextInLine} 
+												student={student}
+												targetClass={this.props.targetClass}
+												isHere={student.isHere}
+												url={student.thumbnail}
+											/>
+											<Heading 
+												tag="h3"
+												truncate={false}
+												style={{width: '200px', maxHeight: '100px', textAlign: 'start', lineHeight: '50px', marginLeft: '20px', marginBottom: 0, overflow:'visible'}}
+											>
+												{student.name}
+											</Heading>
+										</Box>
 										<Box
 											pad="small"
 											alignSelf="end"
@@ -375,7 +380,7 @@ class ClassView extends React.Component {
 											pad="small"
 											alignSelf="end"
 										>
-											<LikeIcon />
+											
 										</Box>
 									</Box>
 								)
@@ -397,8 +402,9 @@ class ClassView extends React.Component {
 									}, { id: this.props.classId });
 								}}
 							/>
-					</Box>
-          <Box margin="medium">
+							</Box>
+					
+          <Box pad="medium" margin="medium" style={{width: '750px'}}>
 						<Accordion onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}>
 								{Object.values(this.props.teachersClassView.quizzes).map((quiz, index) => {
 									return (
@@ -452,9 +458,12 @@ class ClassView extends React.Component {
 									)
 								})}
 						</Accordion>
-							<Button label="Create New Quiz" onClick={this.toggleQuizBuilderModal}/>
+							<Box direction='row' justify='center'>
+							<Button label="Create New Quiz" onClick={this.toggleQuizBuilderModal} secondary={true}/>
+							</Box>
 					</Box>
-				</Split>
+					</Box>
+				{/* </Split> */}
 
 			{this.props.showQuizLauncherModal &&
 			<Layer
