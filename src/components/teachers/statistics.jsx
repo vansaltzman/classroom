@@ -67,7 +67,8 @@ class Statistics extends React.Component {
 							primary={false}
 							secondary={false}
 							accent={true}
-							critical={false}
+              critical={false}
+              path={'/liveclass'}
 							plain={false} 
 						/>
             </Box>
