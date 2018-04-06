@@ -193,7 +193,9 @@ class Statistics extends React.Component {
                           </Box>
                         </Box>
                       }>
-                          <Button label="Show Distribution" onClick={() => this.props.showDistribution()}></Button>
+                        <Box direction='horizontal' justify='center'>
+                          <Button secondary={true }label="Show Distribution" onClick={() => this.props.showDistribution()}></Button>
+                        </Box>
                           {this.props.teachersClassView.showDistribution ? 
                           <Section pad='none' justify='center' align='center'> 
                             <Chart vertical={false}>

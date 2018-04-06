@@ -400,16 +400,16 @@ export function teacherClassViewReducer(
 						F: 0
 					}
 					const studentScoreHistogram = {
-						"0 - ": 0,
-						"10 - ": 0,
-						"20 - ": 0,
-						"30 - ": 0,
-						"40 - ": 0,
-						"50 - ": 0,
-						"60 - ": 0,
-						"70 - ": 0,
-						"80 - ": 0,
-						"90 - 100": 0
+						"0": 0,
+						"10": 0,
+						"20": 0,
+						"30": 0,
+						"40": 0,
+						"50": 0,
+						"60": 0,
+						"70": 0,
+						"80": 0,
+						"90  100": 0
 					}
 					let quizSum = 0;
 					let quizId = action.quizzes[quizIndex].id;
@@ -443,25 +443,25 @@ export function teacherClassViewReducer(
 						}
 
 						if (studentScore > 0 && studentScore <= 10) {
-							studentScoreHistogram["0 - "] += 1;
+							studentScoreHistogram["0"] += 1;
 						} else if (studentScore > 10 && studentScore <= 20) {
-							studentScoreHistogram["10 - "] += 1;
+							studentScoreHistogram["10"] += 1;
 						} else if (studentScore > 20 && studentScore <= 30) {
-							studentScoreHistogram["20 - "] += 1;
+							studentScoreHistogram["20"] += 1;
 						} else if (studentScore > 30 && studentScore <= 40) {
-							studentScoreHistogram["30 - "] += 1;
+							studentScoreHistogram["30"] += 1;
 						} else if (studentScore > 40 && studentScore <= 50) {
-							studentScoreHistogram["40 - "] += 1;
+							studentScoreHistogram["40"] += 1;
 						} else if (studentScore > 50 && studentScore <= 60) {
-							studentScoreHistogram["50 - "] += 1;
+							studentScoreHistogram["50"] += 1;
 						} else if (studentScore > 60 && studentScore <= 70) {
-							studentScoreHistogram["60 - "] += 1;
+							studentScoreHistogram["60"] += 1;
 						} else if (studentScore > 70 && studentScore <= 80) {
-							studentScoreHistogram["70 - "] += 1;
+							studentScoreHistogram["70"] += 1;
 						} else if (studentScore > 80 && studentScore <= 90) {
-							studentScoreHistogram["80 - "] += 1;
+							studentScoreHistogram["80"] += 1;
 						} else if (studentScore > 90 && studentScore <= 100) {
-							studentScoreHistogram["90 - 100"] += 1;
+							studentScoreHistogram["90  100"] += 1;
 						}
 						
 						scores[action.quizzes[quizIndex].id] = studentScore;
