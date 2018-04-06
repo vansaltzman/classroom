@@ -55,6 +55,7 @@ import classRoom from '../../../data/quizDummyData.js';
 import fb from '../../../db/liveClassroom.js'
 
 import ThumbPoll from './thumbPoll.jsx'
+import { Title } from 'grommet';
 
 class ClassView extends React.Component {
 	constructor() {
@@ -539,75 +540,108 @@ class ClassView extends React.Component {
 								 overlayClose={true}
 								 onClose={this.toggleQuizBuilderModal}>
 						<Split fixed={false}
+									//  style={{background: '#F8EEE7'}}
 									 separator={false}
 									 showOnResponsive='both'>
-							<Box size="xlarge">
-								<Header pad={{ vertical: "medium", horizontal: "medium" }}>
-									<Heading>
+							<Box size="xlarge" >
+								<Header pad={{ vertical: "medium", horizontal: "medium" }} style={{color: "#F5D76E", alignContent: "center", background:"#C7D8C6"}} >
+									<Heading style={{marginLeft: "160px"}}>
 										Create A New Quiz
 									</Heading>
 								</Header>
-								<Form compact={false} pad={{ vertical: "medium", horizontal: "medium" }}>
-										<Section pad={{ vertical: "medium", horizontal: "medium" }}>
-											<FormFields>
-												<TextInput 
-													placeHolder="Please Name Your Quiz"
-													onDOMChange={value => {
-														this.props.setNewQuizName(value);
-													}}/>
-												<SearchInput 
-													placeHolder="Quiz Subject"
-													suggestions={this.props.subjects}
-													value={this.props.teachersClassView.newQuiz.subject.value ? this.props.teachersClassView.newQuiz.subject.value : ""}
-													// value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
-													onDOMChange={(event) => this.props.setNewQuizSubject(event)}
-													onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>
+								<Form compact={false} pad={{ vertical: "small", horizontal: "large" }} style={{alignContent: 'stretch', width: '750px'}}>
+										{/* <Section pad={{ vertical: "medium", horizontal: "medium" }}> */}
+											{/* <FormFields>  */}
+								<Box>
+									<Box direction='row' pad="medium" style={{marginTop: "10px"}} full="horizontal" alignContent="center">
+										<TextInput 
+											style={{width: '305px'}}
+											placeHolder="Please Name Your Quiz"
+											onDOMChange={value => {
+												this.props.setNewQuizName(value);
+											}}/>				
+										<SearchInput 
+											placeHolder="Quiz Subject"
+											suggestions={this.props.subjects}
+											value={this.props.teachersClassView.newQuiz.subject.value ? this.props.teachersClassView.newQuiz.subject.value : ""}
+											// value={this.props.targetClass.newQuizs.subject.value ? this.props.targetClass.newQuiz.subject.value : this.props.targetClass.newQuiz.value ? this.props.targetClass.newQuiz.value : undefined}
+											onDOMChange={(event) => this.props.setNewQuizSubject(event)}
+											onSelect={(target) => this.props.setNewQuizSubjectBySelection(target)}/>							
+									</Box>
+												<Box
+													size="full"
+													full="horizontal"
+												>
 													{this.props.teachersClassView.newQuiz.questions.map((each, index) => {
 															return (
-																<Section>
-																	<Label>{'Question' + ' ' + Number(index + 1)}</Label>
-																	<TextInput placeHolder="Question..."
-																						 //style={{color: each.question ? 'pink' : 'black'}}
-																						 value={each.id ? each.question : each.text}
-																						 onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
-																	<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteQuestion(index)}/>} />
+																<Box pad="medium" style={{marginTop: "10px"}} full="horizontal" alignContent="center">
+																	<Box direction='column'>
+																		<Title>{'Question' + ' ' + Number(index + 1)}</Title>
+																	</Box>
+																	<Box direction='row'>
+																		<TextInput placeHolder="Question..."
+																							style={{width: '700px', marginBottom:'10px'}}
+																							//style={{color: each.question ? 'pink' : 'black'}}
+																							value={each.id ? each.question : each.text}
+																							onDOMChange={(event) => {this.props.addQuestionText(event, index)}}/>
+																		<Button icon={<SubtractCircleIcon 
+																						onClick={() => this.props.deleteQuestion(index)}/>} />
+																	</Box>
 																	{each.answers.map((eachAnswer, answerIndex) => {
 																		return (
-																			<Section>
-																				<TextInput placeHolder="Answer..."
-																									 //style={{color: each.question ? 'pink' : 'black'}}
-																									 value={eachAnswer.answer ? eachAnswer.answer : eachAnswer.text}
-																									 onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
-																				<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteAnswer(index, answerIndex)}/>} />	
-																				<CheckBox label='Correct'
+																			<Box direction='row'>
+																				<CheckBox 
 																									toggle={false}
 																									reverse={true} 
 																									checked={eachAnswer.correct ? true : eachAnswer.isCorrect ? true : false}
 																									onChange={() => this.props.chooseCorrectAnswer(index, answerIndex)}/>
-																			</Section>
+																				<TextInput placeHolder="Answer..."
+																									 style={{width: '600px'}}	
+																									 value={eachAnswer.answer ? eachAnswer.answer : eachAnswer.text}
+																									 onDOMChange={(event) => this.props.addAnswerText(event, index, answerIndex)}/>
+																				<Button icon={<SubtractCircleIcon onClick={() => this.props.deleteAnswer(index, answerIndex)}/>} />	
+																			</Box>
 																		)
 																	})}
-																	<Button icon={<AddCircleIcon />} 
-																					label="Add Answer"
-																					onClick={() => {this.props.addAnswer(index)}}/>
-																</Section>
+																	<Box direction='row' justify='end' style={{marginRight: '35px'}}>
+																		<Button icon={<AddCircleIcon />} 
+																						label="Add Answer"
+																						//hoverIndicator={{background: 'neutral-2'}}
+																						plain={true}
+																						onClick={() => {this.props.addAnswer(index)}}/>
+																		</Box>
+																	</Box>
 															)
 														}) }
-													<Button icon={<AddCircleIcon />}
-																					onClick={() => this.props.setQuestionNumber()}
-																					label="Add Question"/>
-											</FormFields>
-										</Section>
-									<Footer pad={{"vertical": "medium", horizontal: "medium"}}>
-										<Button label='Add Quiz'
-														onClick={() => this.props.addNewQuiz({authorId: this.props.teachersClassView.targetClass.teacher_id, quiz: this.props.teachersClassView.newQuiz})}/>
+														</Box>
+													<Box direction='row' justify='end' style={{marginRight: '35px'}}>
+														<Button icon={<AddCircleIcon />}
+																		secondary={true}
+																		onClick={() => this.props.setQuestionNumber()}
+																		// plain={true}
+																		label="Add Question"/>
+													</Box>
+											{/* </FormFields>
+										</Section> */}
+										</Box>
+									<Footer pad={{"vertical": "medium", horizontal: "small"}}>
+										<Box direction='row' full='horizontal' justify="center">
+											<Button label='Create Quiz'
+															style={{background: "#739172"}}
+															critical={false}
+															secondary={true}
+															// accent={true}
+															style={{width: '340px'}}
+															icon={<DeployIcon />}
+															onClick={() => this.props.addNewQuiz({authorId: this.props.teachersClassView.targetClass.teacher_id, quiz: this.props.teachersClassView.newQuiz})}/>
+										</Box>
 									</Footer>
 								</Form>
 							</Box>
 							<Box size="xlarge">
-								<Header pad={{ vertical: "medium", horizontal: "medium" }}>
-									<Heading>
-										Previous Question
+								<Header pad={{ vertical: "medium", horizontal: "medium" }} colorIndex="light-2" style={{color: "#F4DECB", alignContent: "center", background: "#49274A"}}>
+									<Heading style={{marginLeft: "160px"}}>
+										Past Questions
 									</Heading>
 								</Header>
 								<Accordion openMulti={false}
@@ -618,7 +652,7 @@ class ClassView extends React.Component {
 											<AccordionPanel key={i} heading={
 												<Box direction='row' full='horizontal' margin='small' alignContent='stretch' justify='between'>
 													<Box direction='column' justify='start' alignContent='between' style={{width: '400px', maxWidth: '720px'}} style={{marginRight: 'auto'}}>
-														<Heading tag='h3'>
+														<Heading tag='h4'>
 															{question.question}
 														</Heading>
 													</Box>
@@ -630,7 +664,7 @@ class ClassView extends React.Component {
                           	</Box> 
 													: <Box></Box>}
 													<Box direction='column' justify='end' alignContent='center' style={{width: '298px'}} style={{marginRight: '30px'}}>
-                            <Heading tag='h5'>
+                            <Heading tag='h5' style={{color: question.timeAvg > 1 ? "#ef9210" : "#408760"}}>
                               Average Time: {question.timeAvg ? question.timeAvg + ' min' : 'TBD'}
                             </Heading>
                           </Box>
@@ -640,7 +674,8 @@ class ClassView extends React.Component {
 													{question.timeAvg + ' min'}
 													{this.props.teachersClassView.showAddQuestionButton ? <Button onClick={() => this.props.addRecycledQuestion(question)}>Add Question</Button> : <div></div>}
 												</Label> */}
-												{question.answers.map((eachAnswer) => {
+												<List>
+												{question.answers.map((eachAnswer, i) => {
 													let isCorrect = eachAnswer.correct;
 													var marker;
 													if (eachAnswer.correct === true) {
@@ -649,15 +684,16 @@ class ClassView extends React.Component {
 														marker = <Status value='critical' style={{marginRight:'10px'}} />
 													}
 													return (
-														// <List key={i} separator='horizontal'>
-                            //   {marker}    {i+1}) {eachAnswer.answer}
-                            // </List>
-														<Notification
-															message={eachAnswer.answer}
-															size='small'
-															status={eachAnswer.correct ? 'ok' : 'critical'}/>
+														<ListItem key={i} separator='horizontal'>
+                              {marker}    {i+1}) {eachAnswer.answer}
+                            </ListItem>
+														// <Notification
+														// 	message={eachAnswer.answer}
+														// 	size='small'
+														// 	status={eachAnswer.correct ? 'ok' : 'critical'}/>
 													)
 												})}
+												</List>
 											</AccordionPanel>
 										)
 									})}		
