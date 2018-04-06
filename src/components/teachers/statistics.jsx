@@ -78,7 +78,7 @@ class Statistics extends React.Component {
 						     flex="grow">
               <Headline style={{marginBottom: 0, lineHeight: '75px', textAlign:'center'}}>
                 <Anchor icon={<BarChartIcon size="large" colorIndex='accent-2' />}
-                  // label= {'Stats'}
+                  label= {'Stats'}
                   style={{lineHeight: '100px', marginLeft: "20px", width: '130px'}}
                   primary={false}
                   secondary={false}

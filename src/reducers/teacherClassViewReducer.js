@@ -465,8 +465,10 @@ export function teacherClassViewReducer(
 					const graphs = state.selectedGraphs.slice();
 					const colors = ['accent-1', 'graph-2', 'graph-3', 'accent-2', 'accent-3','accent-1', 'graph-2', 'graph-3', 'accent-2', 'accent-3', 'accent-1', 'graph-2', 'graph-3', 'accent-2', 'accent-3'];
 					const color = colors[Math.floor(Math.random()*colors.length)];
-					action.target.option.color = color;
-					graphs.push(action.target.option);
+					if (graphs.indexOf(action.target.option) === -1) {
+						action.target.option.color = color;
+						graphs.push(action.target.option);
+					}
 				return {
 					...state,
 					selectedGraphs: graphs
