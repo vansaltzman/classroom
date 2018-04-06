@@ -1,26 +1,26 @@
 var db = require('../db/mainDb.js').db
 
-// let Ara = ['Ara', 'Nguyen', 'pnn2104@columbia.edu', '123456'];
-// let Jae = ['Jae', 'Jang', 'jj2837@columbia.edu', '123456'];
-// let Adam = ['Adam', 'Mateo', 'adam@mateo.edu', '123456'];
-// let Jerry = ['Jerry', 'Chen', 'jerry@chen.edu', '123456'];
-// let Artem = ['Artem', 'Ipatev', 'artem@ipatev.edu', '123456'];
-// let Riley = ['Riley', 'Alsman', 'riley@alsman.edu', '123456'];
-// let Juan = ['Juan', 'Galan', 'juan@galan.edu', '123456'];
-// let AlexL = ['Alex', 'Levine', 'alex@levine.edu', '123456'];
-// let AlexC = ['Alex', 'Chojnacki', 'alex@chojnacki.edu', '123456'];
-// let EricSin = ['Eric', 'Sin', 'eric@sin.edu', '123456'];
-// let Rory = ['Rory', 'Reagan', 'rory@reagan.edu', '123456'];
-// let Brent = ['Brent', 'Hagen', 'brent@hagen.edu', '123456'];
-// let Aloralyn = ['Aloralyn', 'Ayran', 'aloralyn@ayran.edu', '123456'];
-// let Allegra = ['Allegra', 'Bernt', 'allegra@bernt.edu', '123456'];
-// let Michael = ['Michael', 'Vasio', 'michael@vasio.edu', '123456'];
-// let Xixi = ['Xixi', 'Chen', 'xixi@chen.edu', '123456'];
-// let Manos = ['Manos', 'Manos', 'manos@manose.edu', '123456'];
-// let Marcus = ['Marcus', 'Hausler', 'marcus@hausler.edu', '123456'];
-// let Danny = ['Danny', 'Schradder', 'danny@schradder.edu', '123456'];
-// let Quentin = ['Quentin', 'Quentin', 'quentin@quentin.edu', '123456'];
-// let Chris = ['Chris', 'Rigoli', 'chris@rigoli.edu', '123456'];
+let Ara = ['Ara', 'Nguyen', 'pnn2104@columbia.edu', '123456'];
+let Jae = ['Jae', 'Jang', 'jj2837@columbia.edu', '123456'];
+let Adam = ['Adam', 'Mateo', 'adam@mateo.edu', '123456'];
+let Jerry = ['Jerry', 'Chen', 'jerry@chen.edu', '123456'];
+let Artem = ['Artem', 'Ipatev', 'artem@ipatev.edu', '123456'];
+let Riley = ['Riley', 'Alsman', 'riley@alsman.edu', '123456'];
+let Juan = ['Juan', 'Galan', 'juan@galan.edu', '123456'];
+let AlexL = ['Alex', 'Levine', 'alex@levine.edu', '123456'];
+let AlexC = ['Alex', 'Chojnacki', 'alex@chojnacki.edu', '123456'];
+let EricSin = ['Eric', 'Sin', 'eric@sin.edu', '123456'];
+let Rory = ['Rory', 'Reagan', 'rory@reagan.edu', '123456'];
+let Brent = ['Brent', 'Hagen', 'brent@hagen.edu', '123456'];
+let Aloralyn = ['Aloralyn', 'Ayran', 'aloralyn@ayran.edu', '123456'];
+let Allegra = ['Allegra', 'Bernt', 'allegra@bernt.edu', '123456'];
+let Michael = ['Michael', 'Vasio', 'michael@vasio.edu', '123456'];
+let Xixi = ['Xixi', 'Chen', 'xixi@chen.edu', '123456'];
+let Manos = ['Manos', 'Manos', 'manos@manose.edu', '123456'];
+let Marcus = ['Marcus', 'Hausler', 'marcus@hausler.edu', '123456'];
+let Danny = ['Danny', 'Schradder', 'danny@schradder.edu', '123456'];
+let Quentin = ['Quentin', 'Quentin', 'quentin@quentin.edu', '123456'];
+let Chris = ['Chris', 'Rigoli', 'chris@rigoli.edu', '123456'];
 
 const migrate = require('../server/migrationWorker.js')
 
