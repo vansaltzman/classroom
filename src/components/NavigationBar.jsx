@@ -29,6 +29,7 @@ import ProfilePic from './students/ProfilePic.jsx';
 import ThumbPoll from './teachers/thumbPoll.jsx';
 import ThumbVote from './students/thumbVote.jsx';
 import Statistics from './teachers/statistics.jsx';
+import Image from 'grommet/components/Image';
 
 
 
@@ -76,12 +77,10 @@ class NavigationBar extends React.Component {
     render() {
 
 
-        const titleStyle = {
-            marginLeft: '50px'
-        }
+        
         if (!this.props.auth.authenticated) {
             var menuLabel = 'Start';
-            var navBarBackground = 'lightGreen'
+            var navBarBackground = '#ffd602'
             var dropAnchors = 
                 <div style={{marginTop: '38px', zIndex:'9999'}}>
                     <Anchor path="/login">
@@ -94,7 +93,7 @@ class NavigationBar extends React.Component {
         } else {
             if (this.props.auth.user.class === 'teacher') {
                 var menuLabel = this.props.auth.user.email;
-                var navBarBackground = 'lightCoral'
+                var navBarBackground = '#5b92cb';
                 var dropAnchors = 
                 <div style={{marginTop: '38px', zIndex:'9999'}}>
 
@@ -109,7 +108,7 @@ class NavigationBar extends React.Component {
             }
             if (this.props.auth.user.class === 'student') {
                 var menuLabel = this.props.auth.user.email;
-                var navBarBackground = 'lightBlue'
+                var navBarBackground = '#ffd602'
             var pic = <ProfilePic userId={this.props.auth.user.id}/>
                 var dropAnchors = 
                 <div style={{marginTop: '38px', zIndex:'10'}}>
@@ -129,6 +128,9 @@ class NavigationBar extends React.Component {
                 </div>
             }
         }
+        const titleStyle = {
+            marginLeft: '50px'
+        }
         return (
         <div>
             <Router history={this.props.history} >
@@ -138,13 +140,21 @@ class NavigationBar extends React.Component {
                 fixed={false}
                 style={{background: navBarBackground}}
                 size='small'>
-                <Headline 
-                  margin='medium'
-                  style={titleStyle} 
-                  primary={true} 
-                >
-                  Jaqen
-                </Headline>
+                <Box direction='row' align='center'> 
+                    <Headline 
+                    margin='medium'
+                    style={titleStyle} 
+                    primary={true} 
+                    >
+                    Jaqen
+                        
+                    </Headline>
+                    <img 
+                        src='https://cdn3.iconfinder.com/data/icons/othericons-3-0/50/pencil-512.png' 
+                        alt='' 
+                        style={{height:'60px'}}
+                    />
+                    </Box>
                 <Box flex={true}
                     margin='medium'
                     justify='end'

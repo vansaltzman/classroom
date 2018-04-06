@@ -4,14 +4,17 @@ var { db, addUser, verifyUser } = require('../../db/mainDb.js')
 
 var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
 
+var Ian = ['Ian', 'Culleton', 'ian@culleton.edu', 'ic', 'https://ca.slack-edge.com/T2SUXDE72-U2T8G8EBG-g1f6514741e4-1024']
+
 const hashUser = function(user) {
   var hashedUser = user.slice()
   return bcrypt.hash(hashedUser[3], 10)
     .then(hash => {
       hashedUser[3] = hash
-      return hashedUser
+      console.log(hashedUser)
     })
 }
+console.log('hash ian ', hashUser(Ian));
 
 const addFrizzle = function(){
   return db.query(`SELECT * FROM teachers WHERE email=$1`, [testTeacher[2]])

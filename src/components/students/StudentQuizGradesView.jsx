@@ -84,15 +84,20 @@ class StudentQuizGradesView extends React.Component {
         return (
             <div>
                 <Article>
-                    <Section pad='medium'justify='center'align='center'>
+                    <Section pad='medium'justify='center'align='center'
+                        style={{background:'#bcd8f2'}}
+                    >
 
-                        <Headline margin='medium' size='medium'>
+                        <Headline margin='small' size='medium'>
                             {className}
                         </Headline>
 
                     </Section>
 
-                    <Section pad='small' justify='center' colorIndex='grey-4' align='center'>
+                    <Section pad='small' justify='center'  align='center'
+                    // colorIndex='grey-4'
+                        
+                    >
                         {classGrade? 
                         <div> <Box direction='row' align='baseline'>
 

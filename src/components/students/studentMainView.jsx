@@ -16,6 +16,8 @@ import Box from "grommet/components/Box";
 import Search from "grommet/components/Search";
 import Menu from "grommet/components/Menu";
 import MenuIcon from "grommet/components/icons/base/Menu";
+import DeployIcon from "grommet/components/icons/base/Deploy";
+import Pulse from "grommet/components/icons/Pulse";
 import Anchor from "grommet/components/Anchor";
 import Hero from "grommet/components/Hero";
 import Heading from "grommet/components/Heading";
@@ -59,17 +61,32 @@ class StudentMainView extends React.Component {
   }
   
   render() {
+
     return (
       <div>
         <Tiles flush={false} selectable={true}>
           {this.props.classes.map((item, index) => {
             return (
               <Tile key={index}>
+                
                 <Card
                   style={{ background: item.isLive ? 'lightGreen' : 'white'}}
                   thumbnail={item.thunmbnail}
                   label={item.year}
-                  heading={item.name}
+
+                  heading={
+                    <Box
+                      direction="row"
+                      margin="none"
+                      pad="none"
+                    >
+                      <Heading>
+                        {item.name}
+                      </Heading>
+                        <DeployIcon type='status' size="xsmall"/>
+                      </Box>  
+                  
+                  } 
                   description="Sample description providing more details."
                 />
                 <Button
