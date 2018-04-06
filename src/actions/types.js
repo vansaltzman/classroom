@@ -73,7 +73,8 @@ const actionTypes = {
 	/******************* Statistics *********************/
 	GET_TAKEN_QUIZZES_ACTION: 'get_taken_quizzes_action',
 	SELECT_GRAPH_TO_SHOW_ACTION: 'select_graph_to_show_action',
-	REVERSE_GRAPH_SELECTION_ACTION: 'reverse_graph_selection_action'
+	REVERSE_GRAPH_SELECTION_ACTION: 'reverse_graph_selection_action',
+	SHOW_DISTRIBUTION_ACTION: 'show_distribution_action'
 }
 
 export default actionTypes

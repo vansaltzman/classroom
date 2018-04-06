@@ -104,11 +104,13 @@ class ClassPerformance extends React.Component {
                 <img 
                   src={eachGraph.thumbnail || "https://ca.slack-edge.com/T2SUXDE72-U8SAGQ1E0-8fa5cea28518-72"} 
                   style={{height: '50px', width: '50px', borderRadius: '50%', cursor:'pointer', opacity: 1 }}/>
-                <AnnotatedMeter legend={true}
-                                type='bar'
-                                max={150}
-                                units="%"
-                                series={data}/>
+                <Box pad="small">
+                  <AnnotatedMeter legend={true}
+                                  type='bar'
+                                  max={150}
+                                  units="%"
+                                  series={data}/>
+                </Box>
                 </Box>
               );
             })}

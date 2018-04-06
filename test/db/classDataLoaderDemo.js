@@ -1021,9 +1021,13 @@ const classObj = {
 
 const randomAssignment = function(classObj) {
     const quiz = classObj.quizzes;
-    const questions = quizzes.questions;
-    const numberOfQuestions = Object.values(questions).length;
-    console.log("numberOfQuestions", numberOfQuestions)
+    const questions = Object.values(quiz)[0].questions;
+    const numberOfQuestions = Object.values(questions).length
+    const multiples = 100 / numberOfQuestions;
+    const possibleScores = [0];
+    var x = multiples;
+   
+    console.log("possibleScores", possibleScores)
 }
 
 randomAssignment(classObj);
