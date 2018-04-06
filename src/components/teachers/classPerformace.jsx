@@ -14,7 +14,9 @@ import { Layers, Base, Value } from "grommet";
 import Section from 'grommet/components/Section';
 import Label from 'grommet/components/Label';
 import Box from 'grommet/components/Box';
-import AnnotatedMeter from 'grommet-addons/components/AnnotatedMeter';
+import AnnotatedMeter from './modifiedAnnotatedMeter.js';
+import Legend from 'grommet/components/Legend';
+//import AnnotatedMeter from 'grommet-addons/components/AnnotatedMeter';
 //import Layers from "grommet/components/chart/Layers";
 import React from "react";
 import { connect } from "react-redux";
@@ -55,6 +57,7 @@ class ClassPerformance extends React.Component {
                   })}
                 />
               );
+              <Legend series={[{"label": "Honeydew", "colorIndex": "graph-1"}, {"label": "Orange", "colorIndex": "graph-2"}, {"label": "Blueberry", "colorIndex": "graph-3"}]}/>
             })}
             {/* <Marker colorIndex='graph-2'
                     count={this.props.teachersClassView.selectedGraphs[0].sub.length}
@@ -68,8 +71,8 @@ class ClassPerformance extends React.Component {
                 activeIndex: (undefined === index ? (this.props.teachersClassView.selectedGraphs[0].sub.length - 1) : index)
               })}
             /> */}
-						
           </Layers>
+          
           <Axis
             ticks={true}
             count={this.props.teachersClassView.selectedGraphs[0].sub.length}

@@ -10,13 +10,19 @@ import AccordionPanel from "grommet/components/AccordionPanel";
 import Box from "grommet/components/Box";
 import Split from "grommet/components/Split";
 import Heading from "grommet/components/Heading";
+import Headline from "grommet/components/Headline";
 import Label from "grommet/components/Label";
 import Notification from "grommet/components/Notification";
+import BarChartIcon from 'grommet/components/icons/base/BarChart';
 import Select from "grommet/components/Select";
+import Header from "grommet/components/Header";
+import Anchor from "grommet/components/Anchor";
 import Section from "grommet/components/Section";
 import config from "../../../server/config.js";
+import Button from "grommet/components/Button";
 import Status from 'grommet/components/icons/Status';
 import ListItem from 'grommet/components/ListItem';
+import LinkPreviousIcon from 'grommet/components/icons/base/LinkPrevious';
 import List from 'grommet/components/List';
 import Chart, {
   Axis,
@@ -38,27 +44,71 @@ import ClassPerformance from "./classPerformace.jsx";
 class Statistics extends React.Component {
   render() {
     return (
-      <Section>
-        {/* <Section> */}
-          <Select
-            placeHolder="None"
-            multiple={true}
-            inline={false}
-            // onSearch={...}
-            options={
-              this.props.teachersClassView.studentsAndPerformances
-                ? Object.values(
-                    this.props.teachersClassView.studentsAndPerformances
-                  ).map((eachStudent, index) => {
-                    return eachStudent;
-                  })
-                : ""
-            }
-            value={this.props.selectedGraphs}
-            onChange={target => {
-              this.props.selectGraphToShow(target);
-            }}
-          />
+      <Section margin="none"
+      pad="none">
+        <Header
+					direction="row"
+					// full="true"
+					justify="between"
+					alignContent="center"
+					margin="small"
+					responsive={false}
+					pad="small"
+					colorIndex="light-2"
+					fixed={false}
+					style={{margin: '0', top: '112px', zIndex:'2'}}>
+            <Box
+              style={{width: '400'}}
+              direction="row"
+              margin="none">
+              <Anchor icon={<LinkPreviousIcon size="medium" href="/liveclass"/>}
+							// label= {'Back To Class'}
+							style={{lineHeight: '100px', marginLeft: "10px", width: '100px'}}
+							primary={false}
+							secondary={false}
+							accent={true}
+							critical={false}
+							plain={false} 
+						/>
+            </Box>
+            <Box direction="column"
+						     margin="none"
+						     style={{margin: '0 50px 0 50px'}}
+						     justify="center"
+						     flex="grow">
+              <Headline style={{marginBottom: 0, lineHeight: '75px', textAlign:'center'}}>
+                <Anchor icon={<BarChartIcon size="large" colorIndex='accent-2' />}
+                  label= {'Stats'}
+                  style={{lineHeight: '100px', marginLeft: "20px", width: '130px'}}
+                  primary={false}
+                  secondary={false}
+                  accent={true}
+                  critical={false}
+                  plain={false}/> 
+						  </Headline>
+            </Box>
+            <Box style={{width: '300px'}}
+						     direction="row"
+						     justify="end"
+						     margin="none">
+              {/* {this.props.teachersClassView.targetClass.name} */}
+              <Select
+                placeHolder="None"
+                multiple={true}
+                inline={false}
+                // onSearch={...}
+                options={this.props.teachersClassView.studentsAndPerformances
+                        ? Object.values(this.props.teachersClassView.studentsAndPerformances)
+                          .map((eachStudent, index) => { return eachStudent;})
+                        : ""
+                }
+                value={this.props.selectedGraphs}
+                onChange={target => {
+                  this.props.selectGraphToShow(target);
+                }}/>      
+            </Box>
+        </Header>
+          
         {/* </Section> */}
         <Box responsive={true}>
         {this.props.teachersClassView.takenQuizzesAverages ? (
