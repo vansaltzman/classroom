@@ -143,12 +143,16 @@ class Statistics extends React.Component {
                       interval.push(obj);
                     }
                     let quizAverageColorIndex;
+                    let graphColorIndex;
                     if (quiz.average <= 65) {
                       quizAverageColorIndex = 'accent-1';
+                      graphColorIndex = 'graph-3'
                     } else if (quiz.average > 65 && quiz.average <=75) {
                       quizAverageColorIndex = 'accent-2';
+                      graphColorIndex = 'graph-1'
                     } else {
                       quizAverageColorIndex='neutral-1';
+                      graphColorIndex = 'graph-2'
                     }
                     let quizAverageComponent = <Value value={quiz.average} colorIndex={quizAverageColorIndex} units='%'/>
                     return (
@@ -199,6 +203,7 @@ class Statistics extends React.Component {
                                 <Grid rows={5} columns={3}/>
                                 <Bar
                                   style={{strokeWidth: "25px"}}
+                                  colorIndex = {graphColorIndex}
                                   vertical={true}
                                   reverse={true}
                                   max={highest + 2}
