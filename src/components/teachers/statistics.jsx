@@ -173,24 +173,16 @@ class Statistics extends React.Component {
                       }>
                         {/* <Label>{"Average: " + quiz.average}</Label> */}
                         <Section pad='small' justify='center' align='center'>
-                          <Chart>
+                          <Chart vertical={true}>
                             <Axis
-                              vertical={true}
+                              // vertical={true}
                               count={interval.length}
                               labels={interval}
                             />
                             <Chart >
-                              <Base width="large"/>
-                              <Layers>
-                                <Grid rows={5} columns={3}/>
-                                <Bar
-                                  max={highest + 2}
-                                  values={Object.values(quiz.quizDiscrete).map(
-                                    each => each
-                                  )}
-                                />
-                              <Axis
-                                vertical={false}
+                            <Axis
+                                vertical={true}
+                                reverse={true}
                                 ticks={true}
                                 count={Object.keys(quiz.quizDiscrete).length}
                                 labels={Object.keys(quiz.quizDiscrete).map(
@@ -202,6 +194,19 @@ class Statistics extends React.Component {
                                   }
                                 )}
                               />
+                              <Base width="large" />
+                              <Layers>
+                                <Grid rows={5} columns={3}/>
+                                <Bar
+                                  style={{strokeWidth: "25px"}}
+                                  vertical={true}
+                                  reverse={true}
+                                  max={highest + 2}
+                                  values={Object.values(quiz.quizDiscrete).map(
+                                    each => each
+                                  )}
+                                />
+                              
                               </Layers>
                             </Chart>  
                           </Chart>
