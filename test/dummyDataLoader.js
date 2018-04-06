@@ -14,18 +14,20 @@ Students:
 */
 
 
-return loaders.addDummyData()
-.then(()=> {
-  console.log('Added Teacher, Class and Students')
-  return loaders.addQuestions()
-})
-.then(returnObj => {
-  console.log('Added Questions')
-  return loaders.addQuiz(returnObj)
-})
-.then(()=> {
-  console.log('Added Quiz')
-})
+// return loaders.addDummyData()
+// .then(()=> {
+//   console.log('Added Teacher, Class and Students')
+//   return loaders.addQuestions()
+// })
+// .then(returnObj => {
+//   console.log('Added Questions')
+//   return loaders.addQuiz(returnObj)
+// })
+// .then(()=> {
+//   console.log('Added Quiz')
+// })
+
+loaders.students()
 
 // !--- Uncomment bellow to remove everything except the teacher
 

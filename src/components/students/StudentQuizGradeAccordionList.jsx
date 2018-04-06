@@ -25,9 +25,6 @@ class IndividualQuizGradeAccordion extends React.Component {
             <Section pad='small' justify='center'align='center'>
             <Section pad='small' justify='center'align='center'>
 
-                <Headline margin='medium' size='small'>
-                    Quiz Grades
-                </Headline>
                     
             <div style={{width:'60%', align:'center'}} >
            

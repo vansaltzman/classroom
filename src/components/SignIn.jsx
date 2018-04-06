@@ -40,15 +40,7 @@ class SignIn extends Component {
                         <Headline margin='medium'>
                         Login
                         </Headline>
-                        {/* <Form onSubmit={this.handleFormSubmit.bind(this)}  >
-                            <FormField label='Sample label'>
-                                <TextInput />
-                            </FormField>
-                            <FormField label='Sample label'>
-                                <PasswordInput />
-                            </FormField>
-                            <Button type="submit" label='Submit' />
-                        </Form> */}
+                       
                         <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))} >  
                             {this.renderAlert()}
                             <div>

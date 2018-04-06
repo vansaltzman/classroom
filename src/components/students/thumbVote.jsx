@@ -47,7 +47,7 @@ class ThumbVote extends React.Component {
   handleChange = debounce((e) => {
   
     let oldValue = parseInt(this.state.thumbs)
-    let classId = 1//------this.props.activeView.id
+    let classId = this.props.activeView.id;
     let studentId = this.props.auth.user.id
     let difference;
     let newVal = parseInt(this.state.degree)
