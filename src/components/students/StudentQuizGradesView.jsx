@@ -88,7 +88,7 @@ class StudentQuizGradesView extends React.Component {
                     <Section 
                         pad='small'
                         justify='between'
-                        colorIndex='grey-4'
+                        style={{background:'#bcd8f2'}}
                         align='center'
                         direction="row"
                     >
@@ -114,7 +114,7 @@ class StudentQuizGradesView extends React.Component {
 
                     </Section>
 
-                    <Section pad='small' justify='center' colorIndex='grey-4' align='center'>
+                    <Section pad='small' justify='center' align='center'>
                         {classGrade ? 
                         <div> <Box direction='row' align='baseline'>
 
