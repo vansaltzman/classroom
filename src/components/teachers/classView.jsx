@@ -177,28 +177,32 @@ class ClassView extends React.Component {
 	}
 
 	code = function(text) {
-    return text.split('~~~').map((item, i)=> {
-      if (i % 2 === 0) {
-        return item
-      } else {
-        // return (
-        // <SyntaxHighlighter language='javascript' style={syntaxStyle} >
-        //   {'\n' + text  + '\n'}
-        // </SyntaxHighlighter>
-        // )
-         return (
-           <code
-            style={{
-              fontFamily: 'Monaco,Menlo,Consolas,"Courier New",monospace!important', fontSize: '1rem', whiteSpace: 'normal',
-							color: '#7026d2',padding: '2px 3px 1px',tabSize: '4',backgroundColor: '#f7f7f9', 
-							border: '1px solid #e1e1e8',  borderRadius: '3px',lineHeight: '2'
-            }}
-          >
-            {'\n' + item + '\n'} 
-          </code>
-         )
-      }
-    }) 
+		if (text) {
+			return text.split('~~~').map((item, i)=> {
+				if (i % 2 === 0) {
+					return item
+				} else {
+					// return (
+					// <SyntaxHighlighter language='javascript' style={syntaxStyle} >
+					//   {'\n' + text  + '\n'}
+					// </SyntaxHighlighter>
+					// )
+					 return (
+						 <code
+							style={{
+								fontFamily: 'Monaco,Menlo,Consolas,"Courier New",monospace!important', fontSize: '1rem', whiteSpace: 'normal',
+								color: '#7026d2',padding: '2px 3px 1px',tabSize: '4',backgroundColor: '#f7f7f9', 
+								border: '1px solid #e1e1e8',  borderRadius: '3px',lineHeight: '2'
+							}}
+						>
+							{'\n' + item + '\n'} 
+						</code>
+					 )
+				}
+			}) 
+		} else {
+			return null
+		}
   }
 
   render() {
@@ -219,18 +223,14 @@ class ClassView extends React.Component {
 				</div> */}
 				<Header
 					direction="row"
-					full="true"
 					justify="between"
 					alignContent="center"
-					margin="small"
-					responsive={false}
-					pad="small"
 					colorIndex="light-2"
-					fixed={false}
-					style={{margin: '0', top: '112px', zIndex:'2'}}
+					pad="small"
+					style={{marginTop: '0', top: '112px', zIndex:'2'}}
 				>
 					<Box
-						style={{width: '400'}}
+						style={{width: '380', marginLeft: '20px'}}
 						direction="row"
 						margin="none"
 						// flex="shrink"
@@ -273,7 +273,7 @@ class ClassView extends React.Component {
 						direction="column"
 						margin="none"
 						style={{margin: '0 50px 0 50px'}}
-						justify="center"
+						// justify="center"
 						flex="grow"
 					>
 						<Headline
@@ -356,7 +356,10 @@ class ClassView extends React.Component {
 						margin="medium"
 						direction='row'
 					>
-						<Box pad="medium">
+						<Box id="stud_list"
+							pad="medium"
+							size="1/2"
+						>
 						{studentsArray
 						.sort((a, b) => {
 							if (a.isHere === b.isHere) {
@@ -377,6 +380,7 @@ class ClassView extends React.Component {
 										direction="row"
 										justify="between"
 										alignContent="center"
+										alignSelf="start"
 										style={{marginLeft: '20px', marginBottom: '10px', width: '500px'}}
 									>
 										<Box direction='row' pad='none' margin='none'>
@@ -415,26 +419,29 @@ class ClassView extends React.Component {
 									</Box>
 								)
 							})}
-						<SearchInput
-								style={{width: 'auto'}}
-								placeHolder="Search For A Student"
-								suggestions={this.props.studentNames}
-								value={this.props.teachersClassView.selectedStudent.value}
-								//  onDOMChange={(target) => this.props.selectStudentToAdd(target)} />
-								onSelect={target => this.props.selectStudentToAdd(target)}
-							/>
-							<Button
-								label="Add Student"
-								onClick={() => {
-									this.props.addAStudentToClass({
-										classId: this.props.classId,
-										studentId: this.props.teachersClassView.selectedStudent.sub.id
-									}, { id: this.props.classId });
-								}}
-							/>
+							<form style={{marginTop: '20px'}}>
+							<SearchInput
+									// style={{width: 'auto'}}
+									placeHolder="Search For A Student"
+									suggestions={this.props.studentNames}
+									value={this.props.teachersClassView.selectedStudent.value}
+									//  onDOMChange={(target) => this.props.selectStudentToAdd(target)} />
+									onSelect={target => this.props.selectStudentToAdd(target)}
+								/>
+								<Button
+									style={{marginLeft: '10px'}}
+									label="Add Student"
+									onClick={() => {
+										this.props.addAStudentToClass({
+											classId: this.props.classId,
+											studentId: this.props.teachersClassView.selectedStudent.sub.id
+										}, { id: this.props.classId });
+									}}
+								/>
+							</form>
 							</Box>
 					
-          <Box pad="medium" margin="medium" style={{width: '750px'}}>
+          <Box id="quiz_list" pad="none" margin="medium" flex="grow">
 						<Accordion onActive={(index)=> this.selectQuiz(this.props.teachersClassView.quizzes[Object.keys(this.props.teachersClassView.quizzes)[index]])}>
 								{Object.values(this.props.teachersClassView.quizzes).map((quiz, index) => {
 									return (
@@ -447,18 +454,23 @@ class ClassView extends React.Component {
                         </Box>
 											</Box>
 										}>
-											<Section pad='small' justify='center' align='center'>
+											<Box pad='small' justify='start' align='start'>
 												{Object.values(quiz.questions).map((question, i) => {
                           return (
-														<Box direction='row'
-																full='horizontal'
-																alignContent='between'
-																style={{marginBottom:'50px'}}>
+														// <Box direction='row'
+														// 		// full='horizontal'
+														// 		size="full"
+														// 		flex="grow"
+														// 		alignContent='between'
+														// 		// style={{marginBottom:'50px'}}
+														// 		>
 															<Box key={i}
 																	direction='column'
-																	full='horizontal'
+																	// full='horizontal'
+																	size="full"
+																	basis="full"
 																	alignContent='between'
-																	style={{marginBottom:'50px'}}>
+																	style={{marginBottom:'50px', width: '100%'}}>
 																<Heading tag="h3">
 																	{this.code(question.text)}
 																</Heading>
@@ -473,23 +485,23 @@ class ClassView extends React.Component {
 																		}
 
 																		return (
-																			<ListItem key={i} separator='horizontal'>
+																			<ListItem key={i} separator='horizontal' flex="grow">
 																				{marker}    {i+1}) {this.code(answer.text)}
 																			</ListItem>
 																		);
 																	})}
 																</List>
 															</Box>
-														</Box>
+														// </Box>
 													);
 												})}  
-											</Section>
+											</Box>
 										</AccordionPanel>
 									)
 								})}
 						</Accordion>
 							<Box direction='row' justify='center'>
-							<Button label="Create New Quiz" onClick={this.toggleQuizBuilderModal} secondary={true}/>
+							<Button label="Create New Quiz" onClick={this.toggleQuizBuilderModal} secondary={true} style={{marginTop: '20px'}}/>
 							</Box>
 					</Box>
 					</Box>
