@@ -4,14 +4,17 @@ var { db, addUser, verifyUser } = require('../../db/mainDb.js')
 
 var testTeacher = ['Valerie', 'Frizzle', 'mfrizz@magic.bus', 'TheFriz']
 
+var Ian = ['Ian', 'Culleton', 'ian@culleton.edu', 'ic', 'https://ca.slack-edge.com/T2SUXDE72-U2T8G8EBG-g1f6514741e4-1024']
+
 const hashUser = function(user) {
   var hashedUser = user.slice()
   return bcrypt.hash(hashedUser[3], 10)
     .then(hash => {
       hashedUser[3] = hash
-      return hashedUser
+      console.log(hashedUser)
     })
 }
+console.log('hash ian ', hashUser(Ian));
 
 const addFrizzle = function(){
   return db.query(`SELECT * FROM teachers WHERE email=$1`, [testTeacher[2]])
@@ -84,50 +87,44 @@ const addStudentsAndClass = function() {
         // Assign students to class
         return db.query(
           `INSERT INTO classes_students (class_id, student_id) 
-          VALUES ((SELECT id FROM classes WHERE name='Magic Class'), (SELECT id FROM students WHERE email=$1));`, 
+          VALUES (2, (SELECT id FROM students WHERE email=$1));`, 
           [hashedStudent[2]])
       })
     }))
   })
 }
 
-const addQuestions = function(){
+
+
+// const questions = [
+//   ['What does CSS Stand for?', teacherId, subjId], 
+//   ['What is the correct HTML for referring to an external stylesheet?', teacherId, subjId], 
+//   ['What year did The Magic School Bus first air?', teacherId, subjId], 
+//   ['How many flies are currently in the office?', teacherId, subjId], 
+//   ['Who is the best house in GoT?', teacherId, subjId], 
+// ]
+
+// const answers = [
+//   [['Function objects', false],
+//     ['Scope where function’s variables are resolved', false],
+//     ['Both Function objects and Scope where function’s variables are resolved', true],
+//     ['None of the above', false],
+//   ],
+//   [['2010', false],['2012', true],['2014', false]],
+//   [['1980', false],['1998', false],['1994', true],['1977', false],['1990', false]],
+//   [['0', false],['Too many', true],],
+//   [['Grey Joy', false],['Lanister', false],['Tyrell', false],['Stark', true],],
+// ]
+const addQuestions = function(questions, answers){
   // [text, teacherId, subjectId, avgTime = 0]
-  let teacherId
-  let subjId
+  let teacherId = 4;
+  let subjId = 2;
 
-  return db.query(`SELECT id FROM teachers WHERE email='mfrizz@magic.bus'`)
-    .then(teacherData => {
-      teacherId = teacherData.rows[0].id
-      return db.query(`SELECT id FROM subjects WHERE name='Magic'`)
-    })
-    .then(subjData=> {
-      subjId = subjData.rows[0].id
-    })
-    .then(()=> {
-      const questions = [
-        ['What is a closure?', teacherId, subjId], 
-        ['How old is Hack Reactor?', teacherId, subjId], 
-        ['What year did The Magic School Bus first air?', teacherId, subjId], 
-        ['How many flies are currently in the office?', teacherId, subjId], 
-        ['Who is the best house in GoT?', teacherId, subjId], 
-      ]
-
-      const answers = [
-        [['Function objects', false],
-          ['Scope where function’s variables are resolved', false],
-          ['Both Function objects and Scope where function’s variables are resolved', true],
-          ['None of the above', false],
-        ],
-        [['2010', false],['2012', true],['2014', false]],
-        [['1980', false],['1998', false],['1994', true],['1977', false],['1990', false]],
-        [['0', false],['Too many', true],],
-        [['Grey Joy', false],['Lanister', false],['Tyrell', false],['Stark', true],],
-      ]
+  
       return Promise.all(questions.map((questionArr, questionIndx) => {
          return db.query(
           `INSERT INTO draft_questions (question, teacher_id, subject_id) 
-          VALUES ($1, $2, $3) RETURNING id;`, questionArr)
+          VALUES ($1, ${teacherId}, ${subjId}) RETURNING id;`, questionArr)
           .then(questionId=> {
             questionId = questionId.rows[0].id
             // add answers
@@ -142,8 +139,7 @@ const addQuestions = function(){
         var returnObj = {questionIdArr: questionIds, teacherId: teacherId, subjId: subjId}
         return returnObj
       })
-    })
-}
+    }
 
 const addQuiz = function({questionIdArr, teacherId, subjId}) {
   return db.query(
