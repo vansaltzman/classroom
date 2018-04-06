@@ -226,6 +226,7 @@ class ClassView extends React.Component {
 					justify="between"
 					alignContent="center"
 					colorIndex="light-2"
+					pad="small"
 					style={{marginTop: '0', top: '112px', zIndex:'2'}}
 				>
 					<Box
