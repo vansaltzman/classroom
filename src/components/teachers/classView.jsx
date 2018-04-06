@@ -192,7 +192,7 @@ class ClassView extends React.Component {
 							style={{
 								fontFamily: 'Monaco,Menlo,Consolas,"Courier New",monospace!important', fontSize: '1rem', whiteSpace: 'normal',
 								color: '#7026d2',padding: '2px 3px 1px',tabSize: '4',backgroundColor: '#f7f7f9', 
-								border: '1px solid #e1e1e8',  borderRadius: '3px',lineHeight: '2'
+								border: '1px solid #e1e1e8',  borderRadius: '3px',lineHeight: '2', whiteSpace:'pre'
 							}}
 						>
 							{'\n' + item + '\n'} 
@@ -471,7 +471,7 @@ class ClassView extends React.Component {
 																	basis="full"
 																	alignContent='between'
 																	style={{marginBottom:'50px', width: '100%'}}>
-																<Heading tag="h3">
+																<Heading tag="h3" style={{whiteSpace:'pre'}}>
 																	{this.code(question.text)}
 																</Heading>
 																<List>
