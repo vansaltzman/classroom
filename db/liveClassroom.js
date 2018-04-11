@@ -1,6 +1,6 @@
 const firebase = require('firebase');
 // Uncomment fbConfig to run on your personal fb Database
-// const {fbConfig} = require('../server/config.js');
+const {fbConfig} = require('../server/config.js');
 const dummyStudentData=require('../db/dummyStudentsData');
 const studentQuizObjConverter = require('../src/utils/studentQuizObjConverter.js');
 const moment = require('moment');
@@ -13,7 +13,7 @@ const prodConfig = {
 	databaseURL: "https://jaqen-d9c2e.firebaseio.com/"
 }
 
-let fbCredentials = prodConfig
+let fbCredentials = prodConfig || fbConfig
 
 firebase.initializeApp(fbCredentials);
 

@@ -28,6 +28,8 @@ const fbClassToPgObj = function(classObj) {
 }
 
 const submitParticipation = function(classId, students) {
+  // ERROR IS HERE!!! getting object.values is not a function
+  // POSSIBLE REASON: NODE VERSIONS <= 7 DO NOT SUPPORT THIS
   return Promise.all(Object.values(students).map(student=> {
     let newParticipation = student.participation || 0
     return db.query(
@@ -41,8 +43,7 @@ const submitParticipation = function(classId, students) {
 
 
 const submitQuiz = function(quizObj, studentResponses, classId) {
-  console.log('Submit Quiz for: ', quizObj.name)
-
+  console.log('Submit Quiz for: ', quizObj.name);
   const prevQuizId = quizObj.id;
   const quizName = quizObj.name;
   const questions = quizObj.questions;
@@ -92,6 +93,8 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
             let responseForThisQuestion = student.responses[question.previous_id]
             let studentsAnswer = answerMapper[Object.keys(responseForThisQuestion.answers).find(key => responseForThisQuestion.answers[key] === true)] || {newId: null, isCorrect: false}
             responseForThisQuestion.time = responseForThisQuestion.time || null;
+            console.log('question way up there ', question);
+            console.log('student netxt to way u p there ', student)
             
             return db.query(
             `INSERT INTO students_responses (student_id, response_id, question_id, draft_question_id, time_spent, correct) 

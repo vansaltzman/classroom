@@ -2,30 +2,28 @@ const { Pool, Client } = require('pg');
 const pg = require('pg');
 const schema = require('./classroom.js')
 const bcrypt = require('bcrypt')
-const dotenv = require('dotenv');
-const {error} = dotenv.config();
-//const migrate = require('../data/studentsQuizDataMigratedFromFB.js')
+// const dotenv = require('dotenv');
+// const {error} = dotenv.config();
 
-// const connectionString = process.env.DATABASE_URL || 'postgres:postgress//localhost:5432/classroom';
-// console.log('process db ',process.env.PG_USER)
-// const db = new Pool({
-//   user: process.env.PG_USER,
-//   database: 'classroom',
-//   host: 'localhost',
-//   password: null,
-//   port: 5432,
-//   })
-// const connectionString = 'jaqen-rds-postgres.cw0klusijyxh.us-east-2.rds.amazonaws.com';
+if (process.env.host && process.env.database 
+  && process.env.PG_USER && process.env.PG_USER ) {
+  var connectionObject = {
+    user: process.env.PG_USER ,
+    database: process.env.database,
+    host: process.env.host,
+    password: process.env.password,
+    port: process.env.port,
+  }
+} else {
+  var connectionObject = {
+    database: 'classroom',
+    host: 'localhost',
+    password: null,
+    port: 5432,
+    }
+}
 
-// !!! Uncomment for production code
-
-const db = new Pool({
-  user: process.env.PG_USER,
-  database: process.env.database,
-  host: process.env.host,
-  password: process.env.password,
-  port: process.env.port,
-})
+const db = new Pool(connectionObject);
 
 db.on('error', (err, client) => {
   console.error('Unexpected error on idle client', err)
@@ -39,7 +37,6 @@ db.connect().then((client)=> {
   })
   .catch(err => {
     client.release()
-    console.log('oops!', err.stack)
   })
 })
 .catch((error)=> {
@@ -121,7 +118,8 @@ const verifyUser = function(email, password) {
 
 const fetchClass = function(classId) {
   return db.query(`
-  SELECT classes.id, classes.name, teachers.first_name, teachers.last_name, teachers.email, teachers.id as teacher_id, subjects.name as subject 
+  SELECT classes.id, classes.name, teachers.first_name, teachers.last_name, 
+  teachers.email, teachers.id as teacher_id, subjects.name as subject 
   FROM classes, teachers, subjects WHERE classes.id=$1;`, [classId])
   .then(res => {
     return res.rows
@@ -137,28 +135,28 @@ const fetchQuizTemplates = function(teacherId) {
   )
   .then(quizzes => {
     return Promise.all(quizzes.rows.map(quiz => {
-      db.query(`SELECT * FROM draft_quizzes_draft_questions INNER JOIN draft_questions .id ON draft_quizzes_draft_questions.draft_question_id WHERE draft_quizzes_draft_questions.draft_quiz_id=$1`, [quiz.id])
+      db.query(`SELECT * FROM draft_quizzes_draft_questions 
+      INNER JOIN draft_questions .id ON draft_quizzes_draft_questions.draft_question_id 
+      WHERE draft_quizzes_draft_questions.draft_quiz_id=$1`, [quiz.id])
     }))
   })
 }
 
 /**************** INSERTING CLASS INTO POSTGRESQL ****************/
 const addNewClass = function(classObj) {
-  //console.log('database side', classObj)
-  //const params = []
   const checkSubjectQuery = `SELECT * FROM subjects WHERE name='${classObj.subject}';`
   return db.query(checkSubjectQuery)
   .then((count) => {
-    console.log('count', count);
     if (count.rowCount === 0) {
       return db.query(`INSERT INTO subjects (name) VALUES ('${classObj.subject}')`)
     }
   })
   .then(() => {
     const queryString = `INSERT INTO classes (name, teacher_id, subject_id, year, quarter, thunmbnail)
-                       VALUES ('${classObj.classname}', (SELECT id FROM teachers WHERE email='${classObj.email}'),
-                       (SELECT id FROM subjects WHERE name='${classObj.subject}'), '${classObj.year}', '${classObj.quarter}', '${classObj.thumbnail}')`
-    //console.log(queryString);
+                       VALUES ('${classObj.classname}', (SELECT id FROM teachers 
+                        WHERE email='${classObj.email}'),
+                       (SELECT id FROM subjects WHERE name='${classObj.subject}'), 
+                       '${classObj.year}', '${classObj.quarter}', '${classObj.thumbnail}')`
     return db.query(queryString)
   })
   .then(() => {
@@ -169,14 +167,12 @@ const addNewClass = function(classObj) {
 }
 
 const getNewAddedClass = function(email, classname) {
-  console.log('email', email, 'classname', classname)
   const teacherIdqueryString = `SELECT id FROM teachers WHERE email='${email}'`;
   return db.query(teacherIdqueryString)
   .then((data) => {
     const teacherId = data.rows[0].id;
     const queryStringForClasses = `SELECT * FROM classes WHERE teacher_id='${teacherId}' AND name='${classname}';`
     return db.query(queryStringForClasses)
-    console.log('teacher id data', data.rows[0].id);
   })
 }
 
@@ -246,22 +242,24 @@ const addQuiz = function(quizObj) {
   const subjectId = quizObj.quiz.subject.sub.id;
   const subjectName = quizObj.quiz.subject.sub.name;
   let quizId 
-  return db.query(`INSERT INTO draft_quizzes (name, subject_id, teacher_id) VALUES ('${quizName}', '${subjectId}', '${teacherId}') RETURNING *;`)
+  return db.query(`INSERT INTO draft_quizzes (name, subject_id, teacher_id) 
+    VALUES ('${quizName}', '${subjectId}', '${teacherId}') RETURNING *;`)
   .then((data) => {
     quizId = data.rows[0].id
     return quizId
   })
   .then((data) => {
     return Promise.all(questions.map((each, index) => {
-      console.log('each ------> ', each)
       if (each.id) {
-        return db.query(`UPDATE draft_questions SET question=$1 WHERE id='${each.id}' RETURNING *;`, [each.text])
+        return db.query(`UPDATE draft_questions SET question=$1 WHERE id='${each.id}'
+          RETURNING *;`, [each.text])
         .then((data) => {
           each.id = data.rows[0].id
           return each
         })
       } else {
-        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) VALUES ($1, '${teacherId}', '${subjectId}') RETURNING *;`, [each.text])
+        return db.query(`INSERT INTO draft_questions (question, teacher_id, subject_id) 
+          VALUES ($1, '${teacherId}', '${subjectId}') RETURNING *;`, [each.text])
         .then((data) => {
           each.id = data.rows[0].id
           return each
@@ -270,9 +268,8 @@ const addQuiz = function(quizObj) {
     }))
   })
   .then(() => {
-    console.log('Did we get here ai all???')
     return Promise.all(questions.map((each, index) => {
-      // console.log('each questions with id to join table', each) //at this point we have the questions with id
+      //at this point we have the questions with id
       return db.query(`INSERT INTO draft_quizzes_draft_questions (draft_quiz_id, draft_question_id, position) 
                 VALUES ('${quizId}', '${each.id}', '${index}');`) 
       .then(() => {
@@ -281,11 +278,11 @@ const addQuiz = function(quizObj) {
     }))
   })
   .then((data) => {
-    // console.log('dataaaaaa after draft_quizzes_draft_questions', data)
     return Promise.all((data.map((q, i) => {
       return Promise.all(q.answers.map((answer, j) => {
         if (answer.id) {
-          return db.query(`UPDATE draft_answers SET answer=$1, correct='${answer.correct}' WHERE id='${answer.id}' AND question_id='${answer.question_id}'`, [answer.answer])
+          return db.query(`UPDATE draft_answers SET answer=$1, correct='${answer.correct}' 
+            WHERE id='${answer.id}' AND question_id='${answer.question_id}'`, [answer.answer])
         } else {
           return db.query(`INSERT INTO draft_answers (answer, question_id, correct) VALUES
                 ($1, '${q.id}', '${answer.isCorrect}');`, [answer.text]) 
@@ -302,8 +299,9 @@ const addQuiz = function(quizObj) {
 }
 
 const getQuizzes = function(teacherId, subjectId) {
-  // console.log('teacherId, subjectId ------> ', teacherId, subjectId)
-  return db.query(`SELECT draft_quizzes.name, draft_quizzes.id, subjects.name as subject FROM draft_quizzes INNER JOIN subjects ON draft_quizzes.subject_id = subjects.id WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
+  return db.query(`SELECT draft_quizzes.name, draft_quizzes.id, subjects.name as subject 
+      FROM draft_quizzes INNER JOIN subjects ON draft_quizzes.subject_id = subjects.id
+      WHERE teacher_id='${teacherId}' AND subject_id='${subjectId}'`)
   .then((data) => {
     const quizzes = data.rows.map((quiz) => {
       return {
@@ -342,13 +340,11 @@ const getQuizzes = function(teacherId, subjectId) {
         return db.query(`SELECT * FROM draft_answers WHERE question_id = '${eachQuestion.draft_question_id}'`)
         .then((answers) => {
           eachQuestion.answers = {}
-
           answers.rows.forEach(answer=> {
             let formattedAnswer = {}
             formattedAnswer.id = answer.id
             formattedAnswer.text = answer.answer
             formattedAnswer.isCorrect = answer.correct
-
             eachQuestion.answers[answer.id] = formattedAnswer
           })
           return eachQuestion
@@ -362,7 +358,6 @@ const getQuizzes = function(teacherId, subjectId) {
   })
 }
 const addProfilePictureForStudent = function (studentId, url) {
-  console.log('------------add profile pic for student in mainDB')
   const queryString = `UPDATE students SET thumbnail_url = '${url}' WHERE id=${studentId}`
   return db.query(queryString)
 }
@@ -382,7 +377,8 @@ const GetAllQuestionsBelongToTeacher = function(teacherId, subjectId) {
         return eachQuestion
       })
       .then((eachQuestionWithAnswers) => {
-        return db.query(`SELECT time_spent FROM students_responses WHERE draft_question_id='${eachQuestionWithAnswers.id}'`)
+        return db.query(`SELECT time_spent FROM students_responses 
+          WHERE draft_question_id='${eachQuestionWithAnswers.id}'`)
       })
       .then((timeSpent) => {
         eachQuestion.timeSpent = timeSpent.rows.map((each) => {
@@ -494,7 +490,8 @@ const getQuizDataForStudentInClass = function(studentId, classId) {
 }
 
 const getParticipationDataForClass = function (classId) {
-  return db.query(`SELECT student_id, participation FROM classes_students WHERE class_id='${classId}'`)
+  return db.query(`SELECT student_id, participation 
+    FROM classes_students WHERE class_id='${classId}'`)
   .then((classParticipationData)=> {
     return classParticipationData.rows
   })
@@ -526,13 +523,11 @@ const getTakenQuizzesAndStudentsPerformance = function(targetClassId) {
       .then((questions) => {
         eachQuiz.questions = {}
           questions.rows.forEach(question=> {
-            //console.log("------------- eachQuestion", question)
             let formattedQuestion = {}
             formattedQuestion.id = question.draft_question_id
             formattedQuestion.text = question.question
             formattedQuestion.position = question.position
             formattedQuestion.draft_question_id = question.draft_question_id
-           
             eachQuiz.questions[question.draft_question_id] = formattedQuestion
           })
           return eachQuiz
@@ -546,7 +541,6 @@ const getTakenQuizzesAndStudentsPerformance = function(targetClassId) {
         return db.query(`SELECT * FROM draft_answers WHERE question_id = '${eachQuestion.draft_question_id}'`)
         .then((answers) => {
           eachQuestion.answers = {}
-
           answers.rows.forEach(answer=> {
             let formattedAnswer = {}
             formattedAnswer.id = answer.id

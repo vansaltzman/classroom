@@ -1,15 +1,15 @@
 const express = require('express');
 const path = require('path')
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+
 const main = require('../db/mainDb.js');
 const jwt = require('jsonwebtoken');
-const dbMethods = require('../db/mainDb.js');
-// const config = require('./config.js');
 const config = require('./config.js');
+
+const dbMethods = require('../db/mainDb.js');
 const migrate = require('./migrationWorker.js')
 const { fb, startClass } = require('../db/liveClassroom.js');
 const dummyAnswerData = require('../db/dummyAnswerData');
-const dummyStudentsData = require('../db/dummyStudentsData');
 
 const dotenv = require('dotenv');
 const {error} = dotenv.config();
@@ -21,6 +21,7 @@ if (error) {
 const multer = require('multer');
 const AWS = require('aws-sdk');
 var fs =  require('fs');
+
 const configAWS = {
     AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
@@ -31,7 +32,6 @@ const app = express()
 
 app.use(express.static(__dirname + '/../dist'))
 app.use(bodyParser.json())
-
 
 // Amazon s3 config
 AWS.config.update(  {
@@ -69,7 +69,6 @@ app.post('/imageUploader', upload.single('file'), (req, res) => {
 
               fs.unlink(req.file.path, (err) => {
                 if (err) console.log(err);
-              
                 //req.body.classPic//true for teacher view//false for student view
                 if(req.body.classPic === false){
                   console.log('req.body.classPic', req.body.classPic)

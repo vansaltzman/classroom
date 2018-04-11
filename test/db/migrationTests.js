@@ -48,23 +48,23 @@ const addMagicSubj = function() {
 
 const addStudentsAndClass = function() {
   // create frizzle
-  // return addFrizzle()
-  // .then(()=> {
-  //   // create subj
-  //   console.log('create subj')
-  //   return addMagicSubj()
-  // })
-  // .then(()=> {
-  //   // create class
-  //  console.log('create class')
-  //  return db.query(
-  //     `INSERT INTO classes (name, teacher_id, subject_id, year, quarter, thunmbnail) 
-  //     VALUES ('Magic Class', (SELECT id FROM teachers WHERE email='mfrizz@magic.bus'), 
-  //     (SELECT id FROM subjects WHERE name='Magic'), '2018', 'Second', 'https://pbs.twimg.com/media/Bp94a-sCYAAkzD2.jpg');`
-  //   )
-  // })
-  // .then(()=> {
-  //   console.log('create students')
+  return addFrizzle()
+  .then(()=> {
+    // create subj
+    console.log('create subj')
+    return addMagicSubj()
+  })
+  .then(()=> {
+    // create class
+   console.log('create class')
+   return db.query(
+      `INSERT INTO classes (name, teacher_id, subject_id, year, quarter, thunmbnail) 
+      VALUES ('Magic Class', (SELECT id FROM teachers WHERE email='mfrizz@magic.bus'), 
+      (SELECT id FROM subjects WHERE name='Magic'), '2018', 'Second', 'https://pbs.twimg.com/media/Bp94a-sCYAAkzD2.jpg');`
+    )
+  })
+  .then(()=> {
+    console.log('create students')
     let students = [
       ['Alex', 'Chojnacki', 'alex@chojnacki.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8T2T768J-ff19ab38e761-1024'],
   ['Adam', 'Mateo', 'adam@mateo.edu', '123456', 'https://ca.slack-edge.com/T2SUXDE72-U8RQ7MGE5-70a1dd9355d4-72'],
@@ -109,11 +109,14 @@ const addStudentsAndClass = function() {
         // Assign students to class
         return db.query(
           `INSERT INTO classes_students (class_id, student_id) 
-          VALUES (2, (SELECT id FROM students WHERE email=$1));`, 
+          VALUES (1, (SELECT id FROM students WHERE email=$1));`, 
           [hashedStudent[2]])
       })
     }))
+  })
 }
+
+addStudentsAndClass();
 
 
 
