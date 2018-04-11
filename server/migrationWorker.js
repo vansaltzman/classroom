@@ -1,7 +1,113 @@
+
 const fb = require('../db/liveClassroom')
 const { db } = require('../db/mainDb')
 const main = require('../db/mainDb')
 
+const fbClassToPgObj = function(classObj) {
+  // console.log('class object in fb class to pg obj ', classObj)
+  const classId = classObj.id
+  const { name, quizzes, students, teacher_id, subject_id } = classObj
+  return submitParticipation(classId, students)
+  .then(()=> {
+    if (quizzes) {
+      return Promise.all(Object.keys(quizzes).map(quizId => {
+        responsesObj = {}    
+        Object.values(students).forEach(student => {
+            studentObj = {}
+            studentObj.id = student.id   
+            studentObj.responses = student.quizzes[quizId].responses
+            responsesObj[student.id] = studentObj
+        })
+        return submitQuiz(quizzes[quizId], responsesObj, classId)
+      }))
+    }
+  })
+  // .then(()=> {
+  //   return updateQuestionTimes()
+  // })
+}
+
+const submitParticipation = function(classId, students) {
+  // ERROR IS HERE!!! getting object.values is not a function
+  // POSSIBLE REASON: NODE VERSIONS <= 7 DO NOT SUPPORT THIS
+  return Promise.all(Object.values(students).map(student=> {
+    let newParticipation = student.participation || 0
+    return db.query(
+      `UPDATE classes_students SET participation = participation + $1 WHERE class_id = $2 AND student_id = $3 RETURNING participation`, 
+      [newParticipation, classId, student.id])
+  }))
+  .catch(err => {
+    console.error('FAILURE with submitting participation: ', err)
+  })
+}
+
+
+const submitQuiz = function(quizObj, studentResponses, classId) {
+  console.log('Submit Quiz for: ', quizObj.name);
+  const prevQuizId = quizObj.id;
+  const quizName = quizObj.name;
+  const questions = quizObj.questions;
+  const quizDuration = quizObj.quizDuration
+  const quizSubject = quizObj.subject
+  const quizTime = quizObj.time
+  const quizWeight = quizObj.weight;
+  
+  let subjectId 
+  let submittedQuizId
+
+  return db.query(`SELECT id FROM subjects WHERE name=$1`, [quizObj.subject])
+  .then((subjectData)=> {
+    subjectId = subjectData.rows[0].id
+    return db.query(
+      `INSERT INTO submitted_quizzes (name, subject_id, weight, previous_id, class_id, duration, time) 
+      VALUES ('${quizName}', '${subjectId}', '${quizWeight}', ${prevQuizId}, ${classId}, ${quizDuration}, ${quizTime}) RETURNING id;`)
+    .then((submittedQuiz) => {
+      submittedQuizId = submittedQuiz.rows[0].id
+      return Promise.all(Object.values(questions).map((each, index) => {
+        return db.query(
+          `INSERT INTO submitted_questions (question, previous_id, subject_id, quiz_id, position) 
+          VALUES ('${each.text}', '${each.id}', '${subjectId}', '${submittedQuizId}', '${each.position}') RETURNING id, previous_id;`)
+      }))
+    })
+    .then((submittedQuestions) => {
+      return Promise.all(Object.values(submittedQuestions).map((question, index) => {
+        question = question.rows[0]
+          return Promise.all(Object.values(questions[question.previous_id].answers).map(answer => {
+            return db.query(
+              `INSERT INTO submitted_answers (answer, question_id, correct) 
+              VALUES ($1, $2, $3) RETURNING id, question_id, correct`, [answer.text, question.id, answer.isCorrect])
+              .then(queryResponse=> {
+                let subAnswer = queryResponse.rows[0]
+                subAnswer.previousAnswerId = answer.id
+                return subAnswer
+              }) 
+          }))
+        .then(submittedAnswers => {
+          let answerMapper = {}
+  
+          submittedAnswers.forEach(submittedAnswer => {
+            answerMapper[submittedAnswer.previousAnswerId] = {newId: submittedAnswer.id, isCorrect: submittedAnswer.correct}
+          })
+
+          return Promise.all(Object.values(studentResponses).map(student => {
+            let responseForThisQuestion = student.responses[question.previous_id]
+            let studentsAnswer = answerMapper[Object.keys(responseForThisQuestion.answers).find(key => responseForThisQuestion.answers[key] === true)] || {newId: null, isCorrect: false}
+            responseForThisQuestion.time = responseForThisQuestion.time || null;
+            console.log('question way up there ', question);
+            console.log('student netxt to way u p there ', student)
+            
+            return db.query(
+            `INSERT INTO students_responses (student_id, response_id, question_id, draft_question_id, time_spent, correct) 
+            VALUES ($1, $2, $3, $4, $5, $6)`, [student.id, studentsAnswer.newId, question.id, question.previous_id, responseForThisQuestion.time, studentsAnswer.isCorrect])
+          }))
+        })
+      }))
+    })
+  })
+  .catch(err => {
+    console.log('ISSUE WITH MIGRATION', err)
+  })
+}
 
 // Converts a class in postgress to a sql obj
 const psqlClassToFbObj = function(sqlClass) {
@@ -18,11 +124,12 @@ const psqlClassToFbObj = function(sqlClass) {
     }
   }
 
+
   // FIX: Consider doing this outise of this function
 
   // Gets student information for this class from db
   return db.query(`
-    SELECT students.id, students.first_name, students.last_name, students.email 
+    SELECT students.id, students.first_name, students.last_name, students.email, students.thumbnail_url 
     FROM students INNER JOIN classes_students 
     ON students .id = classes_students.student_id 
     WHERE classes_students.class_id=$1;`, [sqlClass.id]
@@ -34,6 +141,7 @@ const psqlClassToFbObj = function(sqlClass) {
         isInClassroom: false,
         activeView: 'lobby',
         email: student.email,
+        thumbnail: student.thumbnail_url,
         quizzes: {}
       }
     })
@@ -44,7 +152,6 @@ const psqlClassToFbObj = function(sqlClass) {
 const migrateClassToFB = function(classId){
   main.fetchClass(classId)
   .then(classRow => {
-    console.log(classRow[0])
     return psqlClassToFbObj(classRow[0])
   })
   .then(fbObj => {
@@ -56,6 +163,31 @@ const migrateClassToFB = function(classId){
   .catch((err)=> console.log('Issue starting class' + err))
 }
 
+// const averagetimeForSubmittedQuestions = function(classObj) {
+//   const classId = classObj.id;
+//   const takenQuiz = Object.values(classObj.quizzes)[0];
+//   const takenQuizId = takenQuiz.id;
+//   const quizQuetions = {};
+//   const studentsInClass = classObj.students
+//   for (var questionId in takenQuiz.questions) {
+//     quizQuestions[questionId] = {
+//       sum: 0,
+//       counter: 0
+//     }
+//     for (var studentId in studentsInClass) {
+//       //each student respnse time for each question
+//       const responseTime = studentsInClass[studentId].quizzes.takenQuizId.responses.questionId.time;
+//       quizQuestions[questionId].sum += responseTime;
+//       quizQuestions[questionId].counter += 1;
+//     }
+//   }
+//   return Promise.all(quizQuestions.map((eachQuestion, key) => {
+//     const avg_time = eachQuestion.sum / eachQuestion.counter
+//     return db.query(`INSERT INTO draft_questions avg_time VALUES '${avg_time}' WHERE id='${key}'`)
+//   }))
+// }
+
 module.exports = {
   migrateClassToFB, 
+  fbClassToPgObj
 }

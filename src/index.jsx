@@ -5,6 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
+
 import rootReducer from './reducers/rootReducer';
 import App from './components/app.jsx';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -17,12 +18,12 @@ import {syncHistoryWithStore } from 'react-router-redux';
 import { createBrowserHistory } from 'history';
 import NavigationBar from './components/NavigationBar.jsx';
 
+
 const store = createStore(rootReducer, composeWithDevTools(
   applyMiddleware(thunk)
 ))
 
 const history = syncHistoryWithStore(createBrowserHistory(), store);
-
 if (localStorage.jwtToken) {
 	setAuthorizationToken(localStorage.jwtToken);
 	store.dispatch(setCurrentUser( jwt.decode(localStorage.jwtToken)));
@@ -34,3 +35,6 @@ ReactDOM.render(
 	</Provider>,
 	document.getElementById('app')
 )
+
+
+
