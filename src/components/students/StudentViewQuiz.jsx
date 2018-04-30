@@ -31,15 +31,12 @@ class StudentViewQuiz extends React.Component {
     this.backwardClick = this.backwardClick.bind(this);
     this.getDuration = this.getDuration.bind(this);
     this.submitQuiz = this.submitQuiz.bind(this);
-    
-    console.log('PROPS IN StudentViwQuiz.jsx', this.props);
   }
 
 componentDidMount() {
   this.setState({
     arrayOfQuestionIds: this.props.keys
   }, function() {
-    console.log('this state',this.state)
   })
 }
 
@@ -101,7 +98,6 @@ backwardClick(e) {
   if(copy.responses[this.state.arrayOfQuestionIds[currentQuestion - 1]]) {
     copy.responses[this.state.arrayOfQuestionIds[currentQuestion - 1]].entered = now
   }
-  console.log('Copy ------> ', copy)
     copy.currentQuestion--
     this.props.insertStudentAnswers(copy, this.props.studentId, this.props.quizId, this.props.classId)
 }
@@ -109,20 +105,6 @@ backwardClick(e) {
 render() {
    
     var currentQuestion = this.props.currentQuestion;
-    // if (currentQuestion < 0) {
-    //   var quizView = <div>
-    //                 <Button icon={<DeployIcon />}
-    //                 label='Start Quiz'
-    //                 primary={false}
-    //                 secondary={false}
-    //                 accent={true}
-    //                 critical={false}
-    //                 plain={false} 
-    //                 onClick={(e) => this.forwardClick(e)} 
-                    
-    //               />
-    //           </div>
-    // }
     // get rid of condition that currentQuestion >=0
      if(currentQuestion >= 0 && currentQuestion >= this.state.arrayOfQuestionIds.length) {
       var quizView = <div>

@@ -29,7 +29,6 @@ class StudentLiveClassView extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.studentState.targetClass && nextProps.studentState.targetClass.isLive && this.props.studentState.targetClass.activeView === undefined) {
-			console.log('Triggered')
 			this.props.fetchClassData(this.props.activeView.id, 'student')
 			fb.toggleStudentLiveClassStatus(this.props.activeView.id, this.props.auth.user.id, true)
 		}
@@ -37,7 +36,6 @@ class StudentLiveClassView extends React.Component {
 		if (!nextProps.studentState.targetClass) { //Handles updating target class when class ends
 			let thisClass = this.props.classes.find(each => each.class_id === this.props.studentState.targetClass.id)
 			thisClass.isLive = false
-			console.log('thisClass ------> ', thisClass)
 			this.props.updateStudentTargetClass(this.props.classes.find(each => each.class_id === this.props.studentState.targetClass.id))
 			fb.stopFetchClassData(this.props.activeView.id)
 		} 

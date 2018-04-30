@@ -107,8 +107,6 @@ class ThumbVote extends React.Component {
       animation: 'frame 3s infinite'
     }
 
-      console.log('--degrees', degrees)
-
     return (
       <Layer 	
       closer={false}
@@ -127,9 +125,7 @@ class ThumbVote extends React.Component {
             {this.props.activeView.thumbName || 'Thumb Poll'}
         </Headline>
         <div style={{
-          // margin: 'auto',
-          textAlign: 'center',
-          // marginTop: '100px',
+          textAlign: 'center'
         }}>
         <div style={outDiv}>
           <img src={'https://s3.us-east-2.amazonaws.com/jaqen-app/thumb.png'} alt='' style={thumbStyleAnimate}/>       

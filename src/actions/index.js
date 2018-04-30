@@ -34,7 +34,6 @@ export function setCurrentUser (user) {
 
 export function logoutUser () {
 	return (dispatch) => {
-		// localStorage.removeItem('jwtToken');
 		localStorage.clear();
 		setAuthorizationToken(false);
 		dispatch(setCurrentUser({}));
@@ -45,7 +44,6 @@ export function getLinkFroms3( data ) {
 	return (dispatch) => {
 		axios.post('/imageUploader', data)
 		.then((response) => {
-			console.log('at action creator response.data', response.data, typeof response.data)
 			dispatch(updateProfilePicAction( response.data ))
 		})
 		.catch((error) => {
@@ -55,7 +53,6 @@ export function getLinkFroms3( data ) {
 }
 
 function updateProfilePicAction( pic ) {
-	console.log('2cd action----', pic)
 	return {
 		type: actionTypes.PROFILE_PIC,
 		pic
@@ -213,7 +210,6 @@ export function addNewClass(reqObj) {
 	return (dispatch) => {
 		axios.post('/addClass', reqObj)
 		.then((res) => {
-			console.log('all classes coming back after class is added', res.data)
 			dispatch(addNewClassAction(res.data))
 		})
 	}
@@ -229,7 +225,6 @@ export function getAllExistingSubjects() {
 	return (dispatch) => {
 		axios.get('/getAllSubjects')
 		.then((res) => {
-			console.log('at actions subjects', res.data)
 			dispatch(getAllExistingSubjectsAction(res.data))
 		})
 	}
@@ -270,7 +265,6 @@ export function getAllStudents() {
 	return (dispatch) => {
 		axios.get('/getAllStudents')
 		.then((res) => {
-			//console.log('all students', res.data);
 			dispatch(getAllStudentsAction(res.data));
 		})
 	}
@@ -283,11 +277,9 @@ function getAllStudentsAction(students) {
 }
 
 export function getStudentsBelongToAClass(idObj) {
-	//console.log('console.log', idObj)
 	return (dispatch) => {
 		axios.post('/getAllStudentsInAClass', idObj)
 		.then((res) => {
-			//console.log('dataaaaaa', res.data);
 			dispatch(getStudentsBelongToAClassAction(res.data))
 		})
 	}
@@ -313,7 +305,6 @@ export function classGoLive(classId, classObj) {
 			dispatch(fetchClassData(classId, 'teacher'))
 		})
 		.then(()=> {
-			console.log('It is here')
 			const liveClass = fb.ref('/classes/' + classId)
 			return liveClass.child('isLive').set(true)
 		})
@@ -332,7 +323,6 @@ export function watchClassGoLive(shouldStop) {
 		if (shouldStop === 'stop') {
 			fb.ref('/classes').off('value', (snap) => {
 				// dispatch(watchClassGoLiveAction(snap.toJSON()))
-				console.log('WATCH OFF snap.val() ------> ', snap.val())
 			})
 		} else {
 			fb.ref('/classes').on('value', (snap) => {
@@ -353,7 +343,7 @@ export function getClassStatus(classId) {
 	return (dispatch) => {
 		return fb.ref('/classes/' + classId + '/isLive').once('value')
 			.then(snap => {
-				console.log('Is class live?', snap.val())
+
 				if (snap.val()) {
 					dispatch(fetchClassData(classId, 'teacher'))
 					return
@@ -390,11 +380,11 @@ function selectStudentToAddAction (student) {
 }
 
 export function addAStudentToClass(studentObj) {
-	console.log('selected student to be added', studentObj)
+
 	return (dispatch) => {
 		axios.post('/addAStudentToClass', studentObj)
 		.then((res) => {
-			console.log('at add student action', res.data)
+
 			dispatch(addAStudentToClassAction(res.data))
 		})
 	}
@@ -438,7 +428,6 @@ function updateStudentTargetClassAction(targetClass) {
 
 // join/exit live class from student pov
 export function toggleStudentLiveClassStatus (classId, studentId) {
-	console.log('Toggle Student Class Status' , classId, studentId)
 	const currentStudentStatus = fb.ref('/classes/' + classId + '/students/' + studentId + '/isHere')
 	return (dispatch) => {
 		currentStudentStatus.once('value')
@@ -452,7 +441,6 @@ export function toggleStudentLiveClassStatus (classId, studentId) {
 		.then((snap) => {
 			const status = snap.val();
 			// if (status) {
-				console.log(' ------> Fetch Class Data Student')
 				dispatch(fetchClassData(classId, 'student'))
 			// } else {
 			// 	dispatch(stopFetchingClassData(classId))
@@ -469,7 +457,6 @@ function toggleStudentLiveClassStatusAction (classId, studentId, targetClass) {
  
 // get all class data for a live class
 export function fetchClassData (classId, type) {
-	console.log('classId, type ------> ', classId, type)
 	const currentClass = fb.ref('/classes/' + classId )
 	return (dispatch) => {
 		currentClass.on('value', function(snap) {
@@ -477,7 +464,6 @@ export function fetchClassData (classId, type) {
 				dispatch(updateClassDataTeacher(snap.toJSON()))
 			} 
 			if (type === 'student') {
-				console.log('snap.val(stud) ------> ', snap.val())
 				dispatch(updateClassDataStudent(snap.toJSON()))
 			}
 		})
@@ -527,7 +513,6 @@ export function showThumbPollAction(){
 /******************************************** QUIZ/QUESTION BUILDER ***************************************/
 export function showQuizModal() {
 	return (dispatch) => {
-		console.log('Did we get here?')
 		dispatch(showQuizModalAction())
 	}
 }
@@ -692,7 +677,6 @@ export function fetchQuizzes(reqObj) {
 	return (dispatch) => {
 		axios.post('/getQuizzes', reqObj)
 		.then((res) => {
-			console.log('data from server for all quizzes', res.data)
 			dispatch(fetchQuizzesAction(res.data))
 		})
 	}
@@ -709,7 +693,6 @@ export function fetchQuestions(reqObj) {
 	return (dispatch) => {
 		axios.post('/fetchQuestions', reqObj)
 		.then((res) => {
-			console.log('fetched questions', res.data)
 			dispatch(fetchQuestionsAction(res.data))
 		}) 
 	}
@@ -766,7 +749,6 @@ export function getTakenQuizzes(classIdObj) {
 	return (dispatch) => {
 		axios.post('/getTakenQuizzes', classIdObj)
 		.then((res) => {
-			console.log('taken quizzes at action', res.data)
 			return dispatch(getTakenQuizzesAction(res.data))
 		})
 	}

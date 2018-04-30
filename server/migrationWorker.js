@@ -4,7 +4,6 @@ const { db } = require('../db/mainDb')
 const main = require('../db/mainDb')
 
 const fbClassToPgObj = function(classObj) {
-  // console.log('class object in fb class to pg obj ', classObj)
   const classId = classObj.id
   const { name, quizzes, students, teacher_id, subject_id } = classObj
   return submitParticipation(classId, students)
@@ -28,8 +27,6 @@ const fbClassToPgObj = function(classObj) {
 }
 
 const submitParticipation = function(classId, students) {
-  // ERROR IS HERE!!! getting object.values is not a function
-  // POSSIBLE REASON: NODE VERSIONS <= 7 DO NOT SUPPORT THIS
   return Promise.all(Object.values(students).map(student=> {
     let newParticipation = student.participation || 0
     return db.query(
@@ -93,8 +90,6 @@ const submitQuiz = function(quizObj, studentResponses, classId) {
             let responseForThisQuestion = student.responses[question.previous_id]
             let studentsAnswer = answerMapper[Object.keys(responseForThisQuestion.answers).find(key => responseForThisQuestion.answers[key] === true)] || {newId: null, isCorrect: false}
             responseForThisQuestion.time = responseForThisQuestion.time || null;
-            console.log('question way up there ', question);
-            console.log('student netxt to way u p there ', student)
             
             return db.query(
             `INSERT INTO students_responses (student_id, response_id, question_id, draft_question_id, time_spent, correct) 
@@ -163,29 +158,6 @@ const migrateClassToFB = function(classId){
   .catch((err)=> console.log('Issue starting class' + err))
 }
 
-// const averagetimeForSubmittedQuestions = function(classObj) {
-//   const classId = classObj.id;
-//   const takenQuiz = Object.values(classObj.quizzes)[0];
-//   const takenQuizId = takenQuiz.id;
-//   const quizQuetions = {};
-//   const studentsInClass = classObj.students
-//   for (var questionId in takenQuiz.questions) {
-//     quizQuestions[questionId] = {
-//       sum: 0,
-//       counter: 0
-//     }
-//     for (var studentId in studentsInClass) {
-//       //each student respnse time for each question
-//       const responseTime = studentsInClass[studentId].quizzes.takenQuizId.responses.questionId.time;
-//       quizQuestions[questionId].sum += responseTime;
-//       quizQuestions[questionId].counter += 1;
-//     }
-//   }
-//   return Promise.all(quizQuestions.map((eachQuestion, key) => {
-//     const avg_time = eachQuestion.sum / eachQuestion.counter
-//     return db.query(`INSERT INTO draft_questions avg_time VALUES '${avg_time}' WHERE id='${key}'`)
-//   }))
-// }
 
 module.exports = {
   migrateClassToFB, 

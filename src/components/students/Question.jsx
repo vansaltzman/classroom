@@ -30,24 +30,6 @@ class Question extends React.Component {
           {'\n' + item  + '\n'}
         </SyntaxHighlighter>
         )
-        //  return (
-        //    <code
-        //     style={{
-        //       fontFamily: 'Monaco,Menlo,Consolas,"Courier New",monospace!important',
-        //       fontSize: '0.9rem',
-        //       whiteSpace: 'normal',
-        //       color: '#7026d2',
-        //       padding: '2px 3px 1px',
-        //       tabSize: '4',
-        //       backgroundColor: '#f7f7f9',
-        //       border: '1px solid #e1e1e8',
-        //       borderRadius: '3px',
-        //       lineHeight: '2'
-        //     }}
-        //   >
-        //     {'\n' + item + '\n'} 
-        //   </code>
-        //  )
       }
     }) 
   }

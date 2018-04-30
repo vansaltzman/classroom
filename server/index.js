@@ -71,7 +71,6 @@ app.post('/imageUploader', upload.single('file'), (req, res) => {
                 if (err) console.log(err);
                 //req.body.classPic//true for teacher view//false for student view
                 if(req.body.classPic === false){
-                  console.log('req.body.classPic', req.body.classPic)
                   // main.addClassPic(fileUrl)
                   console.log('------class pic -----',fileUrl)
                   // ('---this should only run from teacher uploading class pic---')
@@ -147,8 +146,6 @@ app.post('/profile', function(req, res) {
     migrate.migrateClassToFB(classId)
     .then(()=> {
 
-      // update redux state?
-
       res.sendStatus(200)
       return
     })
@@ -169,7 +166,6 @@ app.post('/profile', function(req, res) {
 
   app.post('/answer', (req, res) => {
     let answer = req.body.answer
-    //console.log('answer submitted', answer)
   })
 
 app.post('/endClass', (req, res)=> {
@@ -178,7 +174,6 @@ app.post('/endClass', (req, res)=> {
 
   migrate.fbClassToPgObj(classObj)
     .then(()=> {
-      console.log('Migrated ' + classObj.name + ' MainDB')
       res.sendStatus(200)
     })
     .catch(err => {
@@ -188,7 +183,6 @@ app.post('/endClass', (req, res)=> {
 })
   
 app.post('/addClass', (req, res) => {
-  console.log('server side data for add class',  req.body);
   main.addNewClass(req.body)
   .then((data) => {
     console.log('Class is added', data)
@@ -211,7 +205,6 @@ app.post('/getNewAddedClass', (req,res) => {
 })
 
 app.post('/allClasses', (req, res) => {
-  //console.log('serverside /allClasses', req.body);
   main.getClassesForTeacherMainView(req.body.email)
   .then((data) => {
     //console.log('data ------> ', data)
@@ -226,7 +219,6 @@ app.post('/allClasses', (req, res) => {
 app.get('/getAllStudents', (req, res) => {
   main.getAllStudents()
   .then((data) => {
-    //console.log('serverside', data.rows);
     res.send(data.rows);
   })
   .catch((err) => {
@@ -235,7 +227,6 @@ app.get('/getAllStudents', (req, res) => {
 })
 
 app.post('/getAllStudentsInAClass', (req, res) => {
-  //console.log('class id server side', req.body);
   main.getAllStudentsBelongToAClass(req.body.id)
   .then((data) => {
     res.send(data.rows);
@@ -251,7 +242,6 @@ app.post('/getStudentsClasses', (req, res) => {
   main.getClassesBelongToAStudent(req.body.email)
   .then((data) => {
     res.send(data.rows);
-    //console.log('server side data', data.rows);
   })
   .catch((err) => {
     if (err) throw err
