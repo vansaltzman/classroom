@@ -19,7 +19,26 @@ module.exports = {
           presets: ['react', 'es2015', 'stage-2']
        }
       },
-      { test: /\.css$/, loader: "style-loader!css-loader" },
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'sass-loader', options: {
+              includePaths: ['./node_modules', './node_modules/grommet/node_modules']
+            }
+          }
+        ]
+      }
     ]
-  },
+  }, node: {
+    net: "empty",
+    dns: "empty",
+    fs: "empty"
+  }
 };
