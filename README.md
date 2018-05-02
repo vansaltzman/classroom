@@ -33,7 +33,7 @@ Teachers can:
   - Launch a quiz seeing in real-time studnent's current question, current grade and completinon status in an easy to read dasobhard
 - End a class persisting live data to the main database
 
-Students can
+Students can:
 - View their classes seeing which ones are live
 - See past performance in classes that are not live
 - Enter a live class in session where they will be shown:
