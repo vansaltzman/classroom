@@ -4,7 +4,7 @@ Realtime student assessment and learning management platform with a focus on emp
 
 ![Teacher Quiz Dashboard](https://i.imgur.com/CRMj6Sn.gif)
 
-Teacher Quiz Dashboard (2x Speed)
+###### Teacher Quiz Dashboard (2x Speed)
 
 &nbsp;
 
@@ -12,7 +12,7 @@ Teacher Quiz Dashboard (2x Speed)
 " target="_blank"><img src="https://img.youtube.com/vi/wGcndHj-gFs/0.jpg" 
 alt="Document Creation" width="240" height="180" border="10" /></a>
 
-Demo Video of realtime Teacher-Student interaction
+###### Demo Video of realtime Teacher-Student interaction
 
 ## Team
 
