@@ -54,7 +54,14 @@ Students can:
 
 
 ## Requirements
-// List items from package.json
+React
+Redux
+Firebase
+PostgreSQL
+Grommet.io
+Grommet.io Extras
+Moment
+(See package.json for more dependencies)
 
 ## Development
 
