@@ -2,7 +2,11 @@
 
 Realtime student assessment and learning management platform with a focus on empowering teachers in their classroom
 
-![Imgur](https://i.imgur.com/CRMj6Sn.gif)
+![Teacher Quiz Dashboard](https://i.imgur.com/CRMj6Sn.gif)
+
+Teacher Quiz Dashboard (2x Speed)
+
+&nbsp;
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=wGcndHj-gFs
 " target="_blank"><img src="https://img.youtube.com/vi/wGcndHj-gFs/0.jpg" 
