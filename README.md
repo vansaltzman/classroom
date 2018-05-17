@@ -2,7 +2,13 @@
 
 Realtime student assessment and learning management platform with a focus on empowering teachers in their classroom
 
-// add gifs here
+![Imgur](https://i.imgur.com/CRMj6Sn.gif)
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=wGcndHj-gFs
+" target="_blank"><img src="https://img.youtube.com/vi/wGcndHj-gFs/0.jpg" 
+alt="Document Creation" width="240" height="180" border="10" /></a>
+
+Demo Video of realtime Teacher-Student interaction
 
 ## Team
 
